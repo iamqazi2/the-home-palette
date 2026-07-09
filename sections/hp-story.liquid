@@ -1,0 +1,166 @@
+{% comment %} THP — Split editorial story band (image + serif copy) {% endcomment %}
+
+{%- style -%}
+  .hp-story { background: var(--hp-cream); overflow: hidden; }
+  .hp-story__grid {
+    display: grid;
+    gap: 4rem;
+    align-items: center;
+  }
+  @media screen and (min-width: 990px) {
+    .hp-story__grid { grid-template-columns: 1.05fr 1fr; gap: clamp(4rem, 7vw, 9.6rem); }
+    .hp-story--flip .hp-story__grid > .hp-story__media-wrap { order: 2; }
+  }
+  .hp-story__media-wrap { position: relative; }
+  .hp-story__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+  .hp-story__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    {% if section.settings.sepia %}filter: sepia(0.28) saturate(0.9);{% endif %}
+    transition: transform 1.5s var(--hp-ease);
+  }
+  .hp-story__media-wrap:hover .hp-story__media img { transform: scale(1.04); }
+  /* offset hairline frame behind the image */
+  .hp-story__media-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 2rem -2rem -2rem 2rem;
+    border: 1px solid var(--hp-taupe);
+    opacity: 0.45;
+    z-index: -1;
+  }
+  .hp-story__body .hp-eyebrow { margin-bottom: 2rem; }
+  .hp-story__heading {
+    font-family: var(--hp-font-display);
+    font-weight: 500;
+    font-size: clamp(3rem, 4.4vw, 4.8rem);
+    line-height: 1.1;
+    margin: 0 0 2.4rem;
+    color: var(--hp-ink);
+  }
+  .hp-story__text {
+    font-size: 1.5rem;
+    line-height: 1.9;
+    color: var(--hp-taupe);
+    margin: 0 0 3.2rem;
+    max-width: 52rem;
+  }
+  .hp-story__text em { font-family: var(--hp-font-display); font-size: 1.15em; }
+  .hp-story__stats {
+    display: flex;
+    gap: 4rem;
+    margin: 0 0 3.6rem;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--hp-hairline);
+    padding-top: 2.4rem;
+  }
+  .hp-story__stat-value {
+    display: block;
+    font-family: var(--hp-font-display);
+    font-size: 3.4rem;
+    line-height: 1;
+    color: var(--hp-ink);
+  }
+  .hp-story__stat-label {
+    display: block;
+    margin-top: 0.8rem;
+    font-size: 1.05rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--hp-taupe);
+  }
+{%- endstyle -%}
+
+<div class="hp-story hp-grain hp-section{% if section.settings.flip %} hp-story--flip{% endif %}">
+  <div class="hp-container">
+    <div class="hp-story__grid">
+      <div class="hp-story__media-wrap" data-hp-reveal>
+        <div class="hp-story__media hp-media-frame">
+          {%- if section.settings.image -%}
+            {{
+              section.settings.image
+              | image_url: width: 1600
+              | image_tag: widths: '600, 900, 1200, 1600', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'lazy'
+            }}
+          {%- else -%}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="hp-story__body">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="hp-eyebrow" data-hp-reveal>{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="hp-story__heading" data-hp-reveal>{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="hp-story__text" data-hp-reveal>{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.settings.stat_1_value != blank or section.settings.stat_2_value != blank -%}
+          <ul class="hp-story__stats" data-hp-reveal>
+            {%- if section.settings.stat_1_value != blank -%}
+              <li>
+                <span class="hp-story__stat-value">{{ section.settings.stat_1_value | escape }}</span>
+                <span class="hp-story__stat-label">{{ section.settings.stat_1_label | escape }}</span>
+              </li>
+            {%- endif -%}
+            {%- if section.settings.stat_2_value != blank -%}
+              <li>
+                <span class="hp-story__stat-value">{{ section.settings.stat_2_value | escape }}</span>
+                <span class="hp-story__stat-label">{{ section.settings.stat_2_label | escape }}</span>
+              </li>
+            {%- endif -%}
+            {%- if section.settings.stat_3_value != blank -%}
+              <li>
+                <span class="hp-story__stat-value">{{ section.settings.stat_3_value | escape }}</span>
+                <span class="hp-story__stat-label">{{ section.settings.stat_3_label | escape }}</span>
+              </li>
+            {%- endif -%}
+          </ul>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <div data-hp-reveal>
+            <a
+              {% if section.settings.link != blank %}href="{{ section.settings.link }}"{% endif %}
+              class="hp-btn hp-btn--solid"
+            >
+              {{ section.settings.button_label | escape }}
+              {% render 'hp-icon', icon: 'arrow-right', size: 16 %}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP Story Split",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "checkbox", "id": "sepia", "label": "Sepia treatment", "default": true },
+    { "type": "checkbox", "id": "flip", "label": "Image on right", "default": false },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our Craft" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "From Local Kilns to Fine Tables" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Every piece begins in the hands of Pakistani artisans.</p>" },
+    { "type": "text", "id": "stat_1_value", "label": "Stat 1 value", "default": "100%" },
+    { "type": "text", "id": "stat_1_label", "label": "Stat 1 label", "default": "Handcrafted" },
+    { "type": "text", "id": "stat_2_value", "label": "Stat 2 value" },
+    { "type": "text", "id": "stat_2_label", "label": "Stat 2 label" },
+    { "type": "text", "id": "stat_3_value", "label": "Stat 3 value" },
+    { "type": "text", "id": "stat_3_label", "label": "Stat 3 label" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Our story" },
+    { "type": "url", "id": "link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "THP Story Split" }]
+}
+{% endschema %}

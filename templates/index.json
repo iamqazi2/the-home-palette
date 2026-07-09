@@ -1,1 +1,393 @@
-{"sections":{"rich_text":{"type":"rich-text","blocks":{"heading":{"type":"heading","settings":{"heading":"<strong>Home Starts Here!<\/strong>","heading_size":"h2"}},"text_4jNE33":{"type":"text","settings":{"text":"<p><strong>Crafted in Pakistan, Made for Fine Dining<\/strong> — Supporting Local Artisans with Premium Serveware for Homes & Hospitality.<\/p>"}}},"block_order":["heading","text_4jNE33"],"settings":{"desktop_content_position":"center","content_alignment":"center","color_scheme":"scheme-2","full_width":true,"padding_top":28,"padding_bottom":12}},"slideshow_nNcRLK":{"type":"slideshow","blocks":{"slide_cCB4Dd":{"type":"slide","settings":{"image":"shopify:\/\/shop_images\/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp","heading":"Exquisite Dining","heading_size":"h2","subheading":"Our happy colors uplift the mood","button_label":"Dinner Sets","link":"shopify:\/\/collections\/dinner-breakfast-sets","button_style_secondary":false,"box_align":"middle-center","show_text_box":true,"text_alignment":"center","image_overlay_opacity":0,"color_scheme":"scheme-1","text_alignment_mobile":"center"}},"slide_yTHc4f":{"type":"slide","settings":{"image":"shopify:\/\/shop_images\/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp","heading":"Serving Redefined","heading_size":"h2","subheading":"Evolution of craft into luxury","button_label":"All Collections","link":"shopify:\/\/collections","button_style_secondary":false,"box_align":"middle-center","show_text_box":true,"text_alignment":"center","image_overlay_opacity":0,"color_scheme":"","text_alignment_mobile":"center"}},"slide_9JwKfm":{"type":"slide","settings":{"image":"shopify:\/\/shop_images\/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg","heading":"Traditional Kitchenware","heading_size":"h2","subheading":"Quiet luxury for your table","button_label":"Cutlery & Metalware","link":"shopify:\/\/collections\/thp-cutlery-glassware","button_style_secondary":false,"box_align":"middle-center","show_text_box":true,"text_alignment":"center","image_overlay_opacity":0,"color_scheme":"scheme-1","text_alignment_mobile":"center"}},"slide_YFRPXU":{"type":"slide","settings":{"image":"shopify:\/\/shop_images\/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp","heading":"Woven Placemats","heading_size":"h2","subheading":"From everyday meals to grand gatherings, make every dish special","button_label":"THP Weaves","link":"shopify:\/\/collections\/thp-weave-collection","button_style_secondary":false,"box_align":"middle-center","show_text_box":true,"text_alignment":"center","image_overlay_opacity":0,"color_scheme":"scheme-1","text_alignment_mobile":"center"}},"slide_PHnLY9":{"type":"slide","settings":{"image":"shopify:\/\/shop_images\/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp","heading":"Authentic Pakistani Craftsmanship","heading_size":"h2","subheading":"Celebrate heritage with our beautifully crafted tableware","button_label":"Tea & Coffee","link":"shopify:\/\/collections\/tea-coffee-essentials","button_style_secondary":false,"box_align":"middle-center","show_text_box":true,"text_alignment":"center","image_overlay_opacity":0,"color_scheme":"","text_alignment_mobile":"center"}}},"block_order":["slide_cCB4Dd","slide_yTHc4f","slide_9JwKfm","slide_YFRPXU","slide_PHnLY9"],"settings":{"layout":"full_bleed","slide_height":"adapt_image","slider_visual":"dots","auto_rotate":true,"change_slides_speed":5,"image_behavior":"none","show_text_below":true,"accessibility_info":"Slideshow about our brand"}},"featured_collection_Y4MUN7":{"type":"featured-collection","name":"t:sections.featured-collection.presets.name","settings":{"title":"Dinner Sets","heading_size":"h2","description":"","show_description":false,"description_style":"body","collection":"dinner-breakfast-sets","products_to_show":25,"columns_desktop":6,"full_width":true,"show_view_all":true,"view_all_style":"solid","enable_desktop_slider":true,"color_scheme":"scheme-2","image_ratio":"portrait","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":true,"quick_add":"standard","columns_mobile":"2","swipe_on_mobile":true,"padding_top":0,"padding_bottom":0}},"featured_collection_QRn7Q7":{"type":"featured-collection","settings":{"title":"Placemats & Baskets","heading_size":"h2","description":"","show_description":false,"description_style":"body","collection":"thp-weave-collection","products_to_show":25,"columns_desktop":6,"full_width":false,"show_view_all":true,"view_all_style":"solid","enable_desktop_slider":true,"color_scheme":"scheme-2","image_ratio":"portrait","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":true,"quick_add":"bulk","columns_mobile":"2","swipe_on_mobile":true,"padding_top":0,"padding_bottom":0}},"featured-collection":{"type":"featured-collection","settings":{"title":"Platters \/ Plates","heading_size":"h2","description":"","show_description":false,"description_style":"body","collection":"platters","products_to_show":25,"columns_desktop":6,"full_width":true,"show_view_all":true,"view_all_style":"solid","enable_desktop_slider":true,"color_scheme":"scheme-2","image_ratio":"portrait","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":true,"quick_add":"bulk","columns_mobile":"2","swipe_on_mobile":true,"padding_top":12,"padding_bottom":4}},"featured_collection_LPAqnQ":{"type":"featured-collection","settings":{"title":"Tea & Coffee","heading_size":"h2","description":"","show_description":false,"description_style":"body","collection":"tea-coffee-essentials","products_to_show":25,"columns_desktop":6,"full_width":false,"show_view_all":true,"view_all_style":"solid","enable_desktop_slider":true,"color_scheme":"scheme-2","image_ratio":"portrait","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":true,"quick_add":"bulk","columns_mobile":"2","swipe_on_mobile":true,"padding_top":0,"padding_bottom":0}},"featured_collection_ym9qt9":{"type":"featured-collection","settings":{"title":"Cutlery & Metalware","heading_size":"h2","description":"","show_description":false,"description_style":"body","collection":"thp-cutlery-glassware","products_to_show":25,"columns_desktop":6,"full_width":false,"show_view_all":true,"view_all_style":"solid","enable_desktop_slider":true,"color_scheme":"scheme-2","image_ratio":"portrait","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":true,"quick_add":"bulk","columns_mobile":"2","swipe_on_mobile":true,"padding_top":0,"padding_bottom":0}},"featured_collection_AnTVtq":{"type":"featured-collection","settings":{"title":"Serving in Style","heading_size":"h2","description":"","show_description":false,"description_style":"body","collection":"serveware","products_to_show":24,"columns_desktop":6,"full_width":false,"show_view_all":true,"view_all_style":"solid","enable_desktop_slider":true,"color_scheme":"scheme-2","image_ratio":"portrait","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":true,"quick_add":"bulk","columns_mobile":"2","swipe_on_mobile":true,"padding_top":12,"padding_bottom":4}},"featured_collection_yz8zzt":{"type":"featured-collection","settings":{"title":"Bowls","heading_size":"h2","description":"","show_description":false,"description_style":"body","collection":"aesthetic-bowls","products_to_show":25,"columns_desktop":6,"full_width":false,"show_view_all":true,"view_all_style":"solid","enable_desktop_slider":true,"color_scheme":"scheme-2","image_ratio":"portrait","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":true,"quick_add":"bulk","columns_mobile":"2","swipe_on_mobile":true,"padding_top":0,"padding_bottom":0}},"featured_collection_MLCxpJ":{"type":"featured-collection","settings":{"title":"Plates","heading_size":"h2","description":"","show_description":false,"description_style":"body","collection":"plates","products_to_show":25,"columns_desktop":6,"full_width":false,"show_view_all":true,"view_all_style":"solid","enable_desktop_slider":true,"color_scheme":"scheme-2","image_ratio":"portrait","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":true,"quick_add":"bulk","columns_mobile":"2","swipe_on_mobile":true,"padding_top":0,"padding_bottom":0}},"featured_collection_MAEfLD":{"type":"featured-collection","settings":{"title":"Wooden Line","heading_size":"h2","description":"","show_description":false,"description_style":"body","collection":"thp-woodworks","products_to_show":25,"columns_desktop":6,"full_width":true,"show_view_all":true,"view_all_style":"solid","enable_desktop_slider":true,"color_scheme":"scheme-2","image_ratio":"portrait","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":true,"quick_add":"bulk","columns_mobile":"2","swipe_on_mobile":true,"padding_top":12,"padding_bottom":4}},"collage-0":{"type":"collage","blocks":{"collection-0":{"type":"collection","source":"{{ shop.metaobjects[\"shopify--tableware-material\"].ceramic }}","settings":{"collection":"new-arrivals"}},"collection-1":{"type":"collection","source":"{{ shop.metaobjects[\"shopify--tableware-material\"].ceramic }}","settings":{"collection":"plates"}},"collection_XpwQcz":{"type":"collection","source":"{{ shop.metaobjects[\"shopify--tableware-material\"].ceramic }}","settings":{"collection":"platters"}}},"block_order":["collection-0","collection-1","collection_XpwQcz"],"settings":{"heading":"","heading_size":"h2","desktop_layout":"right","mobile_layout":"collage","card_styles":"product-card-wrapper","color_scheme":"scheme-2","padding_top":24,"padding_bottom":0}},"173573001120319a38":{"type":"apps","settings":{"include_margins":true}},"177926887221297785":{"type":"apps","blocks":{"judge_me_reviews_cards_carousel_MPgHFa":{"type":"shopify:\/\/apps\/judge-me-reviews\/blocks\/cards_carousel\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8","settings":{"show_sample_reviews":true,"reviews_selection":"all","products":[],"star_rating":"all","show_review_media":true,"display_order":"media_first","no_image_fallback":"review_text_only","max_reviews":20,"review_length":"medium","text_size":"medium","image_ratio":"1","reviews_shown":4,"show_reviewer_name":true,"show_product_name":true,"hide_arrows_mobile":true,"arrows_position":"sides","max_width":1100,"corner_styling":"soft","header_text_color":"#000000","text_color":"#000000","card_color":"#F9F9F9","stars_color":"","arrows_color":"#000000","transition_speed":5,"header_text":"Customers are saying","show_average_rating":true}}},"block_order":["judge_me_reviews_cards_carousel_MPgHFa"],"settings":{"include_margins":true}}},"order":["rich_text","slideshow_nNcRLK","featured_collection_Y4MUN7","featured_collection_QRn7Q7","featured-collection","featured_collection_LPAqnQ","featured_collection_ym9qt9","featured_collection_AnTVtq","featured_collection_yz8zzt","featured_collection_MLCxpJ","featured_collection_MAEfLD","collage-0","173573001120319a38","177926887221297785"]}
+{
+  "sections": {
+    "hp_hero": {
+      "type": "hp-hero",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
+            "kicker": "Handcrafted Heritage · Pakistan",
+            "heading": "Exquisite Dining",
+            "subheading": "Our happy colors uplift the mood — premium serveware for homes and hospitality.",
+            "button_label": "Dinner Sets",
+            "link": "shopify://collections/dinner-breakfast-sets"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
+            "kicker": "The Home Palette",
+            "heading": "Serving Redefined",
+            "subheading": "The evolution of craft into quiet luxury, one table at a time.",
+            "button_label": "All Collections",
+            "link": "shopify://collections"
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+            "kicker": "Old Ways, New Tables",
+            "heading": "Traditional Kitchenware",
+            "subheading": "Quiet luxury for your table, shaped by local artisans.",
+            "button_label": "Cutlery & Metalware",
+            "link": "shopify://collections/thp-cutlery-glassware"
+          }
+        },
+        "slide_4": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
+            "kicker": "The Weave Collection",
+            "heading": "Woven Placemats",
+            "subheading": "From everyday meals to grand gatherings, make every dish special.",
+            "button_label": "THP Weaves",
+            "link": "shopify://collections/thp-weave-collection"
+          }
+        },
+        "slide_5": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
+            "kicker": "Celebrate Heritage",
+            "heading": "Authentic Pakistani Craftsmanship",
+            "subheading": "Beautifully crafted tableware for slow afternoons and long conversations.",
+            "button_label": "Tea & Coffee",
+            "link": "shopify://collections/tea-coffee-essentials"
+          }
+        }
+      },
+      "block_order": ["slide_1", "slide_2", "slide_3", "slide_4", "slide_5"],
+      "settings": {
+        "auto_rotate": true,
+        "change_slides_speed": 6,
+        "accessibility_info": "Slideshow about our brand"
+      }
+    },
+    "hp_trust": {
+      "type": "hp-trust-strip",
+      "blocks": {
+        "trust_1": {
+          "type": "item",
+          "settings": { "icon": "truck", "title": "Nationwide Delivery", "text": "Flat Rs. 299 — free above Rs. 8,000" }
+        },
+        "trust_2": {
+          "type": "item",
+          "settings": { "icon": "award", "title": "Handcrafted", "text": "Made by Pakistani artisans" }
+        },
+        "trust_3": {
+          "type": "item",
+          "settings": { "icon": "shield-check", "title": "Quality Checked", "text": "Every piece inspected by hand" }
+        },
+        "trust_4": {
+          "type": "item",
+          "settings": { "icon": "sparkles", "title": "5% Off Online Payment", "text": "Website orders only" }
+        }
+      },
+      "block_order": ["trust_1", "trust_2", "trust_3", "trust_4"],
+      "settings": {}
+    },
+    "hp_category_tiles": {
+      "type": "hp-category-tiles",
+      "blocks": {
+        "tile_1": { "type": "tile", "settings": { "collection": "dinner-breakfast-sets", "title": "Dinner Sets" } },
+        "tile_2": { "type": "tile", "settings": { "collection": "tea-coffee-essentials", "title": "Tea & Coffee" } },
+        "tile_3": { "type": "tile", "settings": { "collection": "platters", "title": "Platters" } },
+        "tile_4": { "type": "tile", "settings": { "collection": "thp-weave-collection", "title": "Placemats & Baskets" } },
+        "tile_5": { "type": "tile", "settings": { "collection": "aesthetic-bowls", "title": "Bowls" } },
+        "tile_6": { "type": "tile", "settings": { "collection": "plates", "title": "Plates" } },
+        "tile_7": { "type": "tile", "settings": { "collection": "serveware", "title": "Serveware" } },
+        "tile_8": { "type": "tile", "settings": { "collection": "thp-cutlery-glassware", "title": "Cutlery & Metalware" } },
+        "tile_9": { "type": "tile", "settings": { "collection": "thp-woodworks", "title": "The Wooden Line" } },
+        "tile_10": { "type": "tile", "settings": { "collection": "new-arrivals", "title": "New Arrivals" } }
+      },
+      "block_order": ["tile_1", "tile_2", "tile_3", "tile_4", "tile_5", "tile_6", "tile_7", "tile_8", "tile_9", "tile_10"],
+      "settings": {
+        "eyebrow": "Chapter One — The Collections",
+        "heading": "Every Table Tells a Story",
+        "text": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
+        "center_head": false,
+        "show_count": true
+      }
+    },
+    "featured_collection_Y4MUN7": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Dinner Sets",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "dinner-breakfast-sets",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "outline",
+        "enable_desktop_slider": true,
+        "color_scheme": "scheme-2",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": true,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "hp_story": {
+      "type": "hp-story",
+      "settings": {
+        "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+        "sepia": true,
+        "flip": false,
+        "eyebrow": "Chapter Two — The Craft",
+        "heading": "Crafted in Pakistan, Made for Fine Dining",
+        "text": "<p>Home starts here. Every piece in our palette is shaped, glazed and finished by local artisans — supporting Pakistani craft while setting tables for homes, hotels and restaurants across the country. These aren't just dishes; they're heirlooms in the making.</p>",
+        "stat_1_value": "100%",
+        "stat_1_label": "Handcrafted",
+        "stat_2_value": "10+",
+        "stat_2_label": "Collections",
+        "stat_3_value": "3–5 days",
+        "stat_3_label": "Delivery",
+        "button_label": "Explore the craft",
+        "link": "shopify://collections"
+      }
+    },
+    "featured_collection_LPAqnQ": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Tea & Coffee",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "tea-coffee-essentials",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "outline",
+        "enable_desktop_slider": true,
+        "color_scheme": "scheme-2",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": true,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "hp_occasion": {
+      "type": "hp-occasion",
+      "blocks": {
+        "occ_1": {
+          "type": "occasion",
+          "settings": { "icon": "utensils", "title": "Everyday Dining", "caption": "Sturdy, beautiful staples", "link": "shopify://collections/dinner-breakfast-sets" }
+        },
+        "occ_2": {
+          "type": "occasion",
+          "settings": { "icon": "users", "title": "Hosting Guests", "caption": "Sets that impress", "link": "shopify://collections/serveware" }
+        },
+        "occ_3": {
+          "type": "occasion",
+          "settings": { "icon": "coffee", "title": "Tea Time", "caption": "Slow afternoon rituals", "link": "shopify://collections/tea-coffee-essentials" }
+        },
+        "occ_4": {
+          "type": "occasion",
+          "settings": { "icon": "moon-star", "title": "Ramadan", "caption": "Iftar & suhoor tables", "link": "shopify://collections" }
+        },
+        "occ_5": {
+          "type": "occasion",
+          "settings": { "icon": "sparkles", "title": "Eid", "caption": "Festive gatherings", "link": "shopify://collections/new-arrivals" }
+        },
+        "occ_6": {
+          "type": "occasion",
+          "settings": { "icon": "heart", "title": "Wedding Gifts", "caption": "Heirlooms to give", "link": "shopify://collections" }
+        }
+      },
+      "block_order": ["occ_1", "occ_2", "occ_3", "occ_4", "occ_5", "occ_6"],
+      "settings": {
+        "eyebrow": "Chapter Three — The Table",
+        "heading": "Shop by Occasion",
+        "text": "From quiet weekday meals to grand celebrations — set the table for the moment."
+      }
+    },
+    "featured_collection_AnTVtq": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Serving in Style",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "serveware",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "outline",
+        "enable_desktop_slider": true,
+        "color_scheme": "scheme-2",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": true,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "hp_style_rail": {
+      "type": "hp-style-rail",
+      "blocks": {
+        "style_1": {
+          "type": "style",
+          "settings": { "title": "Minimalist", "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp", "collection": "plates" }
+        },
+        "style_2": {
+          "type": "style",
+          "settings": { "title": "Earthy", "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp", "collection": "thp-weave-collection" }
+        },
+        "style_3": {
+          "type": "style",
+          "settings": { "title": "Reactive", "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp", "collection": "tea-coffee-essentials" }
+        },
+        "style_4": {
+          "type": "style",
+          "settings": { "title": "Contemporary", "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp", "collection": "dinner-breakfast-sets" }
+        },
+        "style_5": {
+          "type": "style",
+          "settings": { "title": "Hotel Collection", "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg", "collection": "serveware" }
+        }
+      },
+      "block_order": ["style_1", "style_2", "style_3", "style_4", "style_5"],
+      "settings": {
+        "eyebrow": "Textures & Glazes",
+        "heading": "Shop by Style"
+      }
+    },
+    "hp_cta": {
+      "type": "hp-cta-band",
+      "settings": {
+        "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
+        "duotone": true,
+        "eyebrow": "The Weave Collection",
+        "heading": "Woven for the Everyday Feast",
+        "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
+        "button_label": "Explore THP Weaves",
+        "link": "shopify://collections/thp-weave-collection"
+      }
+    },
+    "featured_collection_MAEfLD": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "The Wooden Line",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "thp-woodworks",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "outline",
+        "enable_desktop_slider": true,
+        "color_scheme": "scheme-2",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": true,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "hp_marquee": {
+      "type": "hp-marquee",
+      "blocks": {
+        "phrase_1": { "type": "phrase", "settings": { "text": "Crafted in Pakistan", "icon": "sparkles" } },
+        "phrase_2": { "type": "phrase", "settings": { "text": "Made for Fine Dining", "icon": "utensils" } },
+        "phrase_3": { "type": "phrase", "settings": { "text": "Supporting Local Artisans", "icon": "heart" } },
+        "phrase_4": { "type": "phrase", "settings": { "text": "Homes & Hospitality", "icon": "gem" } }
+      },
+      "block_order": ["phrase_1", "phrase_2", "phrase_3", "phrase_4"],
+      "settings": {}
+    },
+    "173573001120319a38": {
+      "type": "apps",
+      "settings": { "include_margins": true }
+    },
+    "177926887221297785": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_cards_carousel_MPgHFa": {
+          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": true,
+            "reviews_selection": "all",
+            "products": [],
+            "star_rating": "all",
+            "show_review_media": true,
+            "display_order": "media_first",
+            "no_image_fallback": "review_text_only",
+            "max_reviews": 20,
+            "review_length": "medium",
+            "text_size": "medium",
+            "image_ratio": "1",
+            "reviews_shown": 4,
+            "show_reviewer_name": true,
+            "show_product_name": true,
+            "hide_arrows_mobile": true,
+            "arrows_position": "sides",
+            "max_width": 1100,
+            "corner_styling": "soft",
+            "header_text_color": "#000000",
+            "text_color": "#000000",
+            "card_color": "#F9F9F9",
+            "stars_color": "",
+            "arrows_color": "#000000",
+            "transition_speed": 5,
+            "header_text": "Customers are saying",
+            "show_average_rating": true
+          }
+        }
+      },
+      "block_order": ["judge_me_reviews_cards_carousel_MPgHFa"],
+      "settings": { "include_margins": true }
+    }
+  },
+  "order": [
+    "hp_hero",
+    "hp_trust",
+    "hp_category_tiles",
+    "featured_collection_Y4MUN7",
+    "hp_story",
+    "featured_collection_LPAqnQ",
+    "hp_occasion",
+    "featured_collection_AnTVtq",
+    "hp_style_rail",
+    "hp_cta",
+    "featured_collection_MAEfLD",
+    "hp_marquee",
+    "173573001120319a38",
+    "177926887221297785"
+  ]
+}

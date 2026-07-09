@@ -1,0 +1,147 @@
+{% comment %} THP — Shop by Occasion icon cards on textured moss band {% endcomment %}
+
+{%- style -%}
+  .hp-occasion { background: var(--hp-moss); color: var(--hp-linen); }
+  .hp-occasion .hp-eyebrow { color: var(--hp-cream); }
+  .hp-occasion .hp-section-head__title { color: var(--hp-linen); }
+  .hp-occasion .hp-section-head__text { color: rgba(239, 236, 236, 0.72); }
+  .hp-occasion__grid {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (min-width: 750px) { .hp-occasion__grid { grid-template-columns: repeat(3, 1fr); } }
+  @media screen and (min-width: 1200px) { .hp-occasion__grid { grid-template-columns: repeat({{ section.blocks.size | at_most: 6 | at_least: 3 }}, 1fr); } }
+  .hp-occasion__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.6rem;
+    padding: 4rem 2rem 3.6rem;
+    border: 1px solid var(--hp-hairline-light);
+    color: var(--hp-linen);
+    text-decoration: none;
+    transition: transform 0.45s var(--hp-ease), background 0.45s var(--hp-ease), border-color 0.45s var(--hp-ease);
+  }
+  .hp-occasion__card:hover {
+    transform: translateY(-6px);
+    background: rgba(239, 236, 236, 0.05);
+    border-color: rgba(255, 249, 223, 0.4);
+  }
+  .hp-occasion__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 6rem;
+    height: 6rem;
+    border: 1px solid var(--hp-hairline-light);
+    border-radius: 50%;
+    color: var(--hp-cream);
+    transition: transform 0.35s var(--hp-ease), background 0.35s var(--hp-ease), color 0.35s var(--hp-ease);
+  }
+  .hp-occasion__card:hover .hp-occasion__icon {
+    transform: translateY(-3px);
+    background: var(--hp-cream);
+    color: var(--hp-moss);
+  }
+  .hp-occasion__name {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-size: 2.1rem;
+    font-weight: 500;
+  }
+  .hp-occasion__caption {
+    margin: 0;
+    font-size: 1.15rem;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+    color: rgba(239, 236, 236, 0.68);
+  }
+{%- endstyle -%}
+
+<div class="hp-occasion hp-section">
+  <div class="hp-container">
+    <div class="hp-section-head hp-section-head--center">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hp-eyebrow hp-eyebrow--rule-after" data-hp-reveal>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hp-section-head__title" data-hp-reveal>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="hp-section-head__text" data-hp-reveal>{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="hp-occasion__grid" data-hp-stagger>
+      {%- for block in section.blocks -%}
+        <a
+          class="hp-occasion__card"
+          {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %}
+          data-hp-reveal
+          {{ block.shopify_attributes }}
+        >
+          <span class="hp-occasion__icon">{% render 'hp-icon', icon: block.settings.icon, size: 24 %}</span>
+          <h3 class="hp-occasion__name">{{ block.settings.title | escape }}</h3>
+          {%- if block.settings.caption != blank -%}
+            <p class="hp-occasion__caption">{{ block.settings.caption | escape }}</p>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP Shop by Occasion",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Chapter Two — The Table" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Occasion" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "From quiet weekday meals to grand celebrations — set the table for the moment." }
+  ],
+  "blocks": [
+    {
+      "type": "occasion",
+      "name": "Occasion",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "utensils", "label": "Utensils" },
+            { "value": "users", "label": "Guests" },
+            { "value": "coffee", "label": "Tea time" },
+            { "value": "moon-star", "label": "Ramadan" },
+            { "value": "sparkles", "label": "Eid" },
+            { "value": "heart", "label": "Wedding" },
+            { "value": "hand-platter", "label": "Serving" },
+            { "value": "flame", "label": "Kitchen" }
+          ],
+          "default": "utensils"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Everyday Dining" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "Sturdy, beautiful staples" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP Shop by Occasion",
+      "blocks": [
+        { "type": "occasion" },
+        { "type": "occasion", "settings": { "icon": "users", "title": "Hosting Guests", "caption": "Sets that impress" } },
+        { "type": "occasion", "settings": { "icon": "coffee", "title": "Tea Time", "caption": "Slow afternoon rituals" } },
+        { "type": "occasion", "settings": { "icon": "moon-star", "title": "Ramadan", "caption": "Iftar & suhoor tables" } },
+        { "type": "occasion", "settings": { "icon": "sparkles", "title": "Eid", "caption": "Festive gatherings" } },
+        { "type": "occasion", "settings": { "icon": "heart", "title": "Wedding Gifts", "caption": "Heirlooms to give" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

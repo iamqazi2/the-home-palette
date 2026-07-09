@@ -1,0 +1,373 @@
+/* ==========================================================================
+   THE HOME PALETTE — "Vintage Story, Modern Craft" design system
+   All colors derive from the existing theme palette (settings_data.json):
+   cream #fff9df · ink #252525 · espresso #0e0606 · taupe #716a56
+   moss #2c332f · fern #3f5147 · linen #efecec · white #ffffff
+   ========================================================================== */
+
+:root {
+  --hp-cream: #fff9df;
+  --hp-cream-soft: #fffdf4;      /* tint of cream */
+  --hp-paper: #ffffff;
+  --hp-ink: #252525;
+  --hp-espresso: #0e0606;
+  --hp-taupe: #716a56;
+  --hp-taupe-soft: #8a8370;      /* tint of taupe */
+  --hp-moss: #2c332f;
+  --hp-fern: #3f5147;
+  --hp-linen: #efecec;
+
+  --hp-hairline: rgba(37, 37, 37, 0.14);
+  --hp-hairline-strong: rgba(37, 37, 37, 0.3);
+  --hp-hairline-light: rgba(239, 236, 236, 0.22);
+
+  --hp-font-display: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+
+  --hp-ease: cubic-bezier(0.22, 0.61, 0.21, 1);
+  --hp-dur: 0.8s;
+  --hp-dur-slow: 1.4s;
+}
+
+/* --------------------------------------------------------------------------
+   1. GLOBAL TYPOGRAPHY — vintage serif display over Dawn's body sans
+   -------------------------------------------------------------------------- */
+
+h1, h2, h3,
+.h0, .h1, .h2, .h3,
+.title,
+.banner__heading,
+.rich-text__heading,
+.image-with-text__heading,
+.collection-hero__title,
+.product__title > *,
+.footer-block__heading,
+.cart__title,
+.main-page-title,
+.quick-add-modal .product__title > * {
+  font-family: var(--hp-font-display) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.005em !important;
+  line-height: 1.12;
+}
+
+.hp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--hp-taupe);
+}
+.hp-eyebrow::before,
+.hp-eyebrow--rule-after::after {
+  content: '';
+  width: 3.6rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.hp-eyebrow--bare::before { content: none; }
+.hp-eyebrow--light { color: var(--hp-cream); }
+
+.hp-display {
+  font-family: var(--hp-font-display);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: 0.005em;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   2. BUTTONS — squared, letter-spaced, quietly confident
+   -------------------------------------------------------------------------- */
+
+.button,
+.shopify-challenge__button,
+.customer button,
+button.shopify-payment-button__button--unbranded {
+  border-radius: 0 !important;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease), opacity 0.35s var(--hp-ease);
+}
+.button::after, .shopify-challenge__button::after { box-shadow: none !important; }
+.button:hover { opacity: 0.88; }
+
+.hp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid currentColor;
+  color: var(--hp-ink);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease), border-color 0.35s var(--hp-ease);
+}
+.hp-btn .hp-icon { transition: transform 0.35s var(--hp-ease); }
+.hp-btn:hover .hp-icon { transform: translateX(4px); }
+
+.hp-btn--solid { background: var(--hp-espresso); border-color: var(--hp-espresso); color: var(--hp-paper); }
+.hp-btn--solid:hover { background: transparent; color: var(--hp-espresso); }
+
+.hp-btn--cream { border-color: var(--hp-cream); color: var(--hp-cream); }
+.hp-btn--cream:hover { background: var(--hp-cream); color: var(--hp-ink); }
+
+.hp-btn--cream-solid { background: var(--hp-cream); border-color: var(--hp-cream); color: var(--hp-ink); }
+.hp-btn--cream-solid:hover { background: transparent; color: var(--hp-cream); }
+
+/* Underline-draw text link */
+.hp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: currentColor;
+  padding-bottom: 0.5rem;
+  position: relative;
+}
+.hp-link::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform: scaleX(0.35);
+  transform-origin: left;
+  transition: transform 0.45s var(--hp-ease);
+}
+.hp-link:hover::after { transform: scaleX(1); }
+.hp-link .hp-icon { transition: transform 0.35s var(--hp-ease); }
+.hp-link:hover .hp-icon { transform: translateX(4px); }
+
+/* --------------------------------------------------------------------------
+   3. ANNOUNCEMENT BAR + HEADER — refined, hairlined, editorial nav
+   -------------------------------------------------------------------------- */
+
+.announcement-bar { letter-spacing: 0.18em; }
+.announcement-bar__message {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.header-wrapper {
+  background: var(--hp-cream-soft);
+  border-bottom: 1px solid var(--hp-hairline);
+}
+.header-wrapper .header { background: transparent; }
+
+.header__heading-link .h2,
+.header__heading-link {
+  font-family: var(--hp-font-display) !important;
+  letter-spacing: 0.04em;
+}
+
+.header__menu-item > span {
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+.header__menu-item:hover > span { text-decoration: none; }
+
+/* underline-draw on nav */
+.header__menu-item > span { position: relative; padding-bottom: 0.3rem; }
+.header__menu-item > span::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--hp-ease);
+}
+.header__menu-item:hover > span::after,
+.header__active-menu-item > span::after { transform: scaleX(1); }
+.header__active-menu-item { text-decoration: none !important; }
+
+/* --------------------------------------------------------------------------
+   4. PRODUCT CARDS — hairline frames, slow zoom, serif prices
+   -------------------------------------------------------------------------- */
+
+.card,
+.card__inner,
+.card__media,
+.card .media {
+  border-radius: 0 !important;
+}
+.card--card { border: 1px solid var(--hp-hairline) !important; box-shadow: none !important; }
+.card__inner { background: var(--hp-linen); }
+
+.card__media img {
+  transition: transform 1.3s var(--hp-ease), opacity 0.5s ease;
+}
+.card-wrapper:hover .card__media img:only-child,
+.card-wrapper:focus-within .card__media img:only-child {
+  transform: scale(1.05);
+}
+
+.card__heading {
+  font-family: var(--assistant-font, inherit);
+  font-size: 1.3rem !important;
+  letter-spacing: 0.06em;
+  line-height: 1.45;
+}
+.card__heading a { text-transform: uppercase; }
+.card-wrapper .card__heading a:hover { text-decoration-thickness: 1px; text-underline-offset: 0.4rem; }
+
+.card-information .price {
+  font-family: var(--hp-font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  color: var(--hp-taupe);
+}
+.card-information .price--on-sale .price-item--regular { font-size: 1.2rem; }
+
+.badge {
+  border-radius: 0 !important;
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: none;
+}
+
+.quick-add__submit { border: 1px solid var(--hp-hairline-strong) !important; background: var(--hp-cream-soft) !important; color: var(--hp-ink) !important; }
+.quick-add__submit:hover { background: var(--hp-espresso) !important; color: var(--hp-paper) !important; }
+
+/* Featured-collection section headings get an editorial treatment */
+.collection .title-wrapper-with-link { align-items: baseline; }
+.collection .title-wrapper-with-link .title {
+  font-size: clamp(2.8rem, 4vw, 4.4rem);
+}
+.collection .title-wrapper-with-link .link-with-icon {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   5. FOOTER + NEWSLETTER — dark heritage footer
+   -------------------------------------------------------------------------- */
+
+.footer { border-top: 1px solid var(--hp-hairline-light); }
+.footer-block__heading {
+  font-size: 2rem !important;
+  letter-spacing: 0.04em !important;
+}
+.footer__content-bottom { border-top: 1px solid var(--hp-hairline-light); }
+.footer__copyright .copyright__content { letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.95rem; }
+
+.footer .field__input,
+.newsletter-form__field-wrapper .field__input {
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Newsletter band ("Join the Table") */
+.newsletter { position: relative; }
+.newsletter__wrapper .newsletter__heading { font-size: clamp(3rem, 5vw, 5rem); }
+.newsletter-form__button { color: currentColor; }
+
+/* --------------------------------------------------------------------------
+   6. SHARED SECTION PRIMITIVES
+   -------------------------------------------------------------------------- */
+
+.hp-section { padding: clamp(5.6rem, 9vw, 10rem) 0; }
+.hp-section--flush-top { padding-top: 0; }
+.hp-container {
+  max-width: 144rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+@media screen and (min-width: 750px) {
+  .hp-container { padding: 0 5rem; }
+}
+
+.hp-section-head { max-width: 72rem; margin-bottom: clamp(3.2rem, 5vw, 5.6rem); }
+.hp-section-head--center { margin-left: auto; margin-right: auto; text-align: center; }
+.hp-section-head--center .hp-eyebrow::after {
+  content: '';
+  width: 3.6rem; height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.hp-section-head__title {
+  font-size: clamp(3.2rem, 5vw, 5.2rem);
+  margin: 1.6rem 0 0;
+}
+.hp-section-head__text {
+  margin: 1.6rem 0 0;
+  font-size: 1.5rem;
+  line-height: 1.8;
+  color: var(--hp-taupe);
+  max-width: 56rem;
+}
+.hp-section-head--center .hp-section-head__text { margin-left: auto; margin-right: auto; }
+
+/* Paper-grain texture (pure CSS, no asset) */
+.hp-grain { position: relative; }
+.hp-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(rgba(37, 37, 37, 0.035) 1px, transparent 1.4px),
+    radial-gradient(rgba(113, 106, 86, 0.03) 1px, transparent 1.6px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 2px 3px;
+}
+.hp-grain > * { position: relative; }
+
+/* Scroll reveal — JS adds .hp-inview; no-JS and reduced-motion stay visible */
+html.hp-js [data-hp-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity var(--hp-dur) var(--hp-ease),
+    transform var(--hp-dur) var(--hp-ease);
+  transition-delay: calc(var(--hp-i, 0) * 90ms);
+}
+html.hp-js [data-hp-reveal].hp-inview { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html.hp-js [data-hp-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* Skeleton shimmer for lazy media */
+.hp-media-frame { background: var(--hp-linen); overflow: hidden; }
+.hp-media-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* Marquee */
+.hp-marquee { overflow: hidden; white-space: nowrap; }
+.hp-marquee__track {
+  display: inline-flex;
+  align-items: center;
+  gap: 4rem;
+  padding-right: 4rem;
+  animation: hp-marquee 38s linear infinite;
+  will-change: transform;
+}
+.hp-marquee:hover .hp-marquee__track { animation-play-state: paused; }
+@keyframes hp-marquee {
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hp-marquee__track { animation: none; }
+}

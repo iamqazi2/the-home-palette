@@ -1,0 +1,83 @@
+{% comment %} THP — Serif brand marquee band {% endcomment %}
+
+{%- style -%}
+  .hp-marquee-band {
+    background: var(--hp-paper);
+    border-top: 1px solid var(--hp-hairline);
+    border-bottom: 1px solid var(--hp-hairline);
+    padding: 2.4rem 0;
+  }
+  .hp-marquee-band__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4rem;
+    font-family: var(--hp-font-display);
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--hp-ink);
+    white-space: nowrap;
+  }
+  .hp-marquee-band__item .hp-icon { color: var(--hp-taupe); }
+{%- endstyle -%}
+
+<div class="hp-marquee-band">
+  <div class="hp-marquee" aria-hidden="true">
+    <div class="hp-marquee__track">
+      {%- for i in (1..2) -%}
+        {%- for block in section.blocks -%}
+          <span class="hp-marquee-band__item" {{ block.shopify_attributes }}>
+            {{ block.settings.text | escape }}
+            {% render 'hp-icon', icon: block.settings.icon, size: 20 %}
+          </span>
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+  </div>
+  <span class="visually-hidden">
+    {%- for block in section.blocks -%}{{ block.settings.text | escape }}{% unless forloop.last %} · {% endunless %}{%- endfor -%}
+  </span>
+</div>
+
+{% schema %}
+{
+  "name": "THP Marquee",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "phrase",
+      "name": "Phrase",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Crafted in Pakistan" },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "sparkles", "label": "Sparkles" },
+            { "value": "gem", "label": "Gem" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "utensils", "label": "Utensils" },
+            { "value": "coffee", "label": "Coffee" }
+          ],
+          "default": "sparkles"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP Marquee",
+      "blocks": [
+        { "type": "phrase" },
+        { "type": "phrase", "settings": { "text": "Made for Fine Dining", "icon": "utensils" } },
+        { "type": "phrase", "settings": { "text": "Supporting Local Artisans", "icon": "heart" } },
+        { "type": "phrase", "settings": { "text": "Homes & Hospitality", "icon": "gem" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,105 @@
+{% comment %} THP — Trust strip with Lucide icons and hairline dividers {% endcomment %}
+
+{%- style -%}
+  .hp-trust {
+    background: var(--hp-cream);
+    border-bottom: 1px solid var(--hp-hairline);
+  }
+  .hp-trust__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (min-width: 990px) {
+    .hp-trust__grid { grid-template-columns: repeat({{ section.blocks.size | at_least: 1 }}, 1fr); }
+  }
+  .hp-trust__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.2rem;
+    padding: 3.2rem 2rem;
+    border-right: 1px solid var(--hp-hairline);
+    color: var(--hp-ink);
+  }
+  .hp-trust__item:nth-child(2n) { border-right: none; }
+  @media screen and (min-width: 990px) {
+    .hp-trust__item:nth-child(2n) { border-right: 1px solid var(--hp-hairline); }
+    .hp-trust__item:last-child { border-right: none; }
+  }
+  .hp-trust__item .hp-icon { color: var(--hp-taupe); transition: transform 0.35s var(--hp-ease); }
+  .hp-trust__item:hover .hp-icon { transform: translateY(-4px); }
+  .hp-trust__title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .hp-trust__text {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--hp-taupe);
+  }
+{%- endstyle -%}
+
+<div class="hp-trust hp-grain">
+  <div class="hp-trust__grid" data-hp-stagger>
+    {%- for block in section.blocks -%}
+      <div class="hp-trust__item" data-hp-reveal {{ block.shopify_attributes }}>
+        {% render 'hp-icon', icon: block.settings.icon, size: 26 %}
+        <h3 class="hp-trust__title">{{ block.settings.title | escape }}</h3>
+        {%- if block.settings.text != blank -%}
+          <p class="hp-trust__text">{{ block.settings.text | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP Trust Strip",
+  "tag": "section",
+  "max_blocks": 5,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Truck" },
+            { "value": "shield-check", "label": "Shield check" },
+            { "value": "award", "label": "Award" },
+            { "value": "rotate-ccw", "label": "Returns" },
+            { "value": "gem", "label": "Gem" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "sparkles", "label": "Sparkles" },
+            { "value": "heart", "label": "Heart" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Nationwide Delivery" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Flat Rs. 299 — free above Rs. 8,000" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP Trust Strip",
+      "blocks": [
+        { "type": "item" },
+        { "type": "item", "settings": { "icon": "award", "title": "Handcrafted", "text": "Made by Pakistani artisans" } },
+        { "type": "item", "settings": { "icon": "shield-check", "title": "Quality Checked", "text": "Every piece inspected by hand" } },
+        { "type": "item", "settings": { "icon": "rotate-ccw", "title": "Easy Returns", "text": "Hassle-free replacements" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
