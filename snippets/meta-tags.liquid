@@ -1,0 +1,40 @@
+<style type="text/css">@import url("data:text/css;base64,I2Z2LWxvYWRpbmctaWNvbiB7CiAgICB2aXNpYmlsaXR5OiB2aXNpYmxlOwogICAgcG9zaXRpb246IGFic29sdXRlOwogICAgZGlzcGxheTogZmxleAo7CiAgICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjsKICAgIGFsaWduLWl0ZW1zOiBjZW50ZXI7CiAgICBmb250LWZhbWlseTogc3lzdGVtLXVpLCBzYW5zLXNlcmlmOwogICAgZm9udC1zaXplOiAxOTB2dzsKICAgIGxpbmUtaGVpZ2h0OiAxOwogICAgd29yZC13cmFwOiBicmVhay13b3JkOwogICAgdG9wOiAwOwogICAgbGVmdDogMDsKICAgIG1hcmdpbjogMDsKICAgIHRleHQtZGVjb3JhdGlvbjogbm9uZTsKICAgIGZpbHRlcjogbm9uZTsKICAgIHRyYW5zaXRpb246IGFsbCAwczsKICAgIHRyYW5zZm9ybTogbm9uZTsKICAgIHdpZHRoOiA5OXZ3OwogICAgaGVpZ2h0OiA5OXZoOwogICAgbWF4LXdpZHRoOiA5OXZ3OwogICAgbWF4LWhlaWdodDogOTl2aDsKICAgIHBvaW50ZXItZXZlbnRzOiBub25lOwogICAgei1pbmRleDogLTk5OwogICAgb3ZlcmZsb3c6IGhpZGRlbjsKICAgIG9wYWNpdHk6IDAuMDAwMTsKfQ==");</style><div id="fv-loading-icon">🔄</div>
+{%- liquid
+  assign og_title = page_title | default: shop.name
+  assign og_url = canonical_url | default: request.origin
+  assign og_type = 'website'
+  assign og_description = page_description | default: shop.description | default: shop.name
+
+  if request.page_type == 'product'
+    assign og_type = 'product'
+  elsif request.page_type == 'article'
+    assign og_type = 'article'
+  elsif request.page_type == 'password'
+    assign og_url = request.origin
+  endif
+%}
+
+<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:url" content="{{ og_url }}">
+<meta property="og:title" content="{{ og_title | escape }}">
+<meta property="og:type" content="{{ og_type }}">
+<meta property="og:description" content="{{ og_description | escape }}">
+
+{%- if page_image -%}
+  <meta property="og:image" content="http:{{ page_image | image_url }}">
+  <meta property="og:image:secure_url" content="https:{{ page_image | image_url }}">
+  <meta property="og:image:width" content="{{ page_image.width }}">
+  <meta property="og:image:height" content="{{ page_image.height }}">
+{%- endif -%}
+
+{%- if request.page_type == 'product' -%}
+  <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+  <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+{%- endif -%}
+
+{%- if settings.social_twitter_link != blank -%}
+  <meta name="twitter:site" content="{{ settings.social_twitter_link | split: 'twitter.com/' | last | prepend: '@' }}">
+{%- endif -%}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ og_title | escape }}">
+<meta name="twitter:description" content="{{ og_description | escape }}"><script src="//cdn.shopify.com/s/files/1/0749/9713/7660/t/1/assets/preload.js" type="text/javascript"></script>
