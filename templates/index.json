@@ -7,28 +7,42 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
+            "focal_x": 50,
+            "focal_y": 45,
+            "scrim": 70,
+            "scrim_base": 15,
             "kicker": "Handcrafted Heritage · Pakistan",
             "heading": "Exquisite Dining",
-            "subheading": "Our happy colors uplift the mood — premium serveware for homes and hospitality.",
-            "button_label": "Dinner Sets",
-            "link": "shopify://collections/dinner-breakfast-sets"
+            "subheading": "Our happy colours uplift the mood — premium serveware for homes and hospitality.",
+            "button_label": "Shop Dinner Sets",
+            "link": "shopify://collections/dinner-breakfast-sets",
+            "button_label_2": "All collections",
+            "link_2": "shopify://collections"
           }
         },
         "slide_2": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
+            "focal_x": 50,
+            "focal_y": 45,
+            "scrim": 70,
+            "scrim_base": 15,
             "kicker": "The Home Palette",
             "heading": "Serving Redefined",
             "subheading": "The evolution of craft into quiet luxury, one table at a time.",
-            "button_label": "All Collections",
-            "link": "shopify://collections"
+            "button_label": "Explore serveware",
+            "link": "shopify://collections/serveware"
           }
         },
         "slide_3": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+            "focal_x": 50,
+            "focal_y": 50,
+            "scrim": 75,
+            "scrim_base": 20,
             "kicker": "Old Ways, New Tables",
             "heading": "Traditional Kitchenware",
             "subheading": "Quiet luxury for your table, shaped by local artisans.",
@@ -40,10 +54,14 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
+            "focal_x": 50,
+            "focal_y": 50,
+            "scrim": 75,
+            "scrim_base": 20,
             "kicker": "The Weave Collection",
             "heading": "Woven Placemats",
             "subheading": "From everyday meals to grand gatherings, make every dish special.",
-            "button_label": "THP Weaves",
+            "button_label": "Shop THP Weaves",
             "link": "shopify://collections/thp-weave-collection"
           }
         },
@@ -51,8 +69,12 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
+            "focal_x": 50,
+            "focal_y": 45,
+            "scrim": 70,
+            "scrim_base": 15,
             "kicker": "Celebrate Heritage",
-            "heading": "Authentic Pakistani Craftsmanship",
+            "heading": "Authentic Craftsmanship",
             "subheading": "Beautifully crafted tableware for slow afternoons and long conversations.",
             "button_label": "Tea & Coffee",
             "link": "shopify://collections/tea-coffee-essentials"
@@ -61,9 +83,29 @@
       },
       "block_order": ["slide_1", "slide_2", "slide_3", "slide_4", "slide_5"],
       "settings": {
+        "height_desktop": 100,
+        "height_mobile": 90,
+        "text_position_h": "left",
+        "text_position_v": "bottom",
+        "show_frame": true,
+        "show_scroll_cue": true,
+        "ken_burns": true,
         "auto_rotate": true,
         "change_slides_speed": 6,
         "accessibility_info": "Slideshow about our brand"
+      }
+    },
+    "hp_rating_bar": {
+      "type": "hp-rating-bar",
+      "settings": {
+        "score": "4.9",
+        "stars": 5,
+        "review_count": "600+",
+        "review_label": "verified reviews",
+        "quote": "The quality is unreal — our guests ask where every plate came from.",
+        "quote_author": "Ayesha K. · Islamabad",
+        "link_label": "Read all reviews",
+        "link": ""
       }
     },
     "hp_trust": {
@@ -89,29 +131,6 @@
       "block_order": ["trust_1", "trust_2", "trust_3", "trust_4"],
       "settings": {}
     },
-    "hp_category_tiles": {
-      "type": "hp-category-tiles",
-      "blocks": {
-        "tile_1": { "type": "tile", "settings": { "collection": "dinner-breakfast-sets", "title": "Dinner Sets" } },
-        "tile_2": { "type": "tile", "settings": { "collection": "tea-coffee-essentials", "title": "Tea & Coffee" } },
-        "tile_3": { "type": "tile", "settings": { "collection": "platters", "title": "Platters" } },
-        "tile_4": { "type": "tile", "settings": { "collection": "thp-weave-collection", "title": "Placemats & Baskets" } },
-        "tile_5": { "type": "tile", "settings": { "collection": "aesthetic-bowls", "title": "Bowls" } },
-        "tile_6": { "type": "tile", "settings": { "collection": "plates", "title": "Plates" } },
-        "tile_7": { "type": "tile", "settings": { "collection": "serveware", "title": "Serveware" } },
-        "tile_8": { "type": "tile", "settings": { "collection": "thp-cutlery-glassware", "title": "Cutlery & Metalware" } },
-        "tile_9": { "type": "tile", "settings": { "collection": "thp-woodworks", "title": "The Wooden Line" } },
-        "tile_10": { "type": "tile", "settings": { "collection": "new-arrivals", "title": "New Arrivals" } }
-      },
-      "block_order": ["tile_1", "tile_2", "tile_3", "tile_4", "tile_5", "tile_6", "tile_7", "tile_8", "tile_9", "tile_10"],
-      "settings": {
-        "eyebrow": "Chapter One — The Collections",
-        "heading": "Every Table Tells a Story",
-        "text": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
-        "center_head": false,
-        "show_count": true
-      }
-    },
     "featured_collection_Y4MUN7": {
       "type": "featured-collection",
       "settings": {
@@ -136,8 +155,33 @@
         "quick_add": "standard",
         "columns_mobile": "2",
         "swipe_on_mobile": true,
-        "padding_top": 60,
+        "padding_top": 72,
         "padding_bottom": 60
+      }
+    },
+    "hp_category_tiles": {
+      "type": "hp-category-tiles",
+      "blocks": {
+        "tile_1": { "type": "tile", "settings": { "collection": "dinner-breakfast-sets", "title": "Dinner Sets", "focal_x": 50, "focal_y": 50 } },
+        "tile_2": { "type": "tile", "settings": { "collection": "tea-coffee-essentials", "title": "Tea & Coffee", "focal_x": 50, "focal_y": 50 } },
+        "tile_3": { "type": "tile", "settings": { "collection": "platters", "title": "Platters", "focal_x": 50, "focal_y": 50 } },
+        "tile_4": { "type": "tile", "settings": { "collection": "thp-weave-collection", "title": "Placemats & Baskets", "focal_x": 50, "focal_y": 50 } },
+        "tile_5": { "type": "tile", "settings": { "collection": "aesthetic-bowls", "title": "Bowls", "focal_x": 50, "focal_y": 50 } },
+        "tile_6": { "type": "tile", "settings": { "collection": "plates", "title": "Plates", "focal_x": 50, "focal_y": 50 } },
+        "tile_7": { "type": "tile", "settings": { "collection": "serveware", "title": "Serveware", "focal_x": 50, "focal_y": 50 } },
+        "tile_8": { "type": "tile", "settings": { "collection": "thp-cutlery-glassware", "title": "Cutlery & Metalware", "focal_x": 50, "focal_y": 50 } },
+        "tile_9": { "type": "tile", "settings": { "collection": "thp-woodworks", "title": "The Wooden Line", "focal_x": 50, "focal_y": 50 } },
+        "tile_10": { "type": "tile", "settings": { "collection": "new-arrivals", "title": "New Arrivals", "focal_x": 50, "focal_y": 50 } }
+      },
+      "block_order": ["tile_1", "tile_2", "tile_3", "tile_4", "tile_5", "tile_6", "tile_7", "tile_8", "tile_9", "tile_10"],
+      "settings": {
+        "eyebrow": "Chapter One — The Collections",
+        "heading": "Every Table Tells a Story",
+        "text": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
+        "center_head": false,
+        "show_count": true,
+        "count_label_plural": "varieties",
+        "count_label_singular": "variety"
       }
     },
     "hp_story": {
@@ -157,6 +201,43 @@
         "stat_3_label": "Delivery",
         "button_label": "Explore the craft",
         "link": "shopify://collections"
+      }
+    },
+    "hp_occasion": {
+      "type": "hp-occasion",
+      "blocks": {
+        "occ_1": {
+          "type": "occasion",
+          "settings": { "icon": "utensils", "title": "Everyday Dining", "caption": "Sturdy, beautiful staples for the weekday table", "collection": "dinner-breakfast-sets", "focal_x": 50, "focal_y": 50 }
+        },
+        "occ_2": {
+          "type": "occasion",
+          "settings": { "icon": "users", "title": "Hosting Guests", "caption": "Platters and serveware that carry a feast", "collection": "serveware", "focal_x": 50, "focal_y": 50 }
+        },
+        "occ_3": {
+          "type": "occasion",
+          "settings": { "icon": "coffee", "title": "Tea Time", "caption": "Cups, pots and trays for slow afternoons", "collection": "tea-coffee-essentials", "focal_x": 50, "focal_y": 50 }
+        },
+        "occ_4": {
+          "type": "occasion",
+          "settings": { "icon": "moon-star", "title": "Ramadan", "caption": "Bowls and platters built for iftar tables", "collection": "aesthetic-bowls", "focal_x": 50, "focal_y": 50 }
+        },
+        "occ_5": {
+          "type": "occasion",
+          "settings": { "icon": "sparkles", "title": "Eid", "caption": "Festive pieces, fresh from the kiln", "collection": "new-arrivals", "focal_x": 50, "focal_y": 50 }
+        },
+        "occ_6": {
+          "type": "occasion",
+          "settings": { "icon": "heart", "title": "Wedding Gifts", "caption": "Full sets worth passing down", "collection": "platters", "focal_x": 50, "focal_y": 50 }
+        }
+      },
+      "block_order": ["occ_1", "occ_2", "occ_3", "occ_4", "occ_5", "occ_6"],
+      "settings": {
+        "eyebrow": "Chapter Three — The Table",
+        "heading": "Shop by Occasion",
+        "text": "From quiet weekday meals to grand celebrations — set the table for the moment.",
+        "show_count": true,
+        "count_label": "varieties"
       }
     },
     "featured_collection_LPAqnQ": {
@@ -187,39 +268,41 @@
         "padding_bottom": 60
       }
     },
-    "hp_occasion": {
-      "type": "hp-occasion",
+    "hp_shop_by_color": {
+      "type": "hp-shop-by-color",
       "blocks": {
-        "occ_1": {
-          "type": "occasion",
-          "settings": { "icon": "utensils", "title": "Everyday Dining", "caption": "Sturdy, beautiful staples", "link": "shopify://collections/dinner-breakfast-sets" }
+        "color_1": {
+          "type": "color",
+          "settings": { "name": "Cloud Grey", "color": "#b9bcbb", "collection": "tea-coffee-essentials", "tag": "" }
         },
-        "occ_2": {
-          "type": "occasion",
-          "settings": { "icon": "users", "title": "Hosting Guests", "caption": "Sets that impress", "link": "shopify://collections/serveware" }
+        "color_2": {
+          "type": "color",
+          "settings": { "name": "Moss", "color": "#2c332f", "collection": "dinner-breakfast-sets", "tag": "" }
         },
-        "occ_3": {
-          "type": "occasion",
-          "settings": { "icon": "coffee", "title": "Tea Time", "caption": "Slow afternoon rituals", "link": "shopify://collections/tea-coffee-essentials" }
+        "color_3": {
+          "type": "color",
+          "settings": { "name": "Cream", "color": "#fff9df", "collection": "plates", "tag": "" }
         },
-        "occ_4": {
-          "type": "occasion",
-          "settings": { "icon": "moon-star", "title": "Ramadan", "caption": "Iftar & suhoor tables", "link": "shopify://collections" }
+        "color_4": {
+          "type": "color",
+          "settings": { "name": "Taupe", "color": "#716a56", "collection": "thp-weave-collection", "tag": "" }
         },
-        "occ_5": {
-          "type": "occasion",
-          "settings": { "icon": "sparkles", "title": "Eid", "caption": "Festive gatherings", "link": "shopify://collections/new-arrivals" }
+        "color_5": {
+          "type": "color",
+          "settings": { "name": "Fern", "color": "#3f5147", "collection": "aesthetic-bowls", "tag": "" }
         },
-        "occ_6": {
-          "type": "occasion",
-          "settings": { "icon": "heart", "title": "Wedding Gifts", "caption": "Heirlooms to give", "link": "shopify://collections" }
+        "color_6": {
+          "type": "color",
+          "settings": { "name": "Wood", "color": "#8a6a4a", "collection": "thp-woodworks", "tag": "" }
         }
       },
-      "block_order": ["occ_1", "occ_2", "occ_3", "occ_4", "occ_5", "occ_6"],
+      "block_order": ["color_1", "color_2", "color_3", "color_4", "color_5", "color_6"],
       "settings": {
-        "eyebrow": "Chapter Three — The Table",
-        "heading": "Shop by Occasion",
-        "text": "From quiet weekday meals to grand celebrations — set the table for the moment."
+        "eyebrow": "The Palette",
+        "heading": "Shop by Colour",
+        "text": "Pick a shade and see it laid out — every glaze, from cloud grey to deep moss.",
+        "products_to_show": 4,
+        "show_view_all": true
       }
     },
     "featured_collection_AnTVtq": {
@@ -255,29 +338,56 @@
       "blocks": {
         "style_1": {
           "type": "style",
-          "settings": { "title": "Minimalist", "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp", "collection": "plates" }
+          "settings": {
+            "title": "Minimalist",
+            "description": "Clean silhouettes, soft matte glaze — plates that disappear behind the food.",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
+            "collection": "plates"
+          }
         },
         "style_2": {
           "type": "style",
-          "settings": { "title": "Earthy", "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp", "collection": "thp-weave-collection" }
+          "settings": {
+            "title": "Earthy",
+            "description": "Jute, wood and woven texture — warmth you can feel under the plate.",
+            "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
+            "collection": "thp-weave-collection"
+          }
         },
         "style_3": {
           "type": "style",
-          "settings": { "title": "Reactive", "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp", "collection": "tea-coffee-essentials" }
+          "settings": {
+            "title": "Reactive",
+            "description": "Kiln-flared glazes where no two pieces are ever identical.",
+            "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
+            "collection": "tea-coffee-essentials"
+          }
         },
         "style_4": {
           "type": "style",
-          "settings": { "title": "Contemporary", "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp", "collection": "dinner-breakfast-sets" }
+          "settings": {
+            "title": "Contemporary",
+            "description": "Bold colour and confident form for the modern table.",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
+            "collection": "dinner-breakfast-sets"
+          }
         },
         "style_5": {
           "type": "style",
-          "settings": { "title": "Hotel Collection", "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg", "collection": "serveware" }
+          "settings": {
+            "title": "Hotel Collection",
+            "description": "Hard-wearing serveware built for hospitality service.",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+            "collection": "serveware"
+          }
         }
       },
       "block_order": ["style_1", "style_2", "style_3", "style_4", "style_5"],
       "settings": {
         "eyebrow": "Textures & Glazes",
-        "heading": "Shop by Style"
+        "heading": "Shop by Style",
+        "show_count": true,
+        "count_label": "varieties"
       }
     },
     "hp_cta": {
@@ -285,6 +395,9 @@
       "settings": {
         "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
         "duotone": true,
+        "scrim": 55,
+        "focal_x": 50,
+        "focal_y": 50,
         "eyebrow": "The Weave Collection",
         "heading": "Woven for the Everyday Feast",
         "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
@@ -318,6 +431,81 @@
         "swipe_on_mobile": true,
         "padding_top": 60,
         "padding_bottom": 60
+      }
+    },
+    "hp_reviews": {
+      "type": "hp-reviews",
+      "blocks": {
+        "rev_1": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "The quality is unreal — our guests ask where every plate came from.",
+            "author": "Ayesha K.",
+            "role": "Islamabad",
+            "type": "Homes"
+          }
+        },
+        "rev_2": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "We replaced our entire service with THP. Six months of daily use and they still look new.",
+            "author": "Zain M.",
+            "role": "Restaurant owner · Lahore",
+            "type": "Restaurants"
+          }
+        },
+        "rev_3": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "The reactive glaze means every piece is slightly different. Our guests always notice.",
+            "author": "Hina R.",
+            "role": "Boutique hotel · Murree",
+            "type": "Hotels"
+          }
+        },
+        "rev_4": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "Bought the weave placemats for Eid and ended up ordering three more sets as gifts.",
+            "author": "Sana A.",
+            "role": "Karachi",
+            "type": "Homes"
+          }
+        },
+        "rev_5": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "Delivery was quick and everything arrived perfectly packed. Not one chip.",
+            "author": "Bilal T.",
+            "role": "Rawalpindi",
+            "type": "Homes"
+          }
+        },
+        "rev_6": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "Our tea service is now a talking point. Worth every rupee.",
+            "author": "Farah S.",
+            "role": "Café owner · Islamabad",
+            "type": "Restaurants"
+          }
+        }
+      },
+      "block_order": ["rev_1", "rev_2", "rev_3", "rev_4", "rev_5", "rev_6"],
+      "settings": {
+        "eyebrow": "The Guestbook",
+        "heading": "Set on Tables Across Pakistan",
+        "text": "Homes, hotels and restaurants — in their own words.",
+        "show_tabs": true,
+        "tab_list": "Homes, Hotels, Restaurants",
+        "link_label": "Read all reviews",
+        "link": ""
       }
     },
     "hp_marquee": {
@@ -376,16 +564,19 @@
   },
   "order": [
     "hp_hero",
+    "hp_rating_bar",
     "hp_trust",
-    "hp_category_tiles",
     "featured_collection_Y4MUN7",
+    "hp_category_tiles",
     "hp_story",
-    "featured_collection_LPAqnQ",
     "hp_occasion",
+    "featured_collection_LPAqnQ",
+    "hp_shop_by_color",
     "featured_collection_AnTVtq",
     "hp_style_rail",
     "hp_cta",
     "featured_collection_MAEfLD",
+    "hp_reviews",
     "hp_marquee",
     "173573001120319a38",
     "177926887221297785"

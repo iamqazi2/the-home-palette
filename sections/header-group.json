@@ -46,6 +46,9 @@
     "header": {
       "type": "header",
       "settings": {
+        "hp_band_enable": true,
+        "hp_band_color": "#1c4a47",
+        "hp_band_text": "#fff9df",
         "logo_position": "top-center",
         "menu": "main-menu",
         "menu_type_desktop": "dropdown",

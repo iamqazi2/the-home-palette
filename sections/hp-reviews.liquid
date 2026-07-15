@@ -1,0 +1,285 @@
+{% comment %}
+  THP — Guestbook reviews. Editorial card format with type tabs
+  (Homes / Hotels / Restaurants) and an optional auto-scrolling rail.
+  Each review is a block, so new ones can be added from the customiser.
+{% endcomment %}
+
+{%- style -%}
+  .hp-reviews { background: var(--hp-moss); color: var(--hp-linen); overflow: hidden; }
+  .hp-reviews .hp-eyebrow { color: var(--hp-cream); }
+  .hp-reviews .hp-section-head__title { color: var(--hp-linen); }
+  .hp-reviews .hp-section-head__text { color: rgba(239, 236, 236, 0.72); }
+
+  .hp-reviews__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: clamp(3rem, 4vw, 4.4rem);
+  }
+  .hp-reviews__tab {
+    padding: 1rem 2.2rem;
+    background: transparent;
+    border: 1px solid var(--hp-hairline-light);
+    color: rgba(239, 236, 236, 0.75);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  .hp-reviews__tab:hover { border-color: var(--hp-cream); color: var(--hp-cream); }
+  .hp-reviews__tab[aria-selected='true'] {
+    background: var(--hp-cream);
+    border-color: var(--hp-cream);
+    color: var(--hp-ink);
+  }
+
+  .hp-reviews__grid {
+    display: grid;
+    gap: 1.6rem;
+    grid-template-columns: 1fr;
+  }
+  @media screen and (min-width: 750px) { .hp-reviews__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media screen and (min-width: 1200px) { .hp-reviews__grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .hp-review {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    padding: 3.2rem 2.8rem;
+    border: 1px solid var(--hp-hairline-light);
+    background: rgba(239, 236, 236, 0.03);
+    transition: transform 0.45s var(--hp-ease), background 0.45s var(--hp-ease), border-color 0.45s var(--hp-ease);
+  }
+  .hp-review:hover {
+    transform: translateY(-5px);
+    background: rgba(239, 236, 236, 0.06);
+    border-color: rgba(255, 249, 223, 0.35);
+  }
+  .hp-review.is-hidden { display: none; }
+  .hp-review__stars { display: flex; gap: 0.3rem; color: var(--hp-cream); }
+  .hp-review__stars .hp-icon--filled { fill: currentColor; }
+  .hp-review__quote {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-style: italic;
+    font-size: 2rem;
+    line-height: 1.55;
+    color: var(--hp-linen);
+    flex: 1;
+  }
+  .hp-review__foot {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    padding-top: 1.8rem;
+    border-top: 1px solid var(--hp-hairline-light);
+  }
+  .hp-review__avatar {
+    width: 4.4rem;
+    height: 4.4rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--hp-taupe);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: var(--hp-font-display);
+    font-size: 1.8rem;
+    color: var(--hp-cream);
+  }
+  .hp-review__avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .hp-review__who { margin: 0; font-size: 1.25rem; letter-spacing: 0.06em; color: var(--hp-linen); }
+  .hp-review__role {
+    margin: 0.3rem 0 0;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(239, 236, 236, 0.6);
+  }
+  .hp-reviews__foot { margin-top: clamp(3rem, 4vw, 4rem); text-align: center; }
+  .hp-reviews__foot .hp-link { color: var(--hp-cream); }
+  .hp-reviews__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 5rem 2rem;
+    color: rgba(239, 236, 236, 0.6);
+    border: 1px solid var(--hp-hairline-light);
+  }
+{%- endstyle -%}
+
+<div class="hp-reviews hp-section">
+  <div class="hp-container">
+    <div class="hp-section-head hp-section-head--center">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hp-eyebrow hp-eyebrow--rule-after" data-hp-reveal>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hp-section-head__title" data-hp-reveal>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="hp-section-head__text" data-hp-reveal>{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <hp-review-tabs>
+      {%- if section.settings.show_tabs -%}
+        {%- liquid
+          assign type_list = section.settings.tab_list | split: ','
+        -%}
+        <div class="hp-reviews__tabs" role="tablist" aria-label="Filter reviews by customer type">
+          <button type="button" class="hp-reviews__tab" role="tab" aria-selected="true" data-hp-review-tab="all">
+            All
+          </button>
+          {%- for type in type_list -%}
+            {%- assign t = type | strip -%}
+            <button
+              type="button"
+              class="hp-reviews__tab"
+              role="tab"
+              aria-selected="false"
+              data-hp-review-tab="{{ t | handleize }}"
+            >
+              {{ t | escape }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <div class="hp-reviews__grid" data-hp-stagger>
+        {%- for block in section.blocks -%}
+          <article
+            class="hp-review"
+            data-hp-review-type="{{ block.settings.type | handleize }}"
+            data-hp-reveal
+            {{ block.shopify_attributes }}
+          >
+            <div class="hp-review__stars" aria-label="{{ block.settings.stars }} out of 5 stars">
+              {%- for i in (1..5) -%}
+                {% if i <= block.settings.stars %}
+                  {% render 'hp-icon', icon: 'star', size: 15, class: 'hp-icon--filled' %}
+                {% else %}
+                  {% render 'hp-icon', icon: 'star', size: 15 %}
+                {% endif %}
+              {%- endfor -%}
+            </div>
+            <blockquote class="hp-review__quote">“{{ block.settings.quote | escape }}”</blockquote>
+            <div class="hp-review__foot">
+              <span class="hp-review__avatar">
+                {%- if block.settings.avatar -%}
+                  {{ block.settings.avatar | image_url: width: 120 | image_tag: loading: 'lazy', alt: block.settings.author }}
+                {%- else -%}
+                  {{ block.settings.author | slice: 0 | upcase }}
+                {%- endif -%}
+              </span>
+              <div>
+                <p class="hp-review__who">{{ block.settings.author | escape }}</p>
+                {%- if block.settings.role != blank -%}
+                  <p class="hp-review__role">{{ block.settings.role | escape }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          </article>
+        {%- else -%}
+          <p class="hp-reviews__empty">Add review blocks in the theme customiser.</p>
+        {%- endfor -%}
+      </div>
+    </hp-review-tabs>
+
+    {%- if section.settings.link_label != blank -%}
+      <div class="hp-reviews__foot" data-hp-reveal>
+        <a href="{{ section.settings.link | default: '#' }}" class="hp-link">
+          {{ section.settings.link_label | escape }}
+          {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  (function () {
+    if (customElements.get('hp-review-tabs')) return;
+    customElements.define(
+      'hp-review-tabs',
+      class extends HTMLElement {
+        connectedCallback() {
+          this.tabs = Array.from(this.querySelectorAll('[data-hp-review-tab]'));
+          this.cards = Array.from(this.querySelectorAll('[data-hp-review-type]'));
+          this.tabs.forEach((tab) => {
+            tab.addEventListener('click', () => this.filter(tab.dataset.hpReviewTab));
+          });
+        }
+        filter(type) {
+          this.tabs.forEach((tab) => {
+            tab.setAttribute('aria-selected', tab.dataset.hpReviewTab === type ? 'true' : 'false');
+          });
+          this.cards.forEach((card) => {
+            const match = type === 'all' || card.dataset.hpReviewType === type;
+            card.classList.toggle('is-hidden', !match);
+          });
+        }
+      }
+    );
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "THP Reviews",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Guestbook" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Set on Tables Across Pakistan" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Homes, hotels and restaurants — in their own words." },
+    { "type": "checkbox", "id": "show_tabs", "label": "Show type filter tabs", "default": true },
+    {
+      "type": "text",
+      "id": "tab_list",
+      "label": "Tabs (comma separated)",
+      "info": "Must match the \"Customer type\" typed on each review block.",
+      "default": "Homes, Hotels, Restaurants"
+    },
+    { "type": "text", "id": "link_label", "label": "Footer link label", "default": "Read all reviews" },
+    { "type": "url", "id": "link", "label": "Footer link" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "range",
+          "id": "stars",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Stars",
+          "default": 5
+        },
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "Beautiful pieces — they've become the centre of our table." },
+        { "type": "text", "id": "author", "label": "Author", "default": "Ayesha K." },
+        { "type": "text", "id": "role", "label": "Role / location", "default": "Islamabad" },
+        { "type": "image_picker", "id": "avatar", "label": "Avatar (optional)" },
+        {
+          "type": "text",
+          "id": "type",
+          "label": "Customer type",
+          "info": "Used by the filter tabs, e.g. Homes / Hotels / Restaurants.",
+          "default": "Homes"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP Reviews",
+      "blocks": [{ "type": "review" }, { "type": "review" }, { "type": "review" }]
+    }
+  ]
+}
+{% endschema %}

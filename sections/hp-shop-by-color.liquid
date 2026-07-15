@@ -1,0 +1,300 @@
+{% comment %}
+  THP — Shop by Colour.
+  Each block = one colour: a swatch dot, a source collection and an optional
+  tag filter. Products are rendered server-side and cross-faded on the client,
+  so switching colours is instant (no reload, no layout shift).
+{% endcomment %}
+
+{%- style -%}
+  .hp-color { background: var(--hp-paper); }
+  .hp-color__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-bottom: clamp(3.2rem, 5vw, 5rem);
+  }
+  .hp-color__dot {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--hp-taupe);
+  }
+  .hp-color__chip {
+    position: relative;
+    width: 4.4rem;
+    height: 4.4rem;
+    border-radius: 50%;
+    border: 1px solid var(--hp-hairline);
+    box-shadow: inset 0 0 0 3px var(--hp-paper);
+    transition: transform 0.4s var(--hp-ease), box-shadow 0.4s var(--hp-ease), border-color 0.4s var(--hp-ease);
+  }
+  .hp-color__dot:hover .hp-color__chip { transform: scale(1.08); }
+  .hp-color__dot[aria-selected='true'] .hp-color__chip {
+    border-color: var(--hp-ink);
+    box-shadow: inset 0 0 0 3px var(--hp-paper), 0 0 0 1px var(--hp-ink);
+    transform: scale(1.08);
+  }
+  .hp-color__name {
+    font-size: 1.05rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+  .hp-color__dot[aria-selected='true'] .hp-color__name { color: var(--hp-ink); font-weight: 600; }
+
+  .hp-color__panels { position: relative; }
+  .hp-color__panel { display: none; }
+  .hp-color__panel.is-active { display: block; animation: hp-fade-in 0.5s var(--hp-ease); }
+  @keyframes hp-fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .hp-color__panel.is-active { animation: none; } }
+
+  .hp-color__grid {
+    display: grid;
+    gap: 1.6rem 1.2rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (min-width: 750px) { .hp-color__grid { grid-template-columns: repeat(4, 1fr); } }
+  .hp-color__card { text-decoration: none; color: inherit; display: block; }
+  .hp-color__media {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--hp-linen);
+    margin-bottom: 1.4rem;
+  }
+  .hp-color__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--hp-ease), opacity 0.5s var(--hp-ease);
+  }
+  .hp-color__media img + img { opacity: 0; }
+  .hp-color__card:hover .hp-color__media img { transform: scale(1.05); }
+  .hp-color__card:hover .hp-color__media img + img { opacity: 1; }
+  .hp-color__title {
+    margin: 0;
+    font-size: 1.25rem;
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+  .hp-color__price {
+    margin: 0.5rem 0 0;
+    font-family: var(--hp-font-display);
+    font-size: 1.6rem;
+    color: var(--hp-taupe);
+  }
+  .hp-color__empty {
+    grid-column: 1 / -1;
+    padding: 6rem 2rem;
+    text-align: center;
+    color: var(--hp-taupe);
+    border: 1px solid var(--hp-hairline);
+  }
+  .hp-color__more { margin-top: clamp(3rem, 4vw, 4rem); text-align: center; }
+{%- endstyle -%}
+
+<div class="hp-color hp-section">
+  <div class="hp-container">
+    <div class="hp-section-head hp-section-head--center">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hp-eyebrow hp-eyebrow--rule-after" data-hp-reveal>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hp-section-head__title" data-hp-reveal>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="hp-section-head__text" data-hp-reveal>{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <hp-color-filter data-hp-reveal>
+      <div class="hp-color__bar" role="tablist" aria-label="{{ section.settings.heading | escape }}">
+        {%- for block in section.blocks -%}
+          <button
+            type="button"
+            class="hp-color__dot"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="hp-color-panel-{{ section.id }}-{{ forloop.index }}"
+            data-hp-color-tab="{{ forloop.index }}"
+            {{ block.shopify_attributes }}
+          >
+            <span
+              class="hp-color__chip"
+              style="background: {% if block.settings.swatch_image %}url({{ block.settings.swatch_image | image_url: width: 100 }}) center/cover{% else %}{{ block.settings.color }}{% endif %};"
+            ></span>
+            <span class="hp-color__name">{{ block.settings.name | escape }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+
+      <div class="hp-color__panels">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign col = block.settings.collection
+            assign tag = block.settings.tag | strip
+            assign shown = 0
+          -%}
+          <div
+            class="hp-color__panel{% if forloop.first %} is-active{% endif %}"
+            id="hp-color-panel-{{ section.id }}-{{ forloop.index }}"
+            role="tabpanel"
+            data-hp-color-panel="{{ forloop.index }}"
+            {% unless forloop.first %}hidden{% endunless %}
+          >
+            <div class="hp-color__grid">
+              {%- if col != blank -%}
+                {%- for product in col.products limit: section.settings.products_to_show -%}
+                  {%- liquid
+                    assign show_product = true
+                    if tag != blank
+                      assign show_product = false
+                      for t in product.tags
+                        assign t_down = t | downcase | strip
+                        assign tag_down = tag | downcase
+                        if t_down == tag_down
+                          assign show_product = true
+                          break
+                        endif
+                      endfor
+                    endif
+                  -%}
+                  {%- if show_product -%}
+                    {%- assign shown = shown | plus: 1 -%}
+                    <a class="hp-color__card" href="{{ product.url }}">
+                      <div class="hp-color__media">
+                        {%- if product.featured_media -%}
+                          {{
+                            product.featured_media
+                            | image_url: width: 800
+                            | image_tag: widths: '300, 500, 700, 800', sizes: '(min-width: 750px) 25vw, 50vw', loading: 'lazy', alt: product.title
+                          }}
+                          {%- if product.media[1] -%}
+                            {{
+                              product.media[1].preview_image
+                              | image_url: width: 800
+                              | image_tag: widths: '300, 500, 700, 800', sizes: '(min-width: 750px) 25vw, 50vw', loading: 'lazy', alt: product.title
+                            }}
+                          {%- endif -%}
+                        {%- else -%}
+                          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                        {%- endif -%}
+                      </div>
+                      <h3 class="hp-color__title">{{ product.title | escape }}</h3>
+                      <p class="hp-color__price">{{ product.price | money }}</p>
+                    </a>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+
+              {%- if shown == 0 -%}
+                <p class="hp-color__empty">
+                  {{ block.settings.name | escape }} pieces are on their way — choose another colour above.
+                </p>
+              {%- endif -%}
+            </div>
+
+            {%- if col != blank and section.settings.show_view_all -%}
+              <div class="hp-color__more">
+                <a href="{{ col.url }}{% if tag != blank %}/{{ tag | handleize }}{% endif %}" class="hp-link">
+                  View all {{ block.settings.name | escape }}
+                  {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+                </a>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </hp-color-filter>
+  </div>
+</div>
+
+<script>
+  (function () {
+    if (customElements.get('hp-color-filter')) return;
+    customElements.define(
+      'hp-color-filter',
+      class extends HTMLElement {
+        connectedCallback() {
+          this.tabs = Array.from(this.querySelectorAll('[data-hp-color-tab]'));
+          this.panels = Array.from(this.querySelectorAll('[data-hp-color-panel]'));
+          this.tabs.forEach((tab) => {
+            tab.addEventListener('click', () => this.select(tab.dataset.hpColorTab));
+          });
+        }
+        select(index) {
+          this.tabs.forEach((tab) => {
+            tab.setAttribute('aria-selected', tab.dataset.hpColorTab === index ? 'true' : 'false');
+          });
+          this.panels.forEach((panel) => {
+            const active = panel.dataset.hpColorPanel === index;
+            panel.classList.toggle('is-active', active);
+            panel.hidden = !active;
+          });
+        }
+      }
+    );
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "THP Shop by Colour",
+  "tag": "section",
+  "max_blocks": 10,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Palette" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Colour" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Pick a shade and see it laid out — every glaze, from cloud grey to deep moss." },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 12,
+      "step": 4,
+      "label": "Products per colour",
+      "default": 4
+    },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show 'view all' link", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "color",
+      "name": "Colour",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Colour name", "default": "Cloud Grey" },
+        { "type": "color", "id": "color", "label": "Swatch colour", "default": "#b9bcbb" },
+        { "type": "image_picker", "id": "swatch_image", "label": "Swatch texture (optional)", "info": "Overrides the flat colour — use for reactive or speckled glazes." },
+        { "type": "collection", "id": "collection", "label": "Source collection" },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Filter by product tag (optional)",
+          "info": "Only show products from the collection carrying this tag, e.g. \"grey\"."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP Shop by Colour",
+      "blocks": [
+        { "type": "color" },
+        { "type": "color", "settings": { "name": "Moss", "color": "#2c332f" } },
+        { "type": "color", "settings": { "name": "Cream", "color": "#fff9df" } },
+        { "type": "color", "settings": { "name": "Taupe", "color": "#716a56" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

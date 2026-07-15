@@ -50,12 +50,40 @@
     inset: auto 0 0 0;
     padding: 2.4rem 2rem;
     text-align: center;
+    color: var(--hp-cream);
+  }
+  .hp-styles__name {
+    display: block;
     font-family: var(--hp-font-display);
     font-size: 2.2rem;
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--hp-cream);
+    text-shadow: 0 1px 16px rgba(14, 6, 6, 0.5);
+  }
+  .hp-styles__meta {
+    display: block;
+    margin-top: 0.8rem;
+    font-size: 1.02rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 249, 223, 0.82);
+  }
+  .hp-styles__desc {
+    display: block;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: rgba(239, 236, 236, 0.85);
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s var(--hp-ease), opacity 0.4s var(--hp-ease);
+  }
+  .hp-styles__tile:hover .hp-styles__desc,
+  .hp-styles__tile:focus-visible .hp-styles__desc { max-height: 8rem; opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-styles__desc { max-height: 8rem; opacity: 1; transition: none; }
   }
   .hp-rail__arrows { display: none; gap: 0.8rem; margin-bottom: clamp(2.4rem, 4vw, 4rem); }
   @media screen and (min-width: 990px) { .hp-rail__arrows { display: flex; } }
@@ -109,7 +137,15 @@
             {%- else -%}
               {{ 'collection-2' | placeholder_svg_tag: 'placeholder-svg' }}
             {%- endif -%}
-            <span class="hp-styles__label">{{ block.settings.title | escape }}</span>
+            <span class="hp-styles__label">
+              <span class="hp-styles__name">{{ block.settings.title | escape }}</span>
+              {%- if col != blank and section.settings.show_count -%}
+                <span class="hp-styles__meta">{{ col.all_products_count }} {{ section.settings.count_label | escape }}</span>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <span class="hp-styles__desc">{{ block.settings.description | escape }}</span>
+              {%- endif -%}
+            </span>
           </a>
         {%- endfor -%}
       </div>
@@ -146,7 +182,9 @@
   "max_blocks": 8,
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Textures & Glazes" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Style" }
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Style" },
+    { "type": "checkbox", "id": "show_count", "label": "Show product count", "default": true },
+    { "type": "text", "id": "count_label", "label": "Count label", "default": "varieties" }
   ],
   "blocks": [
     {
@@ -154,8 +192,9 @@
       "name": "Style tile",
       "settings": [
         { "type": "text", "id": "title", "label": "Title", "default": "Minimalist" },
+        { "type": "text", "id": "description", "label": "Description (shown on hover)", "info": "Say what defines this style in terms of the products.", "default": "Clean silhouettes, soft matte glaze" },
         { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "collection", "id": "collection", "label": "Collection (image + link fallback)" },
+        { "type": "collection", "id": "collection", "label": "Collection", "info": "Defines the products behind this style — also supplies image and link if left blank." },
         { "type": "url", "id": "link", "label": "Link (overrides collection)" }
       ]
     }

@@ -161,10 +161,51 @@
   })();
   if (!customElements.get('hp-rail')) customElements.define('hp-rail', HpRail);
 
+  /* ---- Scroll-linked parallax ----------------------------------------- */
+  var parallaxNodes = [];
+  var parallaxTicking = false;
+
+  function readParallax() {
+    var vh = window.innerHeight;
+    parallaxNodes.forEach(function (node) {
+      var rect = node.el.getBoundingClientRect();
+      if (rect.bottom < -200 || rect.top > vh + 200) return;
+      // -1 → 1 across the viewport, 0 when the element is centred
+      var progress = (rect.top + rect.height / 2 - vh / 2) / (vh / 2 + rect.height / 2);
+      var shift = -progress * node.depth;
+      node.el.style.setProperty('--hp-shift', shift.toFixed(1) + 'px');
+    });
+    parallaxTicking = false;
+  }
+
+  function onParallaxScroll() {
+    if (parallaxTicking) return;
+    parallaxTicking = true;
+    window.requestAnimationFrame(readParallax);
+  }
+
+  function initParallax(root) {
+    if (reducedMotion) return;
+    var nodes = (root || document).querySelectorAll('.hp-parallax');
+    if (!nodes.length) return;
+    Array.prototype.forEach.call(nodes, function (el) {
+      if (el.dataset.hpParallaxBound) return;
+      el.dataset.hpParallaxBound = '1';
+      parallaxNodes.push({ el: el, depth: parseFloat(el.dataset.hpDepth) || 40 });
+    });
+    if (parallaxNodes.length && !window.__hpParallaxBound) {
+      window.__hpParallaxBound = true;
+      window.addEventListener('scroll', onParallaxScroll, { passive: true });
+      window.addEventListener('resize', onParallaxScroll);
+    }
+    readParallax();
+  }
+
   /* ---- boot ----------------------------------------------------------- */
   function boot() {
     applyStagger(document);
     initReveals(document);
+    initParallax(document);
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
@@ -175,5 +216,6 @@
   document.addEventListener('shopify:section:load', function (e) {
     applyStagger(e.target);
     initReveals(e.target);
+    initParallax(e.target);
   });
 })();

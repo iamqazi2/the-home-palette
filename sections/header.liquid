@@ -106,7 +106,31 @@
   endfor
 -%}
 
-<{% if section.settings.sticky_header_type != 'none' %}sticky-header data-sticky-type="{{ section.settings.sticky_header_type }}"{% else %}div{% endif %} class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}">
+{%- if section.settings.hp_band_enable -%}
+  {%- style -%}
+    .header-wrapper.hp-band,
+    .header-wrapper.hp-band .header {
+      background: {{ section.settings.hp_band_color }};
+      color: {{ section.settings.hp_band_text }};
+      --color-foreground: {{ section.settings.hp_band_text | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+    }
+    .header-wrapper.hp-band .header__heading-link,
+    .header-wrapper.hp-band .header__menu-item,
+    .header-wrapper.hp-band .header__icon,
+    .header-wrapper.hp-band .header__icon .icon,
+    .header-wrapper.hp-band .header__menu-item span {
+      color: {{ section.settings.hp_band_text }};
+    }
+    /* logo image sits flush on the band — no square edge */
+    .header-wrapper.hp-band .header__heading-logo-wrapper,
+    .header-wrapper.hp-band .header__heading-logo {
+      background: transparent;
+      mix-blend-mode: normal;
+    }
+    .header-wrapper.hp-band { border-bottom: 1px solid rgba(255, 249, 223, 0.16); }
+  {%- endstyle -%}
+{%- endif -%}
+<{% if section.settings.sticky_header_type != 'none' %}sticky-header data-sticky-type="{{ section.settings.sticky_header_type }}"{% else %}div{% endif %} class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}{% if section.settings.hp_band_enable %} hp-band{% endif %}">
   {%- liquid
     assign social_links = false
     assign localization_forms = false
@@ -444,6 +468,30 @@
   "class": "section-header",
   "max_blocks": 3,
   "settings": [
+    {
+      "type": "header",
+      "content": "Brand band (THP)"
+    },
+    {
+      "type": "checkbox",
+      "id": "hp_band_enable",
+      "label": "Full-width brand band behind logo",
+      "info": "Matches the header background to your logo's background colour so the logo square disappears.",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "hp_band_color",
+      "label": "Brand band colour",
+      "info": "Set this to the exact teal used inside your logo image.",
+      "default": "#1c4a47"
+    },
+    {
+      "type": "color",
+      "id": "hp_band_text",
+      "label": "Brand band text/icon colour",
+      "default": "#fff9df"
+    },
     {
       "type": "select",
       "id": "logo_position",
