@@ -1,25 +1,12 @@
-{% comment %}
-  THP — Full-height cinematic hero slider.
-  Every visual control is exposed in the schema so slides, imagery, focal point,
-  contrast and copy can be managed from the theme customiser.
-{% endcomment %}
-
-{%- liquid
-  assign h_desktop = section.settings.height_desktop
-  assign h_mobile = section.settings.height_mobile
--%}
+{% comment %} THP — Full-height cinematic hero slider {% endcomment %}
 
 {%- style -%}
-  #shopify-section-{{ section.id }} { --hp-hero-h: {{ h_mobile }}svh; }
-  @media screen and (min-width: 750px) {
-    #shopify-section-{{ section.id }} { --hp-hero-h: {{ h_desktop }}svh; }
-  }
-
   .hp-hero {
     position: relative;
     display: block;
-    height: var(--hp-hero-h);
-    min-height: 48rem;
+    height: 100svh;
+    min-height: 56rem;
+    max-height: 120rem;
     overflow: hidden;
     background: var(--hp-moss);
     color: var(--hp-cream);
@@ -29,54 +16,45 @@
     inset: 0;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 1.2s var(--hp-ease), visibility 0s 1.2s;
+    transition: opacity 1.4s var(--hp-ease), visibility 0s 1.4s;
     z-index: 1;
   }
   .hp-hero__slide.is-active {
     opacity: 1;
     visibility: visible;
-    transition: opacity 1.2s var(--hp-ease);
+    transition: opacity 1.4s var(--hp-ease);
     z-index: 2;
   }
-  .hp-hero__media { position: absolute; inset: 0; overflow: hidden; }
+  .hp-hero__media,
   .hp-hero__media img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: var(--hp-focal, 50% 50%);
   }
-  {%- if section.settings.ken_burns -%}
-    .hp-hero__slide.is-active .hp-hero__media img {
-      animation: hp-kenburns 11s var(--hp-ease) forwards;
-    }
-    @keyframes hp-kenburns {
-      from { transform: scale(1.09); }
-      to { transform: scale(1); }
-    }
-  {%- endif -%}
+  .hp-hero__slide.is-active .hp-hero__media img {
+    animation: hp-kenburns 9s var(--hp-ease) forwards;
+  }
+  @keyframes hp-kenburns {
+    from { transform: scale(1.1) translateX(1.5%); }
+    to { transform: scale(1) translateX(0); }
+  }
   @media (prefers-reduced-motion: reduce) {
     .hp-hero__slide { transition: none; }
     .hp-hero__slide.is-active .hp-hero__media img { animation: none; }
   }
-
-  /* Contrast system: a base wash + a directional gradient behind the copy.
-     Both strengths are merchant-controlled so text stays legible on any photo. */
   .hp-hero__scrim {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(
-        var(--hp-scrim-angle, to top),
-        rgba(14, 6, 6, var(--hp-scrim-strong, 0.72)) 0%,
-        rgba(14, 6, 6, calc(var(--hp-scrim-strong, 0.72) * 0.4)) 45%,
-        rgba(14, 6, 6, 0) 78%
-      ),
-      rgba(14, 6, 6, var(--hp-scrim-base, 0.16));
+      linear-gradient(to top, rgba(14, 6, 6, 0.72) 0%, rgba(14, 6, 6, 0.24) 42%, rgba(14, 6, 6, 0.12) 100%);
   }
+  /* inset hairline frame — the "plate rim" */
   .hp-hero__frame {
     position: absolute;
-    inset: 1.4rem;
-    border: 1px solid rgba(255, 249, 223, 0.3);
+    inset: 1.6rem;
+    border: 1px solid rgba(255, 249, 223, 0.34);
     pointer-events: none;
     z-index: 4;
   }
@@ -85,138 +63,132 @@
   .hp-hero__content {
     position: absolute;
     z-index: 3;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    padding: 12rem clamp(2.8rem, 6vw, 8rem) clamp(11rem, 18vh, 15rem);
+    left: 0;
+    right: 0;
+    bottom: clamp(9rem, 16vh, 14rem);
+    padding: 0 clamp(2.8rem, 6vw, 8rem);
+    max-width: 92rem;
   }
-  .hp-hero__inner { max-width: 74rem; }
-  /* vertical placement */
-  .hp-hero--v-top .hp-hero__content { justify-content: flex-start; }
-  .hp-hero--v-middle .hp-hero__content { justify-content: center; }
-  .hp-hero--v-bottom .hp-hero__content { justify-content: flex-end; }
-  /* horizontal placement */
-  .hp-hero--h-center .hp-hero__content { align-items: center; text-align: center; }
-  .hp-hero--h-center .hp-hero__inner { margin: 0 auto; }
-  .hp-hero--h-right .hp-hero__content { align-items: flex-end; text-align: right; }
-
   .hp-hero__kicker {
     display: inline-flex;
     align-items: center;
     gap: 1.2rem;
     font-size: 1.1rem;
     font-weight: 600;
-    letter-spacing: 0.34em;
+    letter-spacing: 0.32em;
     text-transform: uppercase;
     color: var(--hp-cream);
-    margin: 0 0 2rem;
-    text-shadow: 0 1px 14px rgba(14, 6, 6, 0.5);
+    margin-bottom: 2rem;
   }
   .hp-hero__kicker::before {
     content: '';
-    width: 4rem;
+    width: 4.4rem;
     height: 1px;
     background: currentColor;
-    opacity: 0.75;
-  }
-  .hp-hero--h-center .hp-hero__kicker::after {
-    content: '';
-    width: 4rem;
-    height: 1px;
-    background: currentColor;
-    opacity: 0.75;
+    opacity: 0.7;
   }
   .hp-hero__heading {
     font-family: var(--hp-font-display);
     font-weight: 500;
-    font-size: clamp(3.6rem, 7.4vw, 8.4rem);
+    font-size: clamp(4rem, 8.5vw, 9rem);
     line-height: 1.02;
     letter-spacing: 0.005em;
     margin: 0;
     color: var(--hp-cream);
-    text-shadow: 0 2px 30px rgba(14, 6, 6, 0.42);
   }
   .hp-hero__sub {
     margin: 2rem 0 0;
-    font-size: clamp(1.4rem, 1.5vw, 1.7rem);
+    font-size: clamp(1.4rem, 1.6vw, 1.7rem);
     line-height: 1.7;
     letter-spacing: 0.04em;
-    color: #fff;
-    max-width: 46rem;
-    text-shadow: 0 1px 18px rgba(14, 6, 6, 0.6);
+    color: rgba(239, 236, 236, 0.92);
+    max-width: 48rem;
   }
-  .hp-hero--h-center .hp-hero__sub { margin-left: auto; margin-right: auto; }
-  .hp-hero--h-right .hp-hero__sub { margin-left: auto; }
-  .hp-hero__actions { display: flex; flex-wrap: wrap; gap: 1.4rem; margin-top: 3.2rem; }
-  .hp-hero--h-center .hp-hero__actions { justify-content: center; }
-  .hp-hero--h-right .hp-hero__actions { justify-content: flex-end; }
-
+  .hp-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin-top: 3.2rem;
+  }
+  /* staggered rise on the active slide's copy */
   .hp-hero__kicker, .hp-hero__heading, .hp-hero__sub, .hp-hero__actions {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(26px);
   }
   .hp-hero__slide.is-active .hp-hero__kicker,
   .hp-hero__slide.is-active .hp-hero__heading,
   .hp-hero__slide.is-active .hp-hero__sub,
   .hp-hero__slide.is-active .hp-hero__actions {
-    animation: hp-hero-rise 0.95s var(--hp-ease) forwards;
+    animation: hp-hero-rise 1s var(--hp-ease) forwards;
   }
-  .hp-hero__slide.is-active .hp-hero__kicker { animation-delay: 0.2s; }
-  .hp-hero__slide.is-active .hp-hero__heading { animation-delay: 0.34s; }
-  .hp-hero__slide.is-active .hp-hero__sub { animation-delay: 0.48s; }
-  .hp-hero__slide.is-active .hp-hero__actions { animation-delay: 0.62s; }
-  @keyframes hp-hero-rise { to { opacity: 1; transform: none; } }
+  .hp-hero__slide.is-active .hp-hero__kicker { animation-delay: 0.25s; }
+  .hp-hero__slide.is-active .hp-hero__heading { animation-delay: 0.4s; }
+  .hp-hero__slide.is-active .hp-hero__sub { animation-delay: 0.55s; }
+  .hp-hero__slide.is-active .hp-hero__actions { animation-delay: 0.7s; }
+  @keyframes hp-hero-rise {
+    to { opacity: 1; transform: none; }
+  }
   html:not(.hp-js) .hp-hero__kicker,
   html:not(.hp-js) .hp-hero__heading,
   html:not(.hp-js) .hp-hero__sub,
-  html:not(.hp-js) .hp-hero__actions { opacity: 1; transform: none; }
+  html:not(.hp-js) .hp-hero__actions {
+    opacity: 1; transform: none;
+  }
   @media (prefers-reduced-motion: reduce) {
     .hp-hero__kicker, .hp-hero__heading, .hp-hero__sub, .hp-hero__actions {
       opacity: 1 !important; transform: none !important; animation: none !important;
     }
   }
 
+  /* chrome: arrows, dots, counter, scroll cue */
   .hp-hero__chrome {
     position: absolute;
     z-index: 5;
-    inset: auto 0 0 0;
+    left: 0; right: 0;
+    bottom: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
-    padding: 0 clamp(2.8rem, 6vw, 8rem) 3rem;
+    padding: 0 clamp(2.8rem, 6vw, 8rem) 3.2rem;
   }
   .hp-hero__dots { display: flex; gap: 1rem; align-items: center; }
   .hp-hero__dot {
-    width: 3.4rem; height: 2rem;
-    padding: 0; background: transparent; border: none; cursor: pointer; position: relative;
+    width: 3.2rem;
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
   }
   .hp-hero__dot::after {
     content: '';
     position: absolute;
-    left: 0; right: 0; top: 50%;
+    left: 0; right: 0;
+    top: 50%;
     height: 1px;
-    background: rgba(255, 249, 223, 0.45);
-    transition: background 0.3s ease, height 0.3s ease;
+    background: rgba(255, 249, 223, 0.4);
+    transition: background 0.3s ease, height 0.3s ease, transform 0.3s ease;
   }
-  .hp-hero__dot.is-active::after { background: var(--hp-cream); height: 3px; }
+  .hp-hero__dot.is-active::after { background: var(--hp-cream); height: 3px; transform: translateY(-1px); }
   .hp-hero__counter {
     font-family: var(--hp-font-display);
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     letter-spacing: 0.2em;
-    color: rgba(255, 249, 223, 0.8);
+    color: rgba(239, 236, 236, 0.85);
     white-space: nowrap;
   }
-  .hp-hero__counter-current { color: var(--hp-cream); font-size: 2.1rem; }
+  .hp-hero__counter-current { color: var(--hp-cream); font-size: 2.2rem; }
   .hp-hero__nav { display: flex; gap: 0.8rem; }
   .hp-hero__arrow {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 4.4rem; height: 4.4rem;
-    background: rgba(14, 6, 6, 0.22);
-    backdrop-filter: blur(3px);
-    border: 1px solid rgba(255, 249, 223, 0.45);
+    width: 4.4rem;
+    height: 4.4rem;
+    background: transparent;
+    border: 1px solid rgba(255, 249, 223, 0.4);
     border-radius: 50%;
     color: var(--hp-cream);
     cursor: pointer;
@@ -226,9 +198,10 @@
   .hp-hero__cue {
     position: absolute;
     z-index: 5;
-    left: 50%; bottom: 2.8rem;
+    left: 50%;
+    bottom: 3rem;
     transform: translateX(-50%);
-    color: rgba(255, 249, 223, 0.9);
+    color: rgba(255, 249, 223, 0.85);
     display: none;
     animation: hp-cue 2.6s ease-in-out infinite;
   }
@@ -239,13 +212,12 @@
   }
   @media (prefers-reduced-motion: reduce) { .hp-hero__cue { animation: none; } }
   @media screen and (max-width: 749px) {
-    .hp-hero__counter, .hp-hero__nav { display: none; }
-    .hp-hero__content { padding-top: 9rem; }
+    .hp-hero__counter { display: none; }
   }
 {%- endstyle -%}
 
 <hp-hero
-  class="hp-hero hp-hero--v-{{ section.settings.text_position_v }} hp-hero--h-{{ section.settings.text_position_h }}"
+  class="hp-hero"
   data-autoplay="{{ section.settings.auto_rotate }}"
   data-speed="{{ section.settings.change_slides_speed }}"
   tabindex="0"
@@ -254,23 +226,8 @@
   aria-label="{{ section.settings.accessibility_info | escape }}"
 >
   {%- for block in section.blocks -%}
-    {%- liquid
-      if forloop.first
-        assign img_loading = 'eager'
-        assign img_priority = 'high'
-      else
-        assign img_loading = 'lazy'
-        assign img_priority = 'auto'
-      endif
-
-      assign scrim_dir = 'to top'
-      if section.settings.text_position_v == 'top'
-        assign scrim_dir = 'to bottom'
-      endif
-    -%}
     <div
       class="hp-hero__slide{% if forloop.first %} is-active{% endif %}"
-      style="--hp-focal: {{ block.settings.focal_x }}% {{ block.settings.focal_y }}%; --hp-scrim-strong: {{ block.settings.scrim | divided_by: 100.0 }}; --hp-scrim-base: {{ block.settings.scrim_base | divided_by: 100.0 }}; --hp-scrim-angle: {{ scrim_dir }};"
       aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}"
       role="group"
       aria-roledescription="slide"
@@ -279,15 +236,23 @@
     >
       <div class="hp-hero__media">
         {%- if block.settings.image -%}
+          {%- liquid
+            if forloop.first
+              assign img_loading = 'eager'
+              assign img_priority = 'high'
+            else
+              assign img_loading = 'lazy'
+              assign img_priority = 'auto'
+            endif
+          -%}
           {{
             block.settings.image
             | image_url: width: 3200
             | image_tag:
-              widths: '750, 1100, 1500, 1780, 2000, 2400, 3000, 3200',
+              widths: '750, 1100, 1500, 1780, 2000, 3000, 3200',
               sizes: '100vw',
               loading: img_loading,
-              fetchpriority: img_priority,
-              alt: block.settings.image.alt | default: block.settings.heading
+              fetchpriority: img_priority
           }}
         {%- else -%}
           {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
@@ -295,47 +260,35 @@
       </div>
       <div class="hp-hero__scrim"></div>
       <div class="hp-hero__content">
-        <div class="hp-hero__inner">
-          {%- if block.settings.kicker != blank -%}
-            <p class="hp-hero__kicker">{{ block.settings.kicker | escape }}</p>
-          {%- endif -%}
-          {%- if block.settings.heading != blank -%}
-            <h2 class="hp-hero__heading">{{ block.settings.heading | escape }}</h2>
-          {%- endif -%}
-          {%- if block.settings.subheading != blank -%}
-            <p class="hp-hero__sub">{{ block.settings.subheading | escape }}</p>
-          {%- endif -%}
-          {%- if block.settings.button_label != blank or block.settings.button_label_2 != blank -%}
-            <div class="hp-hero__actions">
-              {%- if block.settings.button_label != blank -%}
-                <a
-                  {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
-                  class="hp-btn hp-btn--cream-solid"
-                >
-                  {{ block.settings.button_label | escape }}
-                  {% render 'hp-icon', icon: 'arrow-right', size: 16 %}
-                </a>
-              {%- endif -%}
-              {%- if block.settings.button_label_2 != blank -%}
-                <a
-                  {% if block.settings.link_2 != blank %}href="{{ block.settings.link_2 }}"{% else %}role="link" aria-disabled="true"{% endif %}
-                  class="hp-btn hp-btn--cream"
-                >
-                  {{ block.settings.button_label_2 | escape }}
-                </a>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
-        </div>
+        {%- if block.settings.kicker != blank -%}
+          <p class="hp-hero__kicker">{{ block.settings.kicker | escape }}</p>
+        {%- endif -%}
+        {%- if block.settings.heading != blank -%}
+          <h2 class="hp-hero__heading">{{ block.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if block.settings.subheading != blank -%}
+          <p class="hp-hero__sub">{{ block.settings.subheading | escape }}</p>
+        {%- endif -%}
+        {%- if block.settings.button_label != blank -%}
+          <div class="hp-hero__actions">
+            <a
+              {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+              class="hp-btn hp-btn--cream"
+            >
+              {{ block.settings.button_label | escape }}
+              {% render 'hp-icon', icon: 'arrow-right', size: 16 %}
+            </a>
+          </div>
+        {%- endif -%}
       </div>
     </div>
   {%- endfor -%}
 
-  {%- if section.settings.show_frame -%}<div class="hp-hero__frame"></div>{%- endif -%}
+  <div class="hp-hero__frame"></div>
 
   {%- if section.blocks.size > 1 -%}
     <div class="hp-hero__chrome">
-      <div class="hp-hero__dots">
+      <div class="hp-hero__dots" role="tablist" aria-label="{{ section.settings.accessibility_info | escape }}">
         {%- for block in section.blocks -%}
           <button
             type="button"
@@ -361,9 +314,9 @@
     </div>
   {%- endif -%}
 
-  {%- if section.settings.show_scroll_cue -%}
-    <div class="hp-hero__cue">{% render 'hp-icon', icon: 'chevron-down', size: 22 %}</div>
-  {%- endif -%}
+  <div class="hp-hero__cue">
+    {% render 'hp-icon', icon: 'chevron-down', size: 22 %}
+  </div>
 </hp-hero>
 
 {% schema %}
@@ -371,62 +324,19 @@
   "name": "THP Hero Slider",
   "tag": "section",
   "class": "hp-hero-section",
-  "max_blocks": 8,
+  "max_blocks": 6,
   "settings": [
-    { "type": "header", "content": "Size" },
     {
-      "type": "range",
-      "id": "height_desktop",
-      "min": 60,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "label": "Desktop height (of screen)",
-      "default": 100
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto-rotate slides",
+      "default": true
     },
-    {
-      "type": "range",
-      "id": "height_mobile",
-      "min": 60,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "label": "Mobile height (of screen)",
-      "default": 90
-    },
-    { "type": "header", "content": "Layout" },
-    {
-      "type": "select",
-      "id": "text_position_h",
-      "label": "Text position (horizontal)",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "left"
-    },
-    {
-      "type": "select",
-      "id": "text_position_v",
-      "label": "Text position (vertical)",
-      "options": [
-        { "value": "top", "label": "Top" },
-        { "value": "middle", "label": "Middle" },
-        { "value": "bottom", "label": "Bottom" }
-      ],
-      "default": "bottom"
-    },
-    { "type": "checkbox", "id": "show_frame", "label": "Show inset hairline frame", "default": true },
-    { "type": "checkbox", "id": "show_scroll_cue", "label": "Show scroll cue", "default": true },
-    { "type": "header", "content": "Motion" },
-    { "type": "checkbox", "id": "ken_burns", "label": "Slow zoom (Ken Burns)", "default": true },
-    { "type": "checkbox", "id": "auto_rotate", "label": "Auto-rotate slides", "default": true },
     {
       "type": "range",
       "id": "change_slides_speed",
       "min": 4,
-      "max": 12,
+      "max": 10,
       "step": 1,
       "unit": "s",
       "label": "Change slides every",
@@ -445,55 +355,11 @@
       "name": "Slide",
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Image" },
-        {
-          "type": "range",
-          "id": "focal_x",
-          "min": 0,
-          "max": 100,
-          "step": 5,
-          "unit": "%",
-          "label": "Image focal point — horizontal",
-          "info": "Move the visible part of the photo left/right when it is cropped.",
-          "default": 50
-        },
-        {
-          "type": "range",
-          "id": "focal_y",
-          "min": 0,
-          "max": 100,
-          "step": 5,
-          "unit": "%",
-          "label": "Image focal point — vertical",
-          "default": 50
-        },
-        {
-          "type": "range",
-          "id": "scrim",
-          "min": 0,
-          "max": 90,
-          "step": 5,
-          "unit": "%",
-          "label": "Shade behind text",
-          "info": "Raise this if the heading is hard to read on a bright photo.",
-          "default": 70
-        },
-        {
-          "type": "range",
-          "id": "scrim_base",
-          "min": 0,
-          "max": 60,
-          "step": 5,
-          "unit": "%",
-          "label": "Overall image shade",
-          "default": 15
-        },
         { "type": "text", "id": "kicker", "label": "Kicker", "default": "Handcrafted Heritage" },
         { "type": "text", "id": "heading", "label": "Heading", "default": "The Table Remembers" },
-        { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Premium serveware, crafted in Pakistan." },
-        { "type": "text", "id": "button_label", "label": "Primary button label", "default": "Shop now" },
-        { "type": "url", "id": "link", "label": "Primary button link" },
-        { "type": "text", "id": "button_label_2", "label": "Secondary button label" },
-        { "type": "url", "id": "link_2", "label": "Secondary button link" }
+        { "type": "text", "id": "subheading", "label": "Subheading", "default": "Premium serveware, crafted in Pakistan." },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop now" },
+        { "type": "url", "id": "link", "label": "Button link" }
       ]
     }
   ],

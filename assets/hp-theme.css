@@ -342,44 +342,12 @@ html.hp-js [data-hp-reveal] {
   transform: translateY(22px);
   transition:
     opacity var(--hp-dur) var(--hp-ease),
-    transform var(--hp-dur) var(--hp-ease),
-    clip-path var(--hp-dur-slow) var(--hp-ease);
+    transform var(--hp-dur) var(--hp-ease);
   transition-delay: calc(var(--hp-i, 0) * 90ms);
 }
 html.hp-js [data-hp-reveal].hp-inview { opacity: 1; transform: none; }
-
-/* Editorial image reveal — the photo unveils from the bottom as it enters */
-html.hp-js [data-hp-reveal='clip'] {
-  clip-path: inset(0 0 100% 0);
-  transform: none;
-}
-html.hp-js [data-hp-reveal='clip'].hp-inview { clip-path: inset(0 0 0 0); }
-
 @media (prefers-reduced-motion: reduce) {
-  html.hp-js [data-hp-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    clip-path: none !important;
-    transition: none !important;
-  }
-}
-
-/* Scroll-linked parallax — JS writes --hp-shift, CSS does the moving.
-   Media is over-scaled so the drift never exposes an edge. */
-.hp-parallax { overflow: hidden; }
-.hp-parallax > img,
-.hp-parallax > .hp-parallax__inner {
-  will-change: transform;
-  transform: translate3d(0, var(--hp-shift, 0px), 0) scale(1.12);
-}
-@media (prefers-reduced-motion: reduce) {
-  .hp-parallax > img,
-  .hp-parallax > .hp-parallax__inner { transform: none; }
-}
-
-/* Smooth in-page scrolling for anchor/cue jumps */
-@media (prefers-reduced-motion: no-preference) {
-  html { scroll-behavior: smooth; }
+  html.hp-js [data-hp-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
 
 /* Skeleton shimmer for lazy media */

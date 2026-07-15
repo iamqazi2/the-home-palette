@@ -30,7 +30,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: var(--hp-focal, 50% 50%);
     transition: transform 1.3s var(--hp-ease);
   }
   .hp-cats__tile:hover img { transform: scale(1.05); }
@@ -107,8 +106,7 @@
         <a
           class="hp-cats__tile"
           {% if col != blank %}href="{{ col.url }}"{% else %}role="link" aria-disabled="true"{% endif %}
-          style="--hp-focal: {{ block.settings.focal_x }}% {{ block.settings.focal_y }}%;"
-          data-hp-reveal="clip"
+          data-hp-reveal
           {{ block.shopify_attributes }}
         >
           {%- if tile_image -%}
@@ -124,13 +122,7 @@
             <div>
               <h3 class="hp-cats__name">{{ tile_title | default: 'Collection' }}</h3>
               {%- if col != blank and section.settings.show_count -%}
-                {%- liquid
-                  assign count_word = section.settings.count_label_plural
-                  if col.all_products_count == 1
-                    assign count_word = section.settings.count_label_singular
-                  endif
-                -%}
-                <p class="hp-cats__count">{{ col.all_products_count }} {{ count_word | escape }}</p>
+                <p class="hp-cats__count">{{ col.all_products_count }} pieces</p>
               {%- endif -%}
             </div>
             <span class="hp-cats__arrow">{% render 'hp-icon', icon: 'arrow-right', size: 16 %}</span>
@@ -151,15 +143,7 @@
     { "type": "text", "id": "heading", "label": "Heading", "default": "Every Table Tells a Story" },
     { "type": "textarea", "id": "text", "label": "Text" },
     { "type": "checkbox", "id": "center_head", "label": "Center heading", "default": false },
-    { "type": "checkbox", "id": "show_count", "label": "Show product count", "default": true },
-    {
-      "type": "text",
-      "id": "count_label_plural",
-      "label": "Count label (plural)",
-      "info": "Shown after the number, e.g. \"27 varieties\".",
-      "default": "varieties"
-    },
-    { "type": "text", "id": "count_label_singular", "label": "Count label (singular)", "default": "variety" }
+    { "type": "checkbox", "id": "show_count", "label": "Show product count", "default": true }
   ],
   "blocks": [
     {
@@ -168,27 +152,7 @@
       "settings": [
         { "type": "collection", "id": "collection", "label": "Collection" },
         { "type": "image_picker", "id": "image", "label": "Custom image (optional)" },
-        { "type": "text", "id": "title", "label": "Custom title (optional)" },
-        {
-          "type": "range",
-          "id": "focal_x",
-          "min": 0,
-          "max": 100,
-          "step": 5,
-          "unit": "%",
-          "label": "Focal point — horizontal",
-          "default": 50
-        },
-        {
-          "type": "range",
-          "id": "focal_y",
-          "min": 0,
-          "max": 100,
-          "step": 5,
-          "unit": "%",
-          "label": "Focal point — vertical",
-          "default": 50
-        }
+        { "type": "text", "id": "title", "label": "Custom title (optional)" }
       ]
     }
   ],
