@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#fffdf4;color:#252525;font-family:'Archivo',system-ui,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  ::selection{background:#257575;color:#fff9df}
+  @keyframes hpMq{to{transform:translateX(-50%)}}
+  @keyframes hpMqR{to{transform:translateX(50%)}}
+  @keyframes hpKen{from{transform:scale(1.03)}to{transform:scale(1.13)}}
+  @keyframes hpSheen{0%{transform:translateX(-120%)}55%,100%{transform:translateX(220%)}}
+  @keyframes hpPulse{0%{transform:scale(1);opacity:.55}70%{transform:scale(1.9);opacity:0}100%{opacity:0}}
+  @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  .ph{position:relative;overflow:hidden;background:linear-gradient(135deg,#f2ede0 0%,#e7e0d1 100%)}
+  .ph>span{position:absolute;inset:0;display:flex;flex-direction:column;gap:.5rem;align-items:center;justify-content:center;text-align:center;padding:1rem;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9b937d;font-weight:500}
+  .ph>span::before{content:'';width:26px;height:26px;border:1.5px solid #c8bfa8;border-radius:50%}
+  .ph-dark{background:linear-gradient(135deg,#20575a 0%,#123536 100%)}
+  .ph-dark>span{color:rgba(255,249,223,.5)}
+  .ph-dark>span::before{border-color:rgba(255,249,223,.35)}
+  .nav a{position:relative}
+  .nav a::after{content:'';position:absolute;left:0;bottom:-5px;height:1.5px;width:100%;background:#257575;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.22,.7,.2,1)}
+  .nav a:hover::after{transform:scaleX(1)}
+  .btn{display:inline-flex;align-items:center;gap:.7rem;padding:1rem 2rem;border-radius:40px;font-family:'Archivo';font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid #257575;cursor:pointer;transition:background-color .35s,color .35s,transform .35s,box-shadow .35s;background:#257575;color:#fff9df}
+  .btn:hover{background:#1c5b5b;border-color:#1c5b5b;transform:translateY(-2px);box-shadow:0 10px 24px -12px rgba(28,91,91,.7)}
+  .btn svg{transition:transform .35s cubic-bezier(.22,.7,.2,1)}
+  .btn:hover svg{transform:translateX(4px)}
+  .btn-o{background:transparent;color:#257575}
+  .btn-o:hover{background:#257575;color:#fff9df}
+  .btn-cream{background:#fff9df;border-color:#fff9df;color:#257575}
+  .btn-cream:hover{background:transparent;color:#fff9df;border-color:#fff9df}
+  .eyebrow{display:inline-flex;align-items:center;gap:.7rem;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#257575}
+  .eyebrow::before{content:'';width:22px;height:1.5px;background:currentColor}
+  .card{background:#fff;border:1px solid rgba(37,37,37,.09);border-radius:18px;overflow:hidden;transition:transform .45s cubic-bezier(.22,.7,.2,1),box-shadow .45s;will-change:transform}
+  .card:hover{transform:translateY(-8px);box-shadow:0 30px 50px -30px rgba(37,55,50,.55)}
+  .card .ph{transition:transform 1.2s cubic-bezier(.22,.7,.2,1)}
+  .card:hover .ph{transform:scale(1.07)}
+  .tile{position:relative;overflow:hidden;border-radius:18px;display:block}
+  .tile .ph{transition:transform 1.3s cubic-bezier(.22,.7,.2,1)}
+  .tile:hover .ph{transform:scale(1.08)}
+  .addbtn{width:100%;justify-content:center;padding:.85rem;font-size:11px;border-radius:30px}
+  .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:rgba(255,249,223,.92);display:flex;align-items:center;justify-content:center;transition:transform .4s cubic-bezier(.22,.7,.2,1)}
+  .play::before{content:'';position:absolute;inset:0;border-radius:50%;background:rgba(255,249,223,.5);animation:hpPulse 2.6s ease-out infinite}
+  .vcard:hover .play{transform:translate(-50%,-50%) scale(1.12)}
+  .wrap{max-width:1400px;margin:0 auto;padding:0 20px}
+  .g-coll{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
+  .g-prod{display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+  .g-occ{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+  .g-sty{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+  .g-trust{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .g-foot{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:30px}
+  .split{display:grid;grid-template-columns:1.05fr 1fr;align-items:stretch}
+  .nav-m{display:none}
+  .mqrow{display:flex;gap:20px;width:max-content}
+  .mqA{animation:hpMq 46s linear infinite}
+  .mqB{animation:hpMqR 52s linear infinite}
+  .mqmask:hover .mqA,.mqmask:hover .mqB{animation-play-state:paused}
+  @media(min-width:768px){.wrap{padding:0 40px}}
+  @media(min-width:1200px){.wrap{padding:0 64px}}
+  @media(max-width:1024px){.g-coll{grid-template-columns:repeat(3,1fr)}.g-sty{grid-template-columns:repeat(3,1fr)}.g-occ{grid-template-columns:repeat(3,1fr)}.g-prod{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:900px){.nav-d{display:none!important}.nav-m{display:inline-flex!important}.g-prod{grid-template-columns:repeat(2,1fr)}.split{grid-template-columns:1fr}.g-trust{grid-template-columns:repeat(2,1fr)}.g-foot{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.g-coll{grid-template-columns:repeat(2,1fr)}.g-sty{grid-template-columns:repeat(2,1fr)}.g-occ{grid-template-columns:repeat(2,1fr)}.g-foot{grid-template-columns:1fr}.hero-h{min-height:560px!important}}
+</style>
+</helmet>
+<div ref="{{ root }}" style="position:relative;overflow-x:clip">
+
+  <div style="background:#257575;color:#fff9df;overflow:hidden;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500">
+    <div style="display:inline-flex;white-space:nowrap;padding:9px 0;animation:hpMq 34s linear infinite">
+      <span style="display:inline-flex"><span style="padding:0 2rem">✦ Free delivery over Rs. 8,000</span><span style="padding:0 2rem">✦ 5% off online payment</span><span style="padding:0 2rem">✦ Handcrafted in Pakistan</span><span style="padding:0 2rem">✦ Nationwide shipping</span></span>
+      <span style="display:inline-flex" aria-hidden="true"><span style="padding:0 2rem">✦ Free delivery over Rs. 8,000</span><span style="padding:0 2rem">✦ 5% off online payment</span><span style="padding:0 2rem">✦ Handcrafted in Pakistan</span><span style="padding:0 2rem">✦ Nationwide shipping</span></span>
+    </div>
+  </div>
+
+  <header ref="{{ header }}" style="position:sticky;top:0;z-index:200;background:rgba(255,253,244,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(37,37,37,.1);transition:box-shadow .3s">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;height:74px;gap:1.5rem">
+      <div class="nav nav-d" style="display:flex;align-items:center;gap:1.6rem;font-size:12.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;flex:1">
+        <a href="#">Home</a><a href="#">Dinner Sets</a><a href="#" style="display:inline-flex;align-items:center;gap:.35rem">Categories <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m2 4 4 4 4-4"/></svg></a>
+      </div>
+      <button class="nav-m" style="align-items:center;background:none;border:0;padding:0;cursor:pointer;color:#257575;flex:1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;flex-shrink:0">
+        <div style="width:44px;height:44px;border-radius:50%;border:1.5px solid #257575;display:flex;align-items:center;justify-content:center;background:#fff9df" title="FullLogo_1_ratio_1-01.png"><span style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:19px;color:#257575">thp</span></div>
+        <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:16px;letter-spacing:.22em;color:#252525;line-height:1">THE HOME PALETTE</div>
+      </a>
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:1.3rem;color:#257575;flex:1">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="cursor:pointer"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="cursor:pointer" class="nav-d"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="8" r="4"/></svg>
+        <div style="position:relative;cursor:pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg><span style="position:absolute;top:-7px;right:-8px;background:#257575;color:#fff9df;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600">2</span></div>
+      </div>
+    </div>
+    <nav class="nav nav-d" style="border-top:1px solid rgba(37,37,37,.07)">
+      <div class="wrap" style="display:flex;justify-content:center;gap:2.4rem;padding-top:12px;padding-bottom:12px;font-size:12.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase">
+        <a href="#">All Products</a><a href="#">Tea &amp; Coffee</a><a href="#">Serveware</a><a href="#">The Weave Collection</a><a href="#">Contact Us</a><a href="#">Pricing</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO (video bg) -->
+  <section class="hero-h" style="position:relative;height:88vh;min-height:620px;background:#123536;overflow:hidden">
+    <div ref="{{ heroVideo }}" class="ph-dark par" style="position:absolute;inset:-8% 0;overflow:hidden;animation:hpKen 12s ease-out both">
+      <div style="position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(100deg,transparent,rgba(255,249,223,.08),transparent);animation:hpSheen 7s ease-in-out infinite"></div>
+      <div style="position:absolute;bottom:12px;right:16px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,249,223,.4)">▶ Hero video — autoplay · muted · loop</div>
+    </div>
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,53,54,.78) 0%,rgba(18,53,54,.4) 50%,rgba(18,53,54,.12) 100%)"></div>
+    <div class="wrap" style="position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;color:#fff9df">
+      <div style="max-width:620px">
+        <div class="eyebrow hero-el" style="color:#fff9df">{{ activeKicker }}</div>
+        <h1 class="hero-el" style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(3rem,6.8vw,6.4rem);line-height:1.02;margin:1.4rem 0 0;letter-spacing:.005em">{{ activeHeading }}</h1>
+        <p class="hero-el" style="max-width:430px;margin:1.6rem 0 2.4rem;font-size:15px;line-height:1.7;color:rgba(255,249,223,.88)">{{ activeSub }}</p>
+        <div class="hero-el" style="display:flex;gap:1rem;flex-wrap:wrap"><a class="btn btn-cream" href="#">{{ activeCta }} <svg width="15" height="9" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 6h18M13 1l5 5-5 5"/></svg></a><a class="btn" href="#" style="border-color:rgba(255,249,223,.5);background:transparent;color:#fff9df">Watch Story</a></div>
+      </div>
+    </div>
+    <div class="wrap" style="position:absolute;left:0;right:0;bottom:2.4rem"><div style="display:flex;gap:.6rem">
+      <sc-for list="{{ heroSlides }}" as="s" hint-placeholder-count="5"><span onClick="{{ s.go }}" class="hero-dot" data-idx="{{ $index }}" style="width:32px;height:3px;border-radius:3px;background:rgba(255,249,223,.35);cursor:pointer;transition:background-color .4s"></span></sc-for>
+    </div></div>
+  </section>
+
+  <section style="background:#fff9df;border-bottom:1px solid rgba(37,55,50,.12)">
+    <div class="wrap g-trust">
+      <sc-for list="{{ trust }}" as="t" hint-placeholder-count="4">
+        <div class="rev" style="padding:2rem 1.4rem;text-align:center;border-left:1px solid rgba(37,55,50,.12);display:flex;flex-direction:column;align-items:center;gap:.6rem">
+          <div style="width:34px;height:34px;border-radius:50%;background:#257575;color:#fff9df;display:flex;align-items:center;justify-content:center">{{ t.icon }}</div>
+          <div style="font-weight:600;font-size:12.5px;letter-spacing:.06em">{{ t.title }}</div>
+          <div style="font-size:12px;color:#716a56;line-height:1.4">{{ t.text }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top:clamp(4rem,7vw,7rem);padding-bottom:clamp(4rem,7vw,7rem)">
+    <div class="rev" style="text-align:center;max-width:640px;margin:0 auto clamp(2.2rem,4vw,3.4rem)">
+      <div class="eyebrow" style="justify-content:center">Chapter One — The Collections</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.6rem,4.6vw,4.2rem);margin:1rem 0 .8rem;line-height:1.06">Every Table Tells a Story</h2>
+      <p style="font-size:14px;line-height:1.7;color:#716a56;margin:0">Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets.</p>
+    </div>
+    <div class="g-coll">
+      <sc-for list="{{ tiles }}" as="c" hint-placeholder-count="10">
+        <a href="#" class="tile stag" style="aspect-ratio:4/5">
+          <div class="ph" style="position:absolute;inset:0"><span>{{ c.ph }}</span></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,53,54,0) 40%,rgba(18,53,54,.75) 100%)"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:1.1rem 1.2rem;color:#fff9df"><div style="font-family:'Cormorant Garamond',serif;font-size:21px;line-height:1.1">{{ c.title }}</div><div style="font-size:10px;letter-spacing:.12em;opacity:.85;margin-top:2px">{{ c.count }}</div></div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-bottom:clamp(4rem,7vw,7rem)">
+    <div class="rev" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;border-top:1px solid rgba(37,55,50,.14);padding-top:2rem;margin-bottom:2.2rem">
+      <div><div class="eyebrow">Best Sellers</div><h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.2rem,3.6vw,3.4rem);margin:.7rem 0 0">Dinner Sets</h2></div>
+      <a class="btn btn-o" href="#" style="padding:.7rem 1.4rem">View All</a>
+    </div>
+    <div class="g-prod">
+      <sc-for list="{{ dinner }}" as="p" hint-placeholder-count="4">
+        <div class="card stag">
+          <div style="position:relative;aspect-ratio:4/5"><div class="ph" style="position:absolute;inset:0"><span>{{ p.ph }}</span></div><sc-if value="{{ p.sale }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:14px;left:14px;background:#257575;color:#fff9df;font-size:10px;font-weight:600;letter-spacing:.08em;padding:5px 11px;border-radius:20px">SALE</span></sc-if></div>
+          <div style="padding:1.1rem 1.2rem 1.3rem">
+            <div style="color:#e0a422;letter-spacing:.12em;font-size:12px">★★★★★ <span style="color:#a49b86;font-size:11px">({{ p.rev }})</span></div>
+            <div style="font-weight:500;font-size:14px;line-height:1.4;margin:.5rem 0;min-height:2.6em">{{ p.name }}</div>
+            <div style="display:flex;align-items:baseline;gap:.6rem"><span style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;color:#257575">{{ p.price }}</span><sc-if value="{{ p.was }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;color:#a49b86;text-decoration:line-through">{{ p.was }}</span></sc-if></div>
+            <button class="btn addbtn" style="margin-top:1rem">Add to Cart</button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section class="rev" style="background:#257575;color:#fff9df">
+    <div class="wrap" style="padding:0"><div class="split" style="min-height:580px">
+      <div style="position:relative;overflow:hidden;min-height:380px"><div class="ph par" style="position:absolute;inset:-6% 0;filter:saturate(.92)"><span>WhatsApp_..9.13.36_PM.jpg — copper serveware flatlay</span></div></div>
+      <div style="padding:clamp(2.6rem,5vw,5.5rem)">
+        <div class="eyebrow" style="color:#fff9df">Chapter Two — The Craft</div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.3rem,4vw,4rem);line-height:1.08;margin:1.2rem 0 0">Crafted in Pakistan,<br>Made for Fine Dining</h2>
+        <p style="font-size:14.5px;line-height:1.85;color:rgba(255,249,223,.82);max-width:460px;margin:1.6rem 0 0">Home starts here. Every piece in our palette is shaped, glazed and finished by local artisans — supporting Pakistani craft while setting tables for homes, hotels and restaurants across the country. These aren't just dishes; they're heirlooms in the making.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:clamp(1.6rem,3vw,3rem);margin:2.4rem 0;border-top:1px solid rgba(255,249,223,.24);border-bottom:1px solid rgba(255,249,223,.24);padding:1.8rem 0">
+          <div><div style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600">100%</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,249,223,.7);margin-top:.3rem">Handcrafted</div></div>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600">10+</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,249,223,.7);margin-top:.3rem">Collections</div></div>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600">3–5 days</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,249,223,.7);margin-top:.3rem">Delivery</div></div>
+        </div>
+        <a class="btn btn-cream" href="#">Explore the Craft <svg width="15" height="9" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 6h18M13 1l5 5-5 5"/></svg></a>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="wrap" style="padding-top:clamp(4rem,7vw,7rem);padding-bottom:clamp(4rem,7vw,7rem)">
+    <div class="rev" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:2.2rem">
+      <div><div class="eyebrow">Slow Rituals</div><h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.2rem,3.6vw,3.4rem);margin:.7rem 0 0">Tea &amp; Coffee</h2></div>
+      <a class="btn btn-o" href="#" style="padding:.7rem 1.4rem">View All</a>
+    </div>
+    <div class="g-prod">
+      <sc-for list="{{ tea }}" as="p" hint-placeholder-count="4">
+        <div class="card stag">
+          <div style="position:relative;aspect-ratio:4/5"><div class="ph" style="position:absolute;inset:0"><span>{{ p.ph }}</span></div></div>
+          <div style="padding:1.1rem 1.2rem 1.3rem">
+            <div style="color:#e0a422;letter-spacing:.12em;font-size:12px">★★★★★ <span style="color:#a49b86;font-size:11px">({{ p.rev }})</span></div>
+            <div style="font-weight:500;font-size:14px;line-height:1.4;margin:.5rem 0;min-height:2.6em">{{ p.name }}</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;color:#257575">{{ p.price }}</div>
+            <button class="btn addbtn btn-o" style="margin-top:1rem">Choose Options</button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section class="rev" style="background:#fff9df;padding:clamp(4rem,7vw,7rem) 0">
+    <div class="wrap" style="text-align:center">
+      <div class="eyebrow" style="justify-content:center">Chapter Three — The Table</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.4rem,4vw,4rem);margin:1rem 0 .7rem">Shop by Occasion</h2>
+      <p style="font-size:14px;color:#716a56;max-width:480px;margin:0 auto clamp(2.4rem,4vw,3.6rem)">From quiet weekday meals to grand celebrations — set the table for the moment.</p>
+      <div class="g-occ">
+        <sc-for list="{{ occasions }}" as="o" hint-placeholder-count="6">
+          <a href="#" class="occ stag" style="background:#fff;border:1px solid rgba(37,55,50,.1);border-radius:16px;padding:1.8rem 1rem;display:flex;flex-direction:column;align-items:center;gap:.7rem;transition:transform .35s,box-shadow .35s">
+            <div style="width:44px;height:44px;border-radius:50%;background:#eaf1f0;color:#257575;display:flex;align-items:center;justify-content:center">{{ o.icon }}</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.15;color:#252525">{{ o.title }}</div>
+            <div style="font-size:11px;color:#716a56;line-height:1.4">{{ o.caption }}</div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top:clamp(4rem,7vw,7rem);padding-bottom:clamp(4rem,7vw,7rem)">
+    <div class="rev" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:2.2rem">
+      <div><div class="eyebrow">Host in Style</div><h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.2rem,3.6vw,3.4rem);margin:.7rem 0 0">Serving in Style</h2></div>
+      <a class="btn btn-o" href="#" style="padding:.7rem 1.4rem">View All</a>
+    </div>
+    <div class="g-prod">
+      <sc-for list="{{ serving }}" as="p" hint-placeholder-count="4">
+        <div class="card stag">
+          <div style="position:relative;aspect-ratio:4/5"><div class="ph" style="position:absolute;inset:0"><span>{{ p.ph }}</span></div></div>
+          <div style="padding:1.1rem 1.2rem 1.3rem">
+            <div style="color:#e0a422;letter-spacing:.12em;font-size:12px">★★★★★ <span style="color:#a49b86;font-size:11px">({{ p.rev }})</span></div>
+            <div style="font-weight:500;font-size:14px;line-height:1.4;margin:.5rem 0;min-height:2.6em">{{ p.name }}</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;color:#257575">{{ p.price }}</div>
+            <button class="btn addbtn btn-o" style="margin-top:1rem">Choose Options</button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(4rem,7vw,7rem)">
+    <div class="wrap rev" style="text-align:center;margin-bottom:clamp(2.2rem,4vw,3rem)"><div class="eyebrow" style="justify-content:center">Textures &amp; Glazes</div><h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.4rem,4vw,4rem);margin:1rem 0 0">Shop by Style</h2></div>
+    <div class="wrap g-sty">
+      <sc-for list="{{ styles }}" as="st" hint-placeholder-count="5">
+        <a href="#" class="tile stag" style="aspect-ratio:3/4">
+          <div class="ph" style="position:absolute;inset:0"><span>{{ st.ph }}</span></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,53,54,.12),rgba(18,53,54,.62))"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:1.6rem"><span style="font-family:'Cormorant Garamond',serif;font-size:clamp(19px,2vw,26px);letter-spacing:.04em;color:#fff9df">{{ st.title }}</span></div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <section class="rev wrap" style="padding-bottom:clamp(4rem,7vw,7rem)">
+    <div style="position:relative;overflow:hidden;border-radius:24px;color:#fff9df">
+      <div class="ph par" style="position:absolute;inset:-8% 0;filter:brightness(.72) saturate(.95)"><span>Jute-Weave-Placemats.webp — woven placemat set</span></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,53,54,.84),rgba(37,117,117,.42))"></div>
+      <div style="position:relative;padding:clamp(3rem,6vw,6rem) clamp(2rem,5vw,5rem)"><div style="max-width:520px">
+        <div class="eyebrow" style="color:#fff9df">The Weave Collection</div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.4rem,4.4vw,4.4rem);line-height:1.06;margin:1.2rem 0">Woven for the Everyday Feast</h2>
+        <p style="font-size:14.5px;line-height:1.8;color:rgba(255,249,223,.9);max-width:420px;margin:0 0 2rem">Hand-woven placemats and baskets that ground every table setting in warmth.</p>
+        <a class="btn btn-cream" href="#">Explore THP Weaves <svg width="15" height="9" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 6h18M13 1l5 5-5 5"/></svg></a>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- VIDEO REVIEWS -->
+  <section style="background:#123536;color:#fff9df;padding:clamp(4rem,7vw,7rem) 0;overflow:hidden">
+    <div class="wrap rev" style="text-align:center;margin-bottom:clamp(2.4rem,4vw,3.4rem)">
+      <div class="eyebrow" style="justify-content:center;color:#7fc8be">Real Tables · Real Reviews</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.4rem,4.2vw,4.2rem);margin:1rem 0 .6rem">Loved Across Pakistan</h2>
+      <p style="font-size:14px;color:rgba(255,249,223,.62);max-width:460px;margin:0 auto">Watch and read what homes, hosts and restaurants say about setting their table with us.</p>
+    </div>
+    <div class="mqmask" style="-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)">
+      <div class="mqrow mqA" style="margin-bottom:20px">
+        <sc-for list="{{ reviewsA }}" as="r" hint-placeholder-count="6"><dc-import name="ReviewCard" r="{{ r }}" hint-size="300px,340px"></dc-import></sc-for>
+        <sc-for list="{{ reviewsA }}" as="r" hint-placeholder-count="6"><dc-import name="ReviewCard" r="{{ r }}" hint-size="300px,340px"></dc-import></sc-for>
+      </div>
+      <div class="mqrow mqB">
+        <sc-for list="{{ reviewsB }}" as="r" hint-placeholder-count="6"><dc-import name="ReviewCard" r="{{ r }}" hint-size="300px,340px"></dc-import></sc-for>
+        <sc-for list="{{ reviewsB }}" as="r" hint-placeholder-count="6"><dc-import name="ReviewCard" r="{{ r }}" hint-size="300px,340px"></dc-import></sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#257575;color:#fff9df;overflow:hidden;padding:1.8rem 0">
+    <div style="display:inline-flex;white-space:nowrap;animation:hpMq 32s linear infinite;font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,44px);font-weight:500">
+      <span style="display:inline-flex;align-items:center"><span style="padding:0 2.2rem">Crafted in Pakistan</span><span style="opacity:.6">✦</span><span style="padding:0 2.2rem">Made for Fine Dining</span><span style="opacity:.6">✦</span><span style="padding:0 2.2rem">Supporting Local Artisans</span><span style="opacity:.6">✦</span><span style="padding:0 2.2rem">Homes &amp; Hospitality</span><span style="opacity:.6">✦</span></span>
+      <span style="display:inline-flex;align-items:center" aria-hidden="true"><span style="padding:0 2.2rem">Crafted in Pakistan</span><span style="opacity:.6">✦</span><span style="padding:0 2.2rem">Made for Fine Dining</span><span style="opacity:.6">✦</span><span style="padding:0 2.2rem">Supporting Local Artisans</span><span style="opacity:.6">✦</span><span style="padding:0 2.2rem">Homes &amp; Hospitality</span><span style="opacity:.6">✦</span></span>
+    </div>
+  </section>
+
+  <footer style="background:#257575;color:#fff9df">
+    <div class="wrap" style="padding:clamp(3.5rem,6vw,6rem) 20px;text-align:center;border-bottom:1px solid rgba(255,249,223,.2)">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.6rem,5vw,4.6rem);margin:0 0 .8rem">Join the Table</h2>
+      <p style="font-size:14px;color:rgba(255,249,223,.75);max-width:440px;margin:0 auto 1.8rem">Be first to new collections, artisan stories and private-sale invitations.</p>
+      <div style="display:flex;max-width:440px;margin:0 auto;background:rgba(255,249,223,.1);border:1px solid rgba(255,249,223,.35);border-radius:40px;padding:4px 4px 4px 20px"><input placeholder="Your email address" style="flex:1;background:transparent;border:0;color:#fff9df;font-family:'Archivo';font-size:14px;outline:none"/><button class="btn btn-cream" style="padding:.7rem 1.4rem">Subscribe</button></div>
+    </div>
+    <div class="wrap g-foot" style="padding-top:clamp(3rem,5vw,4.5rem);padding-bottom:clamp(3rem,5vw,4.5rem)">
+      <div>
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:1rem"><div style="width:40px;height:40px;border-radius:50%;border:1.5px solid #fff9df;display:flex;align-items:center;justify-content:center"><span style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:17px">thp</span></div><div style="font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:.14em">THE HOME PALETTE</div></div>
+        <p style="font-size:13px;line-height:1.7;color:rgba(255,249,223,.72);max-width:280px;margin:0 0 1.2rem">Handicrafts redefined — serveware shaped and glazed by Pakistani artisans, for homes and hospitality.</p>
+        <div style="display:flex;gap:.7rem">
+          <a href="https://www.instagram.com/the_homepalette/" style="width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,249,223,.4);display:flex;align-items:center;justify-content:center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://web.facebook.com/profile.php?id=61569011837619" style="width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,249,223,.4);display:flex;align-items:center;justify-content:center"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h2V5h-2c-2 0-3.5 1.5-3.5 3.5V10H8v3h2.5v7h3v-7H16l.5-3h-3V8.5c0-.3.2-.5.5-.5z"/></svg></a>
+        </div>
+      </div>
+      <div><div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,249,223,.55);margin-bottom:1rem">Shop</div><sc-for list="{{ footShop }}" as="l" hint-placeholder-count="5"><a href="#" style="display:block;font-size:13.5px;color:rgba(255,249,223,.85);margin-bottom:.8rem">{{ l }}</a></sc-for></div>
+      <div><div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,249,223,.55);margin-bottom:1rem">Help</div><sc-for list="{{ footHelp }}" as="l" hint-placeholder-count="5"><a href="#" style="display:block;font-size:13.5px;color:rgba(255,249,223,.85);margin-bottom:.8rem">{{ l }}</a></sc-for></div>
+      <div><div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,249,223,.55);margin-bottom:1rem">About</div><sc-for list="{{ footAbout }}" as="l" hint-placeholder-count="4"><a href="#" style="display:block;font-size:13.5px;color:rgba(255,249,223,.85);margin-bottom:.8rem">{{ l }}</a></sc-for></div>
+    </div>
+    <div style="border-top:1px solid rgba(255,249,223,.2)"><div class="wrap" style="padding-top:1.4rem;padding-bottom:1.4rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,249,223,.6)"><span>© 2026 The Home Palette</span><span>Nationwide Delivery · PKR</span></div></div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:2800}}">
+class Component extends DCLogic {
+  state = { hero: 0 };
+  renderVals() {
+    const h = this.state.hero;
+    const heroSlides = [
+      { kicker:'Handcrafted Heritage · Pakistan', heading:'Exquisite Dining', sub:'Our happy colors uplift the mood — premium serveware for homes and hospitality.', cta:'Shop Dinner Sets' },
+      { kicker:'The Home Palette', heading:'Serving Redefined', sub:'The evolution of craft into quiet luxury, one table at a time.', cta:'All Collections' },
+      { kicker:'Old Ways, New Tables', heading:'Traditional Kitchenware', sub:'Quiet luxury for your table, shaped by local artisans.', cta:'Cutlery & Metalware' },
+      { kicker:'Celebrate Heritage', heading:'Authentic Craftsmanship', sub:'Beautifully crafted tableware for slow afternoons and long conversations.', cta:'Tea & Coffee' },
+    ].map((s,i)=>({ ...s, go:()=>this.setState({hero:i}) }));
+    const active = heroSlides[h];
+
+    const tiles = [
+      ['Dinner Sets','24 pieces'],['Tea & Coffee','18 pieces'],['Platters','12 pieces'],['Placemats & Baskets','15 pieces'],['Bowls','20 pieces'],
+      ['Plates','16 pieces'],['Serveware','22 pieces'],['Cutlery & Metalware','9 pieces'],['The Wooden Line','11 pieces'],['New Arrivals','30 pieces'],
+    ].map(t=>({ title:t[0], count:t[1], ph:t[0]+' — collection' }));
+
+    const mk = (arr)=>arr.map(a=>({ name:a[0], price:a[1], was:a[2]||null, sale:!!a[2], rev:a[3], ph:'product shot' }));
+    const dinner = mk([['Ceramic Reactive Dinner Set — 24 Pcs','Rs. 12,900','Rs. 15,900','48'],['Marbled Tableware Range — 18 Pcs','Rs. 9,500',null,'31'],['Speckled Stoneware Set — 16 Pcs','Rs. 11,200','Rs. 13,500','22'],['Cobalt Ceramic Premium Dinner Set','Rs. 14,900',null,'17']]);
+    const tea = mk([['Classic Ceramic Teapot Set','From Rs. 4,900',null,'26'],['Aura Reactive Tea Set — Cloud Grey','From Rs. 5,900',null,'40'],['Fluted Espresso Cup Set','From Rs. 3,200',null,'19'],['Heritage Chai Cups — Set of 6','From Rs. 2,900',null,'54']]);
+    const serving = mk([['Linen Napkin Set — Deep Sea','Rs. 2,200',null,'12'],['Lidded Serving Casserole','Rs. 6,800',null,'28'],['Long Oval Platter — Sapphire','Rs. 4,400',null,'33'],['Brass-Rim Serving Tray','Rs. 5,600',null,'15']]);
+
+    const occIcon = (d)=>React.createElement('svg',{width:20,height:20,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor','strokeWidth':1.5},React.createElement('path',{d}));
+    const occasions = [
+      ['Everyday Dining','Sturdy, beautiful staples','M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M6 11v8M18 11v8'],
+      ['Hosting Guests','Sets that impress','M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87'],
+      ['Tea Time','Slow afternoon rituals','M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 9h2a2 2 0 0 1 0 4h-2'],
+      ['Ramadan','Iftar & suhoor tables','M18 5a7 7 0 1 0 0 14 8 8 0 0 1 0-14z'],
+      ['Eid','Festive gatherings','M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 21l-4.9 2.6.9-5.5-4-3.9 5.5-.8z'],
+      ['Wedding Gifts','Heirlooms to give','M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z'],
+    ].map(o=>({ title:o[0], caption:o[1], icon:occIcon(o[2]) }));
+
+    const styles = [['Minimalist','plates flatlay'],['Earthy','jute & woven texture'],['Reactive','reactive-glaze set'],['Contemporary','plated dinner set'],['Hotel Collection','serveware stack']].map(s=>({ title:s[0], ph:s[1] }));
+
+    const rv = [
+      { type:'video', name:'Ayesha K.', role:'Home Chef · Lahore', ph:'customer video' },
+      { type:'text', name:'Bilal R.', role:'Restaurateur · Karachi', quote:'Packaging was immaculate and the pieces feel like heirlooms. Our whole restaurant switched over. Worth every rupee.' },
+      { type:'video', name:'Sana M.', role:'Host · Islamabad', ph:'customer video' },
+      { type:'text', name:'Hina F.', role:'Event Stylist', quote:'The reactive glaze is even more beautiful in person. Every guest asks where the set is from.' },
+      { type:'video', name:'Usman T.', role:'Cafe Owner · Multan', ph:'customer video' },
+      { type:'text', name:'Zara A.', role:'Newlywed · Rawalpindi', quote:'Bought the dinner set for our new home — it made the whole table feel special. Ordering the tea set next.' },
+      { type:'video', name:'Fatima R.', role:'Food Blogger', ph:'customer video' },
+      { type:'text', name:'Omar S.', role:'Hotel F&B Manager', quote:'Consistent quality across every reorder. Hand-inspected really shows. Our go-to for banquet serveware now.' },
+    ];
+
+    const tIcon = (d)=>React.createElement('svg',{width:17,height:17,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor','strokeWidth':1.6},React.createElement('path',{d}));
+    const trust = [
+      { title:'Nationwide Delivery', text:'Flat Rs. 299 · free over Rs. 8,000', icon:tIcon('M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4M18.5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4') },
+      { title:'Handcrafted', text:'Made by Pakistani artisans', icon:tIcon('M12 2l2.5 6.5L21 9l-5 4 1.5 7L12 16l-5.5 4L8 13 3 9l6.5-.5z') },
+      { title:'Quality Checked', text:'Every piece inspected by hand', icon:tIcon('M20 6 9 17l-5-5') },
+      { title:'5% Off Online', text:'Website orders only', icon:tIcon('M20.6 3.4 12 12M9 3H3v6l9 9 6-6z') },
+    ];
+
+    return {
+      root:(el)=>{ this._root=el; }, header:(el)=>{ this._header=el; }, heroVideo:(el)=>{ this._heroVideo=el; },
+      heroSlides, tiles, dinner, tea, serving, occasions, styles, trust,
+      reviewsA: rv.slice(0,4), reviewsB: rv.slice(4),
+      activeKicker:active.kicker, activeHeading:active.heading, activeSub:active.sub, activeCta:active.cta,
+      footShop:['Dinner Sets','Tea & Coffee','Serveware','The Weave Collection','New Arrivals'],
+      footHelp:['Contact Us','Shipping & Returns','Track Order','FAQs','Care Guide'],
+      footAbout:['Our Story','Artisans','Wholesale','Instagram'],
+    };
+  }
+  componentDidMount(){
+    const activate=()=>{ (this._root?.querySelectorAll('.hero-dot')||[]).forEach(d=>{ d.style.background=(+d.dataset.idx===this.state.hero)?'#fff9df':'rgba(255,249,223,.35)'; }); };
+    this._activate=activate; activate();
+    this._timer=setInterval(()=>this.setState(s=>({hero:(s.hero+1)%4})),6000);
+    this._animReady=false;
+    this._waitLibs(0);
+  }
+  _waitLibs(n){
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return;
+    if (window.gsap && window.ScrollTrigger){ this._initGSAP(); return; }
+    if (n>60) return; // give up after ~6s, content already visible
+    this._libTimer=setTimeout(()=>this._waitLibs(n+1),100);
+  }
+  _initGSAP(){
+    if (this._animReady) return; this._animReady=true;
+    const gsap=window.gsap, ST=window.ScrollTrigger, root=this._root;
+    gsap.registerPlugin(ST);
+    // Lenis smooth scroll
+    try{
+      if (window.Lenis){
+        const lenis=new window.Lenis({ duration:1.1, smoothWheel:true });
+        lenis.on('scroll', ST.update);
+        gsap.ticker.add((t)=>lenis.raf(t*1000));
+        gsap.ticker.lagSmoothing(0);
+        this._lenis=lenis;
+      }
+    }catch(e){}
+    const q=(s)=>Array.from(root.querySelectorAll(s));
+    // hero intro
+    gsap.from(q('.hero-el'),{ y:34, opacity:0, duration:1, ease:'power3.out', stagger:.12, delay:.15 });
+    // section reveals
+    q('.rev').forEach((el)=>{
+      gsap.from(el,{ y:40, opacity:0, duration:.9, ease:'power3.out', scrollTrigger:{ trigger:el, start:'top 86%' } });
+    });
+    // stacking cards (scale + rise, batched per row)
+    ST.batch(q('.stag'),{ start:'top 90%', onEnter:(b)=>gsap.fromTo(b,{ y:70, opacity:0, scale:.94 },{ y:0, opacity:1, scale:1, duration:.85, ease:'power3.out', stagger:.09, overwrite:true }) });
+    // parallax
+    q('.par').forEach((el)=>{ gsap.to(el,{ yPercent:12, ease:'none', scrollTrigger:{ trigger:el.closest('section'), start:'top bottom', end:'bottom top', scrub:true } }); });
+    ST.refresh();
+  }
+  componentDidUpdate(){ this._activate?.(); }
+  componentWillUnmount(){ clearInterval(this._timer); clearTimeout(this._libTimer); try{ this._lenis&&this._lenis.destroy(); window.ScrollTrigger&&window.ScrollTrigger.getAll().forEach(t=>t.kill()); }catch(e){} }
+}
+</script>
+</body>
+</html>

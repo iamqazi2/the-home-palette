@@ -1,16 +1,97 @@
-/* THE HOME PALETTE — shared motion + interactive elements.
-   Reduced-motion safe: reveals and Ken Burns are disabled when the user
-   prefers reduced motion; sliders fall back to instant cuts. */
+/* THE HOME PALETTE — v3 motion engine + interactive elements.
+   Engine: GSAP + ScrollTrigger + Lenis (self-hosted, loaded before this file).
+   Falls back to IntersectionObserver reveals if the libs are missing, and to
+   static content under prefers-reduced-motion. Editor-safe: Lenis is skipped
+   in the theme customizer and everything re-inits on section reload. */
 (function () {
   'use strict';
 
-  document.documentElement.classList.add('hp-js');
+  var doc = document.documentElement;
+  doc.classList.add('hp-js');
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var designMode = window.Shopify && window.Shopify.designMode;
+  var hasGsap = !reducedMotion && window.gsap && window.ScrollTrigger;
 
-  /* ---- Scroll reveal ------------------------------------------------- */
-  function initReveals(root) {
-    var nodes = (root || document).querySelectorAll('[data-hp-reveal]:not(.hp-inview)');
+  /* ---- GSAP / Lenis boot ---------------------------------------------- */
+  var lenis = null;
+  if (hasGsap) {
+    doc.classList.add('hp-gsap');
+    window.gsap.registerPlugin(window.ScrollTrigger);
+
+    if (window.Lenis && !designMode) {
+      try {
+        lenis = new window.Lenis({ duration: 1.1, smoothWheel: true });
+        doc.classList.add('hp-lenis');
+        lenis.on('scroll', window.ScrollTrigger.update);
+        window.gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+        window.gsap.ticker.lagSmoothing(0);
+      } catch (e) { lenis = null; }
+    }
+  }
+
+  /* ---- Reveals + stacking cards + parallax ----------------------------- */
+  function initMotion(root) {
+    root = root || document;
+
+    if (hasGsap) {
+      var gsap = window.gsap;
+      var ST = window.ScrollTrigger;
+
+      // stagger groups: children rise + scale in a batch
+      var staggerChildren = [];
+      root.querySelectorAll('[data-hp-stagger]').forEach(function (parent) {
+        Array.prototype.forEach.call(parent.children, function (child) {
+          if (child.hasAttribute('data-hp-reveal') && !child.dataset.hpDone) {
+            child.dataset.hpDone = '1';
+            staggerChildren.push(child);
+          }
+        });
+      });
+      if (staggerChildren.length) {
+        ST.batch(staggerChildren, {
+          start: 'top 90%',
+          once: true,
+          onEnter: function (batch) {
+            gsap.fromTo(batch,
+              { y: 60, opacity: 0, scale: 0.95 },
+              { y: 0, opacity: 1, scale: 1, duration: 0.85, ease: 'power3.out', stagger: 0.09, overwrite: true, clearProps: 'transform' });
+          }
+        });
+      }
+
+      // single reveals (not inside a stagger group)
+      root.querySelectorAll('[data-hp-reveal]').forEach(function (el) {
+        if (el.dataset.hpDone) return;
+        el.dataset.hpDone = '1';
+        gsap.fromTo(el,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', clearProps: 'transform',
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+      });
+
+      // background parallax (hero video, story image, CTA image)
+      root.querySelectorAll('[data-hp-parallax]').forEach(function (el) {
+        if (el.dataset.hpParDone) return;
+        el.dataset.hpParDone = '1';
+        var holder = el.closest('section, .shopify-section') || el.parentElement;
+        gsap.fromTo(el, { yPercent: -6 }, {
+          yPercent: 6, ease: 'none',
+          scrollTrigger: { trigger: holder, start: 'top bottom', end: 'bottom top', scrub: true }
+        });
+      });
+
+      ST.refresh();
+      return;
+    }
+
+    // ---- vanilla fallback (no GSAP) ----
+    root.querySelectorAll('[data-hp-stagger]').forEach(function (parent) {
+      Array.prototype.forEach.call(parent.children, function (child, i) {
+        child.style.setProperty('--hp-i', i);
+      });
+    });
+    var nodes = root.querySelectorAll('[data-hp-reveal]:not(.hp-inview)');
     if (!nodes.length) return;
     if (reducedMotion || !('IntersectionObserver' in window)) {
       nodes.forEach(function (n) { n.classList.add('hp-inview'); });
@@ -24,21 +105,82 @@
         }
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
-    nodes.forEach(function (n) {
-      // stagger children of grids: parent sets data-hp-stagger, children get --hp-i
-      io.observe(n);
-    });
+    nodes.forEach(function (n) { io.observe(n); });
   }
 
-  function applyStagger(root) {
-    (root || document).querySelectorAll('[data-hp-stagger]').forEach(function (parent) {
-      Array.prototype.forEach.call(parent.children, function (child, i) {
-        child.style.setProperty('--hp-i', i);
+  /* ---- Sticky header shadow after 20px --------------------------------- */
+  function initHeaderShadow() {
+    var wrapper = document.querySelector('.header-wrapper');
+    if (!wrapper) return;
+    var update = function () {
+      wrapper.classList.toggle('hp-scrolled', window.scrollY > 20);
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+
+  /* ---- Video lightbox --------------------------------------------------- */
+  var lightbox = null;
+  function getLightbox() {
+    if (lightbox) return lightbox;
+    var el = document.createElement('div');
+    el.className = 'hp-lightbox';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-label', 'Video player');
+    el.innerHTML =
+      '<div class="hp-lightbox__inner">' +
+      '<button type="button" class="hp-lightbox__close" aria-label="Close video">' +
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
+      '</button>' +
+      '<video controls playsinline preload="metadata"></video>' +
+      '</div>';
+    document.body.appendChild(el);
+
+    var video = el.querySelector('video');
+    var opener = null;
+    function close() {
+      el.classList.remove('is-open');
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+      if (lenis) lenis.start();
+      if (opener && opener.focus) opener.focus();
+      opener = null;
+    }
+    el.addEventListener('click', function (e) { if (e.target === el) close(); });
+    el.querySelector('.hp-lightbox__close').addEventListener('click', close);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && el.classList.contains('is-open')) close();
+    });
+
+    lightbox = {
+      open: function (src, wide, from) {
+        opener = from || null;
+        el.querySelector('.hp-lightbox__inner').classList.toggle('hp-lightbox__inner--wide', !!wide);
+        video.src = src;
+        el.classList.add('is-open');
+        if (lenis) lenis.stop();
+        var play = video.play();
+        if (play && play.catch) play.catch(function () {});
+        el.querySelector('.hp-lightbox__close').focus();
+      }
+    };
+    return lightbox;
+  }
+
+  function initVideoTriggers(root) {
+    (root || document).querySelectorAll('[data-hp-video-src]').forEach(function (btn) {
+      if (btn.dataset.hpVideoWired) return;
+      btn.dataset.hpVideoWired = '1';
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        getLightbox().open(btn.getAttribute('data-hp-video-src'), btn.hasAttribute('data-hp-video-wide'), btn);
       });
     });
   }
 
-  /* ---- Full-height hero slider ---------------------------------------- */
+  /* ---- Full-height hero slider (copy rotation + dots/arrows) ------------ */
   var HpHero = (function () {
     function HpHero() { return Reflect.construct(HTMLElement, [], HpHero); }
     HpHero.prototype = Object.create(HTMLElement.prototype, { constructor: { value: HpHero } });
@@ -63,7 +205,6 @@
         dot.addEventListener('click', function () { el.go(i, true); });
       });
 
-      // touch swipe
       var startX = null;
       el.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
       el.addEventListener('touchend', function (e) {
@@ -73,13 +214,11 @@
         startX = null;
       }, { passive: true });
 
-      // keyboard
       el.addEventListener('keydown', function (e) {
         if (e.key === 'ArrowLeft') el.go(el.index - 1, true);
         if (e.key === 'ArrowRight') el.go(el.index + 1, true);
       });
 
-      // pause when off-screen or tab hidden
       document.addEventListener('visibilitychange', function () {
         document.hidden ? el.stop() : el.play();
       });
@@ -87,6 +226,13 @@
         new IntersectionObserver(function (entries) {
           entries[0].isIntersecting ? el.play() : el.stop();
         }, { threshold: 0.15 }).observe(el);
+      }
+
+      // hero background video: keep autoplay honest (it can be blocked)
+      var vid = el.querySelector('.hp-hero__video video');
+      if (vid) {
+        var p = vid.play();
+        if (p && p.catch) p.catch(function () { el.classList.add('hp-hero--video-blocked'); });
       }
 
       el.render();
@@ -129,7 +275,7 @@
   })();
   if (!customElements.get('hp-hero')) customElements.define('hp-hero', HpHero);
 
-  /* ---- Horizontal rail with arrows ------------------------------------ */
+  /* ---- Horizontal rail with arrows -------------------------------------- */
   var HpRail = (function () {
     function HpRail() { return Reflect.construct(HTMLElement, [], HpRail); }
     HpRail.prototype = Object.create(HTMLElement.prototype, { constructor: { value: HpRail } });
@@ -161,19 +307,20 @@
   })();
   if (!customElements.get('hp-rail')) customElements.define('hp-rail', HpRail);
 
-  /* ---- boot ----------------------------------------------------------- */
+  /* ---- boot ------------------------------------------------------------- */
   function boot() {
-    applyStagger(document);
-    initReveals(document);
+    initMotion(document);
+    initHeaderShadow();
+    initVideoTriggers(document);
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
   } else {
     boot();
   }
-  // re-init inside the theme editor when sections re-render
   document.addEventListener('shopify:section:load', function (e) {
-    applyStagger(e.target);
-    initReveals(e.target);
+    initMotion(e.target);
+    initVideoTriggers(e.target);
+    if (hasGsap) window.ScrollTrigger.refresh();
   });
 })();

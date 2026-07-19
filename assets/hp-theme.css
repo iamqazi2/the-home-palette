@@ -1,35 +1,58 @@
 /* ==========================================================================
-   THE HOME PALETTE — "Vintage Story, Modern Craft" design system
-   All colors derive from the existing theme palette (settings_data.json):
-   cream #fff9df · ink #252525 · espresso #0e0606 · taupe #716a56
-   moss #2c332f · fern #3f5147 · linen #efecec · white #ffffff
+   THE HOME PALETTE — v3 "Modern Vintage, Teal & Cream" design system
+   Brand palette (client-approved):
+   teal #257575 · teal-deep #1c5b5b · teal-ink #123536 · teal-card #173f40
+   chip #eaf1f0 · cream #fff9df · page #fffdf4 · card #ffffff · ink #252525
+   taupe #716a56 · gold #e0a422 (stars) · linen #efecec
+   Type: Cormorant Garamond 600 (display) + Archivo (UI/body)
+   Primitives: pill buttons (r40) · white rounded cards (r18) · teal eyebrows
    ========================================================================== */
 
 :root {
+  --hp-teal: #257575;
+  --hp-teal-deep: #1c5b5b;
+  --hp-teal-ink: #123536;
+  --hp-teal-card: #173f40;
+  --hp-teal-chip: #eaf1f0;
+  --hp-teal-soft: #7fc8be;      /* light accent on dark teal */
   --hp-cream: #fff9df;
-  --hp-cream-soft: #fffdf4;      /* tint of cream */
+  --hp-cream-soft: #fffdf4;
   --hp-paper: #ffffff;
   --hp-ink: #252525;
   --hp-espresso: #0e0606;
   --hp-taupe: #716a56;
-  --hp-taupe-soft: #8a8370;      /* tint of taupe */
-  --hp-moss: #2c332f;
-  --hp-fern: #3f5147;
+  --hp-taupe-soft: #a49b86;
+  --hp-gold: #e0a422;
   --hp-linen: #efecec;
+  /* legacy aliases kept so nothing breaks mid-migration */
+  --hp-moss: #123536;
+  --hp-fern: #257575;
 
-  --hp-hairline: rgba(37, 37, 37, 0.14);
+  --hp-hairline: rgba(37, 37, 37, 0.09);
   --hp-hairline-strong: rgba(37, 37, 37, 0.3);
-  --hp-hairline-light: rgba(239, 236, 236, 0.22);
+  --hp-hairline-light: rgba(255, 249, 223, 0.22);
+  --hp-hairline-teal: rgba(37, 85, 80, 0.12);
 
   --hp-font-display: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+  --hp-font-ui: 'Archivo', 'Archivo Narrow', system-ui, sans-serif;
 
-  --hp-ease: cubic-bezier(0.22, 0.61, 0.21, 1);
+  --hp-r-card: 18px;
+  --hp-r-pill: 40px;
+
+  --hp-ease: cubic-bezier(0.22, 0.7, 0.2, 1);
   --hp-dur: 0.8s;
-  --hp-dur-slow: 1.4s;
+  --hp-dur-slow: 1.3s;
+
+  --hp-shadow-card: 0 30px 50px -30px rgba(18, 53, 54, 0.55);
+  --hp-shadow-btn: 0 10px 24px -12px rgba(28, 91, 91, 0.7);
 }
 
+::selection { background: var(--hp-teal); color: var(--hp-cream); }
+
+body { background: var(--hp-cream-soft); }
+
 /* --------------------------------------------------------------------------
-   1. GLOBAL TYPOGRAPHY — vintage serif display over Dawn's body sans
+   1. TYPOGRAPHY
    -------------------------------------------------------------------------- */
 
 h1, h2, h3,
@@ -45,97 +68,138 @@ h1, h2, h3,
 .main-page-title,
 .quick-add-modal .product__title > * {
   font-family: var(--hp-font-display) !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   letter-spacing: 0.005em !important;
-  line-height: 1.12;
+  line-height: 1.06;
 }
 
 .hp-eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 0.9rem;
+  font-family: var(--hp-font-ui);
   font-size: 1.1rem;
   font-weight: 600;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--hp-taupe);
+  color: var(--hp-teal);
 }
 .hp-eyebrow::before,
 .hp-eyebrow--rule-after::after {
   content: '';
-  width: 3.6rem;
-  height: 1px;
+  width: 2.2rem;
+  height: 1.5px;
   background: currentColor;
-  opacity: 0.6;
 }
 .hp-eyebrow--bare::before { content: none; }
 .hp-eyebrow--light { color: var(--hp-cream); }
+.hp-eyebrow--soft { color: var(--hp-teal-soft); }
 
 .hp-display {
   font-family: var(--hp-font-display);
-  font-weight: 500;
-  line-height: 1.08;
+  font-weight: 600;
+  line-height: 1.06;
   letter-spacing: 0.005em;
   margin: 0;
 }
 
 /* --------------------------------------------------------------------------
-   2. BUTTONS — squared, letter-spaced, quietly confident
+   2. BUTTONS — pill, lift + shadow on hover
    -------------------------------------------------------------------------- */
 
 .button,
 .shopify-challenge__button,
 .customer button,
 button.shopify-payment-button__button--unbranded {
-  border-radius: 0 !important;
-  font-size: 1.1rem;
+  border-radius: var(--hp-r-pill) !important;
+  font-family: var(--hp-font-ui);
+  font-size: 1.2rem;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  transition: background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease), opacity 0.35s var(--hp-ease);
+  transition: background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease),
+    transform 0.35s var(--hp-ease), box-shadow 0.35s var(--hp-ease), opacity 0.35s;
 }
 .button::after, .shopify-challenge__button::after { box-shadow: none !important; }
-.button:hover { opacity: 0.88; }
+.button:hover { transform: translateY(-2px); box-shadow: var(--hp-shadow-btn); }
 
 .hp-btn {
   display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1.5rem 3rem;
-  font-size: 1.1rem;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.4rem 2.6rem;
+  border-radius: var(--hp-r-pill);
+  font-family: var(--hp-font-ui);
+  font-size: 1.2rem;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
-  border: 1px solid currentColor;
-  color: var(--hp-ink);
-  background: transparent;
+  border: 1.5px solid var(--hp-teal);
+  background: var(--hp-teal);
+  color: var(--hp-cream);
   cursor: pointer;
-  transition: background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease), border-color 0.35s var(--hp-ease);
+  transition: background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease),
+    border-color 0.35s var(--hp-ease), transform 0.35s var(--hp-ease), box-shadow 0.35s var(--hp-ease);
+}
+.hp-btn:hover {
+  background: var(--hp-teal-deep);
+  border-color: var(--hp-teal-deep);
+  color: var(--hp-cream);
+  transform: translateY(-2px);
+  box-shadow: var(--hp-shadow-btn);
 }
 .hp-btn .hp-icon { transition: transform 0.35s var(--hp-ease); }
 .hp-btn:hover .hp-icon { transform: translateX(4px); }
 
-.hp-btn--solid { background: var(--hp-espresso); border-color: var(--hp-espresso); color: var(--hp-paper); }
-.hp-btn--solid:hover { background: transparent; color: var(--hp-espresso); }
-
-.hp-btn--cream { border-color: var(--hp-cream); color: var(--hp-cream); }
-.hp-btn--cream:hover { background: var(--hp-cream); color: var(--hp-ink); }
-
-.hp-btn--cream-solid { background: var(--hp-cream); border-color: var(--hp-cream); color: var(--hp-ink); }
-.hp-btn--cream-solid:hover { background: transparent; color: var(--hp-cream); }
+/* Outline (teal on light) */
+.hp-btn--outline, .hp-btn--solid /* legacy alias */ {
+  background: transparent;
+  color: var(--hp-teal);
+}
+.hp-btn--outline:hover, .hp-btn--solid:hover {
+  background: var(--hp-teal);
+  color: var(--hp-cream);
+}
+/* Cream outline (on dark/teal bands) */
+.hp-btn--cream {
+  background: transparent;
+  border-color: rgba(255, 249, 223, 0.55);
+  color: var(--hp-cream);
+}
+.hp-btn--cream:hover {
+  background: var(--hp-cream);
+  border-color: var(--hp-cream);
+  color: var(--hp-teal);
+  box-shadow: 0 10px 24px -12px rgba(14, 6, 6, 0.5);
+}
+/* Cream solid (primary CTA on dark/teal bands) */
+.hp-btn--cream-solid {
+  background: var(--hp-cream);
+  border-color: var(--hp-cream);
+  color: var(--hp-teal);
+}
+.hp-btn--cream-solid:hover {
+  background: transparent;
+  border-color: var(--hp-cream);
+  color: var(--hp-cream);
+  box-shadow: 0 10px 24px -12px rgba(14, 6, 6, 0.5);
+}
+.hp-btn--sm { padding: 0.9rem 1.8rem; font-size: 1.1rem; }
 
 /* Underline-draw text link */
 .hp-link {
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
-  font-size: 1.1rem;
+  font-family: var(--hp-font-ui);
+  font-size: 1.15rem;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
-  color: currentColor;
+  color: var(--hp-teal);
   padding-bottom: 0.5rem;
   position: relative;
 }
@@ -143,7 +207,7 @@ button.shopify-payment-button__button--unbranded {
   content: '';
   position: absolute;
   left: 0; bottom: 0;
-  width: 100%; height: 1px;
+  width: 100%; height: 1.5px;
   background: currentColor;
   transform: scaleX(0.35);
   transform-origin: left;
@@ -154,173 +218,322 @@ button.shopify-payment-button__button--unbranded {
 .hp-link:hover .hp-icon { transform: translateX(4px); }
 
 /* --------------------------------------------------------------------------
-   3. ANNOUNCEMENT BAR + HEADER — refined, hairlined, editorial nav
+   3. HEADER — sticky translucent cream + blur, shadow on scroll.
+   Optional full-width teal brand band (fix #1) is styled from header.liquid.
    -------------------------------------------------------------------------- */
 
-.announcement-bar { letter-spacing: 0.18em; }
-.announcement-bar__message {
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-}
-
 .header-wrapper {
-  background: var(--hp-cream-soft);
+  background: rgba(255, 253, 244, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--hp-hairline);
+  transition: box-shadow 0.3s ease;
 }
+.header-wrapper.hp-scrolled { box-shadow: 0 12px 30px -18px rgba(18, 53, 54, 0.35); }
 .header-wrapper .header { background: transparent; }
 
 .header__heading-link .h2,
 .header__heading-link {
   font-family: var(--hp-font-display) !important;
-  letter-spacing: 0.04em;
+  font-weight: 600 !important;
+  letter-spacing: 0.14em;
 }
 
 .header__menu-item > span {
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-family: var(--hp-font-ui);
+  font-size: 1.2rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.12em;
 }
 .header__menu-item:hover > span { text-decoration: none; }
-
-/* underline-draw on nav */
 .header__menu-item > span { position: relative; padding-bottom: 0.3rem; }
 .header__menu-item > span::after {
   content: '';
   position: absolute;
   left: 0; bottom: 0;
-  width: 100%; height: 1px;
-  background: currentColor;
+  width: 100%; height: 1.5px;
+  background: var(--hp-teal);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.4s var(--hp-ease);
+  transition: transform 0.35s var(--hp-ease);
 }
 .header__menu-item:hover > span::after,
 .header__active-menu-item > span::after { transform: scaleX(1); }
 .header__active-menu-item { text-decoration: none !important; }
+.header__icon { color: var(--hp-teal); }
+.cart-count-bubble { background-color: var(--hp-teal); color: var(--hp-cream); }
 
 /* --------------------------------------------------------------------------
-   4. PRODUCT CARDS — hairline frames, slow zoom, serif prices
+   4. PRODUCT CARDS — white rounded cards, lift + slow zoom, serif teal price,
+   gold stars, pill add-to-cart
    -------------------------------------------------------------------------- */
 
 .card,
 .card__inner,
 .card__media,
 .card .media {
-  border-radius: 0 !important;
+  border-radius: var(--hp-r-card) !important;
 }
-.card--card { border: 1px solid var(--hp-hairline) !important; box-shadow: none !important; }
-.card__inner { background: var(--hp-linen); }
+.card__media, .card .media { border-radius: calc(var(--hp-r-card) - 1px) calc(var(--hp-r-card) - 1px) 0 0 !important; }
+.card--card {
+  background: var(--hp-paper);
+  border: 1px solid var(--hp-hairline) !important;
+  box-shadow: none !important;
+  transition: transform 0.45s var(--hp-ease), box-shadow 0.45s var(--hp-ease);
+}
+.card-wrapper:hover .card--card,
+.card-wrapper:focus-within .card--card {
+  transform: translateY(-8px);
+  box-shadow: var(--hp-shadow-card);
+}
+.card--standard .card__inner { background: var(--hp-linen); }
 
-.card__media img {
-  transition: transform 1.3s var(--hp-ease), opacity 0.5s ease;
-}
+.card__media img { transition: transform 1.2s var(--hp-ease), opacity 0.5s ease; }
 .card-wrapper:hover .card__media img:only-child,
-.card-wrapper:focus-within .card__media img:only-child {
-  transform: scale(1.05);
-}
+.card-wrapper:focus-within .card__media img:only-child { transform: scale(1.07); }
 
 .card__heading {
-  font-family: var(--assistant-font, inherit);
-  font-size: 1.3rem !important;
-  letter-spacing: 0.06em;
-  line-height: 1.45;
+  font-family: var(--hp-font-ui) !important;
+  font-weight: 500 !important;
+  font-size: 1.35rem !important;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
 }
-.card__heading a { text-transform: uppercase; }
 .card-wrapper .card__heading a:hover { text-decoration-thickness: 1px; text-underline-offset: 0.4rem; }
 
 .card-information .price {
   font-family: var(--hp-font-display);
-  font-size: 1.6rem;
+  font-size: 2.1rem;
+  font-weight: 600;
   letter-spacing: 0.02em;
-  color: var(--hp-taupe);
+  color: var(--hp-teal);
 }
-.card-information .price--on-sale .price-item--regular { font-size: 1.2rem; }
+.card-information .price--on-sale .price-item--regular {
+  font-size: 1.3rem;
+  font-family: var(--hp-font-ui);
+  color: var(--hp-taupe-soft);
+}
+.card-information .price .price-item--sale { color: var(--hp-teal); }
+
+/* gold rating stars (Dawn rating uses --color-icon via .rating-star) */
+.rating-star { --color-rating-star: var(--hp-gold); }
+.rating { color: var(--hp-gold); }
+.rating-text, .rating-count { color: var(--hp-taupe-soft); }
 
 .badge {
-  border-radius: 0 !important;
-  font-size: 0.95rem;
-  letter-spacing: 0.18em;
+  border-radius: 20px !important;
+  font-family: var(--hp-font-ui);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   border: none;
+  background-color: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
 }
 
-.quick-add__submit { border: 1px solid var(--hp-hairline-strong) !important; background: var(--hp-cream-soft) !important; color: var(--hp-ink) !important; }
-.quick-add__submit:hover { background: var(--hp-espresso) !important; color: var(--hp-paper) !important; }
-
-/* Featured-collection section headings get an editorial treatment */
-.collection .title-wrapper-with-link { align-items: baseline; }
-.collection .title-wrapper-with-link .title {
-  font-size: clamp(2.8rem, 4vw, 4.4rem);
+.quick-add__submit {
+  border: 1.5px solid var(--hp-teal) !important;
+  background: transparent !important;
+  color: var(--hp-teal) !important;
 }
+.quick-add__submit:hover {
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+}
+
+/* Featured-collection headers: serif title + pill view-all */
+.collection .title-wrapper-with-link { align-items: flex-end; }
+.collection .title-wrapper-with-link .title { font-size: clamp(2.6rem, 3.6vw, 3.8rem); }
 .collection .title-wrapper-with-link .link-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.8rem;
+  border: 1.5px solid var(--hp-teal);
+  border-radius: var(--hp-r-pill);
+  font-family: var(--hp-font-ui);
   font-size: 1.1rem;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  color: var(--hp-teal);
+  text-decoration: none;
+  transition: background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease),
+    transform 0.35s var(--hp-ease), box-shadow 0.35s var(--hp-ease);
 }
+.collection .title-wrapper-with-link .link-with-icon:hover {
+  background: var(--hp-teal);
+  color: var(--hp-cream);
+  transform: translateY(-2px);
+  box-shadow: var(--hp-shadow-btn);
+  text-decoration: none;
+}
+.collection .title-wrapper-with-link .link-with-icon .icon-wrap { display: none; }
 
 /* --------------------------------------------------------------------------
-   5. FOOTER + NEWSLETTER — dark heritage footer
+   5. FOOTER + NEWSLETTER — full teal band, cream text, pill email field
    -------------------------------------------------------------------------- */
 
-.footer { border-top: 1px solid var(--hp-hairline-light); }
+.section-footer-group .newsletter,
+.footer {
+  --color-background: 37, 117, 117;
+  --color-foreground: 255, 249, 223;
+  --color-button: 255, 249, 223;
+  --color-button-text: 37, 117, 117;
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream);
+}
+.footer { border-top: none; }
+.footer__content-top { border-bottom: none; }
 .footer-block__heading {
-  font-size: 2rem !important;
-  letter-spacing: 0.04em !important;
+  font-size: 1.2rem !important;
+  font-family: var(--hp-font-ui) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase;
+  color: rgba(255, 249, 223, 0.6);
 }
-.footer__content-bottom { border-top: 1px solid var(--hp-hairline-light); }
-.footer__copyright .copyright__content { letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.95rem; }
+.footer-block__details-content .list-menu__item--link,
+.footer-block__details-content .rte {
+  color: rgba(255, 249, 223, 0.85);
+}
+.footer-block__details-content .list-menu__item--link:hover { color: var(--hp-cream); }
+.footer__content-bottom { border-top: 1px solid rgba(255, 249, 223, 0.2); }
+.footer__copyright .copyright__content {
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 1rem;
+  color: rgba(255, 249, 223, 0.6);
+}
+.footer .list-social__link { color: rgba(255, 249, 223, 0.85); }
+.footer .list-social__link:hover { color: var(--hp-cream); }
 
-.footer .field__input,
+/* Newsletter band — "Join the Table" */
+.newsletter { position: relative; border-bottom: 1px solid rgba(255, 249, 223, 0.2); }
+.newsletter__wrapper .newsletter__heading {
+  font-size: clamp(3.2rem, 5vw, 4.6rem);
+  color: var(--hp-cream);
+}
+.newsletter__subheading, .newsletter__wrapper > .rte { color: rgba(255, 249, 223, 0.75); }
+.newsletter-form__field-wrapper .field {
+  background: rgba(255, 249, 223, 0.1);
+  border: 1px solid rgba(255, 249, 223, 0.35);
+  border-radius: var(--hp-r-pill);
+  overflow: hidden;
+}
 .newsletter-form__field-wrapper .field__input {
-  border-radius: 0;
+  border-radius: var(--hp-r-pill);
   background: transparent;
+  color: var(--hp-cream);
+  box-shadow: none !important;
+  border: none;
+  padding-left: 2rem;
 }
-
-/* Newsletter band ("Join the Table") */
-.newsletter { position: relative; }
-.newsletter__wrapper .newsletter__heading { font-size: clamp(3rem, 5vw, 5rem); }
-.newsletter-form__button { color: currentColor; }
+.newsletter-form__field-wrapper .field__input::placeholder { color: rgba(255, 249, 223, 0.55); }
+.newsletter-form__field-wrapper .field__label { color: rgba(255, 249, 223, 0.55); left: 2rem; }
+.newsletter-form__button { color: var(--hp-cream); }
+.footer .field__input:focus, .newsletter-form__field-wrapper .field__input:focus { box-shadow: none !important; outline: 1px solid var(--hp-cream); outline-offset: -1px; }
 
 /* --------------------------------------------------------------------------
    6. SHARED SECTION PRIMITIVES
    -------------------------------------------------------------------------- */
 
-.hp-section { padding: clamp(5.6rem, 9vw, 10rem) 0; }
+.hp-section { padding: clamp(4.8rem, 7vw, 8rem) 0; }
 .hp-section--flush-top { padding-top: 0; }
 .hp-container {
   max-width: 144rem;
   margin: 0 auto;
   padding: 0 2rem;
 }
-@media screen and (min-width: 750px) {
-  .hp-container { padding: 0 5rem; }
-}
+@media screen and (min-width: 750px) { .hp-container { padding: 0 4rem; } }
+@media screen and (min-width: 1200px) { .hp-container { padding: 0 6.4rem; } }
 
-.hp-section-head { max-width: 72rem; margin-bottom: clamp(3.2rem, 5vw, 5.6rem); }
+.hp-section-head { max-width: 68rem; margin-bottom: clamp(2.4rem, 4vw, 3.6rem); }
 .hp-section-head--center { margin-left: auto; margin-right: auto; text-align: center; }
 .hp-section-head--center .hp-eyebrow::after {
   content: '';
-  width: 3.6rem; height: 1px;
+  width: 2.2rem; height: 1.5px;
   background: currentColor;
-  opacity: 0.6;
 }
 .hp-section-head__title {
-  font-size: clamp(3.2rem, 5vw, 5.2rem);
-  margin: 1.6rem 0 0;
+  font-size: clamp(3rem, 4.6vw, 4.4rem);
+  margin: 1.2rem 0 0;
+  color: var(--hp-ink);
 }
 .hp-section-head__text {
-  margin: 1.6rem 0 0;
-  font-size: 1.5rem;
-  line-height: 1.8;
+  margin: 1.2rem 0 0;
+  font-size: 1.4rem;
+  line-height: 1.7;
   color: var(--hp-taupe);
-  max-width: 56rem;
+  max-width: 52rem;
 }
 .hp-section-head--center .hp-section-head__text { margin-left: auto; margin-right: auto; }
 
-/* Paper-grain texture (pure CSS, no asset) */
+/* split section header row: title left, action right */
+.hp-head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  margin-bottom: clamp(2rem, 3.4vw, 3rem);
+}
+.hp-head-row .hp-section-head { margin-bottom: 0; }
+
+/* rounded media tile with gradient + zoom */
+.hp-tile {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--hp-r-card);
+  background: var(--hp-linen);
+  text-decoration: none;
+  transform: translateZ(0);
+}
+.hp-tile img, .hp-tile .placeholder-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.3s var(--hp-ease);
+}
+.hp-tile:hover img { transform: scale(1.08); }
+
+/* white rounded card shell */
+.hp-card {
+  background: var(--hp-paper);
+  border: 1px solid var(--hp-hairline);
+  border-radius: var(--hp-r-card);
+  overflow: hidden;
+  transition: transform 0.45s var(--hp-ease), box-shadow 0.45s var(--hp-ease);
+  will-change: transform;
+}
+.hp-card:hover { transform: translateY(-8px); box-shadow: var(--hp-shadow-card); }
+
+/* teal icon chip */
+.hp-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+  background: var(--hp-teal-chip);
+  color: var(--hp-teal);
+  flex-shrink: 0;
+  transition: transform 0.35s var(--hp-ease), background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease);
+}
+.hp-chip--solid { background: var(--hp-teal); color: var(--hp-cream); }
+
+/* gold star row */
+.hp-stars { display: inline-flex; align-items: center; gap: 0.2rem; color: var(--hp-gold); }
+.hp-stars .hp-icon { fill: currentColor; stroke: currentColor; }
+.hp-stars__count { margin-left: 0.5rem; font-size: 1.1rem; color: var(--hp-taupe-soft); letter-spacing: 0.04em; }
+
+/* Paper-grain texture */
 .hp-grain { position: relative; }
 .hp-grain::before {
   content: '';
@@ -329,45 +542,164 @@ button.shopify-payment-button__button--unbranded {
   pointer-events: none;
   opacity: 0.5;
   background-image:
-    radial-gradient(rgba(37, 37, 37, 0.035) 1px, transparent 1.4px),
-    radial-gradient(rgba(113, 106, 86, 0.03) 1px, transparent 1.6px);
+    radial-gradient(rgba(37, 37, 37, 0.03) 1px, transparent 1.4px),
+    radial-gradient(rgba(113, 106, 86, 0.025) 1px, transparent 1.6px);
   background-size: 3px 3px, 7px 7px;
   background-position: 0 0, 2px 3px;
 }
 .hp-grain > * { position: relative; }
 
-/* Scroll reveal — JS adds .hp-inview; no-JS and reduced-motion stay visible */
-html.hp-js [data-hp-reveal] {
+/* --------------------------------------------------------------------------
+   7. MOTION HOOKS
+   [data-hp-reveal]  fade + rise on enter (CSS fallback; GSAP takes over)
+   [data-hp-stagger] parent whose children stagger
+   [data-hp-parallax] background layer, GSAP scrub (needs .hp-par-wrap parent)
+   -------------------------------------------------------------------------- */
+
+html.hp-js:not(.hp-gsap) [data-hp-reveal] {
   opacity: 0;
-  transform: translateY(22px);
+  transform: translateY(26px);
   transition:
     opacity var(--hp-dur) var(--hp-ease),
     transform var(--hp-dur) var(--hp-ease);
-  transition-delay: calc(var(--hp-i, 0) * 90ms);
+  transition-delay: calc(var(--hp-i, 0) * 80ms);
 }
-html.hp-js [data-hp-reveal].hp-inview { opacity: 1; transform: none; }
+html.hp-js:not(.hp-gsap) [data-hp-reveal].hp-inview { opacity: 1; transform: none; }
+/* GSAP path: elements start hidden, GSAP animates them */
+html.hp-gsap [data-hp-reveal] { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
   html.hp-js [data-hp-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
 
-/* Skeleton shimmer for lazy media */
+/* parallax layers get extra bleed so scrub never shows edges */
+[data-hp-parallax] { position: absolute; inset: -9% 0; will-change: transform; }
+[data-hp-parallax] img { width: 100%; height: 100%; object-fit: cover; }
+
 .hp-media-frame { background: var(--hp-linen); overflow: hidden; }
 .hp-media-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-/* Marquee */
+/* --------------------------------------------------------------------------
+   8. MARQUEES (announcement · word band · review rows)
+   -------------------------------------------------------------------------- */
+
 .hp-marquee { overflow: hidden; white-space: nowrap; }
 .hp-marquee__track {
   display: inline-flex;
   align-items: center;
-  gap: 4rem;
-  padding-right: 4rem;
   animation: hp-marquee 38s linear infinite;
   will-change: transform;
 }
-.hp-marquee:hover .hp-marquee__track { animation-play-state: paused; }
-@keyframes hp-marquee {
-  to { transform: translateX(-50%); }
-}
+.hp-marquee--pause:hover .hp-marquee__track { animation-play-state: paused; }
+.hp-marquee__track--reverse { animation-name: hp-marquee-r; }
+@keyframes hp-marquee { to { transform: translateX(-50%); } }
+@keyframes hp-marquee-r { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 @media (prefers-reduced-motion: reduce) {
   .hp-marquee__track { animation: none; }
+  .hp-marquee { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+/* edge fade mask for review rows */
+.hp-mask-x {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   9. VIDEO LIGHTBOX
+   -------------------------------------------------------------------------- */
+
+.hp-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(14, 6, 6, 0.82);
+  backdrop-filter: blur(6px);
+}
+.hp-lightbox.is-open { display: flex; }
+.hp-lightbox__inner {
+  position: relative;
+  width: min(42rem, 92vw);
+  max-height: 88vh;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--hp-r-card);
+  overflow: hidden;
+  background: var(--hp-teal-ink);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.7);
+}
+.hp-lightbox__inner--wide { width: min(96rem, 92vw); aspect-ratio: 16 / 9; }
+.hp-lightbox video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: #000;
+}
+.hp-lightbox__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 249, 223, 0.92);
+  color: var(--hp-teal-ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s var(--hp-ease);
+}
+.hp-lightbox__close:hover { transform: scale(1.1); }
+
+/* pulsing play button */
+.hp-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: rgba(255, 249, 223, 0.92);
+  color: var(--hp-teal-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s var(--hp-ease);
+  z-index: 2;
+}
+.hp-play::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(255, 249, 223, 0.5);
+  animation: hp-pulse 2.6s ease-out infinite;
+  z-index: -1;
+}
+@keyframes hp-pulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  70% { transform: scale(1.9); opacity: 0; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .hp-play::before { animation: none; } }
+
+/* --------------------------------------------------------------------------
+   10. MISC
+   -------------------------------------------------------------------------- */
+
+html.hp-lenis, html.hp-lenis body { height: auto; }
+.hp-lenis .lenis-smooth { scroll-behavior: auto; }
+
+@keyframes hp-kenburns {
+  from { transform: scale(1.03); }
+  to { transform: scale(1.13); }
 }
