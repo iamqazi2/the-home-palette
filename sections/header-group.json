@@ -2,47 +2,6 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar",
-      "blocks": {
-        "announcement_AFbwnC": {
-          "type": "announcement",
-          "settings": { "text": "Delivery Charges Flat 299/-", "link": "" }
-        },
-        "announcement_GdzrVd": {
-          "type": "announcement",
-          "settings": { "text": "Free delivery above orders of 8000/-", "link": "" }
-        },
-        "announcement_gtt84i": {
-          "type": "announcement",
-          "settings": { "text": "Delivery time 3-5 days", "link": "" }
-        },
-        "announcement_online": {
-          "type": "announcement",
-          "settings": { "text": "Online payment to get 5% off (website only)", "link": "" }
-        },
-        "announcement_advance": {
-          "type": "announcement",
-          "settings": { "text": "10% advance payment for full sets", "link": "" }
-        }
-      },
-      "block_order": [
-        "announcement_AFbwnC",
-        "announcement_GdzrVd",
-        "announcement_gtt84i",
-        "announcement_online",
-        "announcement_advance"
-      ],
-      "settings": {
-        "color_scheme": "scheme-4",
-        "show_line_separator": false,
-        "show_social": true,
-        "auto_rotate": true,
-        "change_slides_speed": 4,
-        "enable_country_selector": false,
-        "enable_language_selector": false
-      }
-    },
     "header": {
       "type": "header",
       "settings": {
@@ -64,8 +23,66 @@
     },
     "17358360248ef50bda": {
       "type": "apps",
-      "settings": { "include_margins": true }
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "hp_announcement": {
+      "type": "hp-announcement",
+      "blocks": {
+        "promo_1": {
+          "type": "promo",
+          "settings": {
+            "text": "Delivery Charges Flat 299/-",
+            "link": ""
+          }
+        },
+        "promo_2": {
+          "type": "promo",
+          "settings": {
+            "text": "Free delivery above orders of 8000/-",
+            "link": ""
+          }
+        },
+        "promo_3": {
+          "type": "promo",
+          "settings": {
+            "text": "Delivery time 3-5 days",
+            "link": ""
+          }
+        },
+        "promo_4": {
+          "type": "promo",
+          "settings": {
+            "text": "Online payment to get 5% off (website only)",
+            "link": ""
+          }
+        },
+        "promo_5": {
+          "type": "promo",
+          "settings": {
+            "text": "10% advance payment for full sets",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "promo_1",
+        "promo_2",
+        "promo_3",
+        "promo_4",
+        "promo_5"
+      ],
+      "settings": {
+        "bg_color": "#257575",
+        "text_color": "#fff9df",
+        "speed": 34
+      }
     }
   },
-  "order": ["announcement-bar", "header", "17358360248ef50bda"]
+  "order": [
+    "hp_announcement",
+    "header",
+    "17358360248ef50bda"
+  ]
 }
