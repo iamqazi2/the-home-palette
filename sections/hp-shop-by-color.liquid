@@ -1,0 +1,163 @@
+{% comment %}
+  THP — Shop by Colour: circular glaze swatches linking to real collections
+  (fix #5 — the missing "shop by color" category). Each swatch is a colour dot
+  (or a texture photo) + name + live count, scrollable on mobile.
+{% endcomment %}
+
+{%- style -%}
+  .hp-colors { background: var(--hp-cream-soft); border-top: 1px solid var(--hp-hairline-teal); }
+  .hp-colors__row {
+    display: flex;
+    gap: clamp(1.6rem, 3vw, 3.2rem);
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0.6rem 0.2rem 1rem;
+    scroll-snap-type: x proximity;
+  }
+  .hp-colors__row::-webkit-scrollbar { display: none; }
+  @media screen and (min-width: 990px) { .hp-colors__row { justify-content: center; flex-wrap: wrap; overflow: visible; } }
+  .hp-colors__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--hp-ink);
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    text-align: center;
+  }
+  .hp-colors__dot {
+    position: relative;
+    width: clamp(7.2rem, 9vw, 9.6rem);
+    height: clamp(7.2rem, 9vw, 9.6rem);
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--hp-hairline);
+    box-shadow: inset 0 0 0 4px var(--hp-cream-soft);
+    transition: transform 0.4s var(--hp-ease), box-shadow 0.4s var(--hp-ease);
+  }
+  .hp-colors__dot img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hp-colors__item:hover .hp-colors__dot {
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: inset 0 0 0 4px var(--hp-cream-soft), 0 18px 30px -18px rgba(18, 53, 54, 0.5);
+  }
+  .hp-colors__name {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-weight: 600;
+    font-size: 1.7rem;
+  }
+  .hp-colors__count {
+    margin: 0;
+    font-family: var(--hp-font-ui);
+    font-size: 1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-taupe);
+  }
+{%- endstyle -%}
+
+<div class="hp-colors hp-section">
+  <div class="hp-container">
+    <div class="hp-section-head hp-section-head--center">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hp-eyebrow hp-eyebrow--rule-after" data-hp-reveal>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hp-section-head__title" data-hp-reveal>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="hp-section-head__text" data-hp-reveal>{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="hp-colors__row" data-hp-stagger>
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign col = block.settings.collection
+          assign href = block.settings.link
+          if href == blank and col != blank
+            assign href = col.url
+          endif
+        -%}
+        <a
+          class="hp-colors__item"
+          {% if href != blank %}href="{{ href }}"{% endif %}
+          data-hp-reveal
+          {{ block.shopify_attributes }}
+        >
+          <span class="hp-colors__dot" style="background: {{ block.settings.swatch }};">
+            {%- if block.settings.image -%}
+              {{ block.settings.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: block.settings.title }}
+            {%- endif -%}
+          </span>
+          <span>
+            <p class="hp-colors__name">{{ block.settings.title | escape }}</p>
+            {%- if col != blank and section.settings.show_count -%}
+              <p class="hp-colors__count">{{ col.all_products_count }} {{ section.settings.count_label | default: 'varieties' | escape }}</p>
+            {%- endif -%}
+          </span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP Shop by Colour",
+  "tag": "section",
+  "max_blocks": 10,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Palette" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Colour" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Pick a glaze — every colour has its own table story." },
+    { "type": "checkbox", "id": "show_count", "label": "Show live product counts", "default": true },
+    { "type": "text", "id": "count_label", "label": "Count label", "default": "varieties" }
+  ],
+  "blocks": [
+    {
+      "type": "colour",
+      "name": "Colour",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Name", "default": "Sea Green" },
+        { "type": "color", "id": "swatch", "label": "Swatch colour", "default": "#3f7269" },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Texture photo (optional)",
+          "info": "Shown inside the dot instead of the flat colour."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Links the swatch to this collection and shows its live count."
+        },
+        { "type": "url", "id": "link", "label": "Custom link (overrides collection)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP Shop by Colour",
+      "blocks": [
+        { "type": "colour" },
+        { "type": "colour", "settings": { "title": "Cloud Grey", "swatch": "#b8bdba" } },
+        { "type": "colour", "settings": { "title": "Cobalt", "swatch": "#2b4a76" } },
+        { "type": "colour", "settings": { "title": "Terracotta", "swatch": "#b06a4a" } },
+        { "type": "colour", "settings": { "title": "Ivory", "swatch": "#f2ead8" } },
+        { "type": "colour", "settings": { "title": "Charcoal", "swatch": "#3a3a38" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

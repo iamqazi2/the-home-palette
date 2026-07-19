@@ -1,0 +1,272 @@
+{% comment %}
+  THP — v3 video-review marquee: dark teal band, two rows auto-scrolling in
+  opposite directions (pause on hover, masked edges). Cards mix portrait
+  customer-video cards (poster + pulsing play → lightbox player) and dark text
+  testimonial cards (name, role, gold stars, quote). Fully schema-driven so new
+  clips/quotes are added from the theme editor.
+{% endcomment %}
+
+{%- liquid
+  assign total = section.blocks.size
+  assign split = total | plus: 1 | divided_by: 2
+  if total < 4
+    assign split = total
+  endif
+-%}
+
+{%- style -%}
+  .hp-vrev {
+    background: var(--hp-teal-ink);
+    color: var(--hp-cream);
+    overflow: hidden;
+  }
+  .hp-vrev .hp-section-head__title { color: var(--hp-cream); }
+  .hp-vrev .hp-section-head__text { color: rgba(255, 249, 223, 0.62); }
+  .hp-vrev__row-wrap { display: grid; gap: 2rem; }
+  .hp-vrev .hp-marquee__track { padding: 0.2rem 0; }
+  .hp-vrev__card {
+    width: 28rem;
+    height: 36rem;
+    margin-right: 2rem;
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    white-space: normal;
+    display: inline-flex;
+    flex-direction: column;
+  }
+  /* video card */
+  .hp-vrev__card--video {
+    border: none;
+    padding: 0;
+    background: var(--hp-teal-card);
+    cursor: pointer;
+    text-align: left;
+  }
+  .hp-vrev__poster,
+  .hp-vrev__poster img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hp-vrev__card--video::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(18, 53, 54, 0) 45%, rgba(18, 53, 54, 0.82) 100%);
+  }
+  .hp-vrev__who {
+    position: absolute;
+    z-index: 1;
+    inset: auto 0 0 0;
+    padding: 1.6rem 1.8rem;
+  }
+  /* text card */
+  .hp-vrev__card--text {
+    background: var(--hp-teal-card);
+    border: 1px solid rgba(255, 249, 223, 0.12);
+    padding: 2.4rem 2.2rem;
+    justify-content: space-between;
+    gap: 1.6rem;
+  }
+  .hp-vrev__quote {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.8rem;
+    line-height: 1.55;
+    color: rgba(255, 249, 223, 0.92);
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .hp-vrev__name {
+    margin: 0;
+    font-family: var(--hp-font-ui);
+    font-weight: 600;
+    font-size: 1.35rem;
+    color: var(--hp-cream);
+  }
+  .hp-vrev__role {
+    margin: 0.2rem 0 0;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    color: rgba(255, 249, 223, 0.6);
+  }
+  .hp-vrev__stars { margin-bottom: 0.2rem; }
+  @media screen and (max-width: 560px) {
+    .hp-vrev__card { width: 24rem; height: 32rem; }
+  }
+{%- endstyle -%}
+
+<div class="hp-vrev hp-section">
+  <div class="hp-container">
+    <div class="hp-section-head hp-section-head--center">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hp-eyebrow hp-eyebrow--rule-after hp-eyebrow--soft" data-hp-reveal>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hp-section-head__title" data-hp-reveal>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="hp-section-head__text" data-hp-reveal>{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="hp-vrev__row-wrap hp-mask-x">
+    {%- for row in (1..2) -%}
+      {%- liquid
+        if row == 2 and split >= total
+          break
+        endif
+      -%}
+      {%- liquid
+        assign row_extra = row | times: 6
+        assign row_dur = section.settings.speed | times: 8 | plus: row_extra
+      -%}
+      <div class="hp-marquee hp-marquee--pause">
+        <div class="hp-marquee__track{% if row == 2 %} hp-marquee__track--reverse{% endif %}" style="animation-duration: {{ row_dur }}s;">
+          {%- for i in (1..2) -%}
+            {%- for block in section.blocks -%}
+              {%- liquid
+                if row == 1 and forloop.index > split
+                  continue
+                endif
+                if row == 2 and forloop.index <= split
+                  continue
+                endif
+                assign video_src = ''
+                if block.settings.video != null
+                  assign video_src = block.settings.video.sources | last
+                  assign video_src = video_src.url
+                elsif block.settings.video_url != blank
+                  assign video_src = block.settings.video_url
+                endif
+              -%}
+              {%- if block.type == 'video' -%}
+                <button
+                  type="button"
+                  class="hp-vrev__card hp-vrev__card--video"
+                  {% if video_src != blank %}data-hp-video-src="{{ video_src }}"{% endif %}
+                  aria-label="Play review video from {{ block.settings.name | escape }}"
+                  {% if i == 1 and row == 1 or i == 1 and row == 2 %}{{ block.shopify_attributes }}{% endif %}
+                >
+                  <span class="hp-vrev__poster">
+                    {%- if block.settings.poster -%}
+                      {{ block.settings.poster | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.name }}
+                    {%- elsif block.settings.video != null and block.settings.video.preview_image -%}
+                      {{ block.settings.video.preview_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.name }}
+                    {%- endif -%}
+                  </span>
+                  <span class="hp-play" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+                  </span>
+                  <span class="hp-vrev__who">
+                    <span class="hp-vrev__name">{{ block.settings.name | escape }}</span>
+                    {%- if block.settings.role != blank -%}
+                      <span class="hp-vrev__role">{{ block.settings.role | escape }}</span>
+                    {%- endif -%}
+                  </span>
+                </button>
+              {%- else -%}
+                <figure
+                  class="hp-vrev__card hp-vrev__card--text"
+                  {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}
+                >
+                  <div>
+                    <div class="hp-stars hp-vrev__stars" aria-label="{{ block.settings.stars }} star review">
+                      {%- for s in (1..5) -%}
+                        {%- if s <= block.settings.stars -%}{% render 'hp-icon', icon: 'star', size: 14 %}{%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                    <blockquote class="hp-vrev__quote">{{ block.settings.quote | escape }}</blockquote>
+                  </div>
+                  <figcaption>
+                    <p class="hp-vrev__name">{{ block.settings.name | escape }}</p>
+                    {%- if block.settings.role != blank -%}
+                      <p class="hp-vrev__role">{{ block.settings.role | escape }}</p>
+                    {%- endif -%}
+                  </figcaption>
+                </figure>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP Video Reviews",
+  "tag": "section",
+  "max_blocks": 16,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Real Tables · Real Reviews" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Loved Across Pakistan" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Watch and read what homes, hosts and restaurants say about setting their table with us." },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 3,
+      "max": 9,
+      "step": 1,
+      "label": "Scroll speed (higher = slower)",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video review",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Customer video (9:16 works best)" },
+        { "type": "text", "id": "video_url", "label": "…or external MP4 URL" },
+        { "type": "image_picker", "id": "poster", "label": "Poster thumbnail" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Ayesha K." },
+        { "type": "text", "id": "role", "label": "Role / city", "default": "Home Chef · Lahore" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text testimonial",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "Packaging was immaculate and the pieces feel like heirlooms. Worth every rupee." },
+        { "type": "text", "id": "name", "label": "Name", "default": "Bilal R." },
+        { "type": "text", "id": "role", "label": "Role / city", "default": "Restaurateur · Karachi" },
+        {
+          "type": "range",
+          "id": "stars",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Stars",
+          "default": 5
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP Video Reviews",
+      "blocks": [
+        { "type": "video" },
+        { "type": "text" },
+        { "type": "video", "settings": { "name": "Sana M.", "role": "Host · Islamabad" } },
+        { "type": "text", "settings": { "quote": "The reactive glaze is even more beautiful in person. Every guest asks where the set is from.", "name": "Hina F.", "role": "Event Stylist" } },
+        { "type": "video", "settings": { "name": "Usman T.", "role": "Cafe Owner · Multan" } },
+        { "type": "text", "settings": { "quote": "Bought the dinner set for our new home — it made the whole table feel special.", "name": "Zara A.", "role": "Newlywed · Rawalpindi" } },
+        { "type": "video", "settings": { "name": "Fatima R.", "role": "Food Blogger" } },
+        { "type": "text", "settings": { "quote": "Consistent quality across every reorder. Hand-inspected really shows.", "name": "Omar S.", "role": "Hotel F&B Manager" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
