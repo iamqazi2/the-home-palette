@@ -1,13 +1,15 @@
-{% comment %} THP — Trust strip with Lucide icons and hairline dividers {% endcomment %}
+{% comment %} THP — v3 trust strip: cream band, teal icon chips, hairline dividers {% endcomment %}
 
 {%- style -%}
   .hp-trust {
     background: var(--hp-cream);
-    border-bottom: 1px solid var(--hp-hairline);
+    border-bottom: 1px solid var(--hp-hairline-teal);
   }
   .hp-trust__grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    max-width: 144rem;
+    margin: 0 auto;
   }
   @media screen and (min-width: 990px) {
     .hp-trust__grid { grid-template-columns: repeat({{ section.blocks.size | at_least: 1 }}, 1fr); }
@@ -17,38 +19,48 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 1.2rem;
-    padding: 3.2rem 2rem;
-    border-right: 1px solid var(--hp-hairline);
+    gap: 0.7rem;
+    padding: 2.4rem 1.6rem;
+    border-left: 1px solid var(--hp-hairline-teal);
     color: var(--hp-ink);
   }
-  .hp-trust__item:nth-child(2n) { border-right: none; }
+  .hp-trust__item:nth-child(2n + 1) { border-left: none; }
   @media screen and (min-width: 990px) {
-    .hp-trust__item:nth-child(2n) { border-right: 1px solid var(--hp-hairline); }
-    .hp-trust__item:last-child { border-right: none; }
+    .hp-trust__item:nth-child(2n + 1) { border-left: 1px solid var(--hp-hairline-teal); }
+    .hp-trust__item:first-child { border-left: none; }
   }
-  .hp-trust__item .hp-icon { color: var(--hp-taupe); transition: transform 0.35s var(--hp-ease); }
-  .hp-trust__item:hover .hp-icon { transform: translateY(-4px); }
+  .hp-trust__chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.6rem;
+    height: 3.6rem;
+    border-radius: 50%;
+    background: var(--hp-teal);
+    color: var(--hp-cream);
+    transition: transform 0.35s var(--hp-ease);
+  }
+  .hp-trust__item:hover .hp-trust__chip { transform: translateY(-4px); }
   .hp-trust__title {
     margin: 0;
-    font-size: 1.2rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.25rem;
     font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
   .hp-trust__text {
     margin: 0;
-    font-size: 1.25rem;
-    line-height: 1.6;
+    font-size: 1.2rem;
+    line-height: 1.5;
     color: var(--hp-taupe);
   }
 {%- endstyle -%}
 
-<div class="hp-trust hp-grain">
+<div class="hp-trust">
   <div class="hp-trust__grid" data-hp-stagger>
     {%- for block in section.blocks -%}
       <div class="hp-trust__item" data-hp-reveal {{ block.shopify_attributes }}>
-        {% render 'hp-icon', icon: block.settings.icon, size: 26 %}
+        <span class="hp-trust__chip">{% render 'hp-icon', icon: block.settings.icon, size: 17 %}</span>
         <h3 class="hp-trust__title">{{ block.settings.title | escape }}</h3>
         {%- if block.settings.text != blank -%}
           <p class="hp-trust__text">{{ block.settings.text | escape }}</p>
@@ -81,7 +93,8 @@
             { "value": "gem", "label": "Gem" },
             { "value": "leaf", "label": "Leaf" },
             { "value": "sparkles", "label": "Sparkles" },
-            { "value": "heart", "label": "Heart" }
+            { "value": "heart", "label": "Heart" },
+            { "value": "star", "label": "Star" }
           ],
           "default": "truck"
         },
@@ -97,7 +110,7 @@
         { "type": "item" },
         { "type": "item", "settings": { "icon": "award", "title": "Handcrafted", "text": "Made by Pakistani artisans" } },
         { "type": "item", "settings": { "icon": "shield-check", "title": "Quality Checked", "text": "Every piece inspected by hand" } },
-        { "type": "item", "settings": { "icon": "rotate-ccw", "title": "Easy Returns", "text": "Hassle-free replacements" } }
+        { "type": "item", "settings": { "icon": "sparkles", "title": "5% Off Online", "text": "Website orders only" } }
       ]
     }
   ]

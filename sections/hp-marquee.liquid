@@ -2,27 +2,27 @@
 
 {%- style -%}
   .hp-marquee-band {
-    background: var(--hp-paper);
-    border-top: 1px solid var(--hp-hairline);
-    border-bottom: 1px solid var(--hp-hairline);
-    padding: 2.4rem 0;
+    background: var(--hp-teal);
+    padding: 1.8rem 0;
   }
+  .hp-marquee-band .hp-marquee__track { gap: 0; }
   .hp-marquee-band__item {
     display: inline-flex;
     align-items: center;
-    gap: 4rem;
+    gap: 2.2rem;
+    padding-right: 2.2rem;
     font-family: var(--hp-font-display);
-    font-size: clamp(2rem, 3vw, 3rem);
+    font-size: clamp(2.4rem, 3.4vw, 4rem);
     font-weight: 500;
-    letter-spacing: 0.08em;
-    color: var(--hp-ink);
+    letter-spacing: 0.04em;
+    color: var(--hp-cream);
     white-space: nowrap;
   }
-  .hp-marquee-band__item .hp-icon { color: var(--hp-taupe); }
+  .hp-marquee-band__item .hp-icon { color: rgba(255, 249, 223, 0.6); }
 {%- endstyle -%}
 
 <div class="hp-marquee-band">
-  <div class="hp-marquee" aria-hidden="true">
+  <div class="hp-marquee hp-marquee--pause" aria-hidden="true">
     <div class="hp-marquee__track">
       {%- for i in (1..2) -%}
         {%- for block in section.blocks -%}
