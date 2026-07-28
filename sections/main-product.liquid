@@ -1159,7 +1159,16 @@
           under the gallery in the left column, leaving a narrow buy sidebar.
         {%- endcomment -%}
     {%- if section.settings.hp_layout == 'sidebar' -%}
-      <div class="hp-pdp-below hp-container">
+      {%- comment -%}
+        quick-add-hidden is Dawn's own convention (see quick-add.css): anything
+        with this class is display:none inside <quick-add-modal>. The quick-add
+        JS fetches the ENTIRE <product-info> element — including this block, its
+        divider and the full description/reviews — with no awareness of it, so
+        without this class it always leaked into the modal. The "Choose options"
+        flow only needs title/price/variants/buy button; the full description
+        and reviews stay on the product page, reachable via "View full details".
+      {%- endcomment -%}
+      <div class="hp-pdp-below hp-container quick-add-hidden">
             {%- if product.description != blank -%}
               <div class="hp-pdp-block" id="hp-description">
                 <h2 class="hp-pdp-block__title">{{ section.settings.hp_description_title | default: 'Product Description' }}</h2>
