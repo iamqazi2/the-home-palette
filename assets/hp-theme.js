@@ -757,35 +757,68 @@
   })();
   if (!customElements.get('hp-drawer-recs')) customElements.define('hp-drawer-recs', HpDrawerRecs);
 
-  /* ---- Reviews: show two, reveal the rest on demand --------------------- */
-  function initReviewClamp(root) {
-    (root || document).querySelectorAll('[data-hp-reviews-clamp]').forEach(function (box) {
-      if (box.dataset.hpClampWired) return;
+  /* ---- Reviews: client-side pagination -----------------------------------
+     The review app renders every review in one list; this pages that list at N
+     per page with its own controls. Async-safe: it waits for the app to paint.
+  ---------------------------------------------------------------------- */
+  function initReviewPager(root) {
+    (root || document).querySelectorAll('[data-hp-reviews-pager]').forEach(function (box) {
+      if (box.dataset.hpPagerWired) return;
 
-      // the review app renders asynchronously — wait for its list to appear
+      var perPage = parseInt(box.getAttribute('data-hp-reviews-pager'), 10) || 2;
       var tries = 0;
+
       (function wait() {
-        var items = box.querySelectorAll('.jdgm-rev');
+        var items = Array.prototype.slice.call(box.querySelectorAll('.jdgm-rev'));
         if (!items.length) {
           if (tries++ < 40) return window.setTimeout(wait, 250);
           return;
         }
-        box.dataset.hpClampWired = '1';
-        if (items.length <= 2) { box.classList.remove('hp-reviews-clamp'); return; }
+        box.dataset.hpPagerWired = '1';
 
-        var wrap = document.createElement('div');
-        wrap.className = 'hp-reviews-more';
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'hp-btn hp-btn--outline';
-        btn.textContent = 'View all ' + items.length + ' reviews';
-        btn.addEventListener('click', function () {
-          box.classList.remove('hp-reviews-clamp');
-          wrap.remove();
-          if (hasGsap) window.ScrollTrigger.refresh();
+        // let the app's own paginator go — we drive it now
+        box.querySelectorAll('.jdgm-paginate, .jdgm-rev-widg__paginate').forEach(function (n) {
+          n.style.display = 'none';
         });
-        wrap.appendChild(btn);
-        box.appendChild(wrap);
+        if (items.length <= perPage) return;
+
+        var pages = Math.ceil(items.length / perPage);
+        var page = 0;
+
+        var nav = document.createElement('div');
+        nav.className = 'hp-revpager';
+        nav.innerHTML =
+          '<button type="button" class="hp-revpager__btn" data-prev aria-label="Previous reviews">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>' +
+          '<span class="hp-revpager__label" data-label></span>' +
+          '<button type="button" class="hp-revpager__btn" data-next aria-label="More reviews">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
+
+        var list = items[0].parentNode;
+        (list || box).parentNode.insertBefore(nav, (list || box).nextSibling);
+
+        var prev = nav.querySelector('[data-prev]');
+        var next = nav.querySelector('[data-next]');
+        var label = nav.querySelector('[data-label]');
+
+        function render(scroll) {
+          items.forEach(function (el, i) {
+            var on = i >= page * perPage && i < (page + 1) * perPage;
+            el.style.display = on ? '' : 'none';
+          });
+          label.textContent = 'Page ' + (page + 1) + ' of ' + pages;
+          prev.disabled = page === 0;
+          next.disabled = page === pages - 1;
+          if (scroll) {
+            var top = box.getBoundingClientRect().top + window.scrollY - 120;
+            window.scrollTo({ top: top, behavior: reducedMotion ? 'auto' : 'smooth' });
+          }
+          if (hasGsap) window.ScrollTrigger.refresh();
+        }
+
+        prev.addEventListener('click', function () { if (page > 0) { page--; render(true); } });
+        next.addEventListener('click', function () { if (page < pages - 1) { page++; render(true); } });
+        render(false);
       })();
     });
   }
@@ -795,7 +828,7 @@
     initStickyChrome();
     initMotion(document);
     initVideoTriggers(document);
-    initReviewClamp(document);
+    initReviewPager(document);
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
@@ -805,7 +838,7 @@
   document.addEventListener('shopify:section:load', function (e) {
     initMotion(e.target);
     initVideoTriggers(e.target);
-    initReviewClamp(e.target);
+    initReviewPager(e.target);
     initStickyChrome();
     if (hasGsap) window.ScrollTrigger.refresh();
   });

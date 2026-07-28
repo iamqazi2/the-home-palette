@@ -229,11 +229,174 @@
         margin-top: 0;
         padding-top: 0;
       }
-      #hp-reviews .jdgm-rev-widg__title { display: none; }
-      .hp-reviews-clamp .jdgm-rev-widg__reviews > .jdgm-rev:nth-of-type(n + 3),
-      .hp-reviews-clamp .jdgm-rev-widg__reviews > .jdgm-rev-wrapper:nth-of-type(n + 3) { display: none; }
-      .hp-reviews-clamp .jdgm-paginate, .hp-reviews-clamp .jdgm-rev-widg__paginate { display: none; }
-      .hp-reviews-more { margin-top: 1.8rem; display: flex; justify-content: center; }
+      /* the block supplies the heading */
+      #hp-reviews .jdgm-rev-widg__title { display: none !important; }
+
+      /* type: identical to the description column */
+      #hp-reviews,
+      #hp-reviews .jdgm-rev__body,
+      #hp-reviews .jdgm-rev__body p,
+      #hp-reviews .jdgm-rev__author,
+      #hp-reviews .jdgm-rev__timestamp,
+      #hp-reviews .jdgm-rev-widg__summary-text {
+        font-family: var(--hp-font-ui) !important;
+        color: var(--hp-ink);
+      }
+      #hp-reviews .jdgm-rev__body,
+      #hp-reviews .jdgm-rev__body p {
+        font-size: 1.45rem !important;
+        line-height: 1.85 !important;
+        color: var(--hp-ink);
+      }
+      #hp-reviews .jdgm-rev__title {
+        font-family: var(--hp-font-display) !important;
+        font-weight: 600 !important;
+        font-size: 1.9rem !important;
+        color: var(--hp-ink);
+        margin-bottom: 0.4rem;
+        display: block;
+      }
+
+      /* stars: brand gold */
+      #hp-reviews .jdgm-star,
+      #hp-reviews .jdgm-star.jdgm--on,
+      #hp-reviews .jdgm-star.jdgm--half,
+      .jdgm-star.jdgm--on { color: {{ section.settings.hp_star_color | default: '#e0a422' }} !important; }
+      #hp-reviews .jdgm-star.jdgm--off { color: {{ section.settings.hp_star_color | default: '#e0a422' | color_modify: 'alpha', 0.3 }} !important; }
+
+      /* summary row */
+      #hp-reviews .jdgm-rev-widg__header {
+        border: 1px solid var(--hp-hairline);
+        border-radius: 16px;
+        background: var(--hp-cream);
+        padding: 1.6rem 1.8rem;
+        margin-bottom: 1.6rem;
+      }
+      #hp-reviews .jdgm-rev-widg__summary-average {
+        font-family: var(--hp-font-display) !important;
+        font-size: 2.6rem !important;
+        color: var(--hp-teal) !important;
+      }
+
+      /* review card */
+      #hp-reviews .jdgm-rev {
+        position: relative;
+        border: 1px solid var(--hp-hairline) !important;
+        border-radius: 16px;
+        background: var(--hp-paper);
+        padding: 1.8rem !important;
+        margin-bottom: 1.2rem !important;
+      }
+      #hp-reviews .jdgm-rev.jdgm-divider-top { border-top: 1px solid var(--hp-hairline) !important; }
+
+      /* avatar: teal disc with the initial */
+      #hp-reviews .jdgm-rev__icon {
+        background: var(--hp-teal) !important;
+        color: var(--hp-cream) !important;
+        font-family: var(--hp-font-display) !important;
+        font-weight: 600;
+        font-size: 1.6rem !important;
+        width: 3.6rem !important;
+        height: 3.6rem !important;
+        line-height: 3.6rem !important;
+        border-radius: 50% !important;
+        text-align: center;
+      }
+
+      /* author + verified badge */
+      #hp-reviews .jdgm-rev__author {
+        font-weight: 600 !important;
+        font-size: 1.35rem !important;
+        color: var(--hp-ink) !important;
+        letter-spacing: 0.01em;
+      }
+      #hp-reviews .jdgm-rev__buyer-badge,
+      #hp-reviews .jdgm-rev__buyer-badge-wrapper .jdgm-rev__buyer-badge {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 0.3rem;
+        background: rgba(37, 117, 117, 0.1) !important;
+        color: var(--hp-teal) !important;
+        border: 1px solid rgba(37, 117, 117, 0.3) !important;
+        border-radius: var(--hp-r-pill) !important;
+        padding: 0.2rem 0.8rem !important;
+        font-family: var(--hp-font-ui) !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        opacity: 1 !important;
+      }
+      #hp-reviews .jdgm-rev__timestamp {
+        color: var(--hp-taupe) !important;
+        font-size: 1.1rem !important;
+      }
+      #hp-reviews .jdgm-rev__prod-link, #hp-reviews .jdgm-rev__prod-info-wrapper {
+        background: var(--hp-cream-soft) !important;
+        border: 1px solid var(--hp-hairline);
+        border-radius: 12px;
+        padding: 0.8rem !important;
+        font-size: 1.1rem !important;
+      }
+      #hp-reviews .jdgm-rev__prod-link a, #hp-reviews .jdgm-rev__replier { color: var(--hp-teal) !important; }
+      #hp-reviews .jdgm-rev__pics img { border-radius: 10px !important; }
+
+      /* write-a-review + sort controls on brand */
+      #hp-reviews .jdgm-write-rev-link,
+      #hp-reviews .jdgm-widget .jdgm-write-rev-link {
+        background: var(--hp-teal) !important;
+        color: var(--hp-cream) !important;
+        border: 1.5px solid var(--hp-teal) !important;
+        border-radius: var(--hp-r-pill) !important;
+        font-family: var(--hp-font-ui) !important;
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 1rem 1.8rem !important;
+      }
+      #hp-reviews .jdgm-write-rev-link:hover {
+        background: var(--hp-teal-deep) !important;
+        border-color: var(--hp-teal-deep) !important;
+      }
+      #hp-reviews .jdgm-rev-widg__sort-wrapper select,
+      #hp-reviews .jdgm-sort-dropdown {
+        border-radius: var(--hp-r-pill) !important;
+        border: 1px solid var(--hp-hairline-strong) !important;
+        font-family: var(--hp-font-ui) !important;
+        color: var(--hp-ink) !important;
+      }
+
+      /* our pager */
+      .hp-revpager {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.2rem;
+        margin-top: 1.8rem;
+      }
+      .hp-revpager__btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.6rem;
+        height: 3.6rem;
+        border-radius: 50%;
+        border: 1.5px solid var(--hp-teal);
+        background: transparent;
+        color: var(--hp-teal);
+        cursor: pointer;
+        transition: background 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+      }
+      .hp-revpager__btn:hover:not(:disabled) { background: var(--hp-teal); color: var(--hp-cream); }
+      .hp-revpager__btn:disabled { opacity: 0.3; cursor: default; }
+      .hp-revpager__label {
+        font-family: var(--hp-font-ui);
+        font-size: 1.15rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--hp-taupe);
+      }
 
       /* ---- sidebar suggestions: vertical rows ---- */
       .hp-pdp-side-recs { margin-top: 1.8rem; }
@@ -1008,10 +1171,11 @@
               {%- assign hp_bid = block.id | downcase -%}
               {%- if block.type == '@app' and hp_bid contains 'review_widget' -%}
                 <div
-                  class="hp-pdp-block{% if section.settings.hp_clamp_reviews %} hp-reviews-clamp{% endif %}"
+                  class="hp-pdp-block hp-reviews"
                   id="hp-reviews"
-                  {% if section.settings.hp_clamp_reviews %}data-hp-reviews-clamp{% endif %}
+                  {% if section.settings.hp_reviews_per_page > 0 %}data-hp-reviews-pager="{{ section.settings.hp_reviews_per_page }}"{% endif %}
                 >
+                  <h2 class="hp-pdp-block__title">{{ section.settings.hp_reviews_title | default: 'Customer Reviews' }}</h2>
                   {% render block %}
                 </div>
           {%- endif -%}
@@ -2462,7 +2626,9 @@
     { "type": "checkbox", "id": "hp_show_excerpt", "label": "Show a short excerpt in the sidebar", "default": true },
     { "type": "range", "id": "hp_excerpt_words", "min": 20, "max": 90, "step": 5, "label": "Excerpt length (words)", "default": 45 },
     { "type": "checkbox", "id": "hp_show_meta", "label": "Show SKU & categories", "default": true },
-    { "type": "checkbox", "id": "hp_clamp_reviews", "label": "Show only the 2 most recent reviews", "info": "Adds a 'View all reviews' button that reveals the rest.", "default": true },
+    { "type": "text", "id": "hp_reviews_title", "label": "Reviews heading", "default": "Customer Reviews" },
+    { "type": "range", "id": "hp_reviews_per_page", "min": 0, "max": 10, "step": 1, "label": "Reviews per page", "info": "0 shows them all with the app's own paging.", "default": 2 },
+    { "type": "color", "id": "hp_star_color", "label": "Review star colour", "default": "#e0a422" },
     { "type": "checkbox", "id": "hp_sidebar_recs", "label": "Show 'You might also like' in the sidebar", "default": true },
     { "type": "text", "id": "hp_side_recs_title", "label": "Sidebar suggestions heading", "default": "You might also like" },
     { "type": "text", "id": "hp_loader_section", "label": "Recommendations loader section id", "default": "hp_recs" },

@@ -81,7 +81,9 @@
         "hp_sidebar_recs": true,
         "hp_side_recs_title": "You might also like",
         "hp_loader_section": "hp_recs",
-        "hp_clamp_reviews": true
+        "hp_reviews_per_page": 2,
+        "hp_reviews_title": "Customer Reviews",
+        "hp_star_color": "#e0a422"
       }
     },
     "related-products": {
