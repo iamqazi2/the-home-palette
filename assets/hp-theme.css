@@ -1079,3 +1079,199 @@ hp-recommendations:not(.is-loaded) { display: block; min-height: 0; }
   overflow: hidden;
 }
 .hp-drec__price { font-family: var(--hp-font-display); font-size: 1.6rem; font-weight: 600; color: var(--hp-teal); }
+
+/* ==========================================================================
+   19. COLLECTION / CATEGORY PAGES
+   ========================================================================== */
+
+.collection-hero {
+  position: relative;
+  background: var(--hp-teal);
+  color: var(--hp-cream);
+  overflow: hidden;
+}
+.collection-hero__inner {
+  padding-top: clamp(3.2rem, 6vw, 6rem) !important;
+  padding-bottom: clamp(3.2rem, 6vw, 6rem) !important;
+  position: relative;
+  z-index: 1;
+}
+.collection-hero__title {
+  font-size: clamp(3.2rem, 6vw, 6rem) !important;
+  color: var(--hp-cream);
+  margin: 0;
+}
+.collection-hero__description {
+  margin-top: 1.4rem;
+  max-width: 56rem;
+  font-size: 1.45rem;
+  line-height: 1.75;
+  color: rgba(255, 249, 223, 0.85);
+}
+.collection-hero--with-image .collection-hero__image-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 0;
+}
+.collection-hero--with-image .collection-hero__image-container img { object-fit: cover; filter: brightness(0.5); }
+.collection-hero--with-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(90deg, rgba(12, 38, 39, 0.86), rgba(37, 117, 117, 0.55));
+}
+.collection-hero--with-image .collection-hero__title,
+.collection-hero--with-image .collection-hero__description { text-shadow: 0 2px 16px rgba(12, 38, 39, 0.65); }
+
+/* facets → pills */
+.facets__summary, .facet-filters__label, .facets__heading {
+  font-family: var(--hp-font-ui);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hp-ink);
+}
+.facets__disclosure .facets__display, .facets__display-vertical {
+  border-radius: var(--hp-r-card);
+  border: 1px solid var(--hp-hairline);
+  box-shadow: 0 20px 40px -28px rgba(18, 53, 54, 0.5);
+}
+.active-facets__button-inner {
+  border-radius: var(--hp-r-pill) !important;
+  border: 1.5px solid var(--hp-teal) !important;
+  color: var(--hp-teal) !important;
+  background: rgba(37, 117, 117, 0.06);
+  font-family: var(--hp-font-ui);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 0.6rem 1.2rem;
+}
+.active-facets__button-remove { color: var(--hp-teal); }
+.facets__label { font-size: 1.3rem; }
+.facet-checkbox input[type='checkbox'] { accent-color: var(--hp-teal); }
+.mobile-facets__open, .facet-filters__sort {
+  border-radius: var(--hp-r-pill);
+  font-family: var(--hp-font-ui);
+  letter-spacing: 0.08em;
+}
+.mobile-facets__inner { background: var(--hp-cream-soft); }
+.product-count__text, .facets__status { font-family: var(--hp-font-ui); color: var(--hp-taupe); }
+
+/* product grid rhythm */
+.collection .product-grid, .product-grid { column-gap: 1.2rem; row-gap: 2.4rem; }
+@media screen and (min-width: 750px) { .collection .product-grid, .product-grid { column-gap: 1.8rem; row-gap: 3.2rem; } }
+.collection__title { margin-bottom: 1.6rem; }
+.collection .loading-overlay { backdrop-filter: blur(2px); }
+
+/* pagination */
+.pagination__list .pagination__item {
+  border-radius: 50%;
+  font-family: var(--hp-font-ui);
+  font-weight: 600;
+}
+.pagination__item--current::after, .pagination__item:hover::after { background: var(--hp-teal); }
+
+/* ==========================================================================
+   20. LIST-COLLECTIONS / SEARCH / BLOG / ARTICLE
+   ========================================================================== */
+
+.collection-list .card--card, .collection-list .card { border-radius: var(--hp-r-card) !important; }
+.card__heading a, .collection-list__item .card__heading {
+  font-family: var(--hp-font-display) !important;
+  font-size: 2rem !important;
+  letter-spacing: 0.01em;
+}
+.collection-list__item .card__inner { border-radius: var(--hp-r-card) !important; }
+
+.template-search__header, .template-search__search { margin-bottom: 2.4rem; }
+.search__input.field__input { border-radius: var(--hp-r-pill); }
+.template-search__results { margin-top: 1.6rem; }
+
+.article-card__title, .blog__title { font-family: var(--hp-font-display) !important; }
+.article-card-wrapper .card { border-radius: var(--hp-r-card) !important; }
+.article-template__title { font-size: clamp(3rem, 5vw, 5rem); }
+.article-template__hero-container .article-template__hero { border-radius: var(--hp-r-card); overflow: hidden; }
+.article-template__content.rte { font-size: 1.55rem; line-height: 1.9; }
+.article-template__link .link { font-family: var(--hp-font-ui); letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ==========================================================================
+   21. PAGES (incl. policies) + CONTACT
+   ========================================================================== */
+
+.main-page-title, .article-template__title, .customer h1 {
+  font-size: clamp(3rem, 5.2vw, 5.2rem) !important;
+  margin-bottom: 2.4rem;
+}
+/* readable long-form: policy pages, about, care guide */
+.shopify-policy__container { max-width: 76rem; padding: var(--hp-gap-y) var(--hp-gap-x); }
+.shopify-policy__title h1 { font-family: var(--hp-font-display); font-size: clamp(3rem, 5vw, 4.8rem); }
+.shopify-policy__body, .main-page .rte, .shopify-policy__container .rte {
+  font-size: 1.55rem;
+  line-height: 1.95;
+  color: var(--hp-ink);
+}
+.rte h2 { font-size: clamp(2.2rem, 3vw, 3rem); margin-top: 3.2rem; }
+.rte h3 { font-size: clamp(1.9rem, 2.4vw, 2.4rem); margin-top: 2.4rem; }
+.rte a { color: var(--hp-teal); text-underline-offset: 0.3em; }
+.rte ul, .rte ol { line-height: 1.9; }
+.rte blockquote {
+  border-left: 2px solid var(--hp-teal);
+  padding-left: 2rem;
+  font-family: var(--hp-font-display);
+  font-style: italic;
+  font-size: 1.9rem;
+  color: var(--hp-taupe);
+}
+.rte img { border-radius: var(--hp-r-card); }
+
+.contact .field__input, .contact .text-area,
+.customer .field__input, .form .field__input {
+  border-radius: 14px;
+  background: var(--hp-paper);
+}
+.contact .text-area { min-height: 14rem; }
+.contact__button { margin-top: 1.6rem; }
+.form__message { border-radius: 12px; }
+.field__input:focus-visible, .select__select:focus-visible {
+  outline: 2px solid var(--hp-teal);
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   22. 404 + CUSTOMER ACCOUNT
+   ========================================================================== */
+
+.template-404 .title { font-size: clamp(4rem, 9vw, 9rem); color: var(--hp-teal); }
+.template-404__message { font-family: var(--hp-font-ui); color: var(--hp-taupe); }
+
+.customer table { border-radius: var(--hp-r-card); overflow: hidden; }
+.customer thead th { background: var(--hp-cream); font-family: var(--hp-font-ui); letter-spacing: 0.08em; text-transform: uppercase; font-size: 1.1rem; }
+.customer .order-number, .customer td { font-family: var(--hp-font-ui); }
+
+/* ==========================================================================
+   23. RESPONSIVE POLISH — phone-first tightening across the board
+   ========================================================================== */
+
+@media screen and (max-width: 749px) {
+  .hp-section-head__title { font-size: clamp(2.4rem, 8vw, 3.2rem); }
+  .hp-section-head__text { font-size: 1.35rem; }
+  .hp-btn { padding: 1.2rem 2rem; font-size: 1.1rem; }
+  .hp-recs__grid, .hp-colors__grid { gap: 1rem; }
+  .collection-hero__inner { padding-top: 2.8rem !important; padding-bottom: 2.8rem !important; }
+  .product__info-wrapper { padding-left: 0; }
+  .hp-story__body { padding: 2.4rem var(--hp-gap-x) 3.2rem; }
+  .hp-cta__inner { padding: 2.8rem 2rem; }
+  .hp-vrev__card { margin-right: 1.2rem; }
+  /* tap targets */
+  .header__icon, .hp-colors__item, .hp-hero__dot { min-height: 44px; }
+  .hp-hero__dot { display: inline-flex; align-items: center; }
+}
+
+/* keep horizontal scrollers from causing page-level overflow */
+html, body { overflow-x: clip; }
+@supports not (overflow: clip) { html, body { overflow-x: hidden; } }
