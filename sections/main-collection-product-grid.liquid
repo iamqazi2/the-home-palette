@@ -36,6 +36,27 @@
   }
 {%- endstyle -%}
 
+{%- comment -%}
+  THP: same fix as related-products.liquid / featured-collection.liquid — force
+  a real 2-per-row CSS Grid on mobile (Dawn's flexbox width/gap math wasn't
+  reliably landing 2 items per row here either). Scoped with {{ section.id }},
+  Liquid-resolved rather than guessed.
+{%- endcomment -%}
+{%- style -%}
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} #product-grid.product-grid {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 1.2rem !important;
+    }
+    #shopify-section-{{ section.id }} #product-grid.product-grid .grid__item {
+      width: auto !important;
+      max-width: none !important;
+      margin: 0 !important;
+    }
+  }
+{%- endstyle -%}
+
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
   {%- paginate collection.products by section.settings.products_per_page -%}
     {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
