@@ -479,8 +479,12 @@
         "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
         "button_label": "Explore THP Weaves",
         "link": "shopify://collections/thp-weave-collection",
-        "scrim": 93,
-        "scrim_color": "#0c2627"
+        "scrim": 90,
+        "scrim_color": "#0c2627",
+        "layout": "split",
+        "flip": false,
+        "panel_color": "#257575",
+        "text_color": "#fff9df"
       }
     },
     "featured_collection_MAEfLD": {
@@ -510,46 +514,6 @@
         "padding_top": 32,
         "padding_bottom": 32
       }
-    },
-    "hp_marquee": {
-      "type": "hp-marquee",
-      "blocks": {
-        "phrase_1": {
-          "type": "phrase",
-          "settings": {
-            "text": "Crafted in Pakistan",
-            "icon": "sparkles"
-          }
-        },
-        "phrase_2": {
-          "type": "phrase",
-          "settings": {
-            "text": "Made for Fine Dining",
-            "icon": "utensils"
-          }
-        },
-        "phrase_3": {
-          "type": "phrase",
-          "settings": {
-            "text": "Supporting Local Artisans",
-            "icon": "heart"
-          }
-        },
-        "phrase_4": {
-          "type": "phrase",
-          "settings": {
-            "text": "Homes & Hospitality",
-            "icon": "gem"
-          }
-        }
-      },
-      "block_order": [
-        "phrase_1",
-        "phrase_2",
-        "phrase_3",
-        "phrase_4"
-      ],
-      "settings": {}
     },
     "173573001120319a38": {
       "type": "apps",
@@ -778,7 +742,6 @@
     "hp_style_rail",
     "hp_cta",
     "featured_collection_MAEfLD",
-    "hp_marquee",
     "173573001120319a38"
   ]
 }

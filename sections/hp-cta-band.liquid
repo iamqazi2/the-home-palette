@@ -1,4 +1,25 @@
-{% comment %} THP — v3 CTA band: rounded full-bleed image, teal gradient, single cream CTA {% endcomment %}
+{% comment %}
+  THP — CTA band.
+
+  Two layouts:
+    split   (default) copy sits in a solid teal panel beside the photo, so the
+            heading is legible no matter how bright the imagery is
+    overlay copy over the full-bleed photo, with a heavy directional wash
+
+  The split layout exists because pale imagery (jute, ivory ceramics) will
+  always fight cream text through a gradient — a solid panel removes the
+  problem instead of tuning around it.
+{% endcomment %}
+
+{%- liquid
+  assign layout = section.settings.layout | default: 'split'
+  assign panel = section.settings.panel_color | default: '#257575'
+  assign txt = section.settings.text_color | default: '#fff9df'
+  assign scrim_rgb = section.settings.scrim_color | default: '#0c2627' | color_to_rgb | remove: 'rgb(' | remove: ')'
+  assign a_full = section.settings.scrim | default: 90 | divided_by: 100.0
+  assign a_mid = section.settings.scrim | default: 90 | times: 0.72 | divided_by: 100.0
+  assign a_low = section.settings.scrim | default: 90 | times: 0.3 | divided_by: 100.0
+-%}
 
 {%- style -%}
   .hp-cta { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
@@ -6,86 +27,134 @@
     position: relative;
     overflow: hidden;
     border-radius: 24px;
-    color: var(--hp-cream);
-    background: var(--hp-teal-ink);
+    background: {{ panel }};
+    color: {{ txt }};
     transform: translateZ(0);
   }
-  .hp-cta__media img {
-    {% if section.settings.duotone %}filter: brightness(0.5) sepia(0.2) saturate(0.8) contrast(1.05);{% else %}filter: brightness(0.58);{% endif %}
+
+  /* ---------- split ---------- */
+  .hp-cta--split .hp-cta__frame {
+    display: grid;
+    grid-template-columns: 1fr;
   }
-  /* Legibility: a deep teal wash on the copy side, easing off over the photo.
-     Strength is merchant-adjustable for future images. */
-  {%- liquid
-    assign cta_rgb = section.settings.scrim_color | default: '#0c2627' | color_to_rgb | remove: 'rgb(' | remove: ')'
-    assign a_full = section.settings.scrim | default: 93 | divided_by: 100.0
-    assign a_mid = section.settings.scrim | default: 93 | times: 0.78 | divided_by: 100.0
-    assign a_low = section.settings.scrim | default: 93 | times: 0.34 | divided_by: 100.0
-  -%}
-  /* Legibility: an almost-solid wash on the copy side that eases off across the
-     photo, plus a full-frame base tint so pale imagery (jute, ivory) can never
-     wash the heading out. */
-  .hp-cta__scrim {
+  @media screen and (min-width: 900px) {
+    .hp-cta--split .hp-cta__frame { grid-template-columns: 0.95fr 1.05fr; }
+    .hp-cta--split.hp-cta--flip .hp-cta__media-col { order: -1; }
+  }
+  .hp-cta__media-col {
+    position: relative;
+    overflow: hidden;
+    min-height: 26rem;
+  }
+  @media screen and (min-width: 900px) { .hp-cta__media-col { min-height: 44rem; } }
+  .hp-cta__media-col .hp-media-frame,
+  .hp-cta__media-col img {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(
-        90deg,
-        rgba({{ cta_rgb }}, {{ a_full }}) 0%,
-        rgba({{ cta_rgb }}, {{ a_mid }}) 45%,
-        rgba({{ cta_rgb }}, {{ a_low }}) 100%
-      ),
-      linear-gradient(rgba({{ cta_rgb }}, 0.3), rgba({{ cta_rgb }}, 0.3));
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
-  /* extra vertical wash on phones, where the copy overlays the whole frame */
-  @media screen and (max-width: 749px) {
-    .hp-cta__scrim {
-      background:
-        linear-gradient(
-          180deg,
-          rgba({{ cta_rgb }}, {{ a_mid }}) 0%,
-          rgba({{ cta_rgb }}, {{ a_full }}) 100%
-        ),
-        linear-gradient(rgba({{ cta_rgb }}, 0.35), rgba({{ cta_rgb }}, 0.35));
+  .hp-cta__media-col img {
+    {% if section.settings.duotone %}filter: sepia(0.16) saturate(0.92) contrast(1.03);{% endif %}
+  }
+  /* a soft teal bleed where the panel meets the photo, so the join reads
+     deliberate rather than like two pasted rectangles */
+  @media screen and (min-width: 900px) {
+    .hp-cta--split .hp-cta__media-col::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 22%;
+      z-index: 1;
+      background: linear-gradient(90deg, {{ panel }}, transparent);
+    }
+    .hp-cta--split.hp-cta--flip .hp-cta__media-col::before {
+      inset: 0 0 0 auto;
+      background: linear-gradient(270deg, {{ panel }}, transparent);
     }
   }
-  .hp-cta__inner {
+  .hp-cta--split .hp-cta__inner {
     position: relative;
-    padding: clamp(3rem, 6vw, 6rem) clamp(2rem, 5vw, 5rem);
-    max-width: 58rem;
+    z-index: 2;
+    padding: clamp(2.8rem, 5vw, 5.6rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
   }
+
+  /* ---------- overlay ---------- */
+  .hp-cta--overlay .hp-cta__media-col { position: absolute; inset: 0; min-height: 0; }
+  .hp-cta--overlay .hp-cta__media-col img {
+    {% if section.settings.duotone %}filter: brightness(0.55) sepia(0.2) saturate(0.85) contrast(1.05);{% else %}filter: brightness(0.62);{% endif %}
+  }
+  .hp-cta--overlay .hp-cta__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(90deg,
+        rgba({{ scrim_rgb }}, {{ a_full }}) 0%,
+        rgba({{ scrim_rgb }}, {{ a_mid }}) 48%,
+        rgba({{ scrim_rgb }}, {{ a_low }}) 100%),
+      linear-gradient(rgba({{ scrim_rgb }}, 0.34), rgba({{ scrim_rgb }}, 0.34));
+  }
+  @media screen and (max-width: 899px) {
+    .hp-cta--overlay .hp-cta__scrim {
+      background:
+        linear-gradient(180deg,
+          rgba({{ scrim_rgb }}, {{ a_mid }}) 0%,
+          rgba({{ scrim_rgb }}, {{ a_full }}) 100%),
+        linear-gradient(rgba({{ scrim_rgb }}, 0.4), rgba({{ scrim_rgb }}, 0.4));
+    }
+  }
+  .hp-cta--overlay .hp-cta__inner {
+    position: relative;
+    z-index: 2;
+    padding: clamp(3.2rem, 6vw, 6.4rem) clamp(2rem, 5vw, 5rem);
+    max-width: 60rem;
+  }
+
+  /* ---------- copy ---------- */
+  .hp-cta__frame .hp-eyebrow { color: {{ txt }}; opacity: 0.9; }
   .hp-cta__heading {
     font-family: var(--hp-font-display);
     font-weight: 600;
-    font-size: clamp(2.6rem, 4.4vw, 4.6rem);
-    line-height: 1.06;
-    margin: 1.2rem 0;
-    color: {{ section.settings.text_color | default: '#fff9df' }};
-    text-shadow: 0 2px 20px rgba(12, 38, 39, 0.6);
+    font-size: clamp(2.8rem, 4.4vw, 4.8rem);
+    line-height: 1.04;
+    margin: 1.4rem 0 0;
+    color: {{ txt }};
   }
   .hp-cta__text {
-    margin: 0 0 2.4rem;
-    max-width: 44rem;
+    margin: 1.6rem 0 0;
+    max-width: 42rem;
     font-size: 1.45rem;
     line-height: 1.8;
-    color: rgba(255, 249, 223, 0.94);
-    text-shadow: 0 1px 12px rgba(12, 38, 39, 0.6);
+    color: {{ txt }};
+    opacity: 0.85;
   }
-  .hp-cta .hp-eyebrow--light { text-shadow: 0 1px 10px rgba(12, 38, 39, 0.7); }
+  .hp-cta__action { margin-top: 2.8rem; }
 {%- endstyle -%}
 
 <div class="hp-cta hp-section hp-section--flush-top">
   <div class="hp-container">
-    <div class="hp-cta__frame" data-hp-reveal>
-      <div class="hp-media-frame" data-hp-parallax>
-        {%- if section.settings.image -%}
-          {{
-            section.settings.image
-            | image_url: width: 3000
-            | image_tag: widths: '750, 1100, 1500, 2000, 3000', sizes: '100vw', loading: 'lazy'
-          }}
-        {%- endif -%}
+    <div class="hp-cta__frame hp-cta--{{ layout }}{% if section.settings.flip %} hp-cta--flip{% endif %}" data-hp-reveal>
+      <div class="hp-cta__media-col">
+        <div class="hp-media-frame"{% if layout == 'overlay' %} data-hp-parallax{% endif %}>
+          {%- if section.settings.image -%}
+            {{
+              section.settings.image
+              | image_url: width: 2400
+              | image_tag: widths: '600, 900, 1200, 1800, 2400', sizes: '(min-width: 900px) 55vw, 100vw', loading: 'lazy'
+            }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+        {%- if layout == 'overlay' -%}<div class="hp-cta__scrim"></div>{%- endif -%}
       </div>
-      <div class="hp-cta__scrim"></div>
+
       <div class="hp-cta__inner">
         {%- if section.settings.eyebrow != blank -%}
           <p class="hp-eyebrow hp-eyebrow--light">{{ section.settings.eyebrow | escape }}</p>
@@ -97,13 +166,15 @@
           <p class="hp-cta__text">{{ section.settings.text | escape }}</p>
         {%- endif -%}
         {%- if section.settings.button_label != blank -%}
-          <a
-            {% if section.settings.link != blank %}href="{{ section.settings.link }}"{% endif %}
-            class="hp-btn hp-btn--cream-solid"
-          >
-            {{ section.settings.button_label | escape }}
-            {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
-          </a>
+          <div class="hp-cta__action">
+            <a
+              {% if section.settings.link != blank %}href="{{ section.settings.link }}"{% endif %}
+              class="hp-btn hp-btn--cream-solid"
+            >
+              {{ section.settings.button_label | escape }}
+              {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+            </a>
+          </div>
         {%- endif -%}
       </div>
     </div>
@@ -115,8 +186,20 @@
   "name": "THP CTA Band",
   "tag": "section",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Background image" },
-    { "type": "checkbox", "id": "duotone", "label": "Sepia/duotone treatment", "default": true },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "info": "Split keeps the copy on a solid panel — always legible. Overlay puts it over the photo.",
+      "options": [
+        { "value": "split", "label": "Split — copy panel beside photo" },
+        { "value": "overlay", "label": "Overlay — copy over photo" }
+      ],
+      "default": "split"
+    },
+    { "type": "checkbox", "id": "flip", "label": "Photo on the left", "default": false },
+    { "type": "checkbox", "id": "duotone", "label": "Warm/duotone treatment", "default": true },
     {
       "type": "range",
       "id": "scrim",
@@ -125,14 +208,15 @@
       "step": 5,
       "unit": "%",
       "label": "Overlay strength",
-      "info": "Raise this if the heading is hard to read over the photo.",
-      "default": 93
+      "info": "Overlay layout only.",
+      "default": 90
     },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Weave Collection" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Woven for the Everyday Feast" },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Hand-woven placemats and baskets that ground every table setting in warmth." },
     { "type": "header", "content": "Colours" },
     { "type": "color", "id": "bg_color", "label": "Section background", "default": "#fffdf4" },
+    { "type": "color", "id": "panel_color", "label": "Copy panel", "default": "#257575" },
     { "type": "color", "id": "scrim_color", "label": "Overlay colour", "default": "#0c2627" },
     { "type": "color", "id": "text_color", "label": "Text", "default": "#fff9df" },
     { "type": "header", "content": "Button" },

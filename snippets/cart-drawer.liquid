@@ -74,6 +74,8 @@
           </span>
         </button>
       </div>
+      {%- comment -%} THP: everything above the fixed footer scrolls together {%- endcomment -%}
+      <div class="hp-drawer-scroll">
       <cart-drawer-items
         {% if cart == empty %}
           class=" is-empty"
@@ -454,31 +456,11 @@
           <div id="CartDrawer-CartErrors" role="alert"></div>
         </form>
       </cart-drawer-items>
-      <div class="drawer__footer">
-        {%- if settings.show_cart_note -%}
-          <details id="Details-CartDrawer">
-            <summary>
-              <span class="summary__title">
-                {{ 'sections.cart.note' | t }}
-                {{- 'icon-caret.svg' | inline_asset_content -}}
-              </span>
-            </summary>
-            <cart-note class="cart__note field">
-              <label class="visually-hidden" for="CartDrawer-Note">{{ 'sections.cart.note' | t }}</label>
-              <textarea
-                id="CartDrawer-Note"
-                class="text-area text-area--resize-vertical field__input"
-                name="note"
-                placeholder="{{ 'sections.cart.note' | t }}"
-              >{{ cart.note }}</textarea>
-            </cart-note>
-          </details>
-        {%- endif -%}
 
         {%- comment -%}
-          THP — suggestions based on the most recently added item, pulled from
-          Shopify's own recommendations data. The drawer opens on every page, so
-          this uses the JSON endpoint rather than a section render.
+          Suggestions based on the most recently added item, from Shopify's own
+          recommendations data. The drawer opens on every page, so this uses the
+          JSON endpoint rather than a section render.
         {%- endcomment -%}
         {%- assign last_item = cart.items | last -%}
         {%- if last_item != blank -%}
@@ -495,6 +477,29 @@
           </hp-drawer-recs>
         {%- endif -%}
 
+        {%- if settings.show_cart_note and cart != empty -%}
+          <details id="Details-CartDrawer" class="hp-drawer-note">
+            <summary>
+              <span class="summary__title">
+                {% render 'hp-icon', icon: 'message-circle', size: 15 %}
+                Add a note to your order
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </span>
+            </summary>
+            <cart-note class="cart__note field">
+              <label class="visually-hidden" for="CartDrawer-Note">{{ 'sections.cart.note' | t }}</label>
+              <textarea
+                id="CartDrawer-Note"
+                class="text-area text-area--resize-vertical field__input"
+                name="note"
+                placeholder="Gift wrapping, delivery preferences…"
+              >{{ cart.note }}</textarea>
+            </cart-note>
+          </details>
+        {%- endif -%}
+      </div>
+
+      <div class="drawer__footer">
         <!-- Start blocks -->
         <!-- Subtotals -->
 
