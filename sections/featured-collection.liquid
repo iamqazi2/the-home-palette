@@ -4,6 +4,31 @@
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 {{ 'template-collection.css' | asset_url | stylesheet_tag }}
 
+{%- comment -%}
+  THP: when "swipe on mobile" is off for a given instance of this section, give
+  it a real 2-per-row CSS Grid on mobile instead of Dawn's default flexbox grid
+  (whose width/gap/flex-grow math was not reliably landing 2 items per row).
+  Tied to the setting itself rather than a guessed section id, so it applies to
+  whichever instance has swipe turned off (currently The Wooden Line) without
+  touching the other homepage carousels that still want swipe/peek.
+{%- endcomment -%}
+{%- unless section.settings.swipe_on_mobile -%}
+  {%- style -%}
+    @media screen and (max-width: 749px) {
+      #shopify-section-{{ section.id }} .product-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1.2rem !important;
+      }
+      #shopify-section-{{ section.id }} .product-grid .grid__item {
+        width: auto !important;
+        max-width: none !important;
+        margin: 0 !important;
+      }
+    }
+  {%- endstyle -%}
+{%- endunless -%}
+
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
 {%- endif -%}

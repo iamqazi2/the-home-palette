@@ -2,6 +2,27 @@
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
 
+{%- comment -%}
+  THP: guarantee a real 2-per-row grid on mobile, replacing Dawn's flexbox
+  percentage math (width/gap/flex-grow interacting made it unreliable) with an
+  explicit 2-column CSS Grid. Scoped with {{ section.id }}, which Liquid
+  resolves to the actual runtime id itself — nothing here is guessed.
+{%- endcomment -%}
+{%- style -%}
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .product-grid {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 1.2rem !important;
+    }
+    #shopify-section-{{ section.id }} .product-grid .grid__item {
+      width: auto !important;
+      max-width: none !important;
+      margin: 0 !important;
+    }
+  }
+{%- endstyle -%}
+
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
 {%- endif -%}

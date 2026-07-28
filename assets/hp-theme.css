@@ -1936,22 +1936,12 @@ body.overflow-hidden { overflow: hidden; }
 }
 .related-products { padding-top: clamp(2.4rem, 4vw, 4rem); }
 
-/* Related Products + The Wooden Line: a real 2-per-row grid on mobile, not a
-   single-card carousel. related-products.liquid never uses a slider (its grid
-   should already be 2-up from the columns_mobile setting), and Wooden Line has
-   its own mobile peek-slider turned off in templates/index.json — this is a
-   belt-and-braces guarantee on top of both, scoped to just these two sections
-   (by their stable Shopify section id) so the OTHER homepage carousels
-   (Dinner Sets, Tea & Coffee, Serving in Style) keep their intended swipe/peek
-   behaviour untouched. */
-@media screen and (max-width: 749px) {
-  #shopify-section-related-products .grid__item,
-  #shopify-section-featured_collection_MAEfLD .grid__item {
-    width: calc(50% - 0.6rem) !important;
-    max-width: calc(50% - 0.6rem) !important;
-    margin-left: 0 !important;
-  }
-}
+/* Related Products' + The Wooden Line's 2-per-row mobile grid now live as
+   {% style %} blocks inside related-products.liquid and featured-collection.
+   liquid themselves (using Liquid's own section.id, not a guessed selector,
+   and CSS Grid instead of fighting Dawn's flexbox width/gap math) — see those
+   files. Keeping the override next to the section it belongs to also means it
+   automatically travels with the section if it's ever duplicated or moved. */
 
 /* Judge.me, wherever it renders */
 .jdgm-star { color: var(--hp-gold) !important; }
