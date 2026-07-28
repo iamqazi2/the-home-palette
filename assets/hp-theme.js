@@ -124,9 +124,13 @@
     // every remaining section on every page gets a directional reveal, so the
     // whole site scrolls with the same language — not just the custom sections
     var scope = root.querySelectorAll ? root : document;
-    (scope.querySelectorAll('main .shopify-section') || []).forEach(function (sec) {
+    (scope.querySelectorAll('main .shopify-section') || []).forEach(function (sec, i) {
       if (sec.closest(SKIP)) return;
       if (sec.dataset.hpSection !== undefined || sec.dataset.hpDone) return;
+      // never hide the first section — it is above the fold and would flash
+      if (i === 0 || !sec.previousElementSibling) return;
+      // the hero runs its own timeline; tagging its wrapper would fight it
+      if (sec.querySelector('.hp-hero, [data-hp-no-anim]')) return;
       // skip sections that already animate their own contents
       if (sec.querySelector('[data-hp-reveal], [data-hp-stagger], [data-hp-split], [data-hp-fluid]')) return;
       sec.dataset.hpSection = '';
