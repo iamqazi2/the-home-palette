@@ -983,11 +983,17 @@ sticky-header.shopify-section-header-sticky {
     max-width: none !important;
     justify-content: center;
   }
+  /* The source logo is a tall icon+wordmark lockup, not a square mark.
+     Forcing it into an equal height/width box (the old 7.2rem square) made
+     object-fit: contain shrink it to fit the height, wasting most of the
+     square's width and leaving the wordmark too small to read. Sizing by
+     width only, with height left to follow the image's own aspect ratio,
+     lets it render as large as the header can take without squashing it. */
   .header__heading-logo {
-    height: 7.2rem;
-    width: 7.2rem;
-    max-height: 7.2rem;
-    max-width: 7.2rem;
+    height: auto !important;
+    width: 15rem !important;
+    max-height: none !important;
+    max-width: 60vw !important;
   }
   .header__icons {
     justify-self: end;
@@ -1014,7 +1020,7 @@ sticky-header.shopify-section-header-sticky {
   }
 }
 @media screen and (max-width: 380px) {
-  .header__heading-logo { height: 6rem; width: 6rem; max-height: 6rem; max-width: 6rem; }
+  .header__heading-logo { width: 12rem !important; max-width: 60vw !important; }
   .header__icons { gap: 0; }
 }
 
