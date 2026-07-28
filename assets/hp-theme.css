@@ -885,12 +885,15 @@ sticky-header.shopify-section-header-sticky {
   justify-content: center !important;
   padding: 0;
 }
+/* Size only — do NOT force display here. The search toggle nests two icons
+   (magnifying glass + close X) and shows only one at a time via Dawn's own
+   details[open] rule; forcing display:block on every .svg-wrapper would make
+   both render permanently, which is exactly what happened before this fix. */
 .header__icon .svg-wrapper,
 .header__icon .icon,
 .header__icon svg {
   width: 2.6rem;
   height: 2.6rem;
-  display: block;
 }
 .header__icon--cart .svg-wrapper,
 .header__icon--cart .icon,
@@ -899,6 +902,14 @@ sticky-header.shopify-section-header-sticky {
   height: 4.2rem;
 }
 .header__icon .svg-wrapper > svg { width: 100%; height: 100%; }
+
+/* Re-assert Dawn's search-icon <-> close-icon swap explicitly, so it holds no
+   matter which stylesheet loads last. */
+.header__search details .header__icon-close { display: none !important; }
+.header__search details[open] .header__icon-close { display: inline-flex !important; }
+.header__search details[open] > summary > span > .svg-wrapper:not(.header__icon-close) {
+  display: none !important;
+}
 .header__icons { padding-right: 0; gap: 0.2rem; align-items: center; }
 /* the search <summary> gets a default marker/triangle in some browsers */
 .header__icon--summary { list-style: none; }
