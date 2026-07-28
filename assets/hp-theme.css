@@ -955,10 +955,67 @@ sticky-header.shopify-section-header-sticky {
   line-height: 1;
 }
 
-/* mobile: burger left, logo centre, icons right — keep it low */
+/* ---- mobile/tablet header (<990px): redesigned independently of desktop ----
+   Root cause of the "messed up" mobile header: the desktop logo rule sets a
+   flat height:12rem + width:12rem (no max-height at all), and the previous
+   mobile fix only capped max-height, leaving width still forced to 120px.
+   That squashed a 120px-wide box into a much shorter one, and left the
+   wrapper (also hard-coded to height:12rem) oversized — the header row
+   inflated to match, leaving the small, distorted logo floating in a lot of
+   dead space. Below, width and height are set TOGETHER so the mark stays
+   square, and every dimension that mattered is scoped to this query only —
+   nothing here touches >=990px. */
 @media screen and (max-width: 989px) {
-  .header { grid-template-columns: auto 1fr auto; column-gap: 0.8rem; }
-  .header__heading-logo { max-height: 3.2rem; }
+  .header {
+    grid-template-columns: auto 1fr auto;
+    column-gap: 1rem;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+  }
+  header-drawer { justify-self: start; }
+  .header__heading, .header__heading-link {
+    justify-content: center;
+    width: 100%;
+  }
+  .header__heading-logo-wrapper {
+    height: auto;
+    width: auto;
+    max-width: none !important;
+    justify-content: center;
+  }
+  .header__heading-logo {
+    height: 4.6rem;
+    width: 4.6rem;
+    max-height: 4.6rem;
+    max-width: 4.6rem;
+  }
+  .header__icons {
+    justify-self: end;
+    gap: 0.1rem;
+  }
+  .header__icon,
+  .header__icon--cart,
+  .header__icon--account,
+  .header__icon--search {
+    height: 4rem;
+    width: 4rem;
+  }
+  .header__icon .svg-wrapper,
+  .header__icon .icon,
+  .header__icon svg {
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+  .header__icon--cart .svg-wrapper,
+  .header__icon--cart .icon,
+  .header__icon--cart svg {
+    width: 3.6rem;
+    height: 3.6rem;
+  }
+}
+@media screen and (max-width: 380px) {
+  .header__heading-logo { height: 4rem; width: 4rem; max-height: 4rem; max-width: 4rem; }
+  .header__icons { gap: 0; }
 }
 
 /* Judge.me floating review tab — hidden (disabled in settings too) */
@@ -1411,28 +1468,35 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
 
   /* ---- hero: the clamp() floor alone was still too large on a 320-390px
      screen once eyebrow + heading + rule + subheading + CTAs + rating chip
-     all stack inside one fixed-height hero ---- */
-  .hp-hero__kicker { font-size: 0.95rem; margin-bottom: 1.2rem; }
-  .hp-hero__heading { font-size: clamp(3rem, 10vw, 4rem); line-height: 1.04; }
-  .hp-hero__rule { margin-top: 1.6rem; }
-  .hp-hero__sub { font-size: 1.3rem; margin-top: 1.4rem; }
-  .hp-hero__actions { margin-top: 2rem; }
-  .hp-hero__rating { margin-top: 2rem; padding: 0.7rem 1.3rem; }
-  .hp-hero__rating-score { font-size: 1.7rem; }
-  .hp-hero__rating-text { font-size: 1.05rem; }
+     all stack inside one fixed-height hero.
+     !important below: this section carries its OWN {% style %} block, which
+     renders inline further down the document than this stylesheet (section
+     styles aren't hoisted to <head>) — so at equal specificity the section's
+     un-mediaqueried rule would otherwise win regardless of this media query. ---- */
+  .hp-hero__kicker { font-size: 0.95rem !important; margin-bottom: 1.2rem !important; }
+  .hp-hero__heading { font-size: clamp(3rem, 10vw, 4rem) !important; line-height: 1.04 !important; }
+  .hp-hero__rule { margin-top: 1.6rem !important; }
+  .hp-hero__sub { font-size: 1.3rem !important; margin-top: 1.4rem !important; }
+  .hp-hero__actions { margin-top: 2rem !important; }
+  .hp-hero__rating { margin-top: 2rem !important; padding: 0.7rem 1.3rem !important; }
+  .hp-hero__rating-score { font-size: 1.7rem !important; }
+  .hp-hero__rating-text { font-size: 1.05rem !important; }
 
   /* ---- editorial card/tile titles: same serif at 2rem+ reads oversized once
-     the tile itself is only ~45vw wide on a 2-column mobile grid ---- */
-  .hp-occasion__name { font-size: 1.7rem; }
-  .hp-occasion__caption { font-size: 1.05rem; }
-  .hp-cats__name { font-size: 1.6rem; }
-  .hp-cats__count { font-size: 0.9rem; }
-  .hp-styles__name { font-size: 1.6rem; }
-  .hp-colors__name { font-size: 1.4rem; }
-  .hp-colors__count { font-size: 0.9rem; }
+     the tile itself is only ~45vw wide on a 2-column mobile grid. Same
+     section-style-order issue as the hero, so !important again. ---- */
+  .hp-occasion__name { font-size: 1.7rem !important; }
+  .hp-occasion__caption { font-size: 1.05rem !important; }
+  .hp-cats__name { font-size: 1.5rem !important; }
+  .hp-cats__count { font-size: 0.85rem !important; }
+  .hp-styles__name { font-size: 1.6rem !important; }
+  .hp-colors__name { font-size: 1.4rem !important; }
+  .hp-colors__count { font-size: 0.9rem !important; }
 
   /* ---- product cards (shared by every collection/search/related/rec grid
-     on the site — this single block fixes the same issue everywhere) ---- */
+     on the site — this single block fixes the same issue everywhere).
+     card-product.liquid is a snippet, not a section, so it has no competing
+     inline style and normal cascade order already applies here. ---- */
   .card__heading a { font-size: 1.2rem !important; }
   .card-information .price { font-size: 1.7rem; }
   .card-information .price--on-sale .price-item--regular { font-size: 1.1rem; }
@@ -1444,10 +1508,11 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
 
 /* very small phones (iPhone SE and similar ~360px and below) */
 @media screen and (max-width: 380px) {
-  .hp-hero__heading { font-size: 2.6rem; }
-  .hp-hero__sub { font-size: 1.2rem; }
+  .hp-hero__heading { font-size: 2.6rem !important; }
+  .hp-hero__sub { font-size: 1.2rem !important; }
   .hp-section-head__title { font-size: 2.1rem; }
-  .hp-occasion__name, .hp-cats__name, .hp-styles__name { font-size: 1.45rem; }
+  .hp-occasion__name, .hp-styles__name { font-size: 1.45rem !important; }
+  .hp-cats__name { font-size: 1.35rem !important; }
   .card__heading a { font-size: 1.1rem !important; }
   .card-information .price { font-size: 1.5rem; }
 }
@@ -1870,6 +1935,23 @@ body.overflow-hidden { overflow: hidden; }
   margin-bottom: 2rem;
 }
 .related-products { padding-top: clamp(2.4rem, 4vw, 4rem); }
+
+/* Related Products + The Wooden Line: a real 2-per-row grid on mobile, not a
+   single-card carousel. related-products.liquid never uses a slider (its grid
+   should already be 2-up from the columns_mobile setting), and Wooden Line has
+   its own mobile peek-slider turned off in templates/index.json — this is a
+   belt-and-braces guarantee on top of both, scoped to just these two sections
+   (by their stable Shopify section id) so the OTHER homepage carousels
+   (Dinner Sets, Tea & Coffee, Serving in Style) keep their intended swipe/peek
+   behaviour untouched. */
+@media screen and (max-width: 749px) {
+  #shopify-section-related-products .grid__item,
+  #shopify-section-featured_collection_MAEfLD .grid__item {
+    width: calc(50% - 0.6rem) !important;
+    max-width: calc(50% - 0.6rem) !important;
+    margin-left: 0 !important;
+  }
+}
 
 /* Judge.me, wherever it renders */
 .jdgm-star { color: var(--hp-gold) !important; }

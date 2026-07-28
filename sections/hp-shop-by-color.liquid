@@ -34,9 +34,16 @@
        top edge. Generous top padding keeps that transform fully in view. */
     padding: 2rem 0.2rem 1.4rem;
     scroll-snap-type: x proximity;
+    /* mobile only (the >=990px query below resets all of this to 0/visible):
+       the row bleeds a flat --hp-gap-x so the scrollable/touch area still
+       reaches the viewport edge, but the content padding adds an EXTRA
+       1rem on top of that instead of exactly cancelling it out — a plain
+       circular swatch with no card framing around it reads as flush against
+       the edge at the same numeric inset a bordered tile would use, so it
+       needs a bit more room than gap-x alone gives it. */
     margin: -1.4rem calc(var(--hp-gap-x) * -1) 0;
-    padding-left: var(--hp-gap-x);
-    padding-right: var(--hp-gap-x);
+    padding-left: calc(var(--hp-gap-x) + 1rem);
+    padding-right: calc(var(--hp-gap-x) + 1rem);
   }
   .hp-colors__row::-webkit-scrollbar { display: none; }
   @media screen and (min-width: 990px) {
