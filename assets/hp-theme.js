@@ -1,8 +1,17 @@
-/* THE HOME PALETTE — v3 motion engine + interactive elements.
+/* THE HOME PALETTE — v3 motion engine + interactive modules.
    Engine: GSAP + ScrollTrigger + Lenis (self-hosted, loaded before this file).
    Falls back to IntersectionObserver reveals if the libs are missing, and to
    static content under prefers-reduced-motion. Editor-safe: Lenis is skipped
-   in the theme customizer and everything re-inits on section reload. */
+   in the theme customizer and everything re-inits on section reload.
+
+   Reveal vocabulary (add as attributes, or let autoTag() apply them):
+     data-hp-split    headings — split into words, each rises out of a mask
+     data-hp-fluid    copy/media — blur + rise fade
+     data-hp-clip     images — clip-path wipe up with a slow scale settle
+     data-hp-reveal   generic fade + rise
+     data-hp-stagger  parent whose children reveal in a batch
+     data-hp-parallax background layer, scrub-linked
+*/
 (function () {
   'use strict';
 
@@ -29,16 +38,142 @@
       } catch (e) { lenis = null; }
     }
   }
+  window.hpLenis = function () { return lenis; };
+
+  /* ---- Word splitter ---------------------------------------------------
+     Walks text nodes only, so inline markup (<em>, <a>, <br>) survives.
+     Each word becomes <span class="hp-w"><span class="hp-w__i">word</span></span>
+  ---------------------------------------------------------------------- */
+  function splitWords(el) {
+    if (!el || el.dataset.hpSplitDone) return [];
+    el.dataset.hpSplitDone = '1';
+
+    var inners = [];
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    var textNodes = [];
+    var n;
+    while ((n = walker.nextNode())) {
+      if (n.nodeValue && n.nodeValue.trim()) textNodes.push(n);
+    }
+    // bail on very long copy — masking hundreds of words is wasteful
+    var totalWords = textNodes.reduce(function (a, t) {
+      return a + t.nodeValue.trim().split(/\s+/).length;
+    }, 0);
+    if (totalWords === 0 || totalWords > 60) return [];
+
+    textNodes.forEach(function (node) {
+      var frag = document.createDocumentFragment();
+      var parts = node.nodeValue.split(/(\s+)/);
+      parts.forEach(function (part) {
+        if (!part) return;
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(part));
+          return;
+        }
+        var mask = document.createElement('span');
+        mask.className = 'hp-w';
+        var inner = document.createElement('span');
+        inner.className = 'hp-w__i';
+        inner.textContent = part;
+        mask.appendChild(inner);
+        frag.appendChild(mask);
+        inners.push(inner);
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    if (inners.length) el.classList.add('hp-split-ready');
+    return inners;
+  }
+
+  /* ---- Auto-tagging ----------------------------------------------------
+     Gives the whole site the same fluid entrance without editing every
+     template. Skips chrome (header/footer/nav), the hero (it runs its own
+     timeline), and anything already tagged.
+  ---------------------------------------------------------------------- */
+  var SKIP = '.hp-hero, header, footer, nav, .header-wrapper, .footer, .hp-announce, ' +
+    '.hp-marquee, .cart-drawer, .quick-add-modal, .search-modal, .menu-drawer, [data-hp-no-anim]';
+
+  function autoTag(root) {
+    root = root || document;
+    var main = root.querySelector ? (root.matches && root.matches('main') ? root : root) : root;
+    if (!main || !main.querySelectorAll) return;
+
+    // headings → word-split reveal
+    main.querySelectorAll('h1, h2, h3, .hp-section-head__title, .h1, .h2').forEach(function (el) {
+      if (el.closest(SKIP)) return;
+      if (el.dataset.hpSplit || el.dataset.hpSplitDone) return;
+      if (el.hasAttribute('data-hp-reveal')) el.removeAttribute('data-hp-reveal');
+      el.dataset.hpSplit = '';
+    });
+
+    // supporting copy → fluid fade
+    main.querySelectorAll('.hp-section-head__text, .rte > p, .hp-story__text, .hp-cta__text, .hp-eyebrow')
+      .forEach(function (el) {
+        if (el.closest(SKIP)) return;
+        if (el.dataset.hpFluid || el.dataset.hpReveal !== undefined) return;
+        el.dataset.hpFluid = '';
+      });
+  }
 
   /* ---- Reveals + stacking cards + parallax ----------------------------- */
   function initMotion(root) {
     root = root || document;
+    autoTag(root);
 
     if (hasGsap) {
       var gsap = window.gsap;
       var ST = window.ScrollTrigger;
 
-      // stagger groups: children rise + scale in a batch
+      // 1. word-split headings — the signature "fluid" reveal
+      root.querySelectorAll('[data-hp-split]').forEach(function (el) {
+        if (el.dataset.hpDone) return;
+        el.dataset.hpDone = '1';
+        var words = splitWords(el);
+        if (!words.length) {
+          gsap.fromTo(el, { y: 30, opacity: 0 }, {
+            y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+          });
+          return;
+        }
+        gsap.fromTo(words,
+          { yPercent: 115, opacity: 0, filter: 'blur(6px)' },
+          {
+            yPercent: 0, opacity: 1, filter: 'blur(0px)',
+            duration: 1.1, ease: 'power4.out', stagger: 0.045,
+            clearProps: 'filter',
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+          });
+      });
+
+      // 2. fluid copy/media — blur + rise
+      root.querySelectorAll('[data-hp-fluid]').forEach(function (el) {
+        if (el.dataset.hpDone) return;
+        el.dataset.hpDone = '1';
+        gsap.fromTo(el,
+          { y: 26, opacity: 0, filter: 'blur(8px)' },
+          {
+            y: 0, opacity: 1, filter: 'blur(0px)',
+            duration: 1, ease: 'power3.out', clearProps: 'filter,transform',
+            scrollTrigger: { trigger: el, start: 'top 90%', once: true }
+          });
+      });
+
+      // 3. clip-path image wipes
+      root.querySelectorAll('[data-hp-clip]').forEach(function (el) {
+        if (el.dataset.hpDone) return;
+        el.dataset.hpDone = '1';
+        var img = el.querySelector('img') || el;
+        var tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+        tl.fromTo(el, { clipPath: 'inset(0 0 100% 0)' },
+          { clipPath: 'inset(0 0 0% 0)', duration: 1.2, ease: 'power4.out', clearProps: 'clipPath' });
+        if (img !== el) {
+          tl.fromTo(img, { scale: 1.18 }, { scale: 1, duration: 1.6, ease: 'power3.out', clearProps: 'transform' }, 0);
+        }
+      });
+
+      // 4. stagger groups: children rise + scale in a batch
       var staggerChildren = [];
       root.querySelectorAll('[data-hp-stagger]').forEach(function (parent) {
         Array.prototype.forEach.call(parent.children, function (child) {
@@ -54,13 +189,14 @@
           once: true,
           onEnter: function (batch) {
             gsap.fromTo(batch,
-              { y: 60, opacity: 0, scale: 0.95 },
-              { y: 0, opacity: 1, scale: 1, duration: 0.85, ease: 'power3.out', stagger: 0.09, overwrite: true, clearProps: 'transform' });
+              { y: 60, opacity: 0, scale: 0.95, filter: 'blur(6px)' },
+              { y: 0, opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out',
+                stagger: 0.08, overwrite: true, clearProps: 'transform,filter' });
           }
         });
       }
 
-      // single reveals (not inside a stagger group)
+      // 5. single generic reveals
       root.querySelectorAll('[data-hp-reveal]').forEach(function (el) {
         if (el.dataset.hpDone) return;
         el.dataset.hpDone = '1';
@@ -70,7 +206,7 @@
             scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
       });
 
-      // background parallax (hero video, story image, CTA image)
+      // 6. background parallax
       root.querySelectorAll('[data-hp-parallax]').forEach(function (el) {
         if (el.dataset.hpParDone) return;
         el.dataset.hpParDone = '1';
@@ -91,7 +227,7 @@
         child.style.setProperty('--hp-i', i);
       });
     });
-    var nodes = root.querySelectorAll('[data-hp-reveal]:not(.hp-inview)');
+    var nodes = root.querySelectorAll('[data-hp-reveal]:not(.hp-inview), [data-hp-fluid]:not(.hp-inview), [data-hp-split]:not(.hp-inview)');
     if (!nodes.length) return;
     if (reducedMotion || !('IntersectionObserver' in window)) {
       nodes.forEach(function (n) { n.classList.add('hp-inview'); });
@@ -108,9 +244,24 @@
     nodes.forEach(function (n) { io.observe(n); });
   }
 
-  /* ---- Sticky header shadow after 20px --------------------------------- */
-  function initHeaderShadow() {
+  /* ---- Sticky header: shadow + announcement offset --------------------- */
+  function initStickyChrome() {
     var wrapper = document.querySelector('.header-wrapper');
+    var announce = document.querySelector('.hp-announce');
+
+    function measure() {
+      var h = announce ? announce.offsetHeight : 0;
+      doc.style.setProperty('--hp-announce-h', h + 'px');
+      var header = wrapper ? wrapper.offsetHeight : 0;
+      doc.style.setProperty('--hp-header-h', (h + header) + 'px');
+      // Dawn uses --header-height for the menu drawer and sticky offsets; with
+      // its own sticky-header disabled we own this value now.
+      if (header) doc.style.setProperty('--header-height', header + 'px');
+    }
+    measure();
+    window.addEventListener('resize', measure, { passive: true });
+    if (window.ResizeObserver && announce) new ResizeObserver(measure).observe(announce);
+
     if (!wrapper) return;
     var update = function () {
       wrapper.classList.toggle('hp-scrolled', window.scrollY > 20);
@@ -180,7 +331,7 @@
     });
   }
 
-  /* ---- Full-height hero slider (copy rotation + dots/arrows) ------------ */
+  /* ---- Full-height hero slider ----------------------------------------- */
   var HpHero = (function () {
     function HpHero() { return Reflect.construct(HTMLElement, [], HpHero); }
     HpHero.prototype = Object.create(HTMLElement.prototype, { constructor: { value: HpHero } });
@@ -228,9 +379,9 @@
         }, { threshold: 0.15 }).observe(el);
       }
 
-      // hero background video: keep autoplay honest (it can be blocked)
       var vid = el.querySelector('.hp-hero__video video');
       if (vid) {
+        vid.muted = true;
         var p = vid.play();
         if (p && p.catch) p.catch(function () { el.classList.add('hp-hero--video-blocked'); });
       }
@@ -307,10 +458,144 @@
   })();
   if (!customElements.get('hp-rail')) customElements.define('hp-rail', HpRail);
 
+  /* ---- <hp-colour-shop> — Shop by Colour, actually functional -----------
+     Clicking a swatch fetches that colour's collection (filtered by tag when
+     one is set) through Shopify's own section-rendering API and cross-fades
+     the results in. No page reload, no fake links.
+  ---------------------------------------------------------------------- */
+  var HpColourShop = (function () {
+    function HpColourShop() { return Reflect.construct(HTMLElement, [], HpColourShop); }
+    HpColourShop.prototype = Object.create(HTMLElement.prototype, { constructor: { value: HpColourShop } });
+    Object.setPrototypeOf(HpColourShop, HTMLElement);
+
+    HpColourShop.prototype.connectedCallback = function () {
+      var el = this;
+      el.results = el.querySelector('[data-hp-colour-results]');
+      el.swatches = Array.prototype.slice.call(el.querySelectorAll('[data-hp-colour]'));
+      el.titleEl = el.querySelector('[data-hp-colour-title]');
+      el.linkEl = el.querySelector('[data-hp-colour-link]');
+      el.sectionId = el.getAttribute('data-section-id');
+      el.cache = {};
+      if (!el.results || !el.swatches.length) return;
+
+      el.swatches.forEach(function (btn) {
+        btn.addEventListener('click', function () { el.select(btn); });
+      });
+      // preselect the first swatch so the grid is never empty
+      el.select(el.swatches[0], true);
+    };
+
+    HpColourShop.prototype.select = function (btn, initial) {
+      var el = this;
+      el.swatches.forEach(function (b) {
+        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+        b.classList.toggle('is-active', b === btn);
+      });
+
+      var url = btn.getAttribute('data-hp-url');
+      var label = btn.getAttribute('data-hp-label') || '';
+      if (el.titleEl) el.titleEl.textContent = label;
+      if (el.linkEl && url) {
+        el.linkEl.href = url;
+        el.linkEl.hidden = false;
+      }
+      if (!url) return;
+
+      if (el.cache[url]) { el.paint(el.cache[url], initial); return; }
+
+      el.results.setAttribute('aria-busy', 'true');
+      el.classList.add('is-loading');
+
+      var fetchUrl = url + (url.indexOf('?') > -1 ? '&' : '?') + 'section_id=' + el.sectionId;
+      fetch(fetchUrl)
+        .then(function (r) { return r.text(); })
+        .then(function (html) {
+          var parsed = new DOMParser().parseFromString(html, 'text/html');
+          var fresh = parsed.querySelector('[data-hp-colour-results]');
+          var markup = fresh ? fresh.innerHTML : '';
+          el.cache[url] = markup;
+          el.paint(markup, initial);
+        })
+        .catch(function () {
+          el.classList.remove('is-loading');
+          el.results.removeAttribute('aria-busy');
+        });
+    };
+
+    HpColourShop.prototype.paint = function (markup, initial) {
+      var el = this;
+      var swap = function () {
+        el.results.innerHTML = markup;
+        el.classList.remove('is-loading');
+        el.results.removeAttribute('aria-busy');
+        initMotion(el.results);
+        if (hasGsap && !initial) {
+          window.gsap.fromTo(el.results.children,
+            { y: 24, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.05, clearProps: 'transform' });
+        }
+      };
+      if (reducedMotion || initial || !el.results.children.length) { swap(); return; }
+      el.results.style.transition = 'opacity .22s ease';
+      el.results.style.opacity = '0';
+      setTimeout(function () { swap(); el.results.style.opacity = '1'; }, 220);
+    };
+
+    return HpColourShop;
+  })();
+  if (!customElements.get('hp-colour-shop')) customElements.define('hp-colour-shop', HpColourShop);
+
+  /* ---- <hp-recommendations> --------------------------------------------
+     Shopify's native Product Recommendations API. It is powered by real
+     order/behaviour data for this shop, so the results are genuinely
+     relevant to the product in context — and it needs no API key, no
+     third-party call, and no secret in the theme.
+       intent=related        "you may also like"
+       intent=complementary  "goes well with" (curated in Search & Discovery)
+  ---------------------------------------------------------------------- */
+  var HpRecs = (function () {
+    function HpRecs() { return Reflect.construct(HTMLElement, [], HpRecs); }
+    HpRecs.prototype = Object.create(HTMLElement.prototype, { constructor: { value: HpRecs } });
+    Object.setPrototypeOf(HpRecs, HTMLElement);
+
+    HpRecs.prototype.connectedCallback = function () {
+      var el = this;
+      if (el.dataset.hpLoaded) return;
+      var url = el.getAttribute('data-url');
+      if (!url) return;
+
+      var run = function () {
+        el.dataset.hpLoaded = '1';
+        fetch(url)
+          .then(function (r) { return r.text(); })
+          .then(function (html) {
+            var parsed = new DOMParser().parseFromString(html, 'text/html');
+            var fresh = parsed.querySelector('hp-recommendations');
+            if (!fresh || !fresh.innerHTML.trim()) { el.hidden = true; return; }
+            el.innerHTML = fresh.innerHTML;
+            el.classList.add('is-loaded');
+            initMotion(el);
+            if (hasGsap) window.ScrollTrigger.refresh();
+          })
+          .catch(function () { el.hidden = true; });
+      };
+
+      // only fetch when it is about to matter
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          if (entries[0].isIntersecting) { io.disconnect(); run(); }
+        }, { rootMargin: '400px' });
+        io.observe(el);
+      } else { run(); }
+    };
+    return HpRecs;
+  })();
+  if (!customElements.get('hp-recommendations')) customElements.define('hp-recommendations', HpRecs);
+
   /* ---- boot ------------------------------------------------------------- */
   function boot() {
+    initStickyChrome();
     initMotion(document);
-    initHeaderShadow();
     initVideoTriggers(document);
   }
   if (document.readyState === 'loading') {
@@ -321,6 +606,9 @@
   document.addEventListener('shopify:section:load', function (e) {
     initMotion(e.target);
     initVideoTriggers(e.target);
+    initStickyChrome();
     if (hasGsap) window.ScrollTrigger.refresh();
   });
+  // cart drawer / quick-add inject markup without a section:load event
+  document.addEventListener('shopify:afterCartUpdate', function () { initMotion(document); });
 })();

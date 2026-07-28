@@ -11,12 +11,29 @@
     transform: translateZ(0);
   }
   .hp-cta__media img {
-    {% if section.settings.duotone %}filter: brightness(0.78) sepia(0.2) saturate(0.9);{% else %}filter: brightness(0.82);{% endif %}
+    {% if section.settings.duotone %}filter: brightness(0.6) sepia(0.18) saturate(0.85);{% else %}filter: brightness(0.68);{% endif %}
   }
+  /* Legibility: a deep teal wash on the copy side, easing off over the photo.
+     Strength is merchant-adjustable for future images. */
   .hp-cta__scrim {
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(18, 53, 54, 0.84), rgba(37, 117, 117, 0.42));
+    background: linear-gradient(
+      90deg,
+      rgba(12, 38, 39, {{ section.settings.scrim | divided_by: 100.0 }}) 0%,
+      rgba(18, 53, 54, {{ section.settings.scrim | times: 0.82 | divided_by: 100.0 }}) 45%,
+      rgba(37, 117, 117, {{ section.settings.scrim | times: 0.42 | divided_by: 100.0 }}) 100%
+    );
+  }
+  /* extra vertical wash on phones, where the copy overlays the whole frame */
+  @media screen and (max-width: 749px) {
+    .hp-cta__scrim {
+      background: linear-gradient(
+        180deg,
+        rgba(12, 38, 39, {{ section.settings.scrim | times: 0.7 | divided_by: 100.0 }}) 0%,
+        rgba(12, 38, 39, {{ section.settings.scrim | divided_by: 100.0 }}) 100%
+      );
+    }
   }
   .hp-cta__inner {
     position: relative;
@@ -29,15 +46,18 @@
     font-size: clamp(2.6rem, 4.4vw, 4.6rem);
     line-height: 1.06;
     margin: 1.2rem 0;
-    color: var(--hp-cream);
+    color: #fff9df;
+    text-shadow: 0 2px 20px rgba(12, 38, 39, 0.6);
   }
   .hp-cta__text {
     margin: 0 0 2.4rem;
     max-width: 44rem;
     font-size: 1.45rem;
     line-height: 1.8;
-    color: rgba(255, 249, 223, 0.9);
+    color: rgba(255, 249, 223, 0.94);
+    text-shadow: 0 1px 12px rgba(12, 38, 39, 0.6);
   }
+  .hp-cta .hp-eyebrow--light { text-shadow: 0 1px 10px rgba(12, 38, 39, 0.7); }
 {%- endstyle -%}
 
 <div class="hp-cta hp-section hp-section--flush-top">
@@ -84,6 +104,17 @@
   "settings": [
     { "type": "image_picker", "id": "image", "label": "Background image" },
     { "type": "checkbox", "id": "duotone", "label": "Sepia/duotone treatment", "default": true },
+    {
+      "type": "range",
+      "id": "scrim",
+      "min": 30,
+      "max": 95,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay strength",
+      "info": "Raise this if the heading is hard to read over the photo.",
+      "default": 82
+    },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Weave Collection" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Woven for the Everyday Feast" },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Hand-woven placemats and baskets that ground every table setting in warmth." },

@@ -14,18 +14,25 @@
     .hp-cats__grid { grid-template-columns: repeat({{ section.settings.columns }}, 1fr); }
   }
   .hp-cats__tile { aspect-ratio: 4 / 5; }
+  /* Legibility: the label sits on a deep, tall gradient so it reads over any
+     photo — light jute, pale ceramics or busy flatlays alike. */
   .hp-cats__tile::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: linear-gradient(180deg, rgba(18, 53, 54, 0) 40%, rgba(18, 53, 54, 0.78) 100%);
+    background: linear-gradient(
+      180deg,
+      rgba(18, 53, 54, 0) 30%,
+      rgba(18, 53, 54, 0.55) 62%,
+      rgba(12, 38, 39, 0.92) 100%
+    );
   }
   .hp-cats__tile-inner {
     position: absolute;
     z-index: 1;
     inset: auto 0 0 0;
-    padding: 1.4rem 1.6rem;
+    padding: 1.6rem 1.6rem 1.5rem;
     color: var(--hp-cream);
     display: flex;
     align-items: flex-end;
@@ -38,14 +45,18 @@
     font-weight: 600;
     font-size: clamp(1.9rem, 2vw, 2.3rem);
     line-height: 1.1;
+    color: #fff9df;
+    text-shadow: 0 2px 12px rgba(12, 38, 39, 0.75);
   }
   .hp-cats__count {
     margin: 0.4rem 0 0;
     font-family: var(--hp-font-ui);
     font-size: 1rem;
+    font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(255, 249, 223, 0.85);
+    color: rgba(255, 249, 223, 0.92);
+    text-shadow: 0 1px 8px rgba(12, 38, 39, 0.8);
   }
   .hp-cats__arrow {
     flex-shrink: 0;

@@ -8,7 +8,7 @@
         "logo_position": "top-center",
         "menu": "main-menu",
         "menu_type_desktop": "dropdown",
-        "sticky_header_type": "on-scroll-up",
+        "sticky_header_type": "none",
         "show_line_separator": false,
         "color_scheme": "scheme-1e4cf721-940b-43e2-85b1-b578f1e92a67",
         "menu_color_scheme": "scheme-2",
@@ -18,7 +18,11 @@
         "mobile_logo_position": "center",
         "margin_bottom": 0,
         "padding_top": 0,
-        "padding_bottom": 0
+        "padding_bottom": 0,
+        "hp_search_right": true,
+        "hp_band_enable": true,
+        "hp_band_color": "#257575",
+        "hp_band_text": "#fff9df"
       }
     },
     "17358360248ef50bda": {

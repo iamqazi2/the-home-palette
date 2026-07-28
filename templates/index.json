@@ -72,14 +72,14 @@
         "accessibility_info": "Slideshow about our brand",
         "height": "standard",
         "text_position": "left",
-        "overlay_strength": 65,
+        "overlay_strength": 70,
         "text_shade": true,
         "show_rating": true,
         "rating_score": "4.9",
         "rating_text": "1,000+ happy tables across Pakistan",
         "watch_label": "Watch Story",
         "watch_video_url": "",
-        "video_url": ""
+        "video_url": "https://cdn.shopify.com/videos/c/o/v/f2058e22370f489c8d4c2a6a7eaf5f77.mp4"
       }
     },
     "hp_trust": {
@@ -473,7 +473,8 @@
         "heading": "Woven for the Everyday Feast",
         "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
         "button_label": "Explore THP Weaves",
-        "link": "shopify://collections/thp-weave-collection"
+        "link": "shopify://collections/thp-weave-collection",
+        "scrim": 82
       }
     },
     "featured_collection_MAEfLD": {
@@ -546,48 +547,6 @@
     },
     "173573001120319a38": {
       "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "177926887221297785": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_cards_carousel_MPgHFa": {
-          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "show_sample_reviews": true,
-            "reviews_selection": "all",
-            "products": [],
-            "star_rating": "all",
-            "show_review_media": true,
-            "display_order": "media_first",
-            "no_image_fallback": "review_text_only",
-            "max_reviews": 20,
-            "review_length": "medium",
-            "text_size": "medium",
-            "image_ratio": "1",
-            "reviews_shown": 4,
-            "show_reviewer_name": true,
-            "show_product_name": true,
-            "hide_arrows_mobile": true,
-            "arrows_position": "sides",
-            "max_width": 1100,
-            "corner_styling": "soft",
-            "header_text_color": "#000000",
-            "text_color": "#000000",
-            "card_color": "#F9F9F9",
-            "stars_color": "",
-            "arrows_color": "#000000",
-            "transition_speed": 5,
-            "header_text": "Customers are saying",
-            "show_average_rating": true
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_cards_carousel_MPgHFa"
-      ],
       "settings": {
         "include_margins": true
       }
@@ -732,6 +691,40 @@
             "role": "Hotel F&B Manager",
             "stars": 5
           }
+        },
+        "rev_9": {
+          "type": "text",
+          "settings": {
+            "quote": "Ordered twice for our restaurant. The glaze survives a full service and still looks handmade.",
+            "name": "Imran S.",
+            "role": "Chef · Islamabad",
+            "stars": 5
+          }
+        },
+        "rev_10": {
+          "type": "text",
+          "settings": {
+            "quote": "Gifted a dinner set for my sister’s wedding — she called it the best gift of the day.",
+            "name": "Mahnoor A.",
+            "role": "Lahore",
+            "stars": 5
+          }
+        },
+        "rev_11": {
+          "type": "video",
+          "settings": {
+            "name": "Rabia N.",
+            "role": "Home Stylist · Faisalabad"
+          }
+        },
+        "rev_12": {
+          "type": "text",
+          "settings": {
+            "quote": "Delivery was quick and every piece arrived perfectly wrapped. Zero breakage.",
+            "name": "Danish K.",
+            "role": "Karachi",
+            "stars": 5
+          }
         }
       },
       "block_order": [
@@ -742,12 +735,16 @@
         "rev_5",
         "rev_6",
         "rev_7",
-        "rev_8"
+        "rev_8",
+        "rev_9",
+        "rev_10",
+        "rev_11",
+        "rev_12"
       ],
       "settings": {
         "eyebrow": "Real Tables · Real Reviews",
         "heading": "Loved Across Pakistan",
-        "text": "Watch and read what homes, hosts and restaurants say about setting their table with us.",
+        "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
         "speed": 5
       }
     }
@@ -767,7 +764,6 @@
     "featured_collection_MAEfLD",
     "hp_video_reviews",
     "hp_marquee",
-    "173573001120319a38",
-    "177926887221297785"
+    "173573001120319a38"
   ]
 }

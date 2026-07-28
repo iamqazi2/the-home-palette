@@ -45,6 +45,17 @@
 
   --hp-shadow-card: 0 30px 50px -30px rgba(18, 53, 54, 0.55);
   --hp-shadow-btn: 0 10px 24px -12px rgba(28, 91, 91, 0.7);
+
+  /* Single source of truth for section rhythm — tightened so bands sit close
+     together with no dead space, and much tighter again on phones. */
+  --hp-gap-y: 4.4rem;
+  --hp-gap-x: 1.6rem;
+}
+@media screen and (min-width: 750px) {
+  :root { --hp-gap-y: 6rem; --hp-gap-x: 3.2rem; }
+}
+@media screen and (min-width: 1200px) {
+  :root { --hp-gap-y: 7.2rem; --hp-gap-x: 5.6rem; }
 }
 
 ::selection { background: var(--hp-teal); color: var(--hp-cream); }
@@ -440,17 +451,16 @@ button.shopify-payment-button__button--unbranded {
    6. SHARED SECTION PRIMITIVES
    -------------------------------------------------------------------------- */
 
-.hp-section { padding: clamp(4.8rem, 7vw, 8rem) 0; }
+.hp-section { padding: var(--hp-gap-y) 0; }
 .hp-section--flush-top { padding-top: 0; }
+.hp-section--tight { padding: calc(var(--hp-gap-y) * 0.55) 0; }
 .hp-container {
   max-width: 144rem;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 var(--hp-gap-x);
 }
-@media screen and (min-width: 750px) { .hp-container { padding: 0 4rem; } }
-@media screen and (min-width: 1200px) { .hp-container { padding: 0 6.4rem; } }
 
-.hp-section-head { max-width: 68rem; margin-bottom: clamp(2.4rem, 4vw, 3.6rem); }
+.hp-section-head { max-width: 68rem; margin-bottom: clamp(2rem, 3.2vw, 3.2rem); }
 .hp-section-head--center { margin-left: auto; margin-right: auto; text-align: center; }
 .hp-section-head--center .hp-eyebrow::after {
   content: '';
@@ -703,3 +713,217 @@ html.hp-lenis, html.hp-lenis body { height: auto; }
   from { transform: scale(1.03); }
   to { transform: scale(1.13); }
 }
+
+/* ==========================================================================
+   11. FLUID TEXT REVEALS — the signature motion of the site.
+   Headings/paragraphs are split into words by JS; each word sits in an
+   overflow mask and rises with a slight blur + stagger, so copy "pours" in.
+   Everything degrades: no JS or reduced-motion = plain visible text.
+   ========================================================================== */
+
+/* mask + inner word (created by hp-theme.js) */
+.hp-w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.06em;   /* keeps descenders (g, y, p) from clipping */
+  margin-bottom: -0.06em;
+}
+.hp-w__i {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+html.hp-gsap .hp-split-ready .hp-w__i { opacity: 0; }
+
+/* line-mask variant for big display type */
+.hp-lines { display: block; }
+
+/* fluid image reveal: clip up + slow scale settle */
+html.hp-gsap [data-hp-clip] { clip-path: inset(0 0 100% 0); }
+@media (prefers-reduced-motion: reduce) {
+  html.hp-gsap [data-hp-clip] { clip-path: none !important; }
+  .hp-w__i { opacity: 1 !important; transform: none !important; filter: none !important; }
+}
+
+/* soft blur-in for non-split blocks (cards, media, chips) */
+html.hp-gsap [data-hp-fluid] { opacity: 0; }
+
+/* ==========================================================================
+   12. STICKY ANNOUNCEMENT + COMPACT HEADER
+   The promo marquee and the header travel together and stay pinned to the
+   top of every page. Heights are exposed as CSS vars so page content can
+   offset itself and anchor links land correctly.
+   ========================================================================== */
+
+.hp-sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+/* The header group renders as siblings of <body>, so each wrapper can pin at
+   its own offset: the promo marquee at 0, the nav bar right beneath it. */
+.hp-announce-section {
+  position: sticky;
+  top: 0;
+  z-index: 41;
+}
+.section-header {
+  position: sticky;
+  top: var(--hp-announce-h, 0px);
+  z-index: 40;
+}
+.section-header .header-wrapper { position: static; }
+/* Dawn's own sticky-header JS adds transforms that fight position:sticky —
+   neutralise them so the bar simply stays put. */
+sticky-header.animate,
+sticky-header.shopify-section-header-hidden,
+sticky-header.shopify-section-header-sticky {
+  transform: none !important;
+  transition: box-shadow 0.3s ease !important;
+}
+
+/* --- compact header (was far too tall) --- */
+.header {
+  padding-top: 0.6rem !important;
+  padding-bottom: 0.6rem !important;
+}
+@media screen and (min-width: 990px) {
+  .header { padding-top: 0.8rem !important; padding-bottom: 0.8rem !important; }
+}
+.header__heading-logo { max-height: 4.4rem; width: auto; }
+@media screen and (min-width: 990px) { .header__heading-logo { max-height: 5.2rem; } }
+.header__inline-menu { margin-top: 0; }
+.header--top-center .header__inline-menu { margin-top: 0.4rem; }
+.header__icon--cart .icon, .header__icon .icon { height: 2rem; width: 2rem; }
+.header__icon { height: 4rem; width: 4rem; }
+.header__submenu { border-radius: 12px; overflow: hidden; }
+/* second nav row sits tight under the logo row */
+.header__inline-menu .list-menu--inline { gap: 0.4rem; row-gap: 0; }
+
+/* icons LEFT, search RIGHT (client request) */
+.header--search-right .header__icons { grid-area: left-icons; justify-self: start; }
+.header--search-right .header__search { grid-area: icons; justify-self: end; }
+@media screen and (max-width: 989px) {
+  /* keep the burger first on mobile so the layout still reads naturally */
+  .header--search-right .header__icons { justify-self: start; }
+}
+
+/* ==========================================================================
+   13. EMPTY-SPACE CLEANUP — Dawn ships generous default padding on every
+   section; scale it down (hard) so bands butt up against each other.
+   ========================================================================== */
+
+.shopify-section { margin: 0; }
+.shopify-section-group-header-group + * { margin-top: 0; }
+main#MainContent { margin-top: 0; }
+main#MainContent > .shopify-section:first-child > * { margin-top: 0; }
+
+/* Dawn utility spacers that create dead air */
+.section + .section { margin-top: 0; }
+.page-width { padding-left: var(--hp-gap-x); padding-right: var(--hp-gap-x); }
+
+@media screen and (max-width: 749px) {
+  /* every Dawn section's generated padding gets pulled in on phones */
+  [class*='section-'][class*='-padding'] {
+    padding-top: clamp(2.4rem, 7vw, 3.6rem) !important;
+    padding-bottom: clamp(2.4rem, 7vw, 3.6rem) !important;
+  }
+  .hp-section { padding-top: var(--hp-gap-y); padding-bottom: var(--hp-gap-y); }
+  .collection .title-wrapper-with-link { margin-bottom: 1.6rem; }
+  .title-wrapper--no-top-margin { margin-top: 0; }
+  .collection__title--desktop-slider { padding-bottom: 0; }
+}
+
+/* collection/featured grids: tighter gutters, no orphan bottom space */
+.collection .slider--tablet.grid--peek, .collection .grid { margin-bottom: 0; }
+.collection__view-all { margin-top: 2rem; }
+
+/* ==========================================================================
+   14. SOLD OUT — make it unmistakable: desaturated image, cream veil,
+   and a proper pill badge instead of a whisper-thin label.
+   ========================================================================== */
+
+.card__badge .badge {
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  border-radius: 20px;
+  box-shadow: 0 6px 16px -8px rgba(18, 53, 54, 0.6);
+}
+/* sold-out badge overrides the teal sale badge */
+.card__badge .badge--sold-out,
+.badge.hp-badge--sold {
+  background-color: rgba(37, 37, 37, 0.88) !important;
+  color: var(--hp-cream) !important;
+}
+.hp-sold-out .card__media img,
+.hp-sold-out .card__inner img {
+  filter: grayscale(0.55) opacity(0.72);
+}
+.hp-sold-out .card__inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: rgba(255, 253, 244, 0.35);
+}
+.hp-sold-out .card-information .price { color: var(--hp-taupe-soft); }
+/* big diagonal "sold out" ribbon-free wordmark across the image */
+.hp-soldout-tag {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.7rem 1.8rem;
+  border-radius: var(--hp-r-pill);
+  background: rgba(37, 37, 37, 0.82);
+  color: var(--hp-cream);
+  font-family: var(--hp-font-ui);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+/* ==========================================================================
+   15. RATING HIGHLIGHT — a proper gold chip on cards and product pages
+   ========================================================================== */
+
+.hp-rating-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--hp-r-pill);
+  background: rgba(224, 164, 34, 0.12);
+  border: 1px solid rgba(224, 164, 34, 0.35);
+  color: var(--hp-ink);
+  font-family: var(--hp-font-ui);
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+.hp-rating-chip .hp-icon { color: var(--hp-gold); fill: var(--hp-gold); }
+.hp-rating-chip__score { font-weight: 700; }
+.hp-rating-chip__count { color: var(--hp-taupe); font-weight: 500; }
+.hp-rating-chip--float {
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 253, 244, 0.94);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px -10px rgba(18, 53, 54, 0.5);
+}
+.hp-rating-chip--lg { padding: 0.7rem 1.3rem; font-size: 1.3rem; }
+/* Dawn's inline rating row */
+.card-information .rating-wrapper { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; }
+.card-information .rating-count { font-size: 1.1rem; }
