@@ -843,39 +843,58 @@ sticky-header.shopify-section-header-sticky {
   .header__heading, .header__heading-link { grid-area: heading; justify-self: start; margin: 0; }
   .header__icons { grid-area: icons; justify-self: end; }
 }
-/* logo: big enough to actually read the wordmark */
-.header__heading-logo { max-height: 5.2rem; width: auto; height: auto; }
-@media screen and (min-width: 990px) { .header__heading-logo { max-height: 6.4rem; } }
+/* logo: the source is a 1:1 image containing an emblem, wordmark and tagline,
+   so it needs real height before any of that is legible. Both caps that were
+   shrinking it are gone: our max-height and Dawn's logo_width wrapper. */
+.header__heading-logo {
+  max-height: 7rem;
+  width: auto;
+  height: auto;
+  max-width: none;
+}
+@media screen and (min-width: 990px) { .header__heading-logo { max-height: 9rem; } }
 .header__heading-logo-wrapper {
   display: flex;
   align-items: center;
-  width: auto !important;   /* Dawn caps this to settings.logo_width */
-  max-width: none;
+  width: auto !important;
+  max-width: none !important;
 }
 .header__heading, .header__heading-link { padding: 0; margin: 0; }
 
 .header__inline-menu .list-menu--inline { gap: 0.2rem; row-gap: 0; }
 .header__menu-item { padding: 0.8rem 1.2rem; }
 
-/* every header icon renders at the same optical size — Dawn sizes the cart
-   icon from a different rule, which is why it looked smaller than the rest */
+/* Header icons.
+   The cart glyph is drawn on a 40x40 viewBox while search/account use 18x19,
+   so at an equal box size the cart renders roughly half the visual weight.
+   It gets a proportionally larger box so all three match optically. */
 .header__icon,
 .header__icon--cart,
 .header__icon--account,
 .header__icon--search {
-  height: 4rem;
-  width: 4rem;
+  height: 4.4rem;
+  width: 4.4rem;
   margin-right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+.header__icon .svg-wrapper,
 .header__icon .icon,
-.header__icon--cart .icon,
-.header__icon svg,
-.header__icon--cart svg {
-  height: 2.3rem;
-  width: 2.3rem;
+.header__icon svg {
+  width: 2.4rem;
+  height: 2.4rem;
 }
-.header__icons { padding-right: 0; gap: 0.4rem; }
-/* count bubble sits on the corner of the 4rem box, not over the icon */
+.header__icon--cart .svg-wrapper,
+.header__icon--cart .icon,
+.header__icon--cart svg {
+  width: 3.6rem;
+  height: 3.6rem;
+}
+.header__icon .svg-wrapper > svg { width: 100%; height: 100%; }
+.header__icons { padding-right: 0; gap: 0.4rem; align-items: center; }
+
+/* count bubble sits on the corner of the button, clear of the glyph */
 .header__icon--cart .cart-count-bubble {
   height: 1.8rem;
   width: 1.8rem;
@@ -883,13 +902,11 @@ sticky-header.shopify-section-header-sticky {
   font-size: 1rem;
   font-weight: 600;
   bottom: auto;
-  top: 0.2rem;
+  top: 0.1rem;
   left: auto;
-  right: 0.1rem;
+  right: 0;
   line-height: 1;
 }
-.header__submenu { border-radius: 14px; overflow: hidden; }
-.header__submenu .header__menu-item { padding: 0.9rem 1.6rem; }
 
 /* mobile: burger left, logo centre, icons right — keep it low */
 @media screen and (max-width: 989px) {
