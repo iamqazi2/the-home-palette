@@ -364,7 +364,7 @@
       <div class="hp-hero__content">
         <div class="hp-hero__inner">
           {%- if block.settings.kicker != blank -%}
-            <p class="hp-hero__kicker">{{ block.settings.kicker | escape }}</p>
+            <p class="hp-hero__kicker"{% if section.settings.typewriter %} data-hp-type="42"{% endif %}>{{ block.settings.kicker | escape }}</p>
           {%- endif -%}
           {%- if block.settings.heading != blank -%}
             <h2 class="hp-hero__heading">{{ block.settings.heading | escape }}</h2>
@@ -499,6 +499,7 @@
     },
     { "type": "color", "id": "overlay_color", "label": "Overlay colour", "default": "#123536" },
     { "type": "checkbox", "id": "grain", "label": "Film-grain texture", "info": "Fine vintage grain over the footage — adds depth and masks compression.", "default": true },
+    { "type": "checkbox", "id": "typewriter", "label": "Typewriter effect on the kicker", "default": true },
     { "type": "checkbox", "id": "show_cue", "label": "Show scroll cue", "default": true },
     {
       "type": "select",

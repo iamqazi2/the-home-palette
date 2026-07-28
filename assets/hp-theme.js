@@ -113,13 +113,80 @@
       el.dataset.hpSplit = '';
     });
 
-    // supporting copy → fluid fade
+    // supporting copy → blur emerge
     root.querySelectorAll('.hp-section-head__text, .rte > p, .hp-story__text, .hp-cta__text, .hp-eyebrow')
       .forEach(function (el) {
         if (el.closest(SKIP)) return;
         if (el.dataset.hpFluid !== undefined || el.dataset.hpReveal !== undefined) return;
         el.dataset.hpFluid = '';
       });
+
+    // every remaining section on every page gets a directional reveal, so the
+    // whole site scrolls with the same language — not just the custom sections
+    var scope = root.querySelectorAll ? root : document;
+    (scope.querySelectorAll('main .shopify-section') || []).forEach(function (sec) {
+      if (sec.closest(SKIP)) return;
+      if (sec.dataset.hpSection !== undefined || sec.dataset.hpDone) return;
+      // skip sections that already animate their own contents
+      if (sec.querySelector('[data-hp-reveal], [data-hp-stagger], [data-hp-split], [data-hp-fluid]')) return;
+      sec.dataset.hpSection = '';
+    });
+  }
+
+  /* ---- Direction helper -------------------------------------------------
+     Sections reveal *from* the side they sit on: a left-hand column slides in
+     from the left, a right-hand one from the right, full-width bands rise.
+  ---------------------------------------------------------------------- */
+  function autoDirection(el) {
+    var explicit = el.getAttribute('data-hp-dir');
+    if (explicit) return explicit;
+
+    var host = el.closest('.shopify-section, section') || document.body;
+    var hostBox = host.getBoundingClientRect();
+    var box = el.getBoundingClientRect();
+    if (!hostBox.width || !box.width) return 'up';
+
+    // full-width-ish content just rises
+    if (box.width > hostBox.width * 0.72) return 'up';
+
+    var centre = (box.left + box.width / 2 - hostBox.left) / hostBox.width;
+    if (centre < 0.4) return 'left';
+    if (centre > 0.6) return 'right';
+    return 'up';
+  }
+
+  function fromVars(dir, dist) {
+    dist = dist || 56;
+    switch (dir) {
+      case 'left':  return { x: -dist, y: 0 };
+      case 'right': return { x: dist, y: 0 };
+      case 'down':  return { x: 0, y: -dist };   // enters from above
+      default:      return { x: 0, y: dist };    // 'up' — enters from below
+    }
+  }
+
+  /* ---- Typewriter --------------------------------------------------------
+     Reveals characters in sequence behind a blinking caret. Used sparingly —
+     opt in with data-hp-type.
+  ---------------------------------------------------------------------- */
+  function typewriter(el) {
+    if (el.dataset.hpTypeDone) return;
+    el.dataset.hpTypeDone = '1';
+    var full = el.textContent;
+    if (!full.trim() || full.length > 90) return;
+
+    el.textContent = '';
+    el.classList.add('hp-typing');
+    var i = 0;
+    var speed = parseInt(el.getAttribute('data-hp-type'), 10) || 38;
+    (function tick() {
+      el.textContent = full.slice(0, i);
+      if (i++ <= full.length) {
+        window.setTimeout(tick, speed);
+      } else {
+        el.classList.remove('hp-typing');
+      }
+    })();
   }
 
   /* ---- Reveals + stacking cards + parallax ----------------------------- */
@@ -131,42 +198,56 @@
       var gsap = window.gsap;
       var ST = window.ScrollTrigger;
 
-      // 1. word-split headings — the signature "fluid" reveal
+      // 1. word-split headings — CASCADE DROP + BLUR EMERGE
       root.querySelectorAll('[data-hp-split]').forEach(function (el) {
         if (el.dataset.hpDone) return;
         el.dataset.hpDone = '1';
         var words = splitWords(el);
         if (!words.length) {
-          gsap.fromTo(el, { y: 30, opacity: 0 }, {
-            y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+          var f = fromVars(autoDirection(el), 40);
+          gsap.fromTo(el, { x: f.x, y: f.y, opacity: 0, filter: 'blur(10px)' }, {
+            x: 0, y: 0, opacity: 1, filter: 'blur(0px)', duration: 1, ease: 'power3.out',
+            clearProps: 'filter,transform',
             scrollTrigger: { trigger: el, start: 'top 88%', once: true }
           });
           return;
         }
+        // words fall from above, each blurring into focus — the cascade
         gsap.fromTo(words,
-          { yPercent: 115, opacity: 0, filter: 'blur(6px)' },
+          { yPercent: -110, opacity: 0, filter: 'blur(12px)' },
           {
             yPercent: 0, opacity: 1, filter: 'blur(0px)',
-            duration: 1.1, ease: 'power4.out', stagger: 0.045,
+            duration: 1.05, ease: 'power4.out', stagger: 0.055,
             clearProps: 'filter',
             scrollTrigger: { trigger: el, start: 'top 88%', once: true }
           });
       });
 
-      // 2. fluid copy/media — blur + rise
+      // 2. typewriter (opt-in)
+      root.querySelectorAll('[data-hp-type]').forEach(function (el) {
+        if (el.dataset.hpDone) return;
+        el.dataset.hpDone = '1';
+        ST.create({
+          trigger: el, start: 'top 88%', once: true,
+          onEnter: function () { typewriter(el); }
+        });
+      });
+
+      // 3. fluid copy/media — BLUR EMERGE, direction-aware
       root.querySelectorAll('[data-hp-fluid]').forEach(function (el) {
         if (el.dataset.hpDone) return;
         el.dataset.hpDone = '1';
+        var f = fromVars(autoDirection(el), 34);
         gsap.fromTo(el,
-          { y: 26, opacity: 0, filter: 'blur(8px)' },
+          { x: f.x, y: f.y, opacity: 0, filter: 'blur(12px)' },
           {
-            y: 0, opacity: 1, filter: 'blur(0px)',
-            duration: 1, ease: 'power3.out', clearProps: 'filter,transform',
+            x: 0, y: 0, opacity: 1, filter: 'blur(0px)',
+            duration: 1.05, ease: 'power3.out', clearProps: 'filter,transform',
             scrollTrigger: { trigger: el, start: 'top 90%', once: true }
           });
       });
 
-      // 3. clip-path image wipes
+      // 4. clip-path image wipes
       root.querySelectorAll('[data-hp-clip]').forEach(function (el) {
         if (el.dataset.hpDone) return;
         el.dataset.hpDone = '1';
@@ -179,7 +260,7 @@
         }
       });
 
-      // 4. stagger groups: children rise + scale in a batch
+      // 5. stagger groups — cards cascade in, blurring into place
       var staggerChildren = [];
       root.querySelectorAll('[data-hp-stagger]').forEach(function (parent) {
         Array.prototype.forEach.call(parent.children, function (child) {
@@ -195,24 +276,37 @@
           once: true,
           onEnter: function (batch) {
             gsap.fromTo(batch,
-              { y: 60, opacity: 0, scale: 0.95, filter: 'blur(6px)' },
-              { y: 0, opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out',
-                stagger: 0.08, overwrite: true, clearProps: 'transform,filter' });
+              { y: 64, opacity: 0, scale: 0.95, filter: 'blur(10px)' },
+              { y: 0, opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.95, ease: 'power3.out',
+                stagger: 0.075, overwrite: true, clearProps: 'transform,filter' });
           }
         });
       }
 
-      // 5. single generic reveals
+      // 6. generic reveals — direction-aware
       root.querySelectorAll('[data-hp-reveal]').forEach(function (el) {
         if (el.dataset.hpDone) return;
         el.dataset.hpDone = '1';
+        var f = fromVars(autoDirection(el));
         gsap.fromTo(el,
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', clearProps: 'transform',
+          { x: f.x, y: f.y, opacity: 0, filter: 'blur(8px)' },
+          { x: 0, y: 0, opacity: 1, filter: 'blur(0px)', duration: 1, ease: 'power3.out',
+            clearProps: 'transform,filter',
             scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
       });
 
-      // 6. background parallax
+      // 7. whole-section reveal for anything not otherwise animated
+      root.querySelectorAll('[data-hp-section]').forEach(function (el) {
+        if (el.dataset.hpDone) return;
+        el.dataset.hpDone = '1';
+        var f = fromVars(autoDirection(el), 48);
+        gsap.fromTo(el,
+          { x: f.x, y: f.y, opacity: 0 },
+          { x: 0, y: 0, opacity: 1, duration: 1.05, ease: 'power3.out', clearProps: 'transform',
+            scrollTrigger: { trigger: el, start: 'top 92%', once: true } });
+      });
+
+      // 8. background parallax
       root.querySelectorAll('[data-hp-parallax]').forEach(function (el) {
         if (el.dataset.hpParDone) return;
         el.dataset.hpParDone = '1';
@@ -233,7 +327,9 @@
         child.style.setProperty('--hp-i', i);
       });
     });
-    var nodes = root.querySelectorAll('[data-hp-reveal]:not(.hp-inview), [data-hp-fluid]:not(.hp-inview), [data-hp-split]:not(.hp-inview)');
+    var sel = '[data-hp-reveal]:not(.hp-inview), [data-hp-fluid]:not(.hp-inview), ' +
+              '[data-hp-split]:not(.hp-inview), [data-hp-section]:not(.hp-inview)';
+    var nodes = root.querySelectorAll(sel);
     if (!nodes.length) return;
     if (reducedMotion || !('IntersectionObserver' in window)) {
       nodes.forEach(function (n) { n.classList.add('hp-inview'); });

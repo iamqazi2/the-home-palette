@@ -82,7 +82,8 @@
         "video_url": "https://cdn.shopify.com/videos/c/o/v/f2058e22370f489c8d4c2a6a7eaf5f77.mp4",
         "grain": true,
         "show_cue": true,
-        "focal": "center"
+        "focal": "center",
+        "typewriter": true
       }
     },
     "hp_trust": {

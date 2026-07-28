@@ -747,6 +747,33 @@ html.hp-gsap [data-hp-clip] { clip-path: inset(0 0 100% 0); }
 
 /* soft blur-in for non-split blocks (cards, media, chips) */
 html.hp-gsap [data-hp-fluid] { opacity: 0; }
+/* blanket per-section reveal (applied to every page by autoTag) */
+html.hp-gsap [data-hp-section] { opacity: 0; }
+
+/* typewriter — characters appear behind a blinking caret */
+.hp-typing::after {
+  content: '';
+  display: inline-block;
+  width: 0.06em;
+  height: 1em;
+  margin-left: 0.06em;
+  background: currentColor;
+  vertical-align: -0.1em;
+  animation: hp-caret 0.75s steps(2) infinite;
+}
+@keyframes hp-caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .hp-typing::after { animation: none; opacity: 0; } }
+
+/* vanilla fallback for the section reveal */
+html.hp-js:not(.hp-gsap) [data-hp-section] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity var(--hp-dur) var(--hp-ease), transform var(--hp-dur) var(--hp-ease);
+}
+html.hp-js:not(.hp-gsap) [data-hp-section].hp-inview { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html.hp-js [data-hp-section] { opacity: 1 !important; transform: none !important; }
+}
 
 /* ==========================================================================
    12. STICKY ANNOUNCEMENT + COMPACT HEADER
@@ -1295,3 +1322,278 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
 /* keep horizontal scrollers from causing page-level overflow */
 html, body { overflow-x: clip; }
 @supports not (overflow: clip) { html, body { overflow-x: hidden; } }
+
+/* ==========================================================================
+   24. QUICK-ADD MODAL — matched to the brand system
+   ========================================================================== */
+
+.quick-add-modal__content {
+  border-radius: 22px !important;
+  background: var(--hp-cream-soft) !important;
+  border: 1px solid var(--hp-hairline);
+  box-shadow: 0 50px 90px -40px rgba(8, 26, 27, 0.6);
+  overflow: hidden;
+  max-width: 108rem;
+}
+.quick-add-modal__content-info { padding: 0; }
+.quick-add-modal .product__media-wrapper,
+.quick-add-modal .product__info-wrapper { padding: 0; }
+.quick-add-modal .product { gap: 0; }
+.quick-add-modal .product__media-wrapper .media,
+.quick-add-modal .product__media-item .media { border-radius: 16px; }
+.quick-add-modal .product__info-container { padding: clamp(2rem, 3vw, 3.2rem); }
+.quick-add-modal .product__title h1,
+.quick-add-modal .product__title .h1 { font-size: clamp(2.4rem, 3.2vw, 3.4rem); }
+.quick-add-modal__toggle {
+  background: var(--hp-cream) !important;
+  border: 1px solid var(--hp-hairline);
+  color: var(--hp-ink) !important;
+  border-radius: 50%;
+  width: 4.2rem;
+  height: 4.2rem;
+  transition: background 0.3s ease, transform 0.3s var(--hp-ease);
+}
+.quick-add-modal__toggle:hover { background: var(--hp-teal) !important; color: var(--hp-cream) !important; transform: rotate(90deg); }
+/* variant pills + buy row inside the modal */
+.quick-add-modal .product-form__input input[type='radio'] + label,
+.product-form__input input[type='radio'] + label {
+  border-radius: var(--hp-r-pill);
+  border: 1.5px solid var(--hp-hairline-strong);
+  font-family: var(--hp-font-ui);
+  font-size: 1.2rem;
+  letter-spacing: 0.04em;
+  padding: 0.9rem 1.8rem;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.product-form__input input[type='radio']:checked + label {
+  background: var(--hp-teal);
+  border-color: var(--hp-teal);
+  color: var(--hp-cream);
+}
+.product-form__input input[type='radio']:disabled + label,
+.product-form__input input[type='radio'].disabled + label { opacity: 0.45; }
+.quick-add-modal .product-form__submit,
+.quick-add-modal .shopify-payment-button__button--unbranded {
+  border-radius: var(--hp-r-pill) !important;
+}
+.quick-add-modal .shopify-payment-button__button--unbranded {
+  background: var(--hp-teal-ink) !important;
+  color: var(--hp-cream) !important;
+}
+.quick-add-modal .product__view-details {
+  font-family: var(--hp-font-ui);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  color: var(--hp-teal);
+}
+/* Judge.me's inline star row inside the modal — keep one, ours */
+.quick-add-modal .jdgm-widget.jdgm-preview-badge { display: none; }
+
+/* ==========================================================================
+   25. CART DRAWER — cream sheet, teal accents, roomy rows
+   ========================================================================== */
+
+.cart-drawer { --hp-drawer-pad: clamp(1.6rem, 3vw, 2.4rem); }
+.cart-drawer__inner {
+  background: var(--hp-cream-soft) !important;
+  border-radius: 22px 0 0 22px;
+  box-shadow: -30px 0 70px -40px rgba(8, 26, 27, 0.6);
+}
+.cart-drawer__heading, .cart-drawer .drawer__heading {
+  font-family: var(--hp-font-display) !important;
+  font-weight: 600 !important;
+  font-size: clamp(2.4rem, 3.4vw, 3rem) !important;
+}
+.cart-drawer__header { padding-bottom: 1.2rem; border-bottom: 1px solid var(--hp-hairline-teal); }
+.cart-drawer .drawer__close {
+  background: var(--hp-cream);
+  border: 1px solid var(--hp-hairline);
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  color: var(--hp-ink);
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s var(--hp-ease);
+}
+.cart-drawer .drawer__close:hover { background: var(--hp-teal); color: var(--hp-cream); transform: rotate(90deg); }
+
+.cart-drawer .cart-item {
+  padding: 1.4rem;
+  border-radius: 16px;
+  background: var(--hp-paper);
+  border: 1px solid var(--hp-hairline);
+  margin-bottom: 1rem;
+}
+.cart-drawer .cart-item__image { border-radius: 12px; }
+.cart-drawer .cart-item__name {
+  font-family: var(--hp-font-ui);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--hp-ink);
+  text-decoration: none;
+}
+.cart-drawer .cart-item__price-wrapper .price,
+.cart-drawer .cart-item__totals .price {
+  font-family: var(--hp-font-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--hp-teal);
+}
+.cart-drawer .quantity {
+  border-radius: var(--hp-r-pill);
+  border: 1px solid var(--hp-hairline-strong);
+  overflow: hidden;
+  min-height: 4rem;
+}
+.cart-drawer .quantity__button { color: var(--hp-teal); }
+.cart-drawer cart-remove-button .button { color: var(--hp-taupe); }
+.cart-drawer cart-remove-button .button:hover { color: var(--hp-ink); }
+
+.cart-drawer__footer {
+  border-top: 1px solid var(--hp-hairline-teal) !important;
+  padding-top: 1.6rem;
+}
+.cart-drawer .totals { align-items: baseline; }
+.cart-drawer .totals__subtotal, .cart-drawer .totals__total {
+  font-family: var(--hp-font-ui);
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--hp-taupe);
+}
+.cart-drawer .totals__subtotal-value, .cart-drawer .totals__total-value {
+  font-family: var(--hp-font-display) !important;
+  font-size: 2.6rem !important;
+  font-weight: 600;
+  color: var(--hp-teal) !important;
+}
+.cart-drawer .cart__checkout-button {
+  border-radius: var(--hp-r-pill) !important;
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+  padding: 1.5rem 2rem;
+  font-size: 1.25rem;
+}
+.cart-drawer .cart__checkout-button:hover { background: var(--hp-teal-deep) !important; }
+.cart-drawer .tax-note { font-size: 1.15rem; color: var(--hp-taupe); }
+.cart-drawer .cart-drawer__collection .button,
+.cart-drawer__empty-content .button { border-radius: var(--hp-r-pill) !important; }
+.cart-drawer summary, .cart-drawer .cart__note-label {
+  font-family: var(--hp-font-ui);
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+  color: var(--hp-ink);
+}
+.cart-drawer__overlay { backdrop-filter: blur(4px); background: rgba(8, 26, 27, 0.35); }
+
+/* ==========================================================================
+   26. PRODUCT PAGE — a proper editorial layout
+   ========================================================================== */
+
+.product {
+  gap: clamp(2.4rem, 5vw, 6rem);
+  align-items: flex-start;
+}
+@media screen and (min-width: 990px) {
+  /* sticky buy column so the CTA stays reachable through a long gallery */
+  .product--large .product__info-wrapper,
+  .product--medium .product__info-wrapper {
+    position: sticky;
+    top: calc(var(--hp-header-h, 10rem) + 2rem);
+    align-self: start;
+  }
+}
+.product__info-container {
+  background: var(--hp-paper);
+  border: 1px solid var(--hp-hairline);
+  border-radius: 22px;
+  padding: clamp(2rem, 3vw, 3.2rem);
+}
+.product__info-container > * + * { margin-top: 1.6rem; }
+.product__media-list .product__media-item { margin-bottom: 1.2rem; }
+.product__media-wrapper .media img { border-radius: var(--hp-r-card); }
+.product__media-gallery .thumbnail-list { gap: 0.8rem; margin-top: 1rem; }
+.product__media-gallery .thumbnail { border-radius: 12px; overflow: hidden; }
+.product__media-gallery .thumbnail[aria-current] { box-shadow: 0 0 0 2px var(--hp-teal); }
+.product__media-toggle:focus-visible { outline: 2px solid var(--hp-teal); }
+
+/* buy row */
+.product-form__buttons { display: grid; gap: 1rem; }
+.product-form__submit {
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+  border: none !important;
+  font-size: 1.25rem;
+  padding: 1.6rem 2rem;
+}
+.product-form__submit:hover:not([disabled]) { background: var(--hp-teal-deep) !important; }
+.shopify-payment-button__button--unbranded {
+  background: var(--hp-teal-ink) !important;
+  color: var(--hp-cream) !important;
+  border: none !important;
+  padding: 1.6rem 2rem !important;
+  font-family: var(--hp-font-ui);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.shopify-payment-button__button--unbranded:hover { background: #0c2627 !important; }
+.product__tax, .product .product__tax a { font-size: 1.2rem; color: var(--hp-taupe); }
+
+/* description + accordions */
+.product__description {
+  font-size: 1.5rem;
+  line-height: 1.85;
+  color: var(--hp-ink);
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--hp-hairline);
+}
+.product__description ul { padding-left: 1.6rem; }
+.product__description li { margin-bottom: 0.6rem; }
+.product__description h3, .product__description h4 {
+  font-family: var(--hp-font-display) !important;
+  font-size: 2rem !important;
+  margin-top: 2rem;
+}
+.product .quantity {
+  border: 1px solid var(--hp-hairline-strong);
+  border-radius: var(--hp-r-pill);
+  overflow: hidden;
+  min-height: 4.6rem;
+  width: 14rem;
+}
+.product .quantity__button { color: var(--hp-teal); }
+.product .quantity__input { font-family: var(--hp-font-ui); font-weight: 600; }
+.product__info-container .share-button__button {
+  font-family: var(--hp-font-ui);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  color: var(--hp-teal);
+}
+
+/* reviews block on the PDP */
+.product .jdgm-widget, #judgeme_product_reviews {
+  border-top: 1px solid var(--hp-hairline-teal);
+  padding-top: clamp(2.4rem, 4vw, 4rem);
+  margin-top: clamp(2.4rem, 4vw, 4rem);
+}
+.jdgm-rev-widg__title, .jdgm-rev-widg__summary-average {
+  font-family: var(--hp-font-display) !important;
+}
+/* Judge.me stars → brand gold */
+.jdgm-star { color: var(--hp-gold) !important; }
+.jdgm-widget .jdgm-rev-widg__header { border: none; }
+.jdgm-write-rev-link, .jdgm-rev-widg__sort-wrapper select {
+  border-radius: var(--hp-r-pill) !important;
+  font-family: var(--hp-font-ui) !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 1.1rem !important;
+}
+.jdgm-write-rev-link { background: var(--hp-teal) !important; color: var(--hp-cream) !important; border: none !important; }
+
+@media screen and (max-width: 989px) {
+  .product__info-container { border-radius: 18px; padding: 1.8rem; }
+  .product__media-list { margin-bottom: 1.2rem; }
+}
