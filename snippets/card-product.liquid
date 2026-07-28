@@ -517,10 +517,13 @@
             </div>
           {% endif %}
         {% endif %}
-        {%- comment -%} THP: unmistakable sold-out state over the image {%- endcomment -%}
-        {%- if card_product.available == false -%}
-          <span class="hp-soldout-tag" aria-hidden="true">{{ 'products.product.sold_out' | t }}</span>
-        {%- endif -%}
+        {%- comment -%}
+          THP: sold-out state. Previously this also stamped a centred wordmark
+          over the image, which on narrow mobile cards visually collided with
+          this corner badge (two "SOLD OUT" labels stacked on top of each
+          other). The corner badge + desaturated image + disabled button below
+          are unambiguous on their own, so the stamp is gone.
+        {%- endcomment -%}
         <div class="card__badge {{ settings.badge_position }}">
           {%- if card_product.available == false -%}
             <span

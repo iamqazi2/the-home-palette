@@ -28,9 +28,13 @@
     justify-content: flex-start;
     overflow-x: auto;
     scrollbar-width: none;
-    padding: 0.6rem 0.2rem 1.4rem;
+    /* Setting overflow-x here makes the browser auto-compute overflow-y as
+       clipping too (CSS Overflow spec), so the swatch's hover/active lift
+       (translateY + scale) and its glow were being cut off at the row's own
+       top edge. Generous top padding keeps that transform fully in view. */
+    padding: 2rem 0.2rem 1.4rem;
     scroll-snap-type: x proximity;
-    margin: 0 calc(var(--hp-gap-x) * -1);
+    margin: -1.4rem calc(var(--hp-gap-x) * -1) 0;
     padding-left: var(--hp-gap-x);
     padding-right: var(--hp-gap-x);
   }
