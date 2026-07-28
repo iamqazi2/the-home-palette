@@ -75,7 +75,7 @@
         </button>
       </div>
       {%- comment -%} THP: everything above the fixed footer scrolls together {%- endcomment -%}
-      <div class="hp-drawer-scroll">
+      <div class="hp-drawer-scroll" data-lenis-prevent>
       <cart-drawer-items
         {% if cart == empty %}
           class=" is-empty"

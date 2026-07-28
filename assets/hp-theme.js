@@ -40,6 +40,43 @@
   }
   window.hpLenis = function () { return lenis; };
 
+  /* ---- Overlay scroll lock ---------------------------------------------
+     Lenis drives the page with its own virtual scroll, so `overflow: hidden`
+     on <body> does not stop it — a wheel over an open drawer or modal would
+     keep scrolling the page behind. Dawn adds `.overflow-hidden` to <body>
+     whenever it opens the cart drawer, menu drawer or a modal, so we mirror
+     that: pause Lenis while any overlay is open, resume when it closes.
+     Nested scrollers are additionally marked `data-lenis-prevent`, which tells
+     Lenis to leave wheel/touch events inside them alone.
+  ---------------------------------------------------------------------- */
+  function initOverlayScrollLock() {
+    if (!lenis) return;
+    var body = document.body;
+    var locked = false;
+
+    var sync = function () {
+      var open = body.classList.contains('overflow-hidden') ||
+        body.classList.contains('overflow-hidden-mobile') ||
+        body.classList.contains('overflow-hidden-tablet');
+      if (open === locked) return;
+      locked = open;
+      if (open) { lenis.stop(); } else { lenis.start(); }
+    };
+
+    new MutationObserver(sync).observe(body, { attributes: true, attributeFilter: ['class'] });
+    sync();
+  }
+
+  /* Mark every in-app scroll container so Lenis never steals its wheel. */
+  function markScrollContainers(root) {
+    (root || document).querySelectorAll(
+      '.hp-drawer-scroll, .cart-drawer .drawer__inner, .menu-drawer__inner, ' +
+      '.quick-add-modal__content, .product-popup-modal__content, .hp-lightbox'
+    ).forEach(function (el) {
+      if (!el.hasAttribute('data-lenis-prevent')) el.setAttribute('data-lenis-prevent', '');
+    });
+  }
+
   /* ---- Word splitter ---------------------------------------------------
      Walks text nodes only, so inline markup (<em>, <a>, <br>) survives.
      Each word becomes <span class="hp-w"><span class="hp-w__i">word</span></span>
@@ -921,6 +958,8 @@
 
   /* ---- boot ------------------------------------------------------------- */
   function boot() {
+    initOverlayScrollLock();
+    markScrollContainers(document);
     initStickyChrome();
     initMotion(document);
     initVideoTriggers(document);
@@ -935,6 +974,7 @@
     initMotion(e.target);
     initVideoTriggers(e.target);
     initReviewPager(e.target);
+    markScrollContainers(e.target);
     initStickyChrome();
     if (hasGsap) window.ScrollTrigger.refresh();
   });
