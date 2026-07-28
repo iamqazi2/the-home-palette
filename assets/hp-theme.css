@@ -821,14 +821,14 @@ sticky-header.shopify-section-header-sticky {
 
 /* --- compact single-row header: logo left · nav centre · icons right --- */
 .header {
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
+  padding-top: 0.4rem !important;
+  padding-bottom: 0.4rem !important;
   column-gap: 2rem;
 }
 @media screen and (min-width: 990px) {
   .header {
-    padding-top: 0.6rem !important;
-    padding-bottom: 0.6rem !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
     grid-template-areas: 'heading navigation icons' !important;
     grid-template-columns: auto 1fr auto !important;
     align-items: center;
@@ -843,14 +843,51 @@ sticky-header.shopify-section-header-sticky {
   .header__heading, .header__heading-link { grid-area: heading; justify-self: start; margin: 0; }
   .header__icons { grid-area: icons; justify-self: end; }
 }
-.header__heading-logo { max-height: 3.6rem; width: auto; }
-@media screen and (min-width: 990px) { .header__heading-logo { max-height: 4.4rem; } }
-.header__heading-logo-wrapper { display: flex; align-items: center; }
+/* logo: big enough to actually read the wordmark */
+.header__heading-logo { max-height: 5.2rem; width: auto; height: auto; }
+@media screen and (min-width: 990px) { .header__heading-logo { max-height: 6.4rem; } }
+.header__heading-logo-wrapper {
+  display: flex;
+  align-items: center;
+  width: auto !important;   /* Dawn caps this to settings.logo_width */
+  max-width: none;
+}
+.header__heading, .header__heading-link { padding: 0; margin: 0; }
+
 .header__inline-menu .list-menu--inline { gap: 0.2rem; row-gap: 0; }
 .header__menu-item { padding: 0.8rem 1.2rem; }
-.header__icon, .header__icon--cart { height: 3.6rem; width: 3.6rem; }
-.header__icon .icon { height: 1.9rem; width: 1.9rem; }
-.header__icons { padding-right: 0; gap: 0.2rem; }
+
+/* every header icon renders at the same optical size — Dawn sizes the cart
+   icon from a different rule, which is why it looked smaller than the rest */
+.header__icon,
+.header__icon--cart,
+.header__icon--account,
+.header__icon--search {
+  height: 4rem;
+  width: 4rem;
+  margin-right: 0;
+}
+.header__icon .icon,
+.header__icon--cart .icon,
+.header__icon svg,
+.header__icon--cart svg {
+  height: 2.3rem;
+  width: 2.3rem;
+}
+.header__icons { padding-right: 0; gap: 0.4rem; }
+/* count bubble sits on the corner of the 4rem box, not over the icon */
+.header__icon--cart .cart-count-bubble {
+  height: 1.8rem;
+  width: 1.8rem;
+  min-width: 1.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  bottom: auto;
+  top: 0.2rem;
+  left: auto;
+  right: 0.1rem;
+  line-height: 1;
+}
 .header__submenu { border-radius: 14px; overflow: hidden; }
 .header__submenu .header__menu-item { padding: 0.9rem 1.6rem; }
 
