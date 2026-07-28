@@ -757,30 +757,126 @@
   })();
   if (!customElements.get('hp-drawer-recs')) customElements.define('hp-drawer-recs', HpDrawerRecs);
 
-  /* ---- Reviews: client-side pagination -----------------------------------
-     The review app renders every review in one list; this pages that list at N
-     per page with its own controls. Async-safe: it waits for the app to paint.
+  /* ---- Reviews: brand styling + pagination -------------------------------
+     The review app may render either into the page (light DOM) or inside a
+     Shadow DOM, depending on which widget version the shop is on. Theme CSS
+     cannot cross a shadow boundary, so we walk any open shadow roots, inject
+     the brand styles there, and run pagination inside whichever root actually
+     holds the reviews. Everything is defensive — if the app renders nothing we
+     recognise, we leave it completely alone.
   ---------------------------------------------------------------------- */
+  function hpReviewCss(starColor) {
+    var gold = starColor || '#e0a422';
+    return [
+      /* the block already supplies a heading */
+      '.jdgm-rev-widg__title{display:none!important}',
+      /* type */
+      '.jdgm-rev-widg,.jdgm-rev__body,.jdgm-rev__body p,.jdgm-rev__author,.jdgm-rev__timestamp{',
+      "font-family:'Archivo',system-ui,sans-serif!important;color:#252525}",
+      '.jdgm-rev__body,.jdgm-rev__body p{font-size:15px!important;line-height:1.8!important}',
+      ".jdgm-rev__title{font-family:'Cormorant Garamond',Georgia,serif!important;font-weight:600!important;",
+      'font-size:20px!important;color:#252525!important;display:block;margin-bottom:4px}',
+      /* stars */
+      '.jdgm-star{color:' + gold + '!important}',
+      '.jdgm-star.jdgm--on,.jdgm-star.jdgm--half{color:' + gold + '!important}',
+      '.jdgm-star.jdgm--off{color:' + gold + '4d!important}',
+      /* summary */
+      '.jdgm-rev-widg__header{border:1px solid rgba(37,37,37,.09);border-radius:16px;',
+      'background:#fff9df;padding:16px 18px;margin-bottom:16px}',
+      ".jdgm-rev-widg__summary-average{font-family:'Cormorant Garamond',Georgia,serif!important;",
+      'font-size:26px!important;color:#257575!important}',
+      /* cards */
+      '.jdgm-rev{border:1px solid rgba(37,37,37,.09)!important;border-radius:16px;background:#fff;',
+      'padding:18px!important;margin-bottom:12px!important}',
+      /* avatar */
+      '.jdgm-rev__icon{background:#257575!important;color:#fff9df!important;',
+      "font-family:'Cormorant Garamond',Georgia,serif!important;font-weight:600;font-size:16px!important;",
+      'width:36px!important;height:36px!important;line-height:36px!important;border-radius:50%!important;text-align:center}',
+      /* author + verified badge */
+      '.jdgm-rev__author{font-weight:600!important;font-size:14px!important;color:#252525!important}',
+      '.jdgm-rev__buyer-badge{display:inline-flex!important;align-items:center;gap:3px;',
+      'background:rgba(37,117,117,.1)!important;color:#257575!important;',
+      'border:1px solid rgba(37,117,117,.3)!important;border-radius:40px!important;',
+      'padding:2px 9px!important;font-size:10px!important;font-weight:600!important;',
+      'letter-spacing:.06em;text-transform:uppercase;opacity:1!important}',
+      '.jdgm-rev__timestamp{color:#716a56!important;font-size:11px!important}',
+      '.jdgm-rev__prod-link,.jdgm-rev__prod-info-wrapper{background:#fffdf4!important;',
+      'border:1px solid rgba(37,37,37,.09);border-radius:12px;padding:8px!important;font-size:11px!important}',
+      '.jdgm-rev__prod-link a,.jdgm-rev__replier{color:#257575!important}',
+      '.jdgm-rev__pics img,.jdgm-rev-widg__pics img{border-radius:10px!important}',
+      /* write a review + controls */
+      '.jdgm-write-rev-link{background:#257575!important;color:#fff9df!important;',
+      'border:1.5px solid #257575!important;border-radius:40px!important;',
+      "font-family:'Archivo',system-ui,sans-serif!important;font-size:11px!important;font-weight:600!important;",
+      'letter-spacing:.12em;text-transform:uppercase;padding:10px 18px!important}',
+      '.jdgm-write-rev-link:hover{background:#1c5b5b!important;border-color:#1c5b5b!important}',
+      '.jdgm-rev-widg__sort-wrapper select,.jdgm-sort-dropdown{border-radius:40px!important;',
+      'border:1px solid rgba(37,37,37,.3)!important;color:#252525!important}',
+      /* our pager */
+      '.hp-revpager{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}',
+      '.hp-revpager__btn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;',
+      'border-radius:50%;border:1.5px solid #257575;background:transparent;color:#257575;cursor:pointer}',
+      '.hp-revpager__btn:hover:not(:disabled){background:#257575;color:#fff9df}',
+      '.hp-revpager__btn:disabled{opacity:.3;cursor:default}',
+      ".hp-revpager__label{font-family:'Archivo',system-ui,sans-serif;font-size:11px;",
+      'letter-spacing:.1em;text-transform:uppercase;color:#716a56}'
+    ].join('');
+  }
+
+  // collect a node plus every open shadow root beneath it
+  function collectRoots(node, out, depth) {
+    out = out || [];
+    depth = depth || 0;
+    if (!node || depth > 6) return out;
+    out.push(node);
+    var all = node.querySelectorAll ? node.querySelectorAll('*') : [];
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].shadowRoot) collectRoots(all[i].shadowRoot, out, depth + 1);
+    }
+    return out;
+  }
+
   function initReviewPager(root) {
     (root || document).querySelectorAll('[data-hp-reviews-pager]').forEach(function (box) {
       if (box.dataset.hpPagerWired) return;
 
       var perPage = parseInt(box.getAttribute('data-hp-reviews-pager'), 10) || 2;
+      var star = box.getAttribute('data-hp-star') || '#e0a422';
       var tries = 0;
 
       (function wait() {
-        var items = Array.prototype.slice.call(box.querySelectorAll('.jdgm-rev'));
+        // look in the block and in any shadow roots it contains
+        var roots = collectRoots(box, []);
+        var host = null;
+        var items = [];
+        for (var i = 0; i < roots.length; i++) {
+          var found = roots[i].querySelectorAll('.jdgm-rev, [data-review-id]');
+          if (found.length) { host = roots[i]; items = Array.prototype.slice.call(found); break; }
+        }
+
+        // style every root we can reach, even before reviews resolve
+        roots.forEach(function (r) {
+          if (r.__hpStyled) return;
+          r.__hpStyled = true;
+          // document-level styles already come from the section stylesheet
+          if (r === document || r.nodeType === 1) return;
+          try {
+            var st = document.createElement('style');
+            st.textContent = hpReviewCss(star);
+            r.appendChild(st);
+          } catch (e) {}
+        });
+
         if (!items.length) {
           if (tries++ < 40) return window.setTimeout(wait, 250);
-          return;
+          return;   // app rendered something we do not recognise — leave it alone
         }
         box.dataset.hpPagerWired = '1';
-
-        // let the app's own paginator go — we drive it now
-        box.querySelectorAll('.jdgm-paginate, .jdgm-rev-widg__paginate').forEach(function (n) {
-          n.style.display = 'none';
-        });
         if (items.length <= perPage) return;
+
+        // silence the app's own paginator
+        (host.querySelectorAll ? host.querySelectorAll('.jdgm-paginate, .jdgm-rev-widg__paginate') : [])
+          .forEach(function (n) { n.style.display = 'none'; });
 
         var pages = Math.ceil(items.length / perPage);
         var page = 0;
@@ -795,7 +891,8 @@
           '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
 
         var list = items[0].parentNode;
-        (list || box).parentNode.insertBefore(nav, (list || box).nextSibling);
+        if (list && list.parentNode) list.parentNode.insertBefore(nav, list.nextSibling);
+        else box.appendChild(nav);
 
         var prev = nav.querySelector('[data-prev]');
         var next = nav.querySelector('[data-next]');
@@ -803,8 +900,7 @@
 
         function render(scroll) {
           items.forEach(function (el, i) {
-            var on = i >= page * perPage && i < (page + 1) * perPage;
-            el.style.display = on ? '' : 'none';
+            el.style.display = (i >= page * perPage && i < (page + 1) * perPage) ? '' : 'none';
           });
           label.textContent = 'Page ' + (page + 1) + ' of ' + pages;
           prev.disabled = page === 0;

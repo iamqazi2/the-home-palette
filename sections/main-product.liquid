@@ -1174,8 +1174,15 @@
                   class="hp-pdp-block hp-reviews"
                   id="hp-reviews"
                   {% if section.settings.hp_reviews_per_page > 0 %}data-hp-reviews-pager="{{ section.settings.hp_reviews_per_page }}"{% endif %}
+                  data-hp-star="{{ section.settings.hp_star_color | default: '#e0a422' }}"
                 >
-                  <h2 class="hp-pdp-block__title">{{ section.settings.hp_reviews_title | default: 'Customer Reviews' }}</h2>
+                  {%- comment -%}
+                    The review app renders its own "Customer Reviews" title, so
+                    only add ours when the merchant deliberately sets one.
+                  {%- endcomment -%}
+                  {%- if section.settings.hp_reviews_title != blank -%}
+                    <h2 class="hp-pdp-block__title">{{ section.settings.hp_reviews_title }}</h2>
+                  {%- endif -%}
                   {% render block %}
                 </div>
           {%- endif -%}
@@ -2626,7 +2633,7 @@
     { "type": "checkbox", "id": "hp_show_excerpt", "label": "Show a short excerpt in the sidebar", "default": true },
     { "type": "range", "id": "hp_excerpt_words", "min": 20, "max": 90, "step": 5, "label": "Excerpt length (words)", "default": 45 },
     { "type": "checkbox", "id": "hp_show_meta", "label": "Show SKU & categories", "default": true },
-    { "type": "text", "id": "hp_reviews_title", "label": "Reviews heading", "default": "Customer Reviews" },
+    { "type": "text", "id": "hp_reviews_title", "label": "Reviews heading", "info": "Leave empty — the review app already prints its own title." },
     { "type": "range", "id": "hp_reviews_per_page", "min": 0, "max": 10, "step": 1, "label": "Reviews per page", "info": "0 shows them all with the app's own paging.", "default": 2 },
     { "type": "color", "id": "hp_star_color", "label": "Review star colour", "default": "#e0a422" },
     { "type": "checkbox", "id": "hp_sidebar_recs", "label": "Show 'You might also like' in the sidebar", "default": true },
