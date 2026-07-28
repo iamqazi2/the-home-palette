@@ -843,68 +843,79 @@ sticky-header.shopify-section-header-sticky {
   .header__heading, .header__heading-link { grid-area: heading; justify-self: start; margin: 0; }
   .header__icons { grid-area: icons; justify-self: end; }
 }
-/* logo: the source is a 1:1 image containing an emblem, wordmark and tagline,
-   so it needs real height before any of that is legible. Both caps that were
-   shrinking it are gone: our max-height and Dawn's logo_width wrapper. */
+/* logo: fixed 120x120 as requested, at every breakpoint. The wrapper's forced
+   width and Dawn's logo_width cap are both released so this is the only thing
+   controlling the rendered size. */
 .header__heading-logo {
-  max-height: 7rem;
-  width: auto;
-  height: auto;
+  height: 12rem;
+  width: 12rem;
+  max-height: none;
   max-width: none;
+  object-fit: contain;
 }
-@media screen and (min-width: 990px) { .header__heading-logo { max-height: 9rem; } }
 .header__heading-logo-wrapper {
   display: flex;
   align-items: center;
   width: auto !important;
   max-width: none !important;
+  height: 12rem;
 }
-.header__heading, .header__heading-link { padding: 0; margin: 0; }
+.header__heading, .header__heading-link { padding: 0; margin: 0; display: flex; align-items: center; }
 
 .header__inline-menu .list-menu--inline { gap: 0.2rem; row-gap: 0; }
 .header__menu-item { padding: 0.8rem 1.2rem; }
 
-/* Header icons.
-   The cart glyph is drawn on a 40x40 viewBox while search/account use 18x19,
-   so at an equal box size the cart renders roughly half the visual weight.
-   It gets a proportionally larger box so all three match optically. */
+/* Header icons: cart, account and search must render as one visual family.
+   Two separate Dawn quirks were fighting this —
+   1) the cart glyph is drawn on a 40x40 viewBox while search/account use
+      18x19, so at an identical box the cart looks noticeably smaller;
+   2) the search icon is a <summary> element, which Dawn's own centering rule
+      explicitly excludes (`.header__icon:not(.header__icon--summary)`), so it
+      was never vertically centered the same way as the other two.
+   Both are corrected below. */
 .header__icon,
 .header__icon--cart,
 .header__icon--account,
 .header__icon--search {
-  height: 4.4rem;
-  width: 4.4rem;
+  height: 4.8rem;
+  width: 4.8rem;
   margin-right: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0;
 }
 .header__icon .svg-wrapper,
 .header__icon .icon,
 .header__icon svg {
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.6rem;
+  height: 2.6rem;
+  display: block;
 }
 .header__icon--cart .svg-wrapper,
 .header__icon--cart .icon,
 .header__icon--cart svg {
-  width: 3.6rem;
-  height: 3.6rem;
+  width: 4.2rem;
+  height: 4.2rem;
 }
 .header__icon .svg-wrapper > svg { width: 100%; height: 100%; }
-.header__icons { padding-right: 0; gap: 0.4rem; align-items: center; }
+.header__icons { padding-right: 0; gap: 0.2rem; align-items: center; }
+/* the search <summary> gets a default marker/triangle in some browsers */
+.header__icon--summary { list-style: none; }
+.header__icon--summary::-webkit-details-marker { display: none; }
+.header__icon--summary::marker { content: ''; }
 
 /* count bubble sits on the corner of the button, clear of the glyph */
 .header__icon--cart .cart-count-bubble {
-  height: 1.8rem;
-  width: 1.8rem;
-  min-width: 1.8rem;
+  height: 1.9rem;
+  width: 1.9rem;
+  min-width: 1.9rem;
   font-size: 1rem;
   font-weight: 600;
   bottom: auto;
-  top: 0.1rem;
+  top: 0;
   left: auto;
-  right: 0;
+  right: -0.2rem;
   line-height: 1;
 }
 
