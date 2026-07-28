@@ -104,6 +104,28 @@
                       {{ product.title | escape }}
                     </h2>
                   </a>
+                  {%- comment -%} THP: highlighted rating chip, jumps to the reviews widget {%- endcomment -%}
+                  <div class="hp-product-rating">
+                    {% render 'hp-rating', product: product, size: 'lg', link: '#judgeme_product_reviews' %}
+                    {%- if product.available == false -%}
+                      <span class="hp-stock-pill hp-stock-pill--out">
+                        {% render 'hp-icon', icon: 'x-circle', size: 14 %}
+                        {{ 'products.product.sold_out' | t }}
+                      </span>
+                    {%- elsif product.selected_or_first_available_variant.inventory_management != blank
+                      and product.selected_or_first_available_variant.inventory_quantity > 0
+                      and product.selected_or_first_available_variant.inventory_quantity <= 5 -%}
+                      <span class="hp-stock-pill hp-stock-pill--low">
+                        {% render 'hp-icon', icon: 'flame', size: 14 %}
+                        Only {{ product.selected_or_first_available_variant.inventory_quantity }} left
+                      </span>
+                    {%- else -%}
+                      <span class="hp-stock-pill hp-stock-pill--in">
+                        {% render 'hp-icon', icon: 'check', size: 14 %}
+                        In stock
+                      </span>
+                    {%- endif -%}
+                  </div>
                 </div>
               {%- when 'price' -%}
                 <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>

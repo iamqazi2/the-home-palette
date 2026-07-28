@@ -1,0 +1,39 @@
+{% comment %}
+  THP — recommendations renderer.
+
+  This section exists purely to be fetched by the Section Rendering API:
+    /recommendations/products?section_id=<this>&product_id=<id>&intent=related
+
+  Shopify populates `recommendations` on that request; on a normal page load the
+  section renders nothing, so it adds no weight. `snippets/hp-recommendations`
+  renders the visible placeholder and pulls this grid into it.
+{% endcomment %}
+
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+  <div class="hp-recs__grid" data-hp-recs-source role="list">
+    {%- for rec in recommendations.products -%}
+      <div role="listitem" data-hp-reveal>
+        {% render 'card-product',
+          card_product: rec,
+          media_aspect_ratio: 'portrait',
+          show_secondary_image: true,
+          show_rating: true,
+          section_id: section.id
+        %}
+      </div>
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "THP Recs Loader",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Invisible helper. It renders the recommendation cards that the product, cart and cart-drawer bands load in. Keep it in the template; it outputs nothing on a normal page view."
+    }
+  ]
+}
+{% endschema %}

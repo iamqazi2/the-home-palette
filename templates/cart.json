@@ -1,1 +1,59 @@
-{"sections":{"main-cart-items":{"type":"main-cart-items","settings":{"color_scheme":"scheme-2","padding_top":0,"padding_bottom":0}},"main-cart-footer":{"type":"main-cart-footer","blocks":{"subtotal":{"type":"subtotal","settings":{}},"buttons":{"type":"buttons","settings":{}}},"block_order":["subtotal","buttons"],"settings":{"color_scheme":"scheme-1","padding_top":20,"padding_bottom":40}},"17472397444e598508":{"type":"apps","settings":{"include_margins":true}},"featured_collection_AYjUhx":{"type":"featured-collection","name":"t:sections.featured-collection.presets.name","settings":{"title":"Match them up..","heading_size":"h2","description":"","show_description":false,"description_style":"body","collection":"tea-coffee-essentials","products_to_show":25,"columns_desktop":4,"full_width":false,"show_view_all":true,"view_all_style":"solid","enable_desktop_slider":false,"color_scheme":"","image_ratio":"adapt","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":true,"quick_add":"standard","columns_mobile":"2","swipe_on_mobile":false,"padding_top":36,"padding_bottom":36}}},"order":["main-cart-items","main-cart-footer","17472397444e598508","featured_collection_AYjUhx"]}
+{
+  "sections": {
+    "main-cart-items": {
+      "type": "main-cart-items",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "main-cart-footer": {
+      "type": "main-cart-footer",
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "subtotal",
+        "buttons"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 40
+      }
+    },
+    "17472397444e598508": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "hp_recs": {
+      "type": "hp-recommendations",
+      "settings": {}
+    },
+    "hp_cart_recs": {
+      "type": "hp-cart-recommendations",
+      "settings": {
+        "heading": "Complete your table",
+        "limit": 4,
+        "loader_section": "hp_recs"
+      }
+    }
+  },
+  "order": [
+    "main-cart-items",
+    "main-cart-footer",
+    "17472397444e598508",
+    "hp_cart_recs",
+    "hp_recs"
+  ]
+}

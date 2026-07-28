@@ -475,6 +475,26 @@
           </details>
         {%- endif -%}
 
+        {%- comment -%}
+          THP — suggestions based on the most recently added item, pulled from
+          Shopify's own recommendations data. The drawer opens on every page, so
+          this uses the JSON endpoint rather than a section render.
+        {%- endcomment -%}
+        {%- assign last_item = cart.items | last -%}
+        {%- if last_item != blank -%}
+          <hp-drawer-recs
+            class="hp-recs hp-recs--drawer"
+            data-product-id="{{ last_item.product_id }}"
+            data-limit="4"
+            hidden
+          >
+            <div class="hp-recs__head">
+              <h2 class="hp-recs__title">Goes well with</h2>
+            </div>
+            <div class="hp-drec-grid" data-hp-recs-grid></div>
+          </hp-drawer-recs>
+        {%- endif -%}
+
         <!-- Start blocks -->
         <!-- Subtotals -->
 

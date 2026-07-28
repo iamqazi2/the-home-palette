@@ -927,3 +927,155 @@ main#MainContent > .shopify-section:first-child > * { margin-top: 0; }
 /* Dawn's inline rating row */
 .card-information .rating-wrapper { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; }
 .card-information .rating-count { font-size: 1.1rem; }
+
+/* ==========================================================================
+   16. PRODUCT PAGE — rating + stock pills, teal price, roomier gallery
+   ========================================================================== */
+
+.hp-product-rating {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+.hp-product-rating .hp-rating-chip { text-decoration: none; }
+.hp-stock-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  border-radius: var(--hp-r-pill);
+  font-family: var(--hp-font-ui);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.hp-stock-pill--in { background: rgba(37, 117, 117, 0.1); color: var(--hp-teal); border: 1px solid rgba(37, 117, 117, 0.28); }
+.hp-stock-pill--low { background: rgba(224, 164, 34, 0.14); color: #8a6410; border: 1px solid rgba(224, 164, 34, 0.4); }
+.hp-stock-pill--out { background: rgba(37, 37, 37, 0.08); color: var(--hp-ink); border: 1px solid rgba(37, 37, 37, 0.2); }
+
+.product__title h1, .product__title .h1 { font-size: clamp(2.8rem, 4vw, 4.2rem); }
+.product .price, .product__info-container .price {
+  font-family: var(--hp-font-display);
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: var(--hp-teal);
+}
+.product .price--on-sale .price-item--regular {
+  font-family: var(--hp-font-ui);
+  font-size: 1.5rem;
+  color: var(--hp-taupe-soft);
+}
+.product__media-wrapper .media,
+.product__media-item .media { border-radius: var(--hp-r-card); overflow: hidden; }
+.product-form__submit, .shopify-payment-button__button--unbranded {
+  border-radius: var(--hp-r-pill) !important;
+  padding: 1.5rem 2rem;
+}
+.product-form__input .form__label { font-family: var(--hp-font-ui); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; font-size: 1.1rem; }
+.product-form__input input[type='radio'] + label { border-radius: var(--hp-r-pill); }
+.product__accordion .accordion__title { font-family: var(--hp-font-display); font-size: 1.9rem; }
+.product .quantity { border-radius: var(--hp-r-pill); overflow: hidden; }
+.product__info-wrapper { padding-left: clamp(0rem, 4vw, 5rem); }
+
+/* sold-out product page: mute the buy area so the state is obvious */
+.product-form__submit[disabled],
+.product-form__submit.disabled {
+  background: rgba(37, 37, 37, 0.12) !important;
+  color: rgba(37, 37, 37, 0.55) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* ==========================================================================
+   17. RECOMMENDATIONS — shared band used on PDP, cart page and cart drawer
+   ========================================================================== */
+
+.hp-recs { padding-top: var(--hp-gap-y); }
+.hp-recs__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-top: 1.8rem;
+  border-top: 1px solid var(--hp-hairline-teal);
+}
+.hp-recs__title {
+  margin: 0;
+  font-family: var(--hp-font-display);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 3.2vw, 3.2rem);
+}
+.hp-recs__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+@media screen and (min-width: 750px) {
+  .hp-recs__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.8rem; }
+  .hp-recs__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+hp-recommendations:not(.is-loaded) { display: block; min-height: 0; }
+
+/* compact variant used inside the cart drawer */
+.hp-recs--drawer { padding-top: 1.6rem; }
+.hp-recs--drawer .hp-recs__head { margin-bottom: 1.2rem; padding-top: 1.4rem; }
+.hp-recs--drawer .hp-recs__title { font-size: 1.9rem; }
+.hp-recs--drawer .hp-recs__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.hp-recs--drawer .card__heading { font-size: 1.15rem !important; }
+.hp-recs--drawer .card-information .price { font-size: 1.5rem; }
+.hp-recs--drawer .quick-add { display: none; }
+
+/* ==========================================================================
+   18. CART — rounded cards, teal totals, roomy rows
+   ========================================================================== */
+
+.cart-item { border-radius: var(--hp-r-card); }
+.cart-item__image { border-radius: 12px; }
+.cart__footer .totals__total-value { font-family: var(--hp-font-display); font-size: 2.6rem; color: var(--hp-teal); }
+.cart__checkout-button { border-radius: var(--hp-r-pill) !important; }
+.cart__blocks .cart__dynamic-checkout-buttons { margin-top: 1rem; }
+.cart-drawer__inner { background: var(--hp-cream-soft); }
+.cart-drawer__footer { border-top: 1px solid var(--hp-hairline-teal); }
+.cart-drawer .totals__total-value { font-family: var(--hp-font-display); color: var(--hp-teal); }
+.cart-count-bubble { font-family: var(--hp-font-ui); font-weight: 600; }
+.cart__empty-text, .cart-drawer__empty-content .cart__empty-text {
+  font-family: var(--hp-font-display);
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+}
+
+/* compact recommendation cards rendered by <hp-drawer-recs> */
+.hp-drec-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.hp-drec {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--hp-ink);
+}
+.hp-drec__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--hp-linen);
+  border: 1px solid var(--hp-hairline);
+}
+.hp-drec__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--hp-ease); }
+.hp-drec:hover .hp-drec__media img { transform: scale(1.06); }
+.hp-drec__title {
+  font-family: var(--hp-font-ui);
+  font-size: 1.15rem;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.hp-drec__price { font-family: var(--hp-font-display); font-size: 1.6rem; font-weight: 600; color: var(--hp-teal); }

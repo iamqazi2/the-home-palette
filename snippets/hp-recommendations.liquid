@@ -1,0 +1,51 @@
+{% comment %}
+  THP — product recommendations band (placeholder + loader).
+
+  Uses Shopify's native Product Recommendations, generated from this shop's own
+  order and browsing data — and, for `complementary`, the manual pairings set in
+  the Search & Discovery app. That makes suggestions genuinely relevant to the
+  product in context, server-side, with no third-party API and no key in the
+  theme (a theme is public source, so any key placed here would be readable).
+
+  The heading is rendered here; only the card grid is fetched and injected, so
+  every call site can title its own band.
+
+  Render it with the params below; see hp-complete-the-set.liquid and
+  hp-cart-recommendations.liquid for working call sites.
+
+  Params:
+    product      (required) product to base suggestions on
+    recs_section (required) id of the `hp-recommendations` section in this template
+    intent       'related' (default) | 'complementary'
+    heading      band title
+    limit        how many to show (default 4)
+    columns      grid columns at desktop (default 4)
+{% endcomment %}
+
+{%- liquid
+  assign rec_intent = intent | default: 'related'
+  assign rec_limit = limit | default: 4
+  assign rec_heading = heading
+  if rec_heading == blank
+    if rec_intent == 'complementary'
+      assign rec_heading = 'Completes the set'
+    else
+      assign rec_heading = 'You may also like'
+    endif
+  endif
+  assign rec_url = routes.product_recommendations_url | append: '?section_id=' | append: recs_section | append: '&product_id=' | append: product.id | append: '&limit=' | append: rec_limit | append: '&intent=' | append: rec_intent
+-%}
+
+{%- if product != blank and recs_section != blank -%}
+  <hp-recommendations class="hp-recs" data-url="{{ rec_url }}" hidden>
+    <div class="hp-recs__head">
+      <h2 class="hp-recs__title">{{ rec_heading }}</h2>
+    </div>
+    <div
+      class="hp-recs__grid{% if columns == 3 %} hp-recs__grid--3{% endif %}"
+      data-hp-recs-grid
+      data-hp-stagger
+      role="list"
+    ></div>
+  </hp-recommendations>
+{%- endif -%}

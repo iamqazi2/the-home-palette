@@ -1,0 +1,62 @@
+{% comment %}
+  THP — "Completes the set" on the product page.
+
+  Uses Shopify's *complementary* recommendations: pairings curated in the free
+  Search & Discovery app, falling back to related products when no pairing has
+  been set. So a dinner set suggests serveware, not another dinner set.
+{% endcomment %}
+
+<div class="hp-section hp-section--tight hp-section--flush-top">
+  <div class="hp-container">
+    {% render 'hp-recommendations',
+      product: product,
+      recs_section: section.settings.loader_section,
+      intent: section.settings.intent,
+      heading: section.settings.heading,
+      limit: section.settings.limit,
+      columns: section.settings.limit
+    %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP Completes the Set",
+  "tag": "section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Suggestions come from Shopify's own recommendation data. Curate exact pairings in the free Search & Discovery app → Product recommendations."
+    },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Completes the set" },
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "Recommendation type",
+      "options": [
+        { "value": "complementary", "label": "Complementary (goes well with)" },
+        { "value": "related", "label": "Related (similar products)" }
+      ],
+      "default": "complementary"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Products to show",
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "loader_section",
+      "label": "Loader section id",
+      "info": "Must match the id of the 'THP Recommendations (loader)' section in this template.",
+      "default": "hp_recs"
+    }
+  ],
+  "presets": [{ "name": "THP Completes the Set" }]
+}
+{% endschema %}

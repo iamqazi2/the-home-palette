@@ -375,7 +375,8 @@
         "heading": "Shop by Occasion",
         "text": "From quiet weekday meals to grand celebrations — set the table for the moment.",
         "show_count": true,
-        "count_label": "varieties"
+        "count_label": "varieties",
+        "cta_label": "Shop now"
       }
     },
     "featured_collection_AnTVtq": {
@@ -560,7 +561,7 @@
             "title": "Sea Green",
             "swatch": "#3f7269",
             "collection": "aesthetic-bowls",
-            "link": ""
+            "tag": ""
           }
         },
         "colour_2": {
@@ -569,7 +570,7 @@
             "title": "Cloud Grey",
             "swatch": "#b8bdba",
             "collection": "tea-coffee-essentials",
-            "link": ""
+            "tag": ""
           }
         },
         "colour_3": {
@@ -578,7 +579,7 @@
             "title": "Cobalt",
             "swatch": "#2b4a76",
             "collection": "dinner-breakfast-sets",
-            "link": ""
+            "tag": ""
           }
         },
         "colour_4": {
@@ -587,7 +588,7 @@
             "title": "Terracotta",
             "swatch": "#b06a4a",
             "collection": "thp-woodworks",
-            "link": ""
+            "tag": ""
           }
         },
         "colour_5": {
@@ -596,7 +597,7 @@
             "title": "Ivory",
             "swatch": "#f2ead8",
             "collection": "plates",
-            "link": ""
+            "tag": ""
           }
         },
         "colour_6": {
@@ -605,7 +606,7 @@
             "title": "Charcoal",
             "swatch": "#3a3a38",
             "collection": "serveware",
-            "link": ""
+            "tag": ""
           }
         }
       },
@@ -620,9 +621,12 @@
       "settings": {
         "eyebrow": "The Palette",
         "heading": "Shop by Colour",
-        "text": "Pick a glaze — every colour has its own table story.",
+        "text": "Pick a glaze — the collection below updates instantly.",
         "show_count": true,
-        "count_label": "varieties"
+        "count_label": "varieties",
+        "products_to_show": 4,
+        "default_index": 1,
+        "view_all_label": "View all"
       }
     },
     "hp_video_reviews": {

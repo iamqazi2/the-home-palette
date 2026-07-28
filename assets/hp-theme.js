@@ -562,7 +562,8 @@
       var el = this;
       if (el.dataset.hpLoaded) return;
       var url = el.getAttribute('data-url');
-      if (!url) return;
+      var target = el.querySelector('[data-hp-recs-grid]');
+      if (!url || !target) return;
 
       var run = function () {
         el.dataset.hpLoaded = '1';
@@ -570,27 +571,85 @@
           .then(function (r) { return r.text(); })
           .then(function (html) {
             var parsed = new DOMParser().parseFromString(html, 'text/html');
-            var fresh = parsed.querySelector('hp-recommendations');
-            if (!fresh || !fresh.innerHTML.trim()) { el.hidden = true; return; }
-            el.innerHTML = fresh.innerHTML;
+            var grid = parsed.querySelector('[data-hp-recs-source]');
+            if (!grid || !grid.children.length) { el.remove(); return; }
+            target.innerHTML = grid.innerHTML;
+            el.hidden = false;
             el.classList.add('is-loaded');
             initMotion(el);
             if (hasGsap) window.ScrollTrigger.refresh();
           })
-          .catch(function () { el.hidden = true; });
+          .catch(function () { el.remove(); });
       };
 
       // only fetch when it is about to matter
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(function (entries) {
           if (entries[0].isIntersecting) { io.disconnect(); run(); }
-        }, { rootMargin: '400px' });
+        }, { rootMargin: '600px' });
         io.observe(el);
       } else { run(); }
     };
     return HpRecs;
   })();
   if (!customElements.get('hp-recommendations')) customElements.define('hp-recommendations', HpRecs);
+
+  /* ---- <hp-drawer-recs> -------------------------------------------------
+     The cart drawer opens on every page, where no recommendations *section*
+     is guaranteed to exist — so it uses the JSON recommendations endpoint and
+     renders compact cards itself. Re-runs whenever the cart changes so the
+     suggestions follow whatever was added last.
+  ---------------------------------------------------------------------- */
+  var HpDrawerRecs = (function () {
+    function HpDrawerRecs() { return Reflect.construct(HTMLElement, [], HpDrawerRecs); }
+    HpDrawerRecs.prototype = Object.create(HTMLElement.prototype, { constructor: { value: HpDrawerRecs } });
+    Object.setPrototypeOf(HpDrawerRecs, HTMLElement);
+
+    function money(cents) {
+      var fmt = (window.Shopify && window.Shopify.currency && window.Shopify.currency.active) || 'PKR';
+      try {
+        return new Intl.NumberFormat(undefined, {
+          style: 'currency', currency: fmt, maximumFractionDigits: 0
+        }).format(cents / 100);
+      } catch (e) { return (cents / 100).toFixed(0); }
+    }
+
+    HpDrawerRecs.prototype.connectedCallback = function () { this.load(); };
+
+    HpDrawerRecs.prototype.load = function () {
+      var el = this;
+      var pid = el.getAttribute('data-product-id');
+      var limit = el.getAttribute('data-limit') || 4;
+      var grid = el.querySelector('[data-hp-recs-grid]');
+      if (!pid || !grid) { el.hidden = true; return; }
+      if (el.dataset.hpFor === pid) return;   // already showing this product's set
+      el.dataset.hpFor = pid;
+
+      fetch('/recommendations/products.json?product_id=' + pid + '&limit=' + limit + '&intent=related')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var items = (data && data.products) || [];
+          if (!items.length) { el.hidden = true; return; }
+          grid.innerHTML = items.map(function (p) {
+            var img = p.featured_image || (p.images && p.images[0]) || '';
+            var src = img ? img.replace(/(\.[a-z]+)(\?.*)?$/i, '_300x$1') : '';
+            var price = p.price_min != null ? p.price_min : p.price;
+            return '<a class="hp-drec" href="' + p.url + '">' +
+              '<span class="hp-drec__media">' +
+                (src ? '<img src="' + src + '" alt="" loading="lazy" width="150" height="188">' : '') +
+              '</span>' +
+              '<span class="hp-drec__title">' + p.title + '</span>' +
+              '<span class="hp-drec__price">' + money(price) + '</span>' +
+            '</a>';
+          }).join('');
+          el.hidden = false;
+        })
+        .catch(function () { el.hidden = true; });
+    };
+
+    return HpDrawerRecs;
+  })();
+  if (!customElements.get('hp-drawer-recs')) customElements.define('hp-drawer-recs', HpDrawerRecs);
 
   /* ---- boot ------------------------------------------------------------- */
   function boot() {

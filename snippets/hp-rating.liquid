@@ -1,0 +1,52 @@
+{% comment %}
+  THP — gold rating chip. Highlights the score instead of Dawn's faint star row.
+
+  Reads the standard `reviews.rating` product metafield, which Judge.me writes
+  to, so this stays in sync with the review app already installed.
+
+  Usage:
+    {% render 'hp-rating', product: product %}
+    {% render 'hp-rating', product: product, size: 'lg', float: true %}
+
+  Params:
+    product (required)
+    size    'sm' (default) | 'lg'
+    float   true → absolutely positioned chip (for image corners)
+    link    anchor href (e.g. '#judgeme_product_reviews')
+{% endcomment %}
+
+{%- liquid
+  assign r = product.metafields.reviews.rating.value
+  assign r_count = product.metafields.reviews.rating_count
+-%}
+
+{%- if r != blank and r.rating != blank -%}
+  {%- liquid
+    assign score = r.rating | times: 1.0
+    assign rounded = score | round: 1
+    assign full = score | floor
+    assign classes = 'hp-rating-chip'
+    if size == 'lg'
+      assign classes = classes | append: ' hp-rating-chip--lg'
+    endif
+    if float
+      assign classes = classes | append: ' hp-rating-chip--float'
+    endif
+  -%}
+  {%- assign a11y = 'accessibility.star_reviews_info' | t: rating_value: rounded, rating_max: r.scale_max -%}
+
+  {%- if link != blank -%}<a href="{{ link }}" class="{{ classes }}" aria-label="{{ a11y }}">{%- else -%}
+  <span class="{{ classes }}" role="img" aria-label="{{ a11y }}">{%- endif -%}
+    <span class="hp-rating-chip__stars" aria-hidden="true">
+      {%- for i in (1..5) -%}
+        {%- if i <= full -%}
+          {% render 'hp-icon', icon: 'star', size: 13 %}
+        {%- endif -%}
+      {%- endfor -%}
+    </span>
+    <span class="hp-rating-chip__score" aria-hidden="true">{{ rounded }}</span>
+    {%- if r_count and r_count > 0 -%}
+      <span class="hp-rating-chip__count" aria-hidden="true">({{ r_count }})</span>
+    {%- endif -%}
+  {%- if link != blank -%}</a>{%- else -%}</span>{%- endif -%}
+{%- endif -%}
