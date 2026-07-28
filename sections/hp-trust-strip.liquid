@@ -2,7 +2,7 @@
 
 {%- style -%}
   .hp-trust {
-    background: var(--hp-cream);
+    background: {{ section.settings.bg_color | default: '#fff9df' }};
     border-bottom: 1px solid var(--hp-hairline-teal);
   }
   .hp-trust__grid {
@@ -22,7 +22,7 @@
     gap: 0.7rem;
     padding: 2.4rem 1.6rem;
     border-left: 1px solid var(--hp-hairline-teal);
-    color: var(--hp-ink);
+    color: {{ section.settings.text_color | default: '#252525' }};
   }
   .hp-trust__item:nth-child(2n + 1) { border-left: none; }
   @media screen and (min-width: 990px) {
@@ -36,11 +36,13 @@
     width: 3.6rem;
     height: 3.6rem;
     border-radius: 50%;
-    background: var(--hp-teal);
-    color: var(--hp-cream);
+    background: {{ section.settings.chip_color | default: '#257575' }};
+    color: {{ section.settings.chip_icon_color | default: '#fff9df' }};
     transition: transform 0.35s var(--hp-ease);
   }
   .hp-trust__item:hover .hp-trust__chip { transform: translateY(-4px); }
+  a.hp-trust__item { text-decoration: none; }
+  a.hp-trust__item:focus-visible { outline: 2px solid var(--hp-teal); outline-offset: -2px; }
   .hp-trust__title {
     margin: 0;
     font-family: var(--hp-font-ui);
@@ -59,13 +61,22 @@
 <div class="hp-trust">
   <div class="hp-trust__grid" data-hp-stagger>
     {%- for block in section.blocks -%}
-      <div class="hp-trust__item" data-hp-reveal {{ block.shopify_attributes }}>
+      {%- capture item_inner -%}
         <span class="hp-trust__chip">{% render 'hp-icon', icon: block.settings.icon, size: 17 %}</span>
         <h3 class="hp-trust__title">{{ block.settings.title | escape }}</h3>
         {%- if block.settings.text != blank -%}
           <p class="hp-trust__text">{{ block.settings.text | escape }}</p>
         {%- endif -%}
-      </div>
+      {%- endcapture -%}
+      {%- if block.settings.link != blank -%}
+        <a href="{{ block.settings.link }}" class="hp-trust__item" data-hp-reveal {{ block.shopify_attributes }}>
+          {{ item_inner }}
+        </a>
+      {%- else -%}
+        <div class="hp-trust__item" data-hp-reveal {{ block.shopify_attributes }}>
+          {{ item_inner }}
+        </div>
+      {%- endif -%}
     {%- endfor -%}
   </div>
 </div>
@@ -75,7 +86,13 @@
   "name": "THP Trust Strip",
   "tag": "section",
   "max_blocks": 5,
-  "settings": [],
+  "settings": [
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#fff9df" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#252525" },
+    { "type": "color", "id": "chip_color", "label": "Icon chip", "default": "#257575" },
+    { "type": "color", "id": "chip_icon_color", "label": "Icon", "default": "#fff9df" }
+  ],
   "blocks": [
     {
       "type": "item",
@@ -99,7 +116,8 @@
           "default": "truck"
         },
         { "type": "text", "id": "title", "label": "Title", "default": "Nationwide Delivery" },
-        { "type": "text", "id": "text", "label": "Text", "default": "Flat Rs. 299 — free above Rs. 8,000" }
+        { "type": "text", "id": "text", "label": "Text", "default": "Flat Rs. 299 — free above Rs. 8,000" },
+        { "type": "url", "id": "link", "label": "Link (optional)", "info": "e.g. your shipping or returns policy." }
       ]
     }
   ],

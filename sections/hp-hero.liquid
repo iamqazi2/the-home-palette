@@ -23,6 +23,8 @@
   assign shade = section.settings.overlay_strength | divided_by: 100.0
   assign shade_mid = shade | times: 0.55
   assign shade_low = shade | times: 0.18
+  assign shade_rgb = section.settings.overlay_color | default: '#123536' | color_to_rgb | remove: 'rgb(' | remove: ')'
+  assign hero_text = section.settings.text_color | default: '#fff9df'
 -%}
 
 {%- style -%}
@@ -91,17 +93,17 @@
     pointer-events: none;
     background: linear-gradient(
       90deg,
-      rgba(18, 53, 54, {{ shade }}) 0%,
-      rgba(18, 53, 54, {{ shade_mid }}) 50%,
-      rgba(18, 53, 54, {{ shade_low }}) 100%
+      rgba({{ shade_rgb }}, {{ shade }}) 0%,
+      rgba({{ shade_rgb }}, {{ shade_mid }}) 50%,
+      rgba({{ shade_rgb }}, {{ shade_low }}) 100%
     );
   }
   .hp-hero--center .hp-hero__scrim {
     background: linear-gradient(
       180deg,
-      rgba(18, 53, 54, {{ shade_low }}) 0%,
-      rgba(18, 53, 54, {{ shade_mid }}) 55%,
-      rgba(18, 53, 54, {{ shade }}) 100%
+      rgba({{ shade_rgb }}, {{ shade_low }}) 0%,
+      rgba({{ shade_rgb }}, {{ shade_mid }}) 55%,
+      rgba({{ shade_rgb }}, {{ shade }}) 100%
     );
   }
 
@@ -143,7 +145,7 @@
     font-weight: 600;
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: var(--hp-cream);
+    color: {{ hero_text }};
     margin: 0 0 1.4rem;
     text-shadow: 0 1px 12px rgba(18, 53, 54, 0.6);
   }
@@ -166,7 +168,7 @@
     line-height: 1.02;
     letter-spacing: 0.005em;
     margin: 0;
-    color: var(--hp-cream);
+    color: {{ hero_text }};
     text-shadow: 0 2px 24px rgba(18, 53, 54, 0.55);
   }
   .hp-hero__sub {
@@ -512,6 +514,8 @@
       "label": "Extra shade behind text",
       "default": true
     },
+    { "type": "color", "id": "overlay_color", "label": "Overlay colour", "default": "#123536" },
+    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#fff9df" },
     { "type": "header", "content": "Rotation" },
     { "type": "checkbox", "id": "auto_rotate", "label": "Auto-rotate slides", "default": true },
     {

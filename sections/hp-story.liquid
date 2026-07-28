@@ -7,6 +7,8 @@
     assign band_bg = 'var(--hp-teal-ink)'
   elsif bg == 'cream'
     assign band_bg = 'var(--hp-cream)'
+  elsif bg == 'custom'
+    assign band_bg = section.settings.custom_bg | default: '#257575'
   endif
 -%}
 
@@ -161,10 +163,12 @@
       "options": [
         { "value": "teal", "label": "Brand teal" },
         { "value": "dark", "label": "Deep teal" },
-        { "value": "cream", "label": "Cream" }
+        { "value": "cream", "label": "Cream" },
+        { "value": "custom", "label": "Custom colour" }
       ],
       "default": "teal"
     },
+    { "type": "color", "id": "custom_bg", "label": "Custom band colour", "info": "Used when Band colour is set to Custom.", "default": "#257575" },
     { "type": "checkbox", "id": "sepia", "label": "Sepia treatment on image", "default": false },
     { "type": "checkbox", "id": "flip", "label": "Image on right", "default": false },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Chapter Two — The Craft" },

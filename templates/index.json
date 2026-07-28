@@ -749,7 +749,13 @@
         "eyebrow": "Real Tables · Real Reviews",
         "heading": "Loved Across Pakistan",
         "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
-        "speed": 5
+        "speed": 5,
+        "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
+        "loop_previews": false,
+        "bg_color": "#123536",
+        "text_color": "#fff9df",
+        "eyebrow_color": "#7fc8be",
+        "card_color": "#173f40"
       }
     }
   },

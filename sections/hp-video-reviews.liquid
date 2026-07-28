@@ -16,12 +16,13 @@
 
 {%- style -%}
   .hp-vrev {
-    background: var(--hp-teal-ink);
-    color: var(--hp-cream);
+    background: {{ section.settings.bg_color | default: '#123536' }};
+    color: {{ section.settings.text_color | default: '#fff9df' }};
     overflow: hidden;
   }
-  .hp-vrev .hp-section-head__title { color: var(--hp-cream); }
-  .hp-vrev .hp-section-head__text { color: rgba(255, 249, 223, 0.62); }
+  .hp-vrev .hp-section-head__title { color: {{ section.settings.text_color | default: '#fff9df' }}; }
+  .hp-vrev .hp-section-head__text { color: {{ section.settings.text_color | default: '#fff9df' | color_modify: 'alpha', 0.62 }}; }
+  .hp-vrev .hp-eyebrow--soft { color: {{ section.settings.eyebrow_color | default: '#7fc8be' }}; }
   .hp-vrev__row-wrap { display: grid; gap: 2rem; }
   .hp-vrev .hp-marquee__track { padding: 0.2rem 0; }
   .hp-vrev__card {
@@ -40,18 +41,20 @@
   .hp-vrev__card--video {
     border: none;
     padding: 0;
-    background: var(--hp-teal-card);
+    background: {{ section.settings.card_color | default: '#173f40' }};
     cursor: pointer;
     text-align: left;
   }
   .hp-vrev__poster,
-  .hp-vrev__poster img {
+  .hp-vrev__poster img,
+  .hp-vrev__poster video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
+  .hp-vrev__poster video { pointer-events: none; background: var(--hp-teal-card); }
   .hp-vrev__card--video::after {
     content: '';
     position: absolute;
@@ -66,7 +69,7 @@
   }
   /* text card */
   .hp-vrev__card--text {
-    background: var(--hp-teal-card);
+    background: {{ section.settings.card_color | default: '#173f40' }};
     border: 1px solid rgba(255, 249, 223, 0.12);
     padding: 2.4rem 2.2rem;
     justify-content: space-between;
@@ -147,6 +150,8 @@
                   assign video_src = video_src.url
                 elsif block.settings.video_url != blank
                   assign video_src = block.settings.video_url
+                elsif section.settings.fallback_video_url != blank
+                  assign video_src = section.settings.fallback_video_url
                 endif
               -%}
               {%- if block.type == 'video' -%}
@@ -162,6 +167,25 @@
                       {{ block.settings.poster | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.name }}
                     {%- elsif block.settings.video != null and block.settings.video.preview_image -%}
                       {{ block.settings.video.preview_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.name }}
+                    {%- elsif section.settings.fallback_poster -%}
+                      {{ section.settings.fallback_poster | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.name }}
+                    {%- elsif video_src != blank -%}
+                      {%- comment -%}
+                        No thumbnail supplied: show the clip itself. Muted +
+                        playsinline + metadata-only, seeked to the first frame,
+                        so it reads as a poster without downloading the video.
+                        Turn on "Loop previews" to let them play silently.
+                      {%- endcomment -%}
+                      <video
+                        class="hp-vrev__preview"
+                        src="{{ video_src }}#t=0.1"
+                        muted
+                        playsinline
+                        preload="metadata"
+                        tabindex="-1"
+                        aria-hidden="true"
+                        {% if section.settings.loop_previews %}autoplay loop{% endif %}
+                      ></video>
                     {%- endif -%}
                   </span>
                   <span class="hp-play" aria-hidden="true">
@@ -220,7 +244,31 @@
       "step": 1,
       "label": "Scroll speed (higher = slower)",
       "default": 5
-    }
+    },
+    { "type": "header", "content": "Placeholder video" },
+    {
+      "type": "paragraph",
+      "content": "Used by any video card that has no clip of its own — set one URL here now and swap individual cards later."
+    },
+    { "type": "text", "id": "fallback_video_url", "label": "Fallback video URL (MP4)" },
+    {
+      "type": "image_picker",
+      "id": "fallback_poster",
+      "label": "Fallback thumbnail",
+      "info": "Optional. With no thumbnail the clip's own first frame is shown."
+    },
+    {
+      "type": "checkbox",
+      "id": "loop_previews",
+      "label": "Loop previews silently on the cards",
+      "info": "Looks lively, but plays several videos at once — leave off if the section feels heavy.",
+      "default": false
+    },
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#123536" },
+    { "type": "color", "id": "text_color", "label": "Heading & text", "default": "#fff9df" },
+    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow", "default": "#7fc8be" },
+    { "type": "color", "id": "card_color", "label": "Testimonial card", "default": "#173f40" }
   ],
   "blocks": [
     {

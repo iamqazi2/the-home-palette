@@ -2,23 +2,26 @@
 
 {%- style -%}
   .hp-marquee-band {
-    background: var(--hp-teal);
-    padding: 1.8rem 0;
+    background: {{ section.settings.bg_color | default: '#257575' }};
+    padding: {{ section.settings.padding | default: 18 }}px 0;
   }
-  .hp-marquee-band .hp-marquee__track { gap: 0; }
+  .hp-marquee-band .hp-marquee__track {
+    gap: 0;
+    animation-duration: {{ section.settings.speed | default: 32 }}s;
+  }
   .hp-marquee-band__item {
     display: inline-flex;
     align-items: center;
     gap: 2.2rem;
     padding-right: 2.2rem;
     font-family: var(--hp-font-display);
-    font-size: clamp(2.4rem, 3.4vw, 4rem);
     font-weight: 500;
     letter-spacing: 0.04em;
-    color: var(--hp-cream);
+    color: {{ section.settings.text_color | default: '#fff9df' }};
     white-space: nowrap;
+    font-size: clamp({{ section.settings.size | default: 24 | divided_by: 10.0 }}rem, 3.4vw, {{ section.settings.size | default: 24 | times: 1.7 | divided_by: 10.0 }}rem);
   }
-  .hp-marquee-band__item .hp-icon { color: rgba(255, 249, 223, 0.6); }
+  .hp-marquee-band__item .hp-icon { color: {{ section.settings.text_color | default: '#fff9df' | color_modify: 'alpha', 0.6 }}; }
 {%- endstyle -%}
 
 <div class="hp-marquee-band">
@@ -44,7 +47,15 @@
   "name": "THP Marquee",
   "tag": "section",
   "max_blocks": 8,
-  "settings": [],
+  "settings": [
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#257575" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#fff9df" },
+    { "type": "header", "content": "Layout & motion" },
+    { "type": "range", "id": "size", "min": 16, "max": 48, "step": 2, "unit": "px", "label": "Text size (mobile base)", "default": 24 },
+    { "type": "range", "id": "padding", "min": 8, "max": 48, "step": 2, "unit": "px", "label": "Band padding", "default": 18 },
+    { "type": "range", "id": "speed", "min": 16, "max": 70, "step": 2, "unit": "s", "label": "Scroll duration (lower = faster)", "default": 32 }
+  ],
   "blocks": [
     {
       "type": "phrase",

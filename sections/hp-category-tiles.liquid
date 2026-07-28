@@ -1,7 +1,7 @@
 {% comment %} THP — v3 collection tiles: uniform 4:5 rounded tiles, teal gradient, live counts {% endcomment %}
 
 {%- style -%}
-  .hp-cats { background: var(--hp-cream-soft); }
+  .hp-cats { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
   .hp-cats__grid {
     display: grid;
     gap: 1.2rem;
@@ -24,8 +24,8 @@
     background: linear-gradient(
       180deg,
       rgba(18, 53, 54, 0) 30%,
-      rgba(18, 53, 54, 0.55) 62%,
-      rgba(12, 38, 39, 0.92) 100%
+      rgba(18, 53, 54, {{ section.settings.scrim | default: 92 | times: 0.6 | divided_by: 100.0 }}) 62%,
+      rgba(12, 38, 39, {{ section.settings.scrim | default: 92 | divided_by: 100.0 }}) 100%
     );
   }
   .hp-cats__tile-inner {
@@ -146,6 +146,8 @@
       "label": "Columns on desktop",
       "default": 5
     },
+    { "type": "range", "id": "scrim", "min": 40, "max": 100, "step": 5, "unit": "%", "label": "Label overlay strength", "info": "Raise if names are hard to read on pale photos.", "default": 92 },
+    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#fffdf4" },
     { "type": "checkbox", "id": "show_count", "label": "Show product count", "default": true },
     {
       "type": "text",

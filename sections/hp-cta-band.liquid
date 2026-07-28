@@ -1,7 +1,7 @@
 {% comment %} THP — v3 CTA band: rounded full-bleed image, teal gradient, single cream CTA {% endcomment %}
 
 {%- style -%}
-  .hp-cta { background: var(--hp-cream-soft); }
+  .hp-cta { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
   .hp-cta__frame {
     position: relative;
     overflow: hidden;
@@ -20,9 +20,9 @@
     inset: 0;
     background: linear-gradient(
       90deg,
-      rgba(12, 38, 39, {{ section.settings.scrim | divided_by: 100.0 }}) 0%,
-      rgba(18, 53, 54, {{ section.settings.scrim | times: 0.82 | divided_by: 100.0 }}) 45%,
-      rgba(37, 117, 117, {{ section.settings.scrim | times: 0.42 | divided_by: 100.0 }}) 100%
+      {{ section.settings.scrim_color | default: '#0c2627' | color_modify: 'alpha', 0.9 }} 0%,
+      {{ section.settings.scrim_color | default: '#0c2627' | color_modify: 'alpha', 0.7 }} 45%,
+      {{ section.settings.scrim_color | default: '#0c2627' | color_modify: 'alpha', 0.35 }} 100%
     );
   }
   /* extra vertical wash on phones, where the copy overlays the whole frame */
@@ -46,7 +46,7 @@
     font-size: clamp(2.6rem, 4.4vw, 4.6rem);
     line-height: 1.06;
     margin: 1.2rem 0;
-    color: #fff9df;
+    color: {{ section.settings.text_color | default: '#fff9df' }};
     text-shadow: 0 2px 20px rgba(12, 38, 39, 0.6);
   }
   .hp-cta__text {
@@ -118,6 +118,11 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Weave Collection" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Woven for the Everyday Feast" },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Hand-woven placemats and baskets that ground every table setting in warmth." },
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#fffdf4" },
+    { "type": "color", "id": "scrim_color", "label": "Overlay colour", "default": "#0c2627" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#fff9df" },
+    { "type": "header", "content": "Button" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore THP Weaves" },
     { "type": "url", "id": "link", "label": "Button link" }
   ],

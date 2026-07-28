@@ -4,7 +4,7 @@
 {% endcomment %}
 
 {%- style -%}
-  .hp-styles { background: var(--hp-cream-soft); }
+  .hp-styles { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
   .hp-styles__grid {
     display: grid;
     gap: 1.2rem;
@@ -18,7 +18,7 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: linear-gradient(180deg, rgba(18, 53, 54, 0.12), rgba(18, 53, 54, 0.66));
+    background: linear-gradient(180deg, rgba(18, 53, 54, 0.1), rgba(18, 53, 54, {{ section.settings.scrim | default: 66 | divided_by: 100.0 }}));
   }
   .hp-styles__label {
     position: absolute;
@@ -98,6 +98,8 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Textures & Glazes" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Style" },
+    { "type": "range", "id": "scrim", "min": 30, "max": 95, "step": 5, "unit": "%", "label": "Label overlay strength", "default": 66 },
+    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#fffdf4" },
     { "type": "checkbox", "id": "show_count", "label": "Show live product counts", "default": false },
     { "type": "text", "id": "count_label", "label": "Count label", "default": "varieties" }
   ],

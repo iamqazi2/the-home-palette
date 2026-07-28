@@ -21,7 +21,7 @@
 -%}
 
 {%- style -%}
-  .hp-colors { background: var(--hp-cream-soft); }
+  .hp-colors { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
   .hp-colors__row {
     display: flex;
     gap: clamp(1.4rem, 2.6vw, 2.8rem);
@@ -242,6 +242,7 @@
       "default": 1
     },
     { "type": "text", "id": "view_all_label", "label": "View-all label", "default": "View all" },
+    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#fffdf4" },
     { "type": "checkbox", "id": "show_count", "label": "Show live product counts", "default": true },
     { "type": "text", "id": "count_label", "label": "Count label", "default": "varieties" }
   ],
