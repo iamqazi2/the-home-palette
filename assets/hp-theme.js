@@ -91,27 +91,33 @@
      template. Skips chrome (header/footer/nav), the hero (it runs its own
      timeline), and anything already tagged.
   ---------------------------------------------------------------------- */
-  var SKIP = '.hp-hero, header, footer, nav, .header-wrapper, .footer, .hp-announce, ' +
-    '.hp-marquee, .cart-drawer, .quick-add-modal, .search-modal, .menu-drawer, [data-hp-no-anim]';
+  var SKIP = [
+    '.hp-hero', 'header', 'footer', 'nav', '.header-wrapper', '.footer',
+    '.hp-announce', '.hp-marquee', '.cart-drawer', '.quick-add-modal',
+    '.search-modal', '.menu-drawer', '.hp-vrev',
+    // cards already animate as part of their stagger batch — splitting their
+    // titles too would hide the text behind a second, competing animation
+    '[data-hp-stagger]', '.card', '.card-wrapper', '.hp-drec',
+    '[data-hp-no-anim]'
+  ].join(', ');
 
   function autoTag(root) {
     root = root || document;
-    var main = root.querySelector ? (root.matches && root.matches('main') ? root : root) : root;
-    if (!main || !main.querySelectorAll) return;
+    if (!root.querySelectorAll) return;
 
     // headings → word-split reveal
-    main.querySelectorAll('h1, h2, h3, .hp-section-head__title, .h1, .h2').forEach(function (el) {
+    root.querySelectorAll('h1, h2, h3, .hp-section-head__title').forEach(function (el) {
       if (el.closest(SKIP)) return;
-      if (el.dataset.hpSplit || el.dataset.hpSplitDone) return;
+      if (el.dataset.hpSplit !== undefined || el.dataset.hpSplitDone) return;
       if (el.hasAttribute('data-hp-reveal')) el.removeAttribute('data-hp-reveal');
       el.dataset.hpSplit = '';
     });
 
     // supporting copy → fluid fade
-    main.querySelectorAll('.hp-section-head__text, .rte > p, .hp-story__text, .hp-cta__text, .hp-eyebrow')
+    root.querySelectorAll('.hp-section-head__text, .rte > p, .hp-story__text, .hp-cta__text, .hp-eyebrow')
       .forEach(function (el) {
         if (el.closest(SKIP)) return;
-        if (el.dataset.hpFluid || el.dataset.hpReveal !== undefined) return;
+        if (el.dataset.hpFluid !== undefined || el.dataset.hpReveal !== undefined) return;
         el.dataset.hpFluid = '';
       });
   }

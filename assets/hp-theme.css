@@ -1020,7 +1020,9 @@ main#MainContent > .shopify-section:first-child > * { margin-top: 0; }
   .hp-recs__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.8rem; }
   .hp-recs__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-hp-recommendations:not(.is-loaded) { display: block; min-height: 0; }
+hp-recommendations, hp-drawer-recs { display: block; }
+/* the band ships hidden and reveals itself only once cards actually arrive */
+hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
 
 /* compact variant used inside the cart drawer */
 .hp-recs--drawer { padding-top: 1.6rem; }
