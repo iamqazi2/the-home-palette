@@ -77,6 +77,28 @@
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper">
         {% render 'product-media-gallery', variant_images: variant_images %}
+
+        {%- comment -%}
+          THP sidebar layout: the long description and the review widget sit
+          under the gallery in the left column, leaving a narrow buy sidebar.
+        {%- endcomment -%}
+        {%- if section.settings.hp_layout == 'sidebar' -%}
+          <div class="hp-pdp-below">
+            {%- if product.description != blank -%}
+              <div class="hp-pdp-block" id="hp-description">
+                <h2 class="hp-pdp-block__title">{{ section.settings.hp_description_title | default: 'Product Description' }}</h2>
+                <div class="hp-pdp-block__body rte">{{ product.description }}</div>
+              </div>
+            {%- endif -%}
+
+            {%- for block in section.blocks -%}
+              {%- assign hp_bid = block.id | downcase -%}
+              {%- if block.type == '@app' and hp_bid contains 'review_widget' -%}
+                <div class="hp-pdp-block" id="hp-reviews">{% render block %}</div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       </div>
       <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
@@ -86,6 +108,18 @@
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
           {%- for block in section.blocks -%}
+            {%- liquid
+              # Sidebar layout renders the long description and full review widget
+              # under the gallery, so skip them here.
+              assign hp_skip = false
+              if section.settings.hp_layout == 'sidebar'
+                assign hp_bid = block.id | downcase
+                if block.type == '@app' and hp_bid contains 'review_widget'
+                  assign hp_skip = true
+                endif
+              endif
+            -%}
+            {%- if hp_skip -%}{%- continue -%}{%- endif -%}
             {%- case block.type -%}
               {%- when '@app' -%}
                 {% render block %}
@@ -215,9 +249,18 @@
                 </p>
               {%- when 'description' -%}
                 {%- if product.description != blank -%}
-                  <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
-                    {{ product.description }}
-                  </div>
+                  {%- if section.settings.hp_layout == 'sidebar' -%}
+                    {%- if section.settings.hp_show_excerpt -%}
+                      <div class="product__description hp-pdp-excerpt quick-add-hidden" {{ block.shopify_attributes }}>
+                        {{ product.description | strip_html | truncatewords: section.settings.hp_excerpt_words | default: 45 }}
+                        <a class="hp-pdp-excerpt__more" href="#hp-description">Read more</a>
+                      </div>
+                    {%- endif -%}
+                  {%- else -%}
+                    <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
+                      {{ product.description }}
+                    </div>
+                  {%- endif -%}
                 {%- endif -%}
               {%- when 'sku' -%}
                 <p
@@ -684,11 +727,40 @@
                 {% render 'icon-with-text', block: block %}
             {%- endcase -%}
           {%- endfor -%}
+
+          {%- if section.settings.hp_layout == 'sidebar' and section.settings.hp_show_meta -%}
+            <div class="hp-pdp-meta">
+              {%- if product.selected_or_first_available_variant.sku != blank -%}
+                <span><strong>SKU:</strong> {{ product.selected_or_first_available_variant.sku }}</span>
+              {%- endif -%}
+              {%- if product.collections.size > 0 -%}
+                <span><strong>Categories:</strong>
+                  {%- for c in product.collections limit: 4 -%}
+                    <a href="{{ c.url }}">{{ c.title }}</a>{% unless forloop.last %}, {% endunless %}
+                  {%- endfor -%}
+                </span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
           <a href="{{ product.url }}" class="link product__view-details animate-arrow">
             {{ 'products.product.view_full_details' | t }}
             {{- 'icon-arrow.svg' | inline_asset_content -}}
           </a>
         </section>
+
+        {%- if section.settings.hp_layout == 'sidebar' and section.settings.hp_sidebar_recs -%}
+          <div class="hp-pdp-side-recs">
+            {% render 'hp-recommendations',
+              product: product,
+              recs_section: section.settings.hp_loader_section,
+              intent: 'related',
+              heading: section.settings.hp_side_recs_title,
+              limit: 3,
+              variant: 'side'
+            %}
+          </div>
+        {%- endif -%}
       </div>
     </div>
 
@@ -2116,6 +2188,28 @@
       "content": "t:sections.main-product.settings.header.content",
       "info": "t:sections.main-product.settings.header.info"
     },
+    {
+      "type": "header",
+      "content": "Layout (THP)"
+    },
+    {
+      "type": "select",
+      "id": "hp_layout",
+      "label": "Page layout",
+      "info": "Sidebar puts the description and reviews under the gallery, with a narrow buy column on the right.",
+      "options": [
+        { "value": "sidebar", "label": "Gallery + narrow buy sidebar" },
+        { "value": "classic", "label": "Classic two-column" }
+      ],
+      "default": "sidebar"
+    },
+    { "type": "text", "id": "hp_description_title", "label": "Description heading", "default": "Product Description" },
+    { "type": "checkbox", "id": "hp_show_excerpt", "label": "Show a short excerpt in the sidebar", "default": true },
+    { "type": "range", "id": "hp_excerpt_words", "min": 20, "max": 90, "step": 5, "label": "Excerpt length (words)", "default": 45 },
+    { "type": "checkbox", "id": "hp_show_meta", "label": "Show SKU & categories", "default": true },
+    { "type": "checkbox", "id": "hp_sidebar_recs", "label": "Show 'You might also like' in the sidebar", "default": true },
+    { "type": "text", "id": "hp_side_recs_title", "label": "Sidebar suggestions heading", "default": "You might also like" },
+    { "type": "text", "id": "hp_loader_section", "label": "Recommendations loader section id", "default": "hp_recs" },
     {
       "type": "select",
       "id": "media_size",

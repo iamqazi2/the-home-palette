@@ -37,7 +37,7 @@
 -%}
 
 {%- if product != blank and recs_section != blank -%}
-  <hp-recommendations class="hp-recs" data-url="{{ rec_url }}" hidden>
+  <hp-recommendations class="hp-recs{% if variant == 'drawer' %} hp-recs--drawer{% elsif variant == 'side' %} hp-recs--side{% endif %}" data-url="{{ rec_url }}" hidden>
     <div class="hp-recs__head">
       <h2 class="hp-recs__title">{{ rec_heading }}</h2>
     </div>
