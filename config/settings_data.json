@@ -172,9 +172,9 @@
           "background": "#fff9df",
           "background_gradient": "",
           "text": "#252525",
-          "button": "#0e0606",
-          "button_label": "#ffffff",
-          "secondary_button_label": "#000000",
+          "button": "#257575",
+          "button_label": "#fff9df",
+          "secondary_button_label": "#257575",
           "shadow": "#0e0606"
         }
       },
@@ -183,9 +183,9 @@
           "background": "#ffffff",
           "background_gradient": "",
           "text": "#252525",
-          "button": "#252525",
-          "button_label": "#ffffff",
-          "secondary_button_label": "#252525",
+          "button": "#257575",
+          "button_label": "#fff9df",
+          "secondary_button_label": "#257575",
           "shadow": "#252525"
         }
       },
@@ -194,9 +194,9 @@
           "background": "#716a56",
           "background_gradient": "",
           "text": "#efecec",
-          "button": "#efecec",
+          "button": "#fff9df",
           "button_label": "#716a56",
-          "secondary_button_label": "#efecec",
+          "secondary_button_label": "#fff9df",
           "shadow": "#252525"
         }
       },
@@ -205,9 +205,9 @@
           "background": "#2c332f",
           "background_gradient": "",
           "text": "#efecec",
-          "button": "#efecec",
+          "button": "#fff9df",
           "button_label": "#2c332f",
-          "secondary_button_label": "#efecec",
+          "secondary_button_label": "#fff9df",
           "shadow": "#252525"
         }
       },
@@ -216,9 +216,9 @@
           "background": "#3f5147",
           "background_gradient": "linear-gradient(57deg, rgba(249, 119, 255, 1) 8%, rgba(54, 212, 255, 1) 47%, rgba(43, 252, 135, 1) 83%)",
           "text": "#efecec",
-          "button": "#efecec",
+          "button": "#fff9df",
           "button_label": "#3f5147",
-          "secondary_button_label": "#efecec",
+          "secondary_button_label": "#fff9df",
           "shadow": "#252525"
         }
       },
@@ -227,9 +227,9 @@
           "background": "{{ shop.brand.colors.primary[0].background }}",
           "background_gradient": "",
           "text": "#252525",
-          "button": "#0e0606",
-          "button_label": "#ffffff",
-          "secondary_button_label": "#000000",
+          "button": "#257575",
+          "button_label": "#fff9df",
+          "secondary_button_label": "#257575",
           "shadow": "#0e0606"
         }
       }

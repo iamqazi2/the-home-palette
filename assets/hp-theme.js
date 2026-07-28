@@ -757,11 +757,45 @@
   })();
   if (!customElements.get('hp-drawer-recs')) customElements.define('hp-drawer-recs', HpDrawerRecs);
 
+  /* ---- Reviews: show two, reveal the rest on demand --------------------- */
+  function initReviewClamp(root) {
+    (root || document).querySelectorAll('[data-hp-reviews-clamp]').forEach(function (box) {
+      if (box.dataset.hpClampWired) return;
+
+      // the review app renders asynchronously — wait for its list to appear
+      var tries = 0;
+      (function wait() {
+        var items = box.querySelectorAll('.jdgm-rev');
+        if (!items.length) {
+          if (tries++ < 40) return window.setTimeout(wait, 250);
+          return;
+        }
+        box.dataset.hpClampWired = '1';
+        if (items.length <= 2) { box.classList.remove('hp-reviews-clamp'); return; }
+
+        var wrap = document.createElement('div');
+        wrap.className = 'hp-reviews-more';
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'hp-btn hp-btn--outline';
+        btn.textContent = 'View all ' + items.length + ' reviews';
+        btn.addEventListener('click', function () {
+          box.classList.remove('hp-reviews-clamp');
+          wrap.remove();
+          if (hasGsap) window.ScrollTrigger.refresh();
+        });
+        wrap.appendChild(btn);
+        box.appendChild(wrap);
+      })();
+    });
+  }
+
   /* ---- boot ------------------------------------------------------------- */
   function boot() {
     initStickyChrome();
     initMotion(document);
     initVideoTriggers(document);
+    initReviewClamp(document);
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
@@ -771,6 +805,7 @@
   document.addEventListener('shopify:section:load', function (e) {
     initMotion(e.target);
     initVideoTriggers(e.target);
+    initReviewClamp(e.target);
     initStickyChrome();
     if (hasGsap) window.ScrollTrigger.refresh();
   });

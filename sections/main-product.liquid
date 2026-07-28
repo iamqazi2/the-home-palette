@@ -25,6 +25,180 @@
     {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
 
+  {%- comment -%}
+    THP product layout. This lives in the section — not hp-theme.css — because
+    Dawn injects section-main-product.css here in the body, which would
+    otherwise override the theme stylesheet on equal specificity.
+  {%- endcomment -%}
+  {%- if section.settings.hp_layout == 'sidebar' -%}
+    {%- style -%}
+      /* ---- columns: wide gallery, narrow buy sidebar ---- */
+      @media screen and (min-width: 990px) {
+        .product--large:not(.product--no-media) .product__media-wrapper,
+        .product--medium:not(.product--no-media) .product__media-wrapper,
+        .product--small:not(.product--no-media) .product__media-wrapper {
+          width: 62%;
+          max-width: 62%;
+        }
+        .product--large:not(.product--no-media) .product__info-wrapper,
+        .product--medium:not(.product--no-media) .product__info-wrapper,
+        .product--small:not(.product--no-media) .product__info-wrapper {
+          width: 34%;
+          max-width: 34%;
+          padding: 0 0 0 2rem;
+        }
+      }
+      .product__info-container { max-width: none; }
+
+      /* ---- sidebar card ---- */
+      .product__info-container {
+        background: var(--hp-paper);
+        border: 1px solid var(--hp-hairline);
+        border-radius: 20px;
+        padding: 2rem;
+      }
+      .product__info-container .product__title h1,
+      .product__info-container .product__title .h1 {
+        font-size: 2.6rem;
+        line-height: 1.14;
+        word-break: normal;
+        overflow-wrap: anywhere;
+      }
+      .product__info-container .price { font-size: 2.4rem; }
+
+      /* ---- every button on brand: no black ---- */
+      .product .product-form__submit,
+      .product .shopify-payment-button__button--unbranded,
+      .product .product-form__submit:not([disabled]) {
+        background: var(--hp-teal) !important;
+        color: var(--hp-cream) !important;
+        border: 1.5px solid var(--hp-teal) !important;
+        border-radius: var(--hp-r-pill) !important;
+        box-shadow: none !important;
+        font-family: var(--hp-font-ui);
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .product .product-form__submit:hover:not([disabled]),
+      .product .shopify-payment-button__button--unbranded:hover {
+        background: var(--hp-teal-deep) !important;
+        border-color: var(--hp-teal-deep) !important;
+      }
+      /* dynamic checkout = outline teal, so the two CTAs read as a pair */
+      .product .shopify-payment-button__button--unbranded {
+        background: transparent !important;
+        color: var(--hp-teal) !important;
+      }
+      .product .shopify-payment-button__button--unbranded:hover {
+        background: var(--hp-teal) !important;
+        color: var(--hp-cream) !important;
+      }
+      .product .product-form__submit[disabled] {
+        background: rgba(37, 37, 37, 0.1) !important;
+        color: rgba(37, 37, 37, 0.5) !important;
+        border-color: transparent !important;
+      }
+      .product .shopify-payment-button__more-options { color: var(--hp-teal); }
+      .product .quantity {
+        border: 1px solid var(--hp-hairline-strong);
+        border-radius: var(--hp-r-pill);
+        overflow: hidden;
+        min-height: 4.4rem;
+        width: 13rem;
+      }
+      .product .quantity__button { color: var(--hp-teal); }
+      .product .quantity::after { box-shadow: none; }
+      .product-form__input input[type='radio'] + label { border-radius: var(--hp-r-pill); }
+      .product-form__input input[type='radio']:checked + label {
+        background: var(--hp-teal);
+        border-color: var(--hp-teal);
+        color: var(--hp-cream);
+      }
+
+      /* ---- sidebar excerpt + meta ---- */
+      .hp-pdp-excerpt {
+        font-size: 1.35rem;
+        line-height: 1.7;
+        color: var(--hp-taupe);
+      }
+      .hp-pdp-excerpt__more { color: var(--hp-teal); font-weight: 600; margin-left: 0.4rem; }
+      .hp-pdp-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-top: 1.6rem;
+        padding-top: 1.4rem;
+        border-top: 1px solid var(--hp-hairline);
+        font-family: var(--hp-font-ui);
+        font-size: 1.15rem;
+        color: var(--hp-taupe);
+      }
+      .hp-pdp-meta strong { color: var(--hp-ink); }
+      .hp-pdp-meta a { color: var(--hp-teal); }
+
+      /* ---- left column stack ---- */
+      .hp-pdp-below { margin-top: 4rem; }
+      .hp-pdp-block { padding-top: 2.4rem; }
+      .hp-pdp-block + .hp-pdp-block {
+        margin-top: 3.2rem;
+        border-top: 1px solid var(--hp-hairline-teal);
+      }
+      .hp-pdp-block__title {
+        font-family: var(--hp-font-display);
+        font-weight: 600;
+        font-size: 2.8rem;
+        margin: 0 0 1.6rem;
+        color: var(--hp-ink);
+      }
+      .hp-pdp-block__body { font-size: 1.5rem; line-height: 1.9; color: var(--hp-ink); max-width: 76ch; }
+      .hp-pdp-block__body p { margin: 0 0 1.4rem; }
+      .hp-pdp-block__body ul, .hp-pdp-block__body ol { padding-left: 1.8rem; margin-bottom: 1.4rem; }
+
+      /* ---- reviews: show two, then reveal the rest ---- */
+      .hp-reviews-clamp .jdgm-rev-widg__reviews > .jdgm-rev:nth-of-type(n + 3),
+      .hp-reviews-clamp .jdgm-rev-widg__reviews > .jdgm-rev-wrapper:nth-of-type(n + 3) { display: none; }
+      .hp-reviews-clamp .jdgm-paginate, .hp-reviews-clamp .jdgm-rev-widg__paginate { display: none; }
+      .hp-reviews-more { margin-top: 1.8rem; display: flex; justify-content: center; }
+
+      /* ---- sidebar suggestions: vertical rows ---- */
+      .hp-pdp-side-recs { margin-top: 1.8rem; }
+      .hp-recs--side .hp-recs__head {
+        margin-bottom: 1.2rem;
+        padding-top: 1.6rem;
+        border-top: 1px solid var(--hp-hairline-teal);
+      }
+      .hp-recs--side .hp-recs__title { font-family: var(--hp-font-display); font-size: 1.9rem; font-weight: 600; }
+      .hp-recs--side .hp-recs__grid { display: grid; grid-template-columns: 1fr; gap: 1.2rem; }
+      .hp-recs--side .card {
+        display: grid;
+        grid-template-columns: 7rem 1fr;
+        gap: 1rem;
+        align-items: center;
+        border: none !important;
+        border-bottom: 1px solid var(--hp-hairline) !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        padding: 0 0 1.2rem !important;
+        box-shadow: none !important;
+      }
+      .hp-recs--side .card-wrapper:hover .card { transform: none; box-shadow: none !important; }
+      .hp-recs--side .card__inner { width: 7rem; border-radius: 10px !important; overflow: hidden; }
+      .hp-recs--side .card__content { padding: 0; }
+      .hp-recs--side .card__information { padding: 0; }
+      .hp-recs--side .card__heading { font-size: 1.2rem !important; line-height: 1.35; }
+      .hp-recs--side .card-information .price { font-size: 1.5rem; }
+      .hp-recs--side .card__badge { display: none; }
+      .hp-recs--side .quick-add__submit { padding: 0.6rem 1.1rem !important; font-size: 1rem !important; min-height: 0; }
+
+      @media screen and (max-width: 989px) {
+        .product__info-container { padding: 1.8rem; border-radius: 18px; }
+        .hp-pdp-below { margin-top: 2.4rem; }
+        .hp-pdp-block__title { font-size: 2.2rem; }
+      }
+    {%- endstyle -%}
+  {%- endif -%}
+
   {%- style -%}
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -94,7 +268,13 @@
             {%- for block in section.blocks -%}
               {%- assign hp_bid = block.id | downcase -%}
               {%- if block.type == '@app' and hp_bid contains 'review_widget' -%}
-                <div class="hp-pdp-block" id="hp-reviews">{% render block %}</div>
+                <div
+                  class="hp-pdp-block{% if section.settings.hp_clamp_reviews %} hp-reviews-clamp{% endif %}"
+                  id="hp-reviews"
+                  {% if section.settings.hp_clamp_reviews %}data-hp-reviews-clamp{% endif %}
+                >
+                  {% render block %}
+                </div>
               {%- endif -%}
             {%- endfor -%}
           </div>
@@ -2207,6 +2387,7 @@
     { "type": "checkbox", "id": "hp_show_excerpt", "label": "Show a short excerpt in the sidebar", "default": true },
     { "type": "range", "id": "hp_excerpt_words", "min": 20, "max": 90, "step": 5, "label": "Excerpt length (words)", "default": 45 },
     { "type": "checkbox", "id": "hp_show_meta", "label": "Show SKU & categories", "default": true },
+    { "type": "checkbox", "id": "hp_clamp_reviews", "label": "Show only the 2 most recent reviews", "info": "Adds a 'View all reviews' button that reveals the rest.", "default": true },
     { "type": "checkbox", "id": "hp_sidebar_recs", "label": "Show 'You might also like' in the sidebar", "default": true },
     { "type": "text", "id": "hp_side_recs_title", "label": "Sidebar suggestions heading", "default": "You might also like" },
     { "type": "text", "id": "hp_loader_section", "label": "Recommendations loader section id", "default": "hp_recs" },

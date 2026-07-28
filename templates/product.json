@@ -80,7 +80,8 @@
         "hp_show_meta": true,
         "hp_sidebar_recs": true,
         "hp_side_recs_title": "You might also like",
-        "hp_loader_section": "hp_recs"
+        "hp_loader_section": "hp_recs",
+        "hp_clamp_reviews": true
       }
     },
     "related-products": {
