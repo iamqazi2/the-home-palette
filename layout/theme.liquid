@@ -269,7 +269,6 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Archivo:wght@400;500;600;700&display=swap"
     >
-    {{ 'hp-theme.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'hp-gsap.min.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'hp-scrolltrigger.min.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'hp-lenis.min.js' | asset_url }}" defer="defer"></script>
@@ -315,6 +314,13 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+    {%- comment -%}
+      THP design system loads LAST in <head> on purpose: Dawn ships per-component
+      stylesheets (cart drawer, cart items, facets…) further down this file, and
+      at equal specificity the later sheet wins. Loading here means the theme
+      layer overrides them without needing !important everywhere.
+    {%- endcomment -%}
+    {{ 'hp-theme.css' | asset_url | stylesheet_tag }}
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
