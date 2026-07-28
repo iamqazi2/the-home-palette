@@ -131,7 +131,17 @@ button.shopify-payment-button__button--unbranded {
   transition: background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease),
     transform 0.35s var(--hp-ease), box-shadow 0.35s var(--hp-ease), opacity 0.35s;
 }
-.button::after, .shopify-challenge__button::after { box-shadow: none !important; }
+/* Dawn paints a second ring via ::after — drop it everywhere so buttons have a
+   single, clean border rather than a doubled outline. */
+.button::after,
+.shopify-challenge__button::after,
+.customer button::after,
+.shopify-payment-button__button--unbranded::after,
+.shopify-payment-button__button--unbranded::before {
+  box-shadow: none !important;
+  border: none !important;
+  content: none !important;
+}
 .button:hover { transform: translateY(-2px); box-shadow: var(--hp-shadow-btn); }
 
 .hp-btn {

@@ -99,6 +99,16 @@
         color: rgba(37, 37, 37, 0.5) !important;
         border-color: transparent !important;
       }
+      /* Dawn draws a second ring with ::after — remove it so the CTAs have a
+         single clean border instead of a doubled outline. */
+      .product .product-form__submit::after,
+      .product .shopify-payment-button__button--unbranded::after,
+      .product .product-form__submit::before,
+      .product .shopify-payment-button__button--unbranded::before {
+        box-shadow: none !important;
+        border: none !important;
+        content: none !important;
+      }
       .product .shopify-payment-button__more-options { color: var(--hp-teal); }
       .product .quantity {
         border: 1px solid var(--hp-hairline-strong);
@@ -137,25 +147,89 @@
       .hp-pdp-meta strong { color: var(--hp-ink); }
       .hp-pdp-meta a { color: var(--hp-teal); }
 
-      /* ---- left column stack ---- */
-      .hp-pdp-below { margin-top: 4rem; }
-      .hp-pdp-block { padding-top: 2.4rem; }
-      .hp-pdp-block + .hp-pdp-block {
-        margin-top: 3.2rem;
+      /* ---- description + reviews: full width, side by side ---- */
+      .hp-pdp-below {
+        margin-top: clamp(3.2rem, 5vw, 5.6rem);
+        padding-top: clamp(2.4rem, 4vw, 4rem);
         border-top: 1px solid var(--hp-hairline-teal);
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: clamp(2.4rem, 4vw, 4.8rem);
+        align-items: start;
+      }
+      @media screen and (min-width: 990px) {
+        .hp-pdp-below { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      }
+      .hp-pdp-block { padding-top: 0; min-width: 0; }
+      .hp-pdp-block + .hp-pdp-block { margin-top: 0; border-top: none; }
+      @media screen and (max-width: 989px) {
+        .hp-pdp-block + .hp-pdp-block {
+          padding-top: 2.4rem;
+          border-top: 1px solid var(--hp-hairline-teal);
+        }
       }
       .hp-pdp-block__title {
         font-family: var(--hp-font-display);
         font-weight: 600;
         font-size: 2.8rem;
-        margin: 0 0 1.6rem;
+        line-height: 1.1;
+        margin: 0 0 1.8rem;
         color: var(--hp-ink);
       }
-      .hp-pdp-block__body { font-size: 1.5rem; line-height: 1.9; color: var(--hp-ink); max-width: 76ch; }
-      .hp-pdp-block__body p { margin: 0 0 1.4rem; }
-      .hp-pdp-block__body ul, .hp-pdp-block__body ol { padding-left: 1.8rem; margin-bottom: 1.4rem; }
 
-      /* ---- reviews: show two, then reveal the rest ---- */
+      /* Description typography: the copy comes from the rich-text editor and can
+         carry its own inline fonts/sizes — normalise it to the site's type so it
+         reads the same as every other page. */
+      .hp-pdp-block__body,
+      .hp-pdp-block__body p,
+      .hp-pdp-block__body li,
+      .hp-pdp-block__body span,
+      .hp-pdp-block__body div,
+      .hp-pdp-block__body strong,
+      .hp-pdp-block__body em {
+        font-family: var(--hp-font-ui) !important;
+        color: var(--hp-ink);
+      }
+      .hp-pdp-block__body {
+        font-size: 1.45rem;
+        line-height: 1.85;
+        max-width: 64ch;
+      }
+      .hp-pdp-block__body p,
+      .hp-pdp-block__body li,
+      .hp-pdp-block__body span,
+      .hp-pdp-block__body div {
+        font-size: 1.45rem !important;
+        line-height: 1.85 !important;
+        letter-spacing: normal !important;
+      }
+      .hp-pdp-block__body strong, .hp-pdp-block__body b { font-weight: 600 !important; }
+      .hp-pdp-block__body p { margin: 0 0 1.3rem; }
+      .hp-pdp-block__body h1,
+      .hp-pdp-block__body h2,
+      .hp-pdp-block__body h3,
+      .hp-pdp-block__body h4,
+      .hp-pdp-block__body h5 {
+        font-family: var(--hp-font-display) !important;
+        font-weight: 600 !important;
+        font-size: 2rem !important;
+        line-height: 1.2 !important;
+        margin: 2.4rem 0 1rem !important;
+        color: var(--hp-ink);
+      }
+      .hp-pdp-block__body ul,
+      .hp-pdp-block__body ol { padding-left: 1.6rem; margin: 0 0 1.3rem; }
+      .hp-pdp-block__body li { margin-bottom: 0.5rem; }
+      .hp-pdp-block__body a { color: var(--hp-teal); }
+      .hp-pdp-block__body img { border-radius: var(--hp-r-card); margin: 1.6rem 0; }
+
+      /* ---- reviews column ---- */
+      #hp-reviews .jdgm-widget, #hp-reviews #judgeme_product_reviews {
+        border-top: none;
+        margin-top: 0;
+        padding-top: 0;
+      }
+      #hp-reviews .jdgm-rev-widg__title { display: none; }
       .hp-reviews-clamp .jdgm-rev-widg__reviews > .jdgm-rev:nth-of-type(n + 3),
       .hp-reviews-clamp .jdgm-rev-widg__reviews > .jdgm-rev-wrapper:nth-of-type(n + 3) { display: none; }
       .hp-reviews-clamp .jdgm-paginate, .hp-reviews-clamp .jdgm-rev-widg__paginate { display: none; }
@@ -252,33 +326,6 @@
       <div class="grid__item product__media-wrapper">
         {% render 'product-media-gallery', variant_images: variant_images %}
 
-        {%- comment -%}
-          THP sidebar layout: the long description and the review widget sit
-          under the gallery in the left column, leaving a narrow buy sidebar.
-        {%- endcomment -%}
-        {%- if section.settings.hp_layout == 'sidebar' -%}
-          <div class="hp-pdp-below">
-            {%- if product.description != blank -%}
-              <div class="hp-pdp-block" id="hp-description">
-                <h2 class="hp-pdp-block__title">{{ section.settings.hp_description_title | default: 'Product Description' }}</h2>
-                <div class="hp-pdp-block__body rte">{{ product.description }}</div>
-              </div>
-            {%- endif -%}
-
-            {%- for block in section.blocks -%}
-              {%- assign hp_bid = block.id | downcase -%}
-              {%- if block.type == '@app' and hp_bid contains 'review_widget' -%}
-                <div
-                  class="hp-pdp-block{% if section.settings.hp_clamp_reviews %} hp-reviews-clamp{% endif %}"
-                  id="hp-reviews"
-                  {% if section.settings.hp_clamp_reviews %}data-hp-reviews-clamp{% endif %}
-                >
-                  {% render block %}
-                </div>
-              {%- endif -%}
-            {%- endfor -%}
-          </div>
-        {%- endif -%}
       </div>
       <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
@@ -943,6 +990,34 @@
         {%- endif -%}
       </div>
     </div>
+
+        {%- comment -%}
+          THP sidebar layout: the long description and the review widget sit
+          under the gallery in the left column, leaving a narrow buy sidebar.
+        {%- endcomment -%}
+    {%- if section.settings.hp_layout == 'sidebar' -%}
+      <div class="hp-pdp-below hp-container">
+            {%- if product.description != blank -%}
+              <div class="hp-pdp-block" id="hp-description">
+                <h2 class="hp-pdp-block__title">{{ section.settings.hp_description_title | default: 'Product Description' }}</h2>
+                <div class="hp-pdp-block__body rte">{{ product.description }}</div>
+              </div>
+        {%- endif -%}
+
+            {%- for block in section.blocks -%}
+              {%- assign hp_bid = block.id | downcase -%}
+              {%- if block.type == '@app' and hp_bid contains 'review_widget' -%}
+                <div
+                  class="hp-pdp-block{% if section.settings.hp_clamp_reviews %} hp-reviews-clamp{% endif %}"
+                  id="hp-reviews"
+                  {% if section.settings.hp_clamp_reviews %}data-hp-reviews-clamp{% endif %}
+                >
+                  {% render block %}
+                </div>
+          {%- endif -%}
+            {%- endfor -%}
+          </div>
+    {%- endif -%}
 
     {% render 'product-media-modal', variant_images: variant_images %}
 
