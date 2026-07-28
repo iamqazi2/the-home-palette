@@ -82,31 +82,67 @@
   {%- endif -%}
   .hp-hero__media { position: absolute; inset: 0; }
 
-  /* directional wash */
+  /* Directional wash + a flat full-frame floor underneath it. The floor
+     guarantees a minimum contrast level no matter which part of the video is
+     showing (busy/bright footage can wash out a pure gradient on its own),
+     while the gradient still reads as an intentional, editorial vignette
+     rather than a flat tint. */
   .hp-hero__scrim {
     position: absolute; inset: 0; z-index: 2; pointer-events: none;
-    background: linear-gradient(
-      100deg,
-      rgba({{ shade_rgb }}, {{ shade }}) 0%,
-      rgba({{ shade_rgb }}, {{ shade_mid }}) 48%,
-      rgba({{ shade_rgb }}, {{ shade_low }}) 100%
-    );
+    background:
+      linear-gradient(
+        100deg,
+        rgba({{ shade_rgb }}, {{ shade }}) 0%,
+        rgba({{ shade_rgb }}, {{ shade_mid }}) 48%,
+        rgba({{ shade_rgb }}, {{ shade_low }}) 100%
+      ),
+      rgba({{ shade_rgb }}, {{ shade_low | at_least: 0.22 }});
   }
   .hp-hero--center .hp-hero__scrim {
-    background: linear-gradient(
-      180deg,
-      rgba({{ shade_rgb }}, {{ shade_mid }}) 0%,
-      rgba({{ shade_rgb }}, {{ shade_low }}) 45%,
-      rgba({{ shade_rgb }}, {{ shade }}) 100%
-    );
+    background:
+      linear-gradient(
+        180deg,
+        rgba({{ shade_rgb }}, {{ shade_mid }}) 0%,
+        rgba({{ shade_rgb }}, {{ shade_low }}) 45%,
+        rgba({{ shade_rgb }}, {{ shade }}) 100%
+      ),
+      rgba({{ shade_rgb }}, {{ shade_low | at_least: 0.22 }});
   }
   /* centre vignette — adds depth and hides soft edges on low-res footage */
   .hp-hero__vignette {
     position: absolute; inset: 0; z-index: 3; pointer-events: none;
     background:
-      radial-gradient(120% 90% at 50% 45%, transparent 40%, rgba(8, 26, 27, 0.55) 100%),
-      linear-gradient(to top, rgba(8, 26, 27, 0.5) 0%, transparent 32%);
+      radial-gradient(120% 90% at 50% 45%, transparent 32%, rgba(8, 26, 27, 0.62) 100%),
+      linear-gradient(to top, rgba(8, 26, 27, 0.58) 0%, transparent 34%);
   }
+  /* Localised shade directly behind the text block — the 'text_shade' setting.
+     A soft dark pool that hugs the copy, so it stays legible even on a frame
+     where the wide scrim alone is not quite enough (bright, high-detail food
+     / product footage especially). */
+  {%- if section.settings.text_shade -%}
+  .hp-hero__inner { position: relative; }
+  .hp-hero__inner::before {
+    content: '';
+    position: absolute;
+    inset: -3.2rem -4rem;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse 78% 92% at 22% 50%,
+      rgba(8, 26, 27, 0.6),
+      rgba(8, 26, 27, 0.32) 55%,
+      transparent 80%
+    );
+    pointer-events: none;
+  }
+  .hp-hero--center .hp-hero__inner::before {
+    background: radial-gradient(
+      ellipse 90% 92% at 50% 50%,
+      rgba(8, 26, 27, 0.6),
+      rgba(8, 26, 27, 0.32) 55%,
+      transparent 80%
+    );
+  }
+  {%- endif -%}
   {%- if section.settings.grain -%}
   /* fine film grain — the "vintage classic" texture */
   .hp-hero__grain {
@@ -147,6 +183,7 @@
     color: {{ hero_text }};
     margin: 0 0 1.8rem;
     opacity: 0.92;
+    text-shadow: 0 1px 3px rgba(8, 26, 27, 0.7), 0 3px 16px rgba(8, 26, 27, 0.55);
   }
   .hp-hero__kicker::before { content: ''; width: 3.2rem; height: 1px; background: currentColor; opacity: 0.8; }
   .hp-hero--center .hp-hero__kicker::after { content: ''; width: 3.2rem; height: 1px; background: currentColor; opacity: 0.8; }
@@ -159,7 +196,7 @@
     letter-spacing: -0.008em;
     margin: 0;
     color: {{ hero_text }};
-    text-shadow: 0 4px 40px rgba(8, 26, 27, 0.5);
+    text-shadow: 0 2px 4px rgba(8, 26, 27, 0.7), 0 6px 44px rgba(8, 26, 27, 0.6);
   }
   .hp-hero__rule {
     width: 7rem; height: 1px; margin: 2.4rem 0 0;
@@ -174,7 +211,7 @@
     color: {{ hero_text }};
     opacity: 0.86;
     max-width: 46rem;
-    text-shadow: 0 2px 20px rgba(8, 26, 27, 0.5);
+    text-shadow: 0 1px 3px rgba(8, 26, 27, 0.7), 0 4px 24px rgba(8, 26, 27, 0.6);
   }
   .hp-hero--center .hp-hero__sub { margin-left: auto; margin-right: auto; }
   .hp-hero__actions { display: flex; flex-wrap: wrap; gap: 1.2rem; margin-top: 3rem; }
@@ -484,12 +521,12 @@
       "type": "range",
       "id": "overlay_strength",
       "min": 0,
-      "max": 90,
+      "max": 95,
       "step": 5,
       "unit": "%",
       "label": "Overlay gradient strength",
       "info": "Raise this if the headline is hard to read over the imagery.",
-      "default": 65
+      "default": 75
     },
     {
       "type": "checkbox",

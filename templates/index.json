@@ -72,7 +72,7 @@
         "accessibility_info": "Slideshow about our brand",
         "height": "standard",
         "text_position": "left",
-        "overlay_strength": 72,
+        "overlay_strength": 80,
         "text_shade": true,
         "show_rating": true,
         "rating_score": "4.9",
