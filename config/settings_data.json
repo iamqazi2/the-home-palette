@@ -1,7 +1,7 @@
 {
   "current": {
     "logo": "shopify://shop_images/FullLogo_1_ratio_1-01.png",
-    "logo_width": 150,
+    "logo_width": 90,
     "favicon": "shopify://shop_images/last.png",
     "type_header_font": "archivo_narrow_n7",
     "heading_scale": 120,
@@ -160,7 +160,7 @@
       },
       "12120936241911852800": {
         "type": "shopify://apps/judge-me-reviews/blocks/reviews_tab/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-        "disabled": false,
+        "disabled": true,
         "settings": {
           "position": "left"
         }

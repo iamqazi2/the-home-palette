@@ -1,9 +1,15 @@
 {% comment %}
-  THP — v3 hero: full-bleed background video (or Ken-Burns image slides),
-  left-weighted teal gradient, rotating copy, dash indicators, rating chip.
-  Legibility fixes: gradient strength + text-shade controls, text shadows.
-  Set each image's focal point in the Shopify admin (image editor) — it is
-  respected automatically via object-position.
+  THP — v4 cinematic hero.
+
+  A single full-bleed stage: background video (or Ken-Burns image slides) under a
+  layered treatment — directional gradient + centre vignette + film grain — so the
+  footage reads as intentional and filmic rather than raw. Copy rotates with a
+  cascade reveal; chrome is a thin progress rail plus a scroll cue.
+
+  Video sharpness: the clip is rendered at full stage size with `object-fit: cover`
+  and no scaling filters, and a poster keeps the first paint crisp. If the source
+  file is low-resolution it will still soften when stretched — upload a 1920×1080
+  (or larger) master and it will render 1:1.
 {% endcomment %}
 
 {%- liquid
@@ -17,12 +23,12 @@
   if h == 'full'
     assign hero_h = '100svh'
   elsif h == 'compact'
-    assign hero_h = '72vh'
+    assign hero_h = '76vh'
   endif
 
   assign shade = section.settings.overlay_strength | divided_by: 100.0
-  assign shade_mid = shade | times: 0.55
-  assign shade_low = shade | times: 0.18
+  assign shade_mid = shade | times: 0.6
+  assign shade_low = shade | times: 0.22
   assign shade_rgb = section.settings.overlay_color | default: '#123536' | color_to_rgb | remove: 'rgb(' | remove: ')'
   assign hero_text = section.settings.text_color | default: '#fff9df'
 -%}
@@ -32,25 +38,30 @@
     position: relative;
     display: block;
     height: {{ hero_h }};
-    min-height: 54rem;
+    min-height: 58rem;
     max-height: 110rem;
     overflow: hidden;
-    background: var(--hp-teal-ink);
-    color: var(--hp-cream);
+    background: {{ section.settings.overlay_color | default: '#123536' }};
+    color: {{ hero_text }};
+    isolation: isolate;
   }
-  @media screen and (max-width: 560px) { .hp-hero { min-height: 50rem; } }
+  @media screen and (max-width: 749px) { .hp-hero { min-height: 60rem; height: 92vh; } }
 
-  /* background video layer (parallax via data-hp-parallax) */
-  .hp-hero__video { z-index: 0; }
-  .hp-hero__video video {
+  /* ---- stage layers ---- */
+  .hp-hero__video, .hp-hero__media { z-index: 0; }
+  .hp-hero__video video,
+  .hp-hero__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: {{ section.settings.focal | default: 'center' }};
+    /* no upscaling filters — keeps the source as sharp as it was uploaded */
+    image-rendering: auto;
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
   {%- unless has_video -%}
-  .hp-hero__slide.is-active .hp-hero__media img {
-    animation: hp-kenburns 12s ease-out both;
-  }
+  .hp-hero__slide.is-active .hp-hero__media img { animation: hp-kenburns 16s ease-out both; }
   {%- endunless -%}
 
   .hp-hero__slide {
@@ -62,254 +73,234 @@
     transition: opacity 1.1s var(--hp-ease), visibility 0s 1.1s;
   }
   .hp-hero__slide.is-active {
-    opacity: 1;
-    visibility: visible;
+    opacity: 1; visibility: visible; z-index: 2;
     transition: opacity 1.1s var(--hp-ease);
-    z-index: 2;
   }
   {%- if has_video -%}
-  /* with a video background the slides are copy-only, transparent layers */
   .hp-hero__slide { pointer-events: none; }
   .hp-hero__slide.is-active { pointer-events: auto; }
   {%- endif -%}
-  .hp-hero__media,
-  .hp-hero__media img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hp-hero__slide { transition: none; }
-    .hp-hero__slide.is-active .hp-hero__media img { animation: none !important; }
-  }
+  .hp-hero__media { position: absolute; inset: 0; }
 
-  /* left-weighted gradient — keeps type readable over any footage */
+  /* directional wash */
   .hp-hero__scrim {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
+    position: absolute; inset: 0; z-index: 2; pointer-events: none;
     background: linear-gradient(
-      90deg,
+      100deg,
       rgba({{ shade_rgb }}, {{ shade }}) 0%,
-      rgba({{ shade_rgb }}, {{ shade_mid }}) 50%,
+      rgba({{ shade_rgb }}, {{ shade_mid }}) 48%,
       rgba({{ shade_rgb }}, {{ shade_low }}) 100%
     );
   }
   .hp-hero--center .hp-hero__scrim {
     background: linear-gradient(
       180deg,
-      rgba({{ shade_rgb }}, {{ shade_low }}) 0%,
-      rgba({{ shade_rgb }}, {{ shade_mid }}) 55%,
+      rgba({{ shade_rgb }}, {{ shade_mid }}) 0%,
+      rgba({{ shade_rgb }}, {{ shade_low }}) 45%,
       rgba({{ shade_rgb }}, {{ shade }}) 100%
     );
   }
-
-  .hp-hero__content {
-    position: absolute;
-    z-index: 3;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 clamp(2rem, 6vw, 6.4rem);
-    max-width: 100%;
+  /* centre vignette — adds depth and hides soft edges on low-res footage */
+  .hp-hero__vignette {
+    position: absolute; inset: 0; z-index: 3; pointer-events: none;
+    background:
+      radial-gradient(120% 90% at 50% 45%, transparent 40%, rgba(8, 26, 27, 0.55) 100%),
+      linear-gradient(to top, rgba(8, 26, 27, 0.5) 0%, transparent 32%);
   }
-  .hp-hero__content-inner { max-width: 64rem; }
-  .hp-hero--center .hp-hero__content { align-items: center; text-align: center; }
-  .hp-hero--center .hp-hero__content-inner { max-width: 72rem; }
-
-  {%- if section.settings.text_shade -%}
-  /* soft radial shade hugging the text block itself */
-  .hp-hero__content-inner {
-    position: relative;
+  {%- if section.settings.grain -%}
+  /* fine film grain — the "vintage classic" texture */
+  .hp-hero__grain {
+    position: absolute; inset: -50%; z-index: 4; pointer-events: none;
+    opacity: 0.14;
+    background-image:
+      radial-gradient(rgba(255,249,223,0.5) 0.5px, transparent 0.6px),
+      radial-gradient(rgba(0,0,0,0.4) 0.5px, transparent 0.6px);
+    background-size: 3px 3px, 4px 4px;
+    background-position: 0 0, 1px 2px;
+    animation: hp-grain 1.2s steps(3) infinite;
   }
-  .hp-hero__content-inner::before {
-    content: '';
-    position: absolute;
-    inset: -4rem -6rem;
-    background: radial-gradient(ellipse at 30% 50%, rgba(18, 53, 54, 0.55), transparent 70%);
-    z-index: -1;
-    pointer-events: none;
+  @keyframes hp-grain {
+    0%   { transform: translate(0, 0); }
+    33%  { transform: translate(-2%, 1%); }
+    66%  { transform: translate(1%, -2%); }
+    100% { transform: translate(0, 0); }
   }
+  @media (prefers-reduced-motion: reduce) { .hp-hero__grain { animation: none; } }
   {%- endif -%}
 
+  /* ---- copy ---- */
+  .hp-hero__content {
+    position: absolute; z-index: 6; inset: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 var(--hp-gap-x);
+    padding-bottom: 8rem;
+  }
+  .hp-hero__inner { max-width: 68rem; }
+  .hp-hero--center .hp-hero__content { align-items: center; text-align: center; }
+  .hp-hero--center .hp-hero__inner { max-width: 76rem; }
+
   .hp-hero__kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.9rem;
+    display: inline-flex; align-items: center; gap: 1rem;
     font-family: var(--hp-font-ui);
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
+    font-size: 1.05rem; font-weight: 600;
+    letter-spacing: 0.32em; text-transform: uppercase;
     color: {{ hero_text }};
-    margin: 0 0 1.4rem;
-    text-shadow: 0 1px 12px rgba(18, 53, 54, 0.6);
+    margin: 0 0 1.8rem;
+    opacity: 0.92;
   }
-  .hp-hero__kicker::before {
-    content: '';
-    width: 2.2rem;
-    height: 1.5px;
-    background: currentColor;
-  }
-  .hp-hero--center .hp-hero__kicker::after {
-    content: '';
-    width: 2.2rem;
-    height: 1.5px;
-    background: currentColor;
-  }
+  .hp-hero__kicker::before { content: ''; width: 3.2rem; height: 1px; background: currentColor; opacity: 0.8; }
+  .hp-hero--center .hp-hero__kicker::after { content: ''; width: 3.2rem; height: 1px; background: currentColor; opacity: 0.8; }
+
   .hp-hero__heading {
     font-family: var(--hp-font-display);
     font-weight: 600;
-    font-size: clamp(3.6rem, 6.8vw, 7.2rem);
-    line-height: 1.02;
-    letter-spacing: 0.005em;
+    font-size: clamp(4rem, 7.4vw, 8.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.008em;
     margin: 0;
     color: {{ hero_text }};
-    text-shadow: 0 2px 24px rgba(18, 53, 54, 0.55);
+    text-shadow: 0 4px 40px rgba(8, 26, 27, 0.5);
   }
+  .hp-hero__rule {
+    width: 7rem; height: 1px; margin: 2.4rem 0 0;
+    background: currentColor; opacity: 0.45;
+  }
+  .hp-hero--center .hp-hero__rule { margin-left: auto; margin-right: auto; }
   .hp-hero__sub {
-    margin: 1.6rem 0 0;
-    font-size: clamp(1.4rem, 1.6vw, 1.6rem);
-    line-height: 1.7;
-    letter-spacing: 0.02em;
-    color: rgba(255, 249, 223, 0.9);
-    max-width: 44rem;
-    text-shadow: 0 1px 14px rgba(18, 53, 54, 0.6);
+    margin: 2rem 0 0;
+    font-size: clamp(1.45rem, 1.5vw, 1.7rem);
+    line-height: 1.75;
+    letter-spacing: 0.01em;
+    color: {{ hero_text }};
+    opacity: 0.86;
+    max-width: 46rem;
+    text-shadow: 0 2px 20px rgba(8, 26, 27, 0.5);
   }
   .hp-hero--center .hp-hero__sub { margin-left: auto; margin-right: auto; }
-  .hp-hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.2rem;
-    margin-top: 2.6rem;
-  }
+  .hp-hero__actions { display: flex; flex-wrap: wrap; gap: 1.2rem; margin-top: 3rem; }
   .hp-hero--center .hp-hero__actions { justify-content: center; }
 
-  /* rating chip — total reviews highlighted right at the start (fix #6) */
   .hp-hero__rating {
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 2.8rem;
-    padding: 0.9rem 1.6rem;
+    display: inline-flex; align-items: center; gap: 1rem;
+    margin-top: 3rem; padding: 0.9rem 1.7rem;
     border-radius: var(--hp-r-pill);
-    background: rgba(18, 53, 54, 0.45);
-    border: 1px solid rgba(255, 249, 223, 0.25);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    background: rgba(8, 26, 27, 0.34);
+    border: 1px solid rgba(255, 249, 223, 0.22);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     width: fit-content;
   }
   .hp-hero--center .hp-hero__rating { margin-left: auto; margin-right: auto; }
-  .hp-hero__rating-score {
-    font-family: var(--hp-font-display);
-    font-weight: 600;
-    font-size: 2rem;
-    color: var(--hp-cream);
-  }
-  .hp-hero__rating-text {
-    font-size: 1.15rem;
-    letter-spacing: 0.06em;
-    color: rgba(255, 249, 223, 0.85);
-  }
+  .hp-hero__rating-score { font-family: var(--hp-font-display); font-weight: 600; font-size: 2rem; color: {{ hero_text }}; }
+  .hp-hero__rating-text { font-size: 1.15rem; letter-spacing: 0.05em; color: {{ hero_text }}; opacity: 0.82; }
 
-  /* staggered rise on the active slide's copy */
-  .hp-hero__kicker, .hp-hero__heading, .hp-hero__sub, .hp-hero__actions, .hp-hero__rating {
+  /* entrance: cascade drop, staggered */
+  .hp-hero__kicker, .hp-hero__heading, .hp-hero__rule,
+  .hp-hero__sub, .hp-hero__actions, .hp-hero__rating {
     opacity: 0;
-    transform: translateY(26px);
+    transform: translateY(-28px);
+    filter: blur(10px);
   }
   .hp-hero__slide.is-active .hp-hero__kicker,
   .hp-hero__slide.is-active .hp-hero__heading,
+  .hp-hero__slide.is-active .hp-hero__rule,
   .hp-hero__slide.is-active .hp-hero__sub,
   .hp-hero__slide.is-active .hp-hero__actions,
   .hp-hero__slide.is-active .hp-hero__rating {
-    animation: hp-hero-rise 1s var(--hp-ease) forwards;
+    animation: hp-hero-cascade 1.15s var(--hp-ease) forwards;
   }
-  .hp-hero__slide.is-active .hp-hero__kicker { animation-delay: 0.15s; }
-  .hp-hero__slide.is-active .hp-hero__heading { animation-delay: 0.28s; }
-  .hp-hero__slide.is-active .hp-hero__sub { animation-delay: 0.42s; }
-  .hp-hero__slide.is-active .hp-hero__actions { animation-delay: 0.56s; }
-  .hp-hero__slide.is-active .hp-hero__rating { animation-delay: 0.7s; }
-  @keyframes hp-hero-rise { to { opacity: 1; transform: none; } }
-  html:not(.hp-js) .hp-hero__kicker,
-  html:not(.hp-js) .hp-hero__heading,
-  html:not(.hp-js) .hp-hero__sub,
-  html:not(.hp-js) .hp-hero__actions,
-  html:not(.hp-js) .hp-hero__rating { opacity: 1; transform: none; }
+  .hp-hero__slide.is-active .hp-hero__kicker  { animation-delay: 0.12s; }
+  .hp-hero__slide.is-active .hp-hero__heading { animation-delay: 0.24s; }
+  .hp-hero__slide.is-active .hp-hero__rule    { animation-delay: 0.38s; }
+  .hp-hero__slide.is-active .hp-hero__sub     { animation-delay: 0.48s; }
+  .hp-hero__slide.is-active .hp-hero__actions { animation-delay: 0.6s; }
+  .hp-hero__slide.is-active .hp-hero__rating  { animation-delay: 0.72s; }
+  @keyframes hp-hero-cascade {
+    to { opacity: 1; transform: none; filter: blur(0); }
+  }
+  html:not(.hp-js) .hp-hero__kicker, html:not(.hp-js) .hp-hero__heading,
+  html:not(.hp-js) .hp-hero__rule, html:not(.hp-js) .hp-hero__sub,
+  html:not(.hp-js) .hp-hero__actions, html:not(.hp-js) .hp-hero__rating {
+    opacity: 1; transform: none; filter: none;
+  }
   @media (prefers-reduced-motion: reduce) {
-    .hp-hero__kicker, .hp-hero__heading, .hp-hero__sub, .hp-hero__actions, .hp-hero__rating {
-      opacity: 1 !important; transform: none !important; animation: none !important;
+    .hp-hero__kicker, .hp-hero__heading, .hp-hero__rule,
+    .hp-hero__sub, .hp-hero__actions, .hp-hero__rating {
+      opacity: 1 !important; transform: none !important; filter: none !important; animation: none !important;
     }
+    .hp-hero__slide { transition: none; }
+    .hp-hero__slide.is-active .hp-hero__media img { animation: none !important; }
   }
 
-  /* chrome — thin dash indicators bottom-left, counter + arrows bottom-right */
+  /* ---- chrome: progress rail + scroll cue ---- */
   .hp-hero__chrome {
-    position: absolute;
-    z-index: 5;
-    left: 0; right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    padding: 0 clamp(2rem, 6vw, 6.4rem) 2.4rem;
+    position: absolute; z-index: 7; left: 0; right: 0; bottom: 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+    padding: 0 var(--hp-gap-x) 2.6rem;
   }
-  .hp-hero__dots { display: flex; gap: 0.6rem; align-items: center; }
+  .hp-hero__dots { display: flex; gap: 0.8rem; align-items: center; }
   .hp-hero__dot {
-    width: 3.2rem;
-    height: 2rem;
-    padding: 0;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    position: relative;
+    position: relative; width: 4.4rem; height: 2rem;
+    padding: 0; background: transparent; border: none; cursor: pointer;
   }
   .hp-hero__dot::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0;
-    top: 50%;
-    height: 3px;
-    border-radius: 3px;
-    background: rgba(255, 249, 223, 0.35);
+    content: ''; position: absolute; left: 0; right: 0; top: 50%;
+    height: 2px; border-radius: 2px;
+    background: rgba(255, 249, 223, 0.3);
     transition: background 0.4s ease;
   }
-  .hp-hero__dot.is-active::after { background: var(--hp-cream); }
-  .hp-hero__counter {
-    font-family: var(--hp-font-display);
-    font-size: 1.5rem;
-    letter-spacing: 0.2em;
-    color: rgba(255, 249, 223, 0.8);
-    white-space: nowrap;
+  .hp-hero__dot::before {
+    content: ''; position: absolute; left: 0; top: 50%;
+    height: 2px; width: 0; border-radius: 2px;
+    background: {{ hero_text }};
+    transition: width 0.4s ease;
   }
-  .hp-hero__counter-current { color: var(--hp-cream); font-size: 2rem; }
+  .hp-hero__dot.is-active::before { width: 100%; }
+  .hp-hero__counter {
+    font-family: var(--hp-font-display); font-size: 1.5rem;
+    letter-spacing: 0.18em; color: {{ hero_text }}; opacity: 0.75; white-space: nowrap;
+  }
+  .hp-hero__counter-current { font-size: 2.1rem; opacity: 1; }
   .hp-hero__nav { display: flex; gap: 0.8rem; align-items: center; }
   .hp-hero__arrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 4.2rem;
-    height: 4.2rem;
-    background: transparent;
-    border: 1.5px solid rgba(255, 249, 223, 0.4);
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 4.4rem; height: 4.4rem;
+    background: rgba(8, 26, 27, 0.28);
+    border: 1px solid rgba(255, 249, 223, 0.3);
     border-radius: 50%;
-    color: var(--hp-cream);
+    color: {{ hero_text }};
     cursor: pointer;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s var(--hp-ease);
   }
-  .hp-hero__arrow:hover { background: var(--hp-cream); color: var(--hp-teal); border-color: var(--hp-cream); transform: translateY(-2px); }
-  @media screen and (max-width: 749px) {
-    .hp-hero__counter, .hp-hero__nav { display: none; }
+  .hp-hero__arrow:hover {
+    background: {{ hero_text }}; color: var(--hp-teal-ink);
+    border-color: {{ hero_text }}; transform: translateY(-2px);
   }
+  .hp-hero__cue {
+    position: absolute; z-index: 7; left: 50%; bottom: 2.8rem;
+    transform: translateX(-50%);
+    display: none; flex-direction: column; align-items: center; gap: 0.6rem;
+    font-family: var(--hp-font-ui); font-size: 0.95rem;
+    letter-spacing: 0.28em; text-transform: uppercase;
+    color: {{ hero_text }}; opacity: 0.6;
+  }
+  @media screen and (min-width: 990px) { .hp-hero__cue { display: flex; } }
+  .hp-hero__cue-line {
+    width: 1px; height: 4rem;
+    background: linear-gradient(to bottom, currentColor, transparent);
+    animation: hp-cue 2.4s ease-in-out infinite;
+    transform-origin: top;
+  }
+  @keyframes hp-cue { 0%,100% { transform: scaleY(0.4); opacity: 0.4; } 50% { transform: scaleY(1); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .hp-hero__cue-line { animation: none; } }
+  @media screen and (max-width: 749px) { .hp-hero__counter, .hp-hero__nav { display: none; } }
 {%- endstyle -%}
 
 <hp-hero
   class="hp-hero{% if section.settings.text_position == 'center' %} hp-hero--center{% endif %}"
   data-autoplay="{{ section.settings.auto_rotate }}"
   data-speed="{{ section.settings.change_slides_speed }}"
+  data-hp-no-anim
   tabindex="0"
   role="region"
   aria-roledescription="carousel"
@@ -320,24 +311,19 @@
       {%- if section.settings.video != null -%}
         {{
           section.settings.video
-          | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata'
+          | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', image_size: '1920x'
         }}
       {%- else -%}
         <video
-          autoplay
-          loop
-          muted
-          playsinline
-          preload="metadata"
-          {% if section.settings.video_poster %}poster="{{ section.settings.video_poster | image_url: width: 1800 }}"{% endif %}
+          autoplay loop muted playsinline preload="auto"
+          {% if section.settings.video_poster %}poster="{{ section.settings.video_poster | image_url: width: 2400 }}"{% endif %}
           src="{{ section.settings.video_url }}"
         ></video>
       {%- endif -%}
     </div>
-  {%- endif -%}
-
-  {%- if has_video -%}
     <div class="hp-hero__scrim"></div>
+    <div class="hp-hero__vignette"></div>
+    {%- if section.settings.grain -%}<div class="hp-hero__grain"></div>{%- endif -%}
   {%- endif -%}
 
   {%- for block in section.blocks -%}
@@ -363,28 +349,27 @@
             -%}
             {{
               block.settings.image
-              | image_url: width: 3200
-              | image_tag:
-                widths: '750, 1100, 1500, 1780, 2000, 3000, 3200',
-                sizes: '100vw',
-                loading: img_loading,
-                fetchpriority: img_priority
+              | image_url: width: 3840
+              | image_tag: widths: '750, 1100, 1500, 1780, 2000, 2400, 3000, 3840', sizes: '100vw', loading: img_loading, fetchpriority: img_priority
             }}
           {%- else -%}
             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
           {%- endif -%}
         </div>
         <div class="hp-hero__scrim"></div>
+        <div class="hp-hero__vignette"></div>
+        {%- if section.settings.grain -%}<div class="hp-hero__grain"></div>{%- endif -%}
       {%- endunless -%}
 
       <div class="hp-hero__content">
-        <div class="hp-hero__content-inner">
+        <div class="hp-hero__inner">
           {%- if block.settings.kicker != blank -%}
             <p class="hp-hero__kicker">{{ block.settings.kicker | escape }}</p>
           {%- endif -%}
           {%- if block.settings.heading != blank -%}
             <h2 class="hp-hero__heading">{{ block.settings.heading | escape }}</h2>
           {%- endif -%}
+          <span class="hp-hero__rule" aria-hidden="true"></span>
           {%- if block.settings.subheading != blank -%}
             <p class="hp-hero__sub">{{ block.settings.subheading | escape }}</p>
           {%- endif -%}
@@ -399,12 +384,7 @@
               </a>
             {%- endif -%}
             {%- if section.settings.watch_label != blank and section.settings.watch_video_url != blank -%}
-              <button
-                type="button"
-                class="hp-btn hp-btn--cream"
-                data-hp-video-src="{{ section.settings.watch_video_url }}"
-                data-hp-video-wide
-              >
+              <button type="button" class="hp-btn hp-btn--cream" data-hp-video-src="{{ section.settings.watch_video_url }}" data-hp-video-wide>
                 {{ section.settings.watch_label | escape }}
               </button>
             {%- endif -%}
@@ -429,11 +409,7 @@
     <div class="hp-hero__chrome">
       <div class="hp-hero__dots" role="tablist" aria-label="{{ section.settings.accessibility_info | escape }}">
         {%- for block in section.blocks -%}
-          <button
-            type="button"
-            class="hp-hero__dot{% if forloop.first %} is-active{% endif %}"
-            aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
-          >
+          <button type="button" class="hp-hero__dot{% if forloop.first %} is-active{% endif %}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
             <span class="visually-hidden">{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }}</span>
           </button>
         {%- endfor -%}
@@ -450,6 +426,13 @@
           {% render 'hp-icon', icon: 'chevron-right', size: 18 %}
         </button>
       </div>
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.show_cue -%}
+    <div class="hp-hero__cue" aria-hidden="true">
+      <span>Scroll</span>
+      <span class="hp-hero__cue-line"></span>
     </div>
   {%- endif -%}
 </hp-hero>
@@ -515,6 +498,22 @@
       "default": true
     },
     { "type": "color", "id": "overlay_color", "label": "Overlay colour", "default": "#123536" },
+    { "type": "checkbox", "id": "grain", "label": "Film-grain texture", "info": "Fine vintage grain over the footage — adds depth and masks compression.", "default": true },
+    { "type": "checkbox", "id": "show_cue", "label": "Show scroll cue", "default": true },
+    {
+      "type": "select",
+      "id": "focal",
+      "label": "Video / image focal point",
+      "info": "Which part of the frame stays visible when it is cropped.",
+      "options": [
+        { "value": "center", "label": "Centre" },
+        { "value": "top", "label": "Top" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
     { "type": "color", "id": "text_color", "label": "Text colour", "default": "#fff9df" },
     { "type": "header", "content": "Rotation" },
     { "type": "checkbox", "id": "auto_rotate", "label": "Auto-rotate slides", "default": true },

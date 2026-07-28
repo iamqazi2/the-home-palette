@@ -2,29 +2,6 @@
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
-    "newsletter_6XcRyn": {
-      "type": "newsletter",
-      "blocks": {
-        "heading_7KFUpi": {
-          "type": "heading",
-          "settings": { "heading": "Join the Table", "heading_size": "h1" }
-        },
-        "paragraph_iGwma9": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>Stories from the kiln, new collections and table-setting inspiration — a letter, not a flyer.</p>"
-          }
-        },
-        "email_form_bhrCK4": { "type": "email_form", "settings": {} }
-      },
-      "block_order": ["heading_7KFUpi", "paragraph_iGwma9", "email_form_bhrCK4"],
-      "settings": {
-        "color_scheme": "scheme-1",
-        "full_width": true,
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
     "footer": {
       "type": "footer",
       "blocks": {
@@ -37,7 +14,10 @@
         },
         "link_list_RWcm7t": {
           "type": "link_list",
-          "settings": { "heading": "Quick links", "menu": "footer" }
+          "settings": {
+            "heading": "Quick links",
+            "menu": "footer"
+          }
         },
         "text_heritage": {
           "type": "text",
@@ -47,7 +27,11 @@
           }
         }
       },
-      "block_order": ["text_contact", "link_list_RWcm7t", "text_heritage"],
+      "block_order": [
+        "text_contact",
+        "link_list_RWcm7t",
+        "text_heritage"
+      ],
       "settings": {
         "color_scheme": "scheme-4",
         "newsletter_enable": false,
@@ -64,5 +48,7 @@
       }
     }
   },
-  "order": ["newsletter_6XcRyn", "footer"]
+  "order": [
+    "footer"
+  ]
 }

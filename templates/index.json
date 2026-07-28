@@ -72,14 +72,17 @@
         "accessibility_info": "Slideshow about our brand",
         "height": "standard",
         "text_position": "left",
-        "overlay_strength": 70,
+        "overlay_strength": 72,
         "text_shade": true,
         "show_rating": true,
         "rating_score": "4.9",
         "rating_text": "1,000+ happy tables across Pakistan",
         "watch_label": "Watch Story",
         "watch_video_url": "",
-        "video_url": "https://cdn.shopify.com/videos/c/o/v/f2058e22370f489c8d4c2a6a7eaf5f77.mp4"
+        "video_url": "https://cdn.shopify.com/videos/c/o/v/f2058e22370f489c8d4c2a6a7eaf5f77.mp4",
+        "grain": true,
+        "show_cue": true,
+        "focal": "center"
       }
     },
     "hp_trust": {
@@ -475,7 +478,8 @@
         "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
         "button_label": "Explore THP Weaves",
         "link": "shopify://collections/thp-weave-collection",
-        "scrim": 82
+        "scrim": 93,
+        "scrim_color": "#0c2627"
       }
     },
     "featured_collection_MAEfLD": {
@@ -752,10 +756,10 @@
         "speed": 5,
         "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
         "loop_previews": false,
-        "bg_color": "#123536",
+        "bg_color": "#257575",
         "text_color": "#fff9df",
-        "eyebrow_color": "#7fc8be",
-        "card_color": "#173f40"
+        "eyebrow_color": "#fff9df",
+        "card_color": "#1c5b5b"
       }
     }
   },
@@ -766,13 +770,13 @@
     "hp_category_tiles",
     "hp_story",
     "featured_collection_LPAqnQ",
+    "hp_video_reviews",
     "hp_occasion",
     "hp_shop_by_color",
     "featured_collection_AnTVtq",
     "hp_style_rail",
     "hp_cta",
     "featured_collection_MAEfLD",
-    "hp_video_reviews",
     "hp_marquee",
     "173573001120319a38"
   ]

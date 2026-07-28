@@ -11,28 +11,41 @@
     transform: translateZ(0);
   }
   .hp-cta__media img {
-    {% if section.settings.duotone %}filter: brightness(0.6) sepia(0.18) saturate(0.85);{% else %}filter: brightness(0.68);{% endif %}
+    {% if section.settings.duotone %}filter: brightness(0.5) sepia(0.2) saturate(0.8) contrast(1.05);{% else %}filter: brightness(0.58);{% endif %}
   }
   /* Legibility: a deep teal wash on the copy side, easing off over the photo.
      Strength is merchant-adjustable for future images. */
+  {%- liquid
+    assign cta_rgb = section.settings.scrim_color | default: '#0c2627' | color_to_rgb | remove: 'rgb(' | remove: ')'
+    assign a_full = section.settings.scrim | default: 93 | divided_by: 100.0
+    assign a_mid = section.settings.scrim | default: 93 | times: 0.78 | divided_by: 100.0
+    assign a_low = section.settings.scrim | default: 93 | times: 0.34 | divided_by: 100.0
+  -%}
+  /* Legibility: an almost-solid wash on the copy side that eases off across the
+     photo, plus a full-frame base tint so pale imagery (jute, ivory) can never
+     wash the heading out. */
   .hp-cta__scrim {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      90deg,
-      {{ section.settings.scrim_color | default: '#0c2627' | color_modify: 'alpha', 0.9 }} 0%,
-      {{ section.settings.scrim_color | default: '#0c2627' | color_modify: 'alpha', 0.7 }} 45%,
-      {{ section.settings.scrim_color | default: '#0c2627' | color_modify: 'alpha', 0.35 }} 100%
-    );
+    background:
+      linear-gradient(
+        90deg,
+        rgba({{ cta_rgb }}, {{ a_full }}) 0%,
+        rgba({{ cta_rgb }}, {{ a_mid }}) 45%,
+        rgba({{ cta_rgb }}, {{ a_low }}) 100%
+      ),
+      linear-gradient(rgba({{ cta_rgb }}, 0.3), rgba({{ cta_rgb }}, 0.3));
   }
   /* extra vertical wash on phones, where the copy overlays the whole frame */
   @media screen and (max-width: 749px) {
     .hp-cta__scrim {
-      background: linear-gradient(
-        180deg,
-        rgba(12, 38, 39, {{ section.settings.scrim | times: 0.7 | divided_by: 100.0 }}) 0%,
-        rgba(12, 38, 39, {{ section.settings.scrim | divided_by: 100.0 }}) 100%
-      );
+      background:
+        linear-gradient(
+          180deg,
+          rgba({{ cta_rgb }}, {{ a_mid }}) 0%,
+          rgba({{ cta_rgb }}, {{ a_full }}) 100%
+        ),
+        linear-gradient(rgba({{ cta_rgb }}, 0.35), rgba({{ cta_rgb }}, 0.35));
     }
   }
   .hp-cta__inner {
@@ -113,7 +126,7 @@
       "unit": "%",
       "label": "Overlay strength",
       "info": "Raise this if the heading is hard to read over the photo.",
-      "default": 82
+      "default": 93
     },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Weave Collection" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Woven for the Everyday Feast" },

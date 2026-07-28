@@ -119,13 +119,15 @@
       --color-foreground: {{ section.settings.hp_band_text | color_to_rgb | remove: 'rgb(' | remove: ')' }};
     }
     .header-wrapper.hp-band .header__heading-link,
-    .header-wrapper.hp-band .header__menu-item,
-    .header-wrapper.hp-band .header__menu-item span,
+    .header-wrapper.hp-band > .header > .header__inline-menu .header__menu-item,
+    .header-wrapper.hp-band > .header > .header__inline-menu .header__menu-item span,
     .header-wrapper.hp-band .header__icon,
     .header-wrapper.hp-band .header__icon .icon {
       color: {{ section.settings.hp_band_text }};
     }
-    .header-wrapper.hp-band .header__menu-item > span::after { background: {{ section.settings.hp_band_text }}; }
+    .header-wrapper.hp-band > .header > .header__inline-menu .header__menu-item > span::after {
+      background: {{ section.settings.hp_band_text }};
+    }
     .header-wrapper.hp-band .header__heading-logo-wrapper,
     .header-wrapper.hp-band .header__heading-logo {
       background: transparent;
@@ -136,8 +138,43 @@
       background-color: {{ section.settings.hp_band_text }};
       color: {{ section.settings.hp_band_color }};
     }
+
+    /* Dropdown panels sit on cream, so their text must go back to ink —
+       otherwise the cream band colour above makes them invisible. */
+    .header-wrapper.hp-band .header__submenu,
+    .header-wrapper.hp-band .mega-menu__content {
+      background: var(--hp-cream-soft);
+      border: 1px solid var(--hp-hairline);
+      border-radius: 14px;
+      box-shadow: 0 24px 48px -28px rgba(18, 53, 54, 0.55);
+      padding: 1rem 0.6rem;
+    }
+    .header-wrapper.hp-band .header__submenu .header__menu-item,
+    .header-wrapper.hp-band .header__submenu .header__menu-item span,
+    .header-wrapper.hp-band .header__submenu a,
+    .header-wrapper.hp-band .header__submenu summary,
+    .header-wrapper.hp-band .mega-menu__content a,
+    .header-wrapper.hp-band .mega-menu__link {
+      color: var(--hp-ink) !important;
+      opacity: 1 !important;
+    }
+    .header-wrapper.hp-band .header__submenu .header__menu-item:hover,
+    .header-wrapper.hp-band .header__submenu .header__menu-item:hover span,
+    .header-wrapper.hp-band .mega-menu__link:hover {
+      color: var(--hp-teal) !important;
+    }
+    .header-wrapper.hp-band .header__submenu .header__menu-item > span::after,
+    .header-wrapper.hp-band .header__submenu .header__menu-item span::after {
+      background: var(--hp-teal);
+    }
+    .header-wrapper.hp-band .header__submenu .icon-caret { color: var(--hp-taupe); }
+    /* drawer + search overlay are light surfaces too */
     .header-wrapper.hp-band .menu-drawer,
-    .header-wrapper.hp-band .header__search .search-modal { color: initial; }
+    .header-wrapper.hp-band .menu-drawer a,
+    .header-wrapper.hp-band .menu-drawer summary,
+    .header-wrapper.hp-band .search-modal,
+    .header-wrapper.hp-band .search-modal input,
+    .header-wrapper.hp-band predictive-search { color: var(--hp-ink); }
   {%- endstyle -%}
 {%- endif -%}
 <{% if section.settings.sticky_header_type != 'none' %}sticky-header data-sticky-type="{{ section.settings.sticky_header_type }}"{% else %}div{% endif %} class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}{% if section.settings.hp_band_enable %} hp-band{% endif %}">
