@@ -3,6 +3,20 @@
 {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
 
 {%- comment -%}
+  Add-to-cart needs Dawn's quick-add bundle. Loading it out here, outside
+  <product-recommendations>, is deliberate: this section renders once on page
+  load and the recommendations element later replaces only its own innerHTML
+  with a fetched copy. Anything inside that element is therefore thrown away and
+  re-inserted, and script tags injected that way do not execute — out here it
+  loads once and the custom elements upgrade the swapped-in cards themselves.
+{%- endcomment -%}
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+
+{%- comment -%}
   THP: guarantee a real 2-per-row grid on mobile, replacing Dawn's flexbox
   percentage math (width/gap/flex-grow interacting made it unreliable) with an
   explicit 2-column CSS Grid. Scoped with {{ section.id }}, which Liquid
@@ -66,7 +80,9 @@
               show_secondary_image: section.settings.show_secondary_image,
               show_vendor: section.settings.show_vendor,
               show_rating: section.settings.show_rating,
-              skip_styles: skip_card_product_styles
+              skip_styles: skip_card_product_styles,
+              quick_add: section.settings.quick_add,
+              section_id: section.id
             %}
           </li>
           {%- assign skip_card_product_styles = true -%}
@@ -231,6 +247,17 @@
       "default": false,
       "label": "t:sections.related-products.settings.show_rating.label",
       "info": "t:sections.related-products.settings.show_rating.info"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "label": "Add-to-cart button",
+      "default": "standard",
+      "info": "Products with more than one variant show \"Options\" and open a picker instead.",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "standard", "label": "Standard" }
+      ]
     },
     {
       "type": "header",

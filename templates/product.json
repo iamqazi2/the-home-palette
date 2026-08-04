@@ -96,7 +96,8 @@
         "show_rating": true,
         "columns_mobile": "2",
         "padding_top": 24,
-        "padding_bottom": 36
+        "padding_bottom": 36,
+        "quick_add": "standard"
       }
     },
     "1735728895025f6c98": {
