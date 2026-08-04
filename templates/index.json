@@ -403,34 +403,6 @@
         "text_color": "#fff9df"
       }
     },
-    "featured_collection_MAEfLD": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "The Wooden Line",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "thp-woodworks",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "outline",
-        "enable_desktop_slider": true,
-        "color_scheme": "scheme-2",
-        "image_ratio": "portrait",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": true,
-        "quick_add": "standard",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 32,
-        "padding_bottom": 32
-      }
-    },
     "173573001120319a38": {
       "type": "apps",
       "settings": {
@@ -691,6 +663,36 @@
         "show_view_all": true,
         "view_all_label": "View all"
       }
+    },
+    "hp_wooden_line_rail": {
+      "type": "hp-collection-rails",
+      "blocks": {
+        "rail_1": {
+          "type": "rail",
+          "settings": {
+            "collection": "thp-woodworks",
+            "title": "The Wooden Line",
+            "products_to_show": 8
+          }
+        }
+      },
+      "block_order": [
+        "rail_1"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "text": "",
+        "bg_color": "#fffdf4",
+        "columns_desktop": 4,
+        "peek_mobile": 2.2,
+        "image_ratio": "portrait",
+        "show_secondary_image": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "show_view_all": true,
+        "view_all_label": "View all"
+      }
     }
   },
   "order": [
@@ -704,7 +706,7 @@
     "hp_shop_by_color",
     "hp_style_rail",
     "hp_cta",
-    "featured_collection_MAEfLD",
+    "hp_wooden_line_rail",
     "173573001120319a38"
   ]
 }

@@ -33,7 +33,18 @@
 -%}
 
 {%- style -%}
-  .hp-rails { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
+  {%- comment -%}
+    Anything driven by this instance's own settings is scoped with the real
+    {{ section.id }}; only settings-independent structure uses bare class
+    selectors. This matters because the homepage renders this section twice (the
+    "Shop the Range" band and The Wooden Line). Both emit this stylesheet, so an
+    unscoped `.hp-rails { background }` or item-width calc would let whichever
+    instance happens to render second silently win for both — the two would stay
+    locked together and changing one in the theme editor would move the other.
+  {%- endcomment -%}
+  #shopify-section-{{ section.id }} .hp-rails {
+    background: {{ section.settings.bg_color | default: '#fffdf4' }};
+  }
 
   /* Space between one collection rail and the next. Generous enough that the
      two read as separate collections, tight enough that they still read as one
@@ -105,16 +116,18 @@
      a partly visible next card is what tells a touch visitor the row scrolls,
      which a flush 2-up grid never communicates. */
   .hp-rails { --hp-rail-gap: 1.2rem; }
-  .hp-rail__track {
+  #shopify-section-{{ section.id }} .hp-rail__track {
     --hp-rail-item: calc((100% - (var(--hp-rail-gap) * {{ per_view_mobile | minus: 1 | round: 2 }})) / {{ per_view_mobile }});
   }
   @media screen and (min-width: 750px) {
     .hp-rails { --hp-rail-gap: 1.6rem; }
-    .hp-rail__track { --hp-rail-item: calc((100% - (var(--hp-rail-gap) * 2)) / 3); }
+    #shopify-section-{{ section.id }} .hp-rail__track {
+      --hp-rail-item: calc((100% - (var(--hp-rail-gap) * 2)) / 3);
+    }
   }
   @media screen and (min-width: 990px) {
     .hp-rails { --hp-rail-gap: 2rem; }
-    .hp-rail__track {
+    #shopify-section-{{ section.id }} .hp-rail__track {
       --hp-rail-item: calc((100% - (var(--hp-rail-gap) * {{ per_view | minus: 1 }})) / {{ per_view }});
     }
   }
