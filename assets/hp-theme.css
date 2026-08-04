@@ -4,7 +4,7 @@
    teal #257575 · teal-deep #1c5b5b · teal-ink #123536 · teal-card #173f40
    chip #eaf1f0 · cream #fff9df · page #fffdf4 · card #ffffff · ink #252525
    taupe #716a56 · gold #e0a422 (stars) · linen #efecec
-   Type: Cormorant Garamond 600 (display) + Archivo (UI/body)
+   Type: Fraunces 600 (display) + Plus Jakarta Sans (UI/body)
    Primitives: pill buttons (r40) · white rounded cards (r18) · teal eyebrows
    ========================================================================== */
 
@@ -33,8 +33,28 @@
   --hp-hairline-light: rgba(255, 249, 223, 0.22);
   --hp-hairline-teal: rgba(37, 85, 80, 0.12);
 
-  --hp-font-display: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
-  --hp-font-ui: 'Archivo', 'Archivo Narrow', system-ui, sans-serif;
+  --hp-font-display: 'Fraunces', 'Georgia', 'Times New Roman', serif;
+  --hp-font-ui: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* Fraunces is variable on an optical-size axis: at small sizes it wants a low
+     opsz (sturdier stems, more legible), at display sizes a high one (finer,
+     more elegant). These are applied per-context rather than globally, because
+     one flat value would either bloat headlines or thin out small type. */
+  --hp-opsz-display: 'opsz' 108;
+  --hp-opsz-text: 'opsz' 24;
+
+  /* Dawn's own type variables, repointed at the THP faces. Overriding these
+     here — rather than chasing individual selectors — is what makes the swap
+     reach every stock Dawn template (cart, account, search, policies, blog,
+     404) and not just the sections rebuilt for v3. Same :root specificity as
+     theme.liquid's block, but hp-theme.css loads after it, so these win. */
+  --font-body-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body-style: normal;
+  --font-body-weight: 400;
+  --font-body-weight-bold: 600;
+  --font-heading-family: 'Fraunces', 'Georgia', 'Times New Roman', serif;
+  --font-heading-style: normal;
+  --font-heading-weight: 600;
 
   --hp-r-card: 18px;
   --hp-r-pill: 40px;
@@ -80,8 +100,18 @@ h1, h2, h3,
 .quick-add-modal .product__title > * {
   font-family: var(--hp-font-display) !important;
   font-weight: 600 !important;
-  letter-spacing: 0.005em !important;
-  line-height: 1.06;
+  font-variation-settings: var(--hp-opsz-display);
+  /* Fraunces is wider and far sturdier than the Cormorant it replaced, so the
+     old positive tracking now reads as loose — pulled slightly negative, which
+     is where a display serif of this weight actually wants to sit. */
+  letter-spacing: -0.012em !important;
+  line-height: 1.08;
+}
+/* Small headings (card titles, footer blocks, drawer titles) get the low
+   optical size so their stems stay solid instead of thinning out. */
+h3, .h3, .footer-block__heading, .cart__title {
+  font-variation-settings: var(--hp-opsz-text);
+  letter-spacing: -0.004em !important;
 }
 
 .hp-eyebrow {
@@ -109,8 +139,9 @@ h1, h2, h3,
 .hp-display {
   font-family: var(--hp-font-display);
   font-weight: 600;
-  line-height: 1.06;
-  letter-spacing: 0.005em;
+  font-variation-settings: var(--hp-opsz-display);
+  line-height: 1.08;
+  letter-spacing: -0.012em;
   margin: 0;
 }
 

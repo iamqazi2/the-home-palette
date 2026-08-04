@@ -809,9 +809,9 @@
       '.jdgm-rev-widg__title{display:none!important}',
       /* type */
       '.jdgm-rev-widg,.jdgm-rev__body,.jdgm-rev__body p,.jdgm-rev__author,.jdgm-rev__timestamp{',
-      "font-family:'Archivo',system-ui,sans-serif!important;color:#252525}",
+      'font-family:var(--hp-font-ui)!important;color:#252525}',
       '.jdgm-rev__body,.jdgm-rev__body p{font-size:15px!important;line-height:1.8!important}',
-      ".jdgm-rev__title{font-family:'Cormorant Garamond',Georgia,serif!important;font-weight:600!important;",
+      '.jdgm-rev__title{font-family:var(--hp-font-display)!important;font-weight:600!important;',
       'font-size:20px!important;color:#252525!important;display:block;margin-bottom:4px}',
       /* stars */
       '.jdgm-star{color:' + gold + '!important}',
@@ -820,14 +820,14 @@
       /* summary */
       '.jdgm-rev-widg__header{border:1px solid rgba(37,37,37,.09);border-radius:16px;',
       'background:#fff9df;padding:16px 18px;margin-bottom:16px}',
-      ".jdgm-rev-widg__summary-average{font-family:'Cormorant Garamond',Georgia,serif!important;",
+      '.jdgm-rev-widg__summary-average{font-family:var(--hp-font-display)!important;',
       'font-size:26px!important;color:#257575!important}',
       /* cards */
       '.jdgm-rev{border:1px solid rgba(37,37,37,.09)!important;border-radius:16px;background:#fff;',
       'padding:18px!important;margin-bottom:12px!important}',
       /* avatar */
       '.jdgm-rev__icon{background:#257575!important;color:#fff9df!important;',
-      "font-family:'Cormorant Garamond',Georgia,serif!important;font-weight:600;font-size:16px!important;",
+      'font-family:var(--hp-font-display)!important;font-weight:600;font-size:16px!important;',
       'width:36px!important;height:36px!important;line-height:36px!important;border-radius:50%!important;text-align:center}',
       /* author + verified badge */
       '.jdgm-rev__author{font-weight:600!important;font-size:14px!important;color:#252525!important}',
@@ -844,7 +844,7 @@
       /* write a review + controls */
       '.jdgm-write-rev-link{background:#257575!important;color:#fff9df!important;',
       'border:1.5px solid #257575!important;border-radius:40px!important;',
-      "font-family:'Archivo',system-ui,sans-serif!important;font-size:11px!important;font-weight:600!important;",
+      'font-family:var(--hp-font-ui)!important;font-size:11px!important;font-weight:600!important;',
       'letter-spacing:.12em;text-transform:uppercase;padding:10px 18px!important}',
       '.jdgm-write-rev-link:hover{background:#1c5b5b!important;border-color:#1c5b5b!important}',
       '.jdgm-rev-widg__sort-wrapper select,.jdgm-sort-dropdown{border-radius:40px!important;',
@@ -855,7 +855,7 @@
       'border-radius:50%;border:1.5px solid #257575;background:transparent;color:#257575;cursor:pointer}',
       '.hp-revpager__btn:hover:not(:disabled){background:#257575;color:#fff9df}',
       '.hp-revpager__btn:disabled{opacity:.3;cursor:default}',
-      ".hp-revpager__label{font-family:'Archivo',system-ui,sans-serif;font-size:11px;",
+      '.hp-revpager__label{font-family:var(--hp-font-ui);font-size:11px;',
       'letter-spacing:.1em;text-transform:uppercase;color:#716a56}'
     ].join('');
   }

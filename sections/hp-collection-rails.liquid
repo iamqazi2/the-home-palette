@@ -1,0 +1,336 @@
+{% comment %}
+  THP — Collection Rails.
+
+  Replaces three separate stock `featured-collection` sections (Dinner Sets,
+  Tea & Coffee, Serving in Style) that were scattered down the homepage. Each
+  one shipped its own background, its own bare `<h2>` with no eyebrow, and its
+  own padding, so the page read as three unrelated slabs with inconsistent
+  headings compared with the v3 sections around them.
+
+  Here they are blocks inside a single band: one background, one section head
+  in the same eyebrow + display-title + standfirst shape used by "Chapter One —
+  The Collections", and one consistent rail treatment per collection.
+
+  Every rail is a horizontal slider at every breakpoint — on mobile especially,
+  where the previous grid was collapsing to a single full-width card per row.
+  Sliding is driven by native CSS scroll-snap, so it works with no JS at all;
+  the <hp-rail> element only adds the desktop arrow buttons on top.
+{% endcomment %}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-rating.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+
+{%- liquid
+  assign per_view = section.settings.columns_desktop | default: 4
+  assign per_view_mobile = section.settings.peek_mobile | default: 2.2
+-%}
+
+{%- style -%}
+  .hp-rails { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
+
+  /* Space between one collection rail and the next. Generous enough that the
+     two read as separate collections, tight enough that they still read as one
+     section rather than the three disconnected bands this replaced. */
+  .hp-rails__rail + .hp-rails__rail { margin-top: clamp(3.2rem, 4.4vw, 5rem); }
+
+  .hp-rails__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.2rem 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.6rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--hp-hairline-teal);
+  }
+  .hp-rails__title {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-weight: 600;
+    font-variation-settings: var(--hp-opsz-display);
+    font-size: clamp(2rem, 2.8vw, 2.8rem);
+    letter-spacing: -0.012em;
+    line-height: 1.1;
+    color: var(--hp-ink);
+  }
+  .hp-rails__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .hp-rails__all .hp-icon { transition: transform 0.35s var(--hp-ease); }
+  .hp-rails__all:hover { color: var(--hp-teal-deep); }
+  .hp-rails__all:hover .hp-icon { transform: translateX(4px); }
+
+  /* ---- the rail itself -------------------------------------------------- */
+  .hp-rail { position: relative; display: block; }
+
+  .hp-rail__track {
+    display: flex;
+    gap: var(--hp-rail-gap);
+    margin: 0;
+    padding: 0 0 0.6rem;
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hp-rail__track::-webkit-scrollbar { display: none; }
+
+  .hp-rail__item {
+    flex: 0 0 var(--hp-rail-item);
+    width: var(--hp-rail-item);
+    max-width: var(--hp-rail-item);
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  /* Mobile: a peeking slider. The fractional card count is the whole point —
+     a partly visible next card is what tells a touch visitor the row scrolls,
+     which a flush 2-up grid never communicates. */
+  .hp-rails { --hp-rail-gap: 1.2rem; }
+  .hp-rail__track {
+    --hp-rail-item: calc((100% - (var(--hp-rail-gap) * {{ per_view_mobile | minus: 1 | round: 2 }})) / {{ per_view_mobile }});
+  }
+  @media screen and (min-width: 750px) {
+    .hp-rails { --hp-rail-gap: 1.6rem; }
+    .hp-rail__track { --hp-rail-item: calc((100% - (var(--hp-rail-gap) * 2)) / 3); }
+  }
+  @media screen and (min-width: 990px) {
+    .hp-rails { --hp-rail-gap: 2rem; }
+    .hp-rail__track {
+      --hp-rail-item: calc((100% - (var(--hp-rail-gap) * {{ per_view | minus: 1 }})) / {{ per_view }});
+    }
+  }
+
+  /* ---- arrows (desktop only) -------------------------------------------- */
+  .hp-rail__arrow {
+    position: absolute;
+    top: calc(50% - 4rem);
+    z-index: 2;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 4.4rem;
+    height: 4.4rem;
+    padding: 0;
+    border: 1px solid var(--hp-hairline);
+    border-radius: 50%;
+    background: var(--hp-paper);
+    color: var(--hp-teal);
+    cursor: pointer;
+    box-shadow: 0 12px 24px -14px rgba(18, 53, 54, 0.55);
+    transition: background-color 0.3s var(--hp-ease), color 0.3s var(--hp-ease),
+      opacity 0.3s var(--hp-ease), transform 0.3s var(--hp-ease);
+  }
+  .hp-rail__arrow:hover:not(:disabled) {
+    background: var(--hp-teal);
+    color: var(--hp-cream);
+    border-color: var(--hp-teal);
+    transform: scale(1.06);
+  }
+  .hp-rail__arrow:disabled { opacity: 0; pointer-events: none; }
+  .hp-rail__arrow--prev { left: -1.8rem; }
+  .hp-rail__arrow--next { right: -1.8rem; }
+  @media screen and (min-width: 990px) {
+    .hp-rail__arrow { display: inline-flex; }
+  }
+
+  /* ---- card presentation inside a rail ---------------------------------- */
+  /* Dawn's card ships a lot of vertical air between the media, the title and
+     the price; inside a rail that pushes the add-to-cart button below the fold
+     of the row. These pull the block together without touching the card
+     anywhere else on the site. */
+  .hp-rail__item .card__content { padding: 1.2rem 0.2rem 0; }
+  .hp-rail__item .card__information { padding: 0; }
+  .hp-rail__item .card-wrapper { height: 100%; }
+  .hp-rail__item .quick-add { margin-top: 1rem; }
+{%- endstyle -%}
+
+{%- comment -%}
+  Reveal is per-element via data-hp-reveal, matching every other v3 section,
+  rather than a single data-hp-section on the wrapper. A whole-section reveal
+  starts the element at opacity:0 and depends on ScrollTrigger firing to bring
+  it back — for a block this tall that is a blank screen if anything goes wrong,
+  and it would animate three rails as one slab instead of in sequence.
+{%- endcomment -%}
+<div class="hp-rails hp-section">
+  <div class="hp-container">
+    {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+      <div class="hp-section-head hp-section-head--center">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="hp-eyebrow hp-eyebrow--rule-after" data-hp-reveal>{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="hp-section-head__title" data-hp-reveal>{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <p class="hp-section-head__text" data-hp-reveal>{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign col = block.settings.collection
+        assign rail_title = block.settings.title | default: col.title
+        assign limit = block.settings.products_to_show | default: 8
+      -%}
+      {%- if col != blank and col.products.size > 0 -%}
+        <div class="hp-rails__rail" {{ block.shopify_attributes }} data-hp-reveal>
+          <div class="hp-rails__head">
+            <h3 class="hp-rails__title">{{ rail_title | escape }}</h3>
+            {%- if section.settings.show_view_all -%}
+              <a class="hp-rails__all" href="{{ col.url }}">
+                {{ section.settings.view_all_label | default: 'View all' | escape }}
+                {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+              </a>
+            {%- endif -%}
+          </div>
+
+          <hp-rail class="hp-rail">
+            <button
+              type="button"
+              class="hp-rail__arrow hp-rail__arrow--prev"
+              aria-label="{{ 'general.slider.previous_slide' | t }}"
+            >
+              {% render 'hp-icon', icon: 'chevron-left', size: 20 %}
+            </button>
+            <button
+              type="button"
+              class="hp-rail__arrow hp-rail__arrow--next"
+              aria-label="{{ 'general.slider.next_slide' | t }}"
+            >
+              {% render 'hp-icon', icon: 'chevron-right', size: 20 %}
+            </button>
+
+            <ul class="hp-rail__track" role="list">
+              {%- assign skip_card_product_styles = false -%}
+              {%- for product in col.products limit: limit -%}
+                <li class="hp-rail__item">
+                  {% render 'card-product',
+                    card_product: product,
+                    media_aspect_ratio: section.settings.image_ratio,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_rating: section.settings.show_rating,
+                    show_vendor: false,
+                    skip_styles: skip_card_product_styles,
+                    quick_add: section.settings.quick_add,
+                    lazy_load: true,
+                    section_id: section.id
+                  %}
+                </li>
+                {%- assign skip_card_product_styles = true -%}
+              {%- endfor -%}
+            </ul>
+          </hp-rail>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP Collection Rails",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Shelf" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop the Range" },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Three collections that cover the whole table — from the everyday plate to the set you bring out for guests."
+    },
+    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#fffdf4" },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "Cards per view (desktop)"
+    },
+    {
+      "type": "range",
+      "id": "peek_mobile",
+      "min": 1.2,
+      "max": 3,
+      "step": 0.1,
+      "default": 2.2,
+      "label": "Cards per view (mobile)",
+      "info": "A fractional value leaves the next card peeking, which shows visitors the row scrolls."
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "default": "portrait",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ]
+    },
+    { "type": "checkbox", "id": "show_secondary_image", "label": "Show second image on hover", "default": true },
+    { "type": "checkbox", "id": "show_rating", "label": "Show product rating", "default": true },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "label": "Add-to-cart button",
+      "default": "standard",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "standard", "label": "Standard" }
+      ]
+    },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show \"view all\" link per rail", "default": true },
+    { "type": "text", "id": "view_all_label", "label": "View-all label", "default": "View all" }
+  ],
+  "blocks": [
+    {
+      "type": "rail",
+      "name": "Collection rail",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the collection's own name." },
+        {
+          "type": "range",
+          "id": "products_to_show",
+          "min": 4,
+          "max": 16,
+          "step": 1,
+          "default": 8,
+          "label": "Products to show"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP Collection Rails",
+      "blocks": [{ "type": "rail" }, { "type": "rail" }, { "type": "rail" }]
+    }
+  ]
+}
+{% endschema %}
