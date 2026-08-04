@@ -1078,10 +1078,12 @@ sticky-header.shopify-section-header-sticky {
     align-items: center;
     padding-top: 0.6rem !important;
     padding-bottom: 0.6rem !important;
-    /* Dawn's 3rem side padding costs 60px of a 375px screen — far too much
-       once a bigger logo has to fit between the drawer and the icons. */
-    padding-left: 1.2rem !important;
-    padding-right: 1.2rem !important;
+    /* Dawn's 3rem side padding costs 60px of a 375px screen, which left no room
+       for a larger logo; 2rem keeps the hamburger and cart off the screen edge
+       without taking that room back. Trading it against the icon sizes below is
+       what makes both fit. */
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
   }
   header-drawer { grid-column: 1; justify-self: start; }
   .header > .header__heading,
@@ -1111,26 +1113,29 @@ sticky-header.shopify-section-header-sticky {
     max-width: none !important;
   }
 
+  /* Covers the hamburger too — header-drawer's <summary> carries
+     .header__icon .header__icon--menu, so it tracks these sizes automatically
+     and the three stay optically matched. */
   .header__icon,
   .header__icon--cart,
   .header__icon--account,
   .header__icon--search {
-    height: 3.6rem;
-    width: 3.6rem;
+    height: 3.2rem;
+    width: 3.2rem;
   }
   .header__icon .svg-wrapper,
   .header__icon .icon,
   .header__icon svg {
-    width: 2.1rem;
-    height: 2.1rem;
+    width: 1.9rem;
+    height: 1.9rem;
   }
   /* The cart glyph is drawn on a 40x40 viewBox against the others' 18x19, so
      it needs a larger box to look the same optical size. */
   .header__icon--cart .svg-wrapper,
   .header__icon--cart .icon,
   .header__icon--cart svg {
-    width: 3.2rem;
-    height: 3.2rem;
+    width: 2.8rem;
+    height: 2.8rem;
   }
   .header__icon--cart .cart-count-bubble {
     height: 1.7rem;
@@ -1154,18 +1159,18 @@ sticky-header.shopify-section-header-sticky {
 @media screen and (max-width: 380px) {
   /* Tightest phones: shrink both sides of the equation so the centred logo
      still clears the icon cluster. */
-  .header { column-gap: 0.4rem; padding-left: 0.8rem !important; padding-right: 0.8rem !important; }
+  .header { column-gap: 0.4rem; padding-left: 1.4rem !important; padding-right: 1.4rem !important; }
   .header__heading-logo { width: clamp(12rem, 45vw, 15rem) !important; }
   .header__icons { gap: 0; }
   .header__icon,
   .header__icon--cart,
-  .header__icon--search { height: 3.2rem; width: 3.2rem; }
+  .header__icon--search { height: 2.9rem; width: 2.9rem; }
   .header__icon .svg-wrapper,
   .header__icon .icon,
-  .header__icon svg { width: 1.9rem; height: 1.9rem; }
+  .header__icon svg { width: 1.75rem; height: 1.75rem; }
   .header__icon--cart .svg-wrapper,
   .header__icon--cart .icon,
-  .header__icon--cart svg { width: 2.9rem; height: 2.9rem; }
+  .header__icon--cart svg { width: 2.5rem; height: 2.5rem; }
 }
 
 /* Judge.me floating review tab — hidden (disabled in settings too) */
