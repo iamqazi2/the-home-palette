@@ -1173,8 +1173,32 @@ sticky-header.shopify-section-header-sticky {
   .header__icon--cart svg { width: 2.5rem; height: 2.5rem; }
 }
 
-/* Judge.me floating review tab — hidden (disabled in settings too) */
-.jdgm-rev-tab, #jdgm-rev-tab, .jdgm-widget.jdgm-rev-tab { display: none !important; }
+/* Judge.me floating review tab — the yellow "Reviews" flag pinned to the side
+   of every page. Not wanted anywhere on the site.
+
+   The previous rule here only listed .jdgm-rev-tab, which is Judge.me's older
+   markup; current builds render the floating tab as .jdgm-all-reviews-tab /
+   #judgeme_all_reviews_tab, so nothing was actually being hidden. All the
+   variants are covered below, plus an attribute match to catch any future
+   rename, since this element is injected by the app and can change without
+   the theme knowing.
+
+   visibility/pointer-events as well as display: the tab is app-injected and
+   sometimes has its display set from inline JS after paint; belt and braces so
+   it can neither appear nor swallow taps at the screen edge if it does. */
+.jdgm-rev-tab,
+#jdgm-rev-tab,
+.jdgm-widget.jdgm-rev-tab,
+.jdgm-all-reviews-tab,
+#judgeme_all_reviews_tab,
+.jdgm-widget.jdgm-all-reviews-tab,
+.jdgm-floating-tab,
+#judgeme_floating_tab,
+[class*='jdgm'][class*='-tab'] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
 
 /* ==========================================================================
    13. EMPTY-SPACE CLEANUP — Dawn ships generous default padding on every

@@ -805,6 +805,13 @@
   function hpReviewCss(starColor) {
     var gold = starColor || '#e0a422';
     return [
+      /* Floating "Reviews" tab — removed site-wide. Repeated here as well as in
+         hp-theme.css because this stylesheet is also injected into any shadow
+         roots Judge.me renders into, and a stylesheet in <head> cannot reach
+         inside a shadow root. */
+      '.jdgm-rev-tab,#jdgm-rev-tab,.jdgm-all-reviews-tab,#judgeme_all_reviews_tab,',
+      '.jdgm-floating-tab,#judgeme_floating_tab,[class*="jdgm"][class*="-tab"]{',
+      'display:none!important;visibility:hidden!important;pointer-events:none!important}',
       /* the block already supplies a heading */
       '.jdgm-rev-widg__title{display:none!important}',
       /* type */
