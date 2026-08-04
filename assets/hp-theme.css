@@ -4,7 +4,7 @@
    teal #257575 · teal-deep #1c5b5b · teal-ink #123536 · teal-card #173f40
    chip #eaf1f0 · cream #fff9df · page #fffdf4 · card #ffffff · ink #252525
    taupe #716a56 · gold #e0a422 (stars) · linen #efecec
-   Type: Fraunces 600 (display) + Plus Jakarta Sans (UI/body)
+   Type: DM Serif Display 400 (display) + DM Sans 300-700 (UI/body)
    Primitives: pill buttons (r40) · white rounded cards (r18) · teal eyebrows
    ========================================================================== */
 
@@ -33,28 +33,30 @@
   --hp-hairline-light: rgba(255, 249, 223, 0.22);
   --hp-hairline-teal: rgba(37, 85, 80, 0.12);
 
-  --hp-font-display: 'Fraunces', 'Georgia', 'Times New Roman', serif;
-  --hp-font-ui: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --hp-font-display: 'DM Serif Display', 'Georgia', 'Times New Roman', serif;
+  --hp-font-ui: 'DM Sans', system-ui, -apple-system, sans-serif;
 
-  /* Fraunces is variable on an optical-size axis: at small sizes it wants a low
-     opsz (sturdier stems, more legible), at display sizes a high one (finer,
-     more elegant). These are applied per-context rather than globally, because
-     one flat value would either bloat headlines or thin out small type. */
-  --hp-opsz-display: 'opsz' 108;
-  --hp-opsz-text: 'opsz' 24;
+  /* Kept as no-ops. Several section files declare
+     `font-variation-settings: var(--hp-opsz-display|text)` from the previous
+     type system; DM Serif Display has no variable axes, so rather than edit
+     every one of those call sites these resolve to `normal`, which is the
+     valid "use the font's defaults" value. Repointing one variable is also how
+     the next type change stays a small diff. */
+  --hp-opsz-display: normal;
+  --hp-opsz-text: normal;
 
   /* Dawn's own type variables, repointed at the THP faces. Overriding these
      here — rather than chasing individual selectors — is what makes the swap
      reach every stock Dawn template (cart, account, search, policies, blog,
      404) and not just the sections rebuilt for v3. Same :root specificity as
      theme.liquid's block, but hp-theme.css loads after it, so these win. */
-  --font-body-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body-family: 'DM Sans', system-ui, -apple-system, sans-serif;
   --font-body-style: normal;
   --font-body-weight: 400;
-  --font-body-weight-bold: 600;
-  --font-heading-family: 'Fraunces', 'Georgia', 'Times New Roman', serif;
+  --font-body-weight-bold: 700;
+  --font-heading-family: 'DM Serif Display', 'Georgia', 'Times New Roman', serif;
   --font-heading-style: normal;
-  --font-heading-weight: 600;
+  --font-heading-weight: 400;
 
   --hp-r-card: 18px;
   --hp-r-pill: 40px;
@@ -82,6 +84,23 @@
 
 body { background: var(--hp-cream-soft); }
 
+/* DM Serif Display exists in exactly one weight (400). Dozens of rules across
+   this file and the section files ask display text for 600, which would make
+   the browser synthesise a bold by smearing the 400 outlines — the blurry,
+   slightly-too-heavy look you get from faked bold. Suppressing weight
+   synthesis globally means those 600s quietly render as the real 400 instead,
+   so no call site needs editing. It costs nothing for DM Sans: that face is
+   variable across 300–700, so every weight asked of it is genuine and
+   synthesis never engages in the first place. */
+html {
+  font-synthesis-weight: none;
+  /* Long-hand isn't in older Safari; the shorthand is, and `style small-caps`
+     preserves the two synthesised behaviours actually wanted (real italics
+     exist for both faces, but this keeps faux-italic available as a fallback
+     for any third-party widget that asks for one). */
+  font-synthesis: style small-caps;
+}
+
 /* --------------------------------------------------------------------------
    1. TYPOGRAPHY
    -------------------------------------------------------------------------- */
@@ -99,19 +118,15 @@ h1, h2, h3,
 .main-page-title,
 .quick-add-modal .product__title > * {
   font-family: var(--hp-font-display) !important;
-  font-weight: 600 !important;
-  font-variation-settings: var(--hp-opsz-display);
-  /* Fraunces is wider and far sturdier than the Cormorant it replaced, so the
-     old positive tracking now reads as loose — pulled slightly negative, which
-     is where a display serif of this weight actually wants to sit. */
-  letter-spacing: -0.012em !important;
-  line-height: 1.08;
-}
-/* Small headings (card titles, footer blocks, drawer titles) get the low
-   optical size so their stems stay solid instead of thinning out. */
-h3, .h3, .footer-block__heading, .cart__title {
-  font-variation-settings: var(--hp-opsz-text);
+  /* 400 is DM Serif Display's only weight — stated explicitly here rather than
+     leaning on the synthesis guard above, so the intent is obvious at the one
+     place that matters most. */
+  font-weight: 400 !important;
+  /* DM Serif Display sets fairly tight by default and has real thick/thin
+     contrast, so it needs only a hair of negative tracking — more would start
+     closing up the thin strokes. */
   letter-spacing: -0.004em !important;
+  line-height: 1.12;
 }
 
 .hp-eyebrow {
@@ -138,10 +153,9 @@ h3, .h3, .footer-block__heading, .cart__title {
 
 .hp-display {
   font-family: var(--hp-font-display);
-  font-weight: 600;
-  font-variation-settings: var(--hp-opsz-display);
-  line-height: 1.08;
-  letter-spacing: -0.012em;
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.004em;
   margin: 0;
 }
 

@@ -266,20 +266,20 @@
       THP v3 revamp: display serif + UI sans + design-system layer + motion
       (GSAP/Lenis self-hosted).
 
-      Type pairing is Fraunces (display) + Plus Jakarta Sans (UI/body). Both are
-      variable fonts, so the whole weight range ships in a single file each —
-      fewer requests than the old four-static-weight Archivo load. Fraunces
-      replaced Cormorant Garamond because Cormorant is a high-contrast, very
-      light-stemmed serif: at heading sizes its thin strokes were washing out
-      against cream, which is what made headings read as faint. Fraunces holds a
-      much sturdier stem at the same optical size while keeping the warm,
-      crafted feel the brand wants.
+      Type pairing is DM Serif Display (display) + DM Sans (UI/body) — designed
+      as a family, so they share proportions and sit together without fighting.
+
+      Note the weight request: DM Serif Display ships ONE weight (400) and no
+      variable axes, which is normal for a display cut — its strokes are already
+      thick, so a bold would only smear it. Asking for anything heavier makes the
+      browser fake it. That is handled globally in hp-theme.css rather than here.
+      DM Sans is variable, so its whole 300–700 range is a single file.
     {%- endcomment -%}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display:ital@0;1&display=swap"
     >
     <script src="{{ 'hp-gsap.min.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'hp-scrolltrigger.min.js' | asset_url }}" defer="defer"></script>
