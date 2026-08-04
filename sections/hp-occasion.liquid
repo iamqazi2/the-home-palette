@@ -1,26 +1,30 @@
 {% comment %}
   THP — v3 Shop by Occasion.
 
-  Cards reuse the shared .hp-card shell for its radius, hairline and hover lift,
-  so the shape stays in step with the product cards, but the surface is a soft
-  teal tint rather than .hp-card's white — white cards on the cream band had too
-  little separation from it.
+  Cards are solid brand teal (#257575) on the cream band. Earlier passes tried
+  white and then a pale teal tint; both sat too close to the cream behind them
+  to read as distinct cards. Note this is the *brand* teal, not the deep
+  #173f40 tried before it — that one was dark enough to read as a near-black
+  slab rather than a teal card.
 
-  That tint is the same value as the default .hp-chip background, so the icon
-  circle and the count pill both have to move OFF it (they go white below) or
-  they would dissolve into the card they sit on.
+  Going dark inverts everything that sits on the card: title, caption, icon
+  circle, count pill and link cue all move to cream, and the icon circle fills
+  solid cream on hover so it still has somewhere to go.
 
-  Structure carried over from the earlier pass: the card is sized by its content
-  instead of a fixed tall box (which is what left dead space underneath), and the
-  "shop now" cue is always visible rather than fading in on hover, which meant no
-  touch visitor ever saw it.
+  Shape still comes from the shared .hp-card shell (radius, hover lift, shadow),
+  so these stay in step with the product cards. Structure carried over from the
+  earlier passes: the card is sized by its content instead of a fixed tall box
+  (which is what left dead space underneath), and the "shop now" cue is always
+  visible rather than fading in on hover, which meant no touch visitor ever saw
+  it.
 
   Each occasion is backed by a real collection: the card links to it and can
   show its live product count.
 {% endcomment %}
 
 {%- liquid
-  assign card_bg = section.settings.card_color | default: '#eaf1f0'
+  assign card_bg = section.settings.card_color | default: '#257575'
+  assign card_bg_hover = section.settings.card_color_hover | default: '#1c5b5b'
 -%}
 
 {%- style -%}
@@ -46,28 +50,38 @@
     gap: 0.9rem;
     padding: 2.4rem 1.4rem 2rem;
     text-decoration: none;
-    color: var(--hp-ink);
     /* Overrides .hp-card's white. Same specificity as .hp-card (0,1,0), but a
        section's style block renders inline in the body, i.e. later in document
        order than hp-theme.css in the head — so this wins on order, no
-       !important needed. Radius, hairline, lift and shadow stay inherited. */
+       !important needed. Radius, hover lift and shadow stay inherited. */
     background: {{ card_bg }};
-    /* Teal-tinted hairline instead of .hp-card's neutral one, so the edge reads
-       as part of the same tint rather than a grey line drawn over it. */
-    border-color: var(--hp-hairline-teal);
+    color: var(--hp-cream);
+    /* Lightened edge rather than .hp-card's dark hairline, which would vanish
+       against a dark surface. */
+    border-color: rgba(255, 249, 223, 0.16);
+    transition: background-color 0.45s var(--hp-ease), border-color 0.45s var(--hp-ease),
+      transform 0.45s var(--hp-ease), box-shadow 0.45s var(--hp-ease);
   }
-  .hp-occasion__card:focus-visible { outline: 2px solid var(--hp-teal); outline-offset: 3px; }
+  .hp-occasion__card:hover {
+    background: {{ card_bg_hover }};
+    border-color: rgba(255, 249, 223, 0.3);
+  }
+  .hp-occasion__card:focus-visible { outline: 2px solid var(--hp-cream); outline-offset: 3px; }
 
-  /* White, not the default .hp-chip tint — that tint is now the card colour, so
-     leaving it would make the icon circle invisible. */
+  /* Translucent cream, not the default pale-teal .hp-chip tint — that tint is
+     nearly invisible on a saturated teal card. Fills solid cream on hover so
+     the circle still has a state to move to. */
   .hp-occasion__card .hp-chip {
     width: 5rem;
     height: 5rem;
-    background: var(--hp-paper);
+    background: rgba(255, 249, 223, 0.13);
+    border: 1px solid rgba(255, 249, 223, 0.26);
+    color: var(--hp-cream);
   }
   .hp-occasion__card:hover .hp-chip {
-    background: var(--hp-teal);
-    color: var(--hp-cream);
+    background: var(--hp-cream);
+    color: {{ card_bg_hover }};
+    border-color: var(--hp-cream);
     transform: translateY(-2px) scale(1.04);
   }
 
@@ -77,7 +91,7 @@
     aspect-ratio: 4 / 3;
     border-radius: 12px;
     overflow: hidden;
-    background: var(--hp-linen);
+    background: rgba(255, 249, 223, 0.1);
     margin-bottom: 0.2rem;
   }
   .hp-occasion__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--hp-ease); }
@@ -91,28 +105,30 @@
     font-size: clamp(1.8rem, 1.6vw, 2.2rem);
     line-height: 1.2;
     letter-spacing: -0.002em;
-    color: var(--hp-ink);
+    color: var(--hp-cream);
   }
   .hp-occasion__caption {
     margin: 0;
     font-size: 1.2rem;
     line-height: 1.5;
-    color: var(--hp-taupe);
+    /* Cream at reduced alpha rather than a separate grey — it keeps the caption
+       secondary to the title while staying in the same colour family as the
+       card, which a flat grey would not do on a saturated background. */
+    color: rgba(255, 249, 223, 0.76);
   }
   /* Count sits in a pill so it reads as metadata rather than a third line of
-     body copy. White for the same reason as the icon chip above — the teal tint
-     it used to use is now the card's own background. */
+     body copy. Translucent cream, matching the icon circle above it. */
   .hp-occasion__count {
     margin: 0.2rem 0 0;
     padding: 0.4rem 1rem;
     border-radius: var(--hp-r-pill);
-    background: var(--hp-paper);
+    background: rgba(255, 249, 223, 0.14);
     font-family: var(--hp-font-ui);
     font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--hp-teal);
+    color: var(--hp-cream);
   }
   .hp-occasion__cta {
     display: inline-flex;
@@ -125,10 +141,10 @@
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--hp-teal);
+    color: var(--hp-teal-soft);
     transition: color 0.35s var(--hp-ease);
   }
-  .hp-occasion__card:hover .hp-occasion__cta { color: var(--hp-teal-deep); }
+  .hp-occasion__card:hover .hp-occasion__cta { color: var(--hp-cream); }
   .hp-occasion__cta .hp-icon { transition: transform 0.35s var(--hp-ease); }
   .hp-occasion__card:hover .hp-occasion__cta .hp-icon { transform: translateX(4px); }
 
@@ -209,8 +225,15 @@
       "type": "color",
       "id": "card_color",
       "label": "Card background",
-      "default": "#eaf1f0",
-      "info": "Card text stays dark, so keep this light. The icon circle and count pill are white, so avoid white here or they will disappear."
+      "default": "#257575",
+      "info": "Card text, icon and count pill are all cream, so this needs to stay dark enough to read against."
+    },
+    {
+      "type": "color",
+      "id": "card_color_hover",
+      "label": "Card background on hover",
+      "default": "#1c5b5b",
+      "info": "Also used as the icon colour once the circle fills cream on hover."
     },
     { "type": "checkbox", "id": "show_count", "label": "Show live product counts", "default": true },
     { "type": "text", "id": "count_label", "label": "Count label", "default": "varieties" },
