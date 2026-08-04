@@ -28,6 +28,25 @@
   --hp-moss: #123536;
   --hp-fern: #257575;
 
+  /* Headings are deep teal, never black. Set as a variable rather than a colour
+     literal on each selector so the dark bands further down can flip the whole
+     heading system to cream by overriding this one property — see "dark bands"
+     below. Anything that inherits it automatically stays legible. */
+  --hp-heading: #1c5b5b;
+
+  /* One heading scale for the entire site, in three tiers:
+       --hp-h-page     the title of a page (collection hero, page, article,
+                       policy) — one per screen, full width
+       --hp-h-section  a section's own title ("Shop by Occasion")
+       --hp-h-block    a titled block inside a section ("Dinner Sets")
+     Every heading points at one of these instead of carrying its own clamp().
+     Before this there were five different scales in play across templates,
+     which is why headings looked different page to page. The phone breakpoints
+     retune these three values rather than re-listing each selector. */
+  --hp-h-page: clamp(3rem, 5.2vw, 5.2rem);
+  --hp-h-section: clamp(2.6rem, 4.4vw, 4.2rem);
+  --hp-h-block: clamp(2rem, 2.8vw, 2.8rem);
+
   --hp-hairline: rgba(37, 37, 37, 0.09);
   --hp-hairline-strong: rgba(37, 37, 37, 0.3);
   --hp-hairline-light: rgba(255, 249, 223, 0.22);
@@ -118,6 +137,11 @@ h1, h2, h3,
 .main-page-title,
 .quick-add-modal .product__title > * {
   font-family: var(--hp-font-display) !important;
+  /* Deep teal, not black. Deliberately NOT !important: a heading sitting on a
+     dark band needs to be cream, and those sections set their own colour in
+     their own style blocks — which render later in the document and would be
+     locked out by an !important here, turning teal-on-teal invisible. */
+  color: var(--hp-heading);
   /* 400 is DM Serif Display's only weight — stated explicitly here rather than
      leaning on the synthesis guard above, so the intent is obvious at the one
      place that matters most. */
@@ -127,6 +151,22 @@ h1, h2, h3,
      closing up the thin strokes. */
   letter-spacing: -0.004em !important;
   line-height: 1.12;
+}
+
+/* Dark bands: flip the heading system to cream for everything inside them.
+   Overriding the variable (rather than restating a colour on each heading
+   selector) means any heading added to these sections later is correct by
+   default instead of inheriting deep teal onto a dark background. */
+.hp-hero,
+.hp-story,
+.hp-vrev,
+.hp-marquee-band,
+.hp-cta__frame,
+.hp-occasion__card,
+.collection-hero,
+.footer,
+.section-footer-group .newsletter {
+  --hp-heading: var(--hp-cream);
 }
 
 .hp-eyebrow {
@@ -365,7 +405,14 @@ button.shopify-payment-button__button--unbranded {
   font-size: 1.35rem !important;
   letter-spacing: 0.02em;
   line-height: 1.4;
+  /* Card titles stay ink even though they are <h3> and would otherwise inherit
+     the deep-teal heading colour. The price directly beneath them is already
+     teal; making the title teal too would put two teals of similar weight
+     side by side and flatten the hierarchy inside the card. These read as
+     product names, not as headings in the editorial sense. */
+  color: var(--hp-ink);
 }
+.card__heading a { color: inherit; }
 /* truncate to 2 lines everywhere the card is small — this is the shared card
    used on every collection, search, related-products and recommendation grid
    on the whole site, so this one rule fixes long titles site-wide */
@@ -436,7 +483,7 @@ button.shopify-payment-button__button--unbranded {
 
 /* Featured-collection headers: serif title + pill view-all */
 .collection .title-wrapper-with-link { align-items: flex-end; }
-.collection .title-wrapper-with-link .title { font-size: clamp(2.6rem, 3.6vw, 3.8rem); }
+.collection .title-wrapper-with-link .title { font-size: var(--hp-h-section); }
 .collection .title-wrapper-with-link .link-with-icon {
   display: inline-flex;
   align-items: center;
@@ -548,9 +595,9 @@ button.shopify-payment-button__button--unbranded {
   background: currentColor;
 }
 .hp-section-head__title {
-  font-size: clamp(3rem, 4.6vw, 4.4rem);
+  font-size: var(--hp-h-section);
   margin: 1.2rem 0 0;
-  color: var(--hp-ink);
+  color: var(--hp-heading);
 }
 .hp-section-head__text {
   margin: 1.2rem 0 0;
@@ -1000,73 +1047,125 @@ sticky-header.shopify-section-header-sticky {
   line-height: 1;
 }
 
-/* ---- mobile/tablet header (<990px): redesigned independently of desktop ----
-   Root cause of the "messed up" mobile header: the desktop logo rule sets a
-   flat height:12rem + width:12rem (no max-height at all), and the previous
-   mobile fix only capped max-height, leaving width still forced to 120px.
-   That squashed a 120px-wide box into a much shorter one, and left the
-   wrapper (also hard-coded to height:12rem) oversized — the header row
-   inflated to match, leaving the small, distorted logo floating in a lot of
-   dead space. Below, width and height are set TOGETHER so the mark stays
-   square, and every dimension that mattered is scoped to this query only —
-   nothing here touches >=990px. */
+/* ---- mobile/tablet header (<990px) --------------------------------------
+   Three things are being solved here, in order:
+
+   1. The logo was never actually centred. The grid was `auto 1fr auto`, so the
+      middle column sits between a one-icon hamburger and a multi-icon cluster —
+      two side columns of different widths, which offsets the middle by half
+      their difference no matter how the logo is aligned inside it. Equal `1fr`
+      side columns fix it geometrically. Absolute positioning would centre it
+      too, but the logo is much taller than the icons, so taking it out of flow
+      would collapse the header height around it.
+
+   2. Account moves into the menu drawer. Dawn already ships that behaviour —
+      the header link carries `small-hide` and the drawer has its own account
+      link marked `medium-hide large-up-hide`. It was this stylesheet that broke
+      it: the `display: inline-flex !important` a few rules above (needed so the
+      search <summary> centres like a real button) outranks `.small-hide`'s
+      `display: none !important` on equal specificity, forcing the icon back on.
+      Re-asserted below at higher specificity rather than weakening that rule.
+
+   3. Icons come down a size and the logo goes up, per request. The logo width
+      is capped in vw so the two side columns always stay wider than the icon
+      cluster — if the logo grew past that, the side columns would hit their
+      min-content floor, become unequal again, and un-centre the logo. ---- */
 @media screen and (max-width: 989px) {
   .header {
-    grid-template-columns: auto 1fr auto;
-    column-gap: 1rem;
+    /* Equal side columns == genuinely centred middle column. */
+    grid-template-columns: 1fr auto 1fr;
+    column-gap: 0.8rem;
+    align-items: center;
     padding-top: 0.6rem !important;
     padding-bottom: 0.6rem !important;
+    /* Dawn's 3rem side padding costs 60px of a 375px screen — far too much
+       once a bigger logo has to fit between the drawer and the icons. */
+    padding-left: 1.2rem !important;
+    padding-right: 1.2rem !important;
   }
-  header-drawer { justify-self: start; }
-  .header__heading, .header__heading-link {
+  header-drawer { grid-column: 1; justify-self: start; }
+  .header > .header__heading,
+  .header > .header__heading-link {
+    grid-column: 2;
+    justify-self: center;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    display: flex;
     justify-content: center;
-    width: 100%;
   }
+  .header__icons { grid-column: 3; justify-self: end; gap: 0.1rem; }
+
   .header__heading-logo-wrapper {
     height: auto;
     width: auto;
     max-width: none !important;
     justify-content: center;
   }
-  /* The source logo is a tall icon+wordmark lockup, not a square mark.
-     Forcing it into an equal height/width box (the old 7.2rem square) made
-     object-fit: contain shrink it to fit the height, wasting most of the
-     square's width and leaving the wordmark too small to read. Sizing by
-     width only, with height left to follow the image's own aspect ratio,
-     lets it render as large as the header can take without squashing it. */
+  /* Sized by width only, height auto — the logo is a wide wordmark lockup, so
+     constraining height instead would letterbox it. */
   .header__heading-logo {
     height: auto !important;
-    width: 15rem !important;
+    width: clamp(15rem, 48vw, 19rem) !important;
     max-height: none !important;
-    max-width: 60vw !important;
+    max-width: none !important;
   }
-  .header__icons {
-    justify-self: end;
-    gap: 0.1rem;
-  }
+
   .header__icon,
   .header__icon--cart,
   .header__icon--account,
   .header__icon--search {
-    height: 4rem;
-    width: 4rem;
+    height: 3.6rem;
+    width: 3.6rem;
   }
   .header__icon .svg-wrapper,
   .header__icon .icon,
   .header__icon svg {
-    width: 2.3rem;
-    height: 2.3rem;
+    width: 2.1rem;
+    height: 2.1rem;
   }
+  /* The cart glyph is drawn on a 40x40 viewBox against the others' 18x19, so
+     it needs a larger box to look the same optical size. */
   .header__icon--cart .svg-wrapper,
   .header__icon--cart .icon,
   .header__icon--cart svg {
-    width: 3.6rem;
-    height: 3.6rem;
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+  .header__icon--cart .cart-count-bubble {
+    height: 1.7rem;
+    width: 1.7rem;
+    min-width: 1.7rem;
+    font-size: 0.95rem;
   }
 }
+/* Account belongs in the drawer on phones — undo this sheet's own override of
+   Dawn's .small-hide. Two classes beats the one-class rule that broke it.
+
+   Deliberately at 749px, NOT inside the 989px block above: `.small-hide` is a
+   <750px utility, and the drawer's own account link is marked
+   `medium-hide large-up-hide` so it only appears below 750px too. Hiding the
+   header icon all the way up to 989px would blank the account out of both
+   places between 750 and 989px, leaving no way to reach it on a tablet. */
+@media screen and (max-width: 749px) {
+  .header__icon--account.small-hide { display: none !important; }
+}
+
 @media screen and (max-width: 380px) {
-  .header__heading-logo { width: 12rem !important; max-width: 60vw !important; }
+  /* Tightest phones: shrink both sides of the equation so the centred logo
+     still clears the icon cluster. */
+  .header { column-gap: 0.4rem; padding-left: 0.8rem !important; padding-right: 0.8rem !important; }
+  .header__heading-logo { width: clamp(12rem, 45vw, 15rem) !important; }
   .header__icons { gap: 0; }
+  .header__icon,
+  .header__icon--cart,
+  .header__icon--search { height: 3.2rem; width: 3.2rem; }
+  .header__icon .svg-wrapper,
+  .header__icon .icon,
+  .header__icon svg { width: 1.9rem; height: 1.9rem; }
+  .header__icon--cart .svg-wrapper,
+  .header__icon--cart .icon,
+  .header__icon--cart svg { width: 2.9rem; height: 2.9rem; }
 }
 
 /* Judge.me floating review tab — hidden (disabled in settings too) */
@@ -1343,7 +1442,7 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
   z-index: 1;
 }
 .collection-hero__title {
-  font-size: clamp(3.2rem, 6vw, 6rem) !important;
+  font-size: var(--hp-h-page) !important;
   color: var(--hp-cream);
   margin: 0;
 }
@@ -1439,7 +1538,7 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
 
 .article-card__title, .blog__title { font-family: var(--hp-font-display) !important; }
 .article-card-wrapper .card { border-radius: var(--hp-r-card) !important; }
-.article-template__title { font-size: clamp(3rem, 5vw, 5rem); }
+.article-template__title { font-size: var(--hp-h-page); }
 .article-template__hero-container .article-template__hero { border-radius: var(--hp-r-card); overflow: hidden; }
 .article-template__content.rte { font-size: 1.55rem; line-height: 1.9; }
 .article-template__link .link { font-family: var(--hp-font-ui); letter-spacing: 0.1em; text-transform: uppercase; }
@@ -1449,12 +1548,12 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
    ========================================================================== */
 
 .main-page-title, .article-template__title, .customer h1 {
-  font-size: clamp(3rem, 5.2vw, 5.2rem) !important;
+  font-size: var(--hp-h-page) !important;
   margin-bottom: 2.4rem;
 }
 /* readable long-form: policy pages, about, care guide */
 .shopify-policy__container { max-width: 76rem; padding: var(--hp-gap-y) var(--hp-gap-x); }
-.shopify-policy__title h1 { font-family: var(--hp-font-display); font-size: clamp(3rem, 5vw, 4.8rem); }
+.shopify-policy__title h1 { font-family: var(--hp-font-display); font-size: var(--hp-h-page); }
 .shopify-policy__body, .main-page .rte, .shopify-policy__container .rte {
   font-size: 1.55rem;
   line-height: 1.95;
@@ -1504,7 +1603,14 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
    ========================================================================== */
 
 @media screen and (max-width: 749px) {
-  .hp-section-head__title { font-size: clamp(2.4rem, 8vw, 3.2rem); }
+  /* Retune the shared scale once; every heading that points at these tokens
+     follows automatically, so phone sizes cannot drift out of step with
+     desktop the way per-selector overrides did. */
+  :root {
+    --hp-h-page: clamp(2.8rem, 9vw, 3.8rem);
+    --hp-h-section: clamp(2.4rem, 8vw, 3.2rem);
+    --hp-h-block: clamp(1.9rem, 5.6vw, 2.3rem);
+  }
   .hp-section-head__text { font-size: 1.35rem; }
   .hp-btn { padding: 1.2rem 2rem; font-size: 1.1rem; }
   .hp-recs__grid, .hp-colors__grid { gap: 1rem; }
@@ -1561,7 +1667,7 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
 @media screen and (max-width: 380px) {
   .hp-hero__heading { font-size: 2.6rem !important; }
   .hp-hero__sub { font-size: 1.2rem !important; }
-  .hp-section-head__title { font-size: 2.1rem; }
+  :root { --hp-h-page: 2.4rem; --hp-h-section: 2.1rem; --hp-h-block: 1.8rem; }
   .hp-occasion__name, .hp-styles__name { font-size: 1.45rem !important; }
   .hp-cats__name { font-size: 1.35rem !important; }
   .card__heading a { font-size: 1.1rem !important; }

@@ -65,10 +65,13 @@
     margin: 0;
     font-family: var(--hp-font-display);
     font-weight: 400;
-    font-size: clamp(2rem, 2.8vw, 2.8rem);
+    /* Shared block tier + shared heading colour, so these rail titles track the
+       rest of the site's headings instead of carrying their own size and a
+       near-black ink. */
+    font-size: var(--hp-h-block);
     letter-spacing: -0.004em;
     line-height: 1.15;
-    color: var(--hp-ink);
+    color: var(--hp-heading);
   }
   .hp-rails__all {
     display: inline-flex;
