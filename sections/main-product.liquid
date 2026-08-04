@@ -32,19 +32,23 @@
   {%- endcomment -%}
   {%- if section.settings.hp_layout == 'sidebar' -%}
     {%- style -%}
-      /* ---- columns: wide gallery, narrow buy sidebar ---- */
+      /* ---- columns: media slider left, buy + description right ----
+         The buy column was 34% back when it held only title/price/variants and
+         the description sat full-width underneath. Now that the description
+         lives in this column it needs more measure — 38% keeps line lengths
+         readable without starving the gallery. */
       @media screen and (min-width: 990px) {
         .product--large:not(.product--no-media) .product__media-wrapper,
         .product--medium:not(.product--no-media) .product__media-wrapper,
         .product--small:not(.product--no-media) .product__media-wrapper {
-          width: 62%;
-          max-width: 62%;
+          width: 58%;
+          max-width: 58%;
         }
         .product--large:not(.product--no-media) .product__info-wrapper,
         .product--medium:not(.product--no-media) .product__info-wrapper,
         .product--small:not(.product--no-media) .product__info-wrapper {
-          width: 34%;
-          max-width: 34%;
+          width: 38%;
+          max-width: 38%;
           padding: 0 0 0 2rem;
         }
       }
@@ -65,6 +69,58 @@
         overflow-wrap: anywhere;
       }
       .product__info-container .price { font-size: 2.4rem; }
+
+      /* ---- title <-> rating stars ----
+         The review app's rating badge is an app block, so it renders with no
+         margin of its own and sat flush against the title. Spacing it from
+         here rather than inside the app block, which the theme cannot edit.
+         `:empty` guard: the badge renders an empty wrapper on products with no
+         reviews yet, which would otherwise leave an unexplained gap. */
+      .product__info-container .product__title { margin-bottom: 0; }
+      .product__info-container .product__title + .shopify-app-block:not(:empty) {
+        display: block;
+        margin-top: 1.1rem;
+        margin-bottom: 0.4rem;
+      }
+      /* Covers the badge wherever the merchant orders the blocks, not just
+         directly after the title. */
+      .product__info-container .jdgm-widget.jdgm-preview-badge:not(:empty) {
+        display: block;
+        margin: 1.1rem 0 0.4rem;
+      }
+
+      /* ---- full description, in the buy column beside the gallery ---- */
+      .hp-pdp-desc {
+        margin-top: 1.8rem;
+        padding-top: 1.6rem;
+        border-top: 1px solid var(--hp-hairline);
+        font-size: 1.4rem;
+        line-height: 1.75;
+        color: var(--hp-taupe);
+      }
+      .hp-pdp-desc__title {
+        margin: 0 0 1rem;
+        font-family: var(--hp-font-display);
+        font-weight: 400;
+        font-size: var(--hp-h-block);
+        line-height: 1.2;
+        color: var(--hp-heading);
+      }
+      .hp-pdp-desc p { margin: 0 0 1.2rem; }
+      .hp-pdp-desc p:last-child { margin-bottom: 0; }
+      .hp-pdp-desc ul,
+      .hp-pdp-desc ol { padding-left: 1.6rem; margin: 0 0 1.2rem; }
+      .hp-pdp-desc li { margin-bottom: 0.5rem; }
+      .hp-pdp-desc a { color: var(--hp-teal); }
+      .hp-pdp-desc img { border-radius: var(--hp-r-card); margin: 1.4rem 0; max-width: 100%; height: auto; }
+      /* Long descriptions can run past the gallery's height; capping the column
+         and letting it scroll keeps the buy button reachable without pushing the
+         page length out. */
+      @media screen and (min-width: 990px) {
+        .hp-pdp-desc { max-height: 42rem; overflow-y: auto; padding-right: 0.6rem; }
+        .hp-pdp-desc::-webkit-scrollbar { width: 4px; }
+        .hp-pdp-desc::-webkit-scrollbar-thumb { background: var(--hp-hairline-strong); border-radius: 4px; }
+      }
 
       /* ---- every button on brand: no black ---- */
       .product .product-form__submit,
@@ -499,8 +555,9 @@
 
           {%- for block in section.blocks -%}
             {%- liquid
-              # Sidebar layout renders the long description and full review widget
-              # under the gallery, so skip them here.
+              # Reviews are their own section further down the product template
+              # (the same review section the homepage uses), so the app's inline
+              # review widget is skipped here rather than doubling up on it.
               assign hp_skip = false
               if section.settings.hp_layout == 'sidebar'
                 assign hp_bid = block.id | downcase
@@ -641,9 +698,27 @@
                 {%- if product.description != blank -%}
                   {%- if section.settings.hp_layout == 'sidebar' -%}
                     {%- if section.settings.hp_show_excerpt -%}
+                      {%- comment -%}
+                        Excerpt mode: a teaser here, with the full text kept in
+                        the block under the gallery that "Read more" jumps to.
+                      {%- endcomment -%}
                       <div class="product__description hp-pdp-excerpt quick-add-hidden" {{ block.shopify_attributes }}>
                         {{ product.description | strip_html | truncatewords: section.settings.hp_excerpt_words | default: 45 }}
                         <a class="hp-pdp-excerpt__more" href="#hp-description">Read more</a>
+                      </div>
+                    {%- else -%}
+                      {%- comment -%}
+                        Full description in the buy column, beside the gallery
+                        rather than under it. Previously this branch rendered
+                        nothing at all — turning the excerpt off simply dropped
+                        the description out of this column and left it only in
+                        the block below the gallery.
+                      {%- endcomment -%}
+                      <div class="product__description rte hp-pdp-desc quick-add-hidden" id="hp-description" {{ block.shopify_attributes }}>
+                        {%- if section.settings.hp_description_title != blank -%}
+                          <h2 class="hp-pdp-desc__title">{{ section.settings.hp_description_title }}</h2>
+                        {%- endif -%}
+                        {{ product.description }}
                       </div>
                     {%- endif -%}
                   {%- else -%}
@@ -1168,35 +1243,20 @@
         flow only needs title/price/variants/buy button; the full description
         and reviews stay on the product page, reachable via "View full details".
       {%- endcomment -%}
-      <div class="hp-pdp-below hp-container quick-add-hidden">
-            {%- if product.description != blank -%}
-              <div class="hp-pdp-block" id="hp-description">
-                <h2 class="hp-pdp-block__title">{{ section.settings.hp_description_title | default: 'Product Description' }}</h2>
-                <div class="hp-pdp-block__body rte">{{ product.description }}</div>
-              </div>
-        {%- endif -%}
-
-            {%- for block in section.blocks -%}
-              {%- assign hp_bid = block.id | downcase -%}
-              {%- if block.type == '@app' and hp_bid contains 'review_widget' -%}
-                <div
-                  class="hp-pdp-block hp-reviews"
-                  id="hp-reviews"
-                  {% if section.settings.hp_reviews_per_page > 0 %}data-hp-reviews-pager="{{ section.settings.hp_reviews_per_page }}"{% endif %}
-                  data-hp-star="{{ section.settings.hp_star_color | default: '#e0a422' }}"
-                >
-                  {%- comment -%}
-                    The review app renders its own "Customer Reviews" title, so
-                    only add ours when the merchant deliberately sets one.
-                  {%- endcomment -%}
-                  {%- if section.settings.hp_reviews_title != blank -%}
-                    <h2 class="hp-pdp-block__title">{{ section.settings.hp_reviews_title }}</h2>
-                  {%- endif -%}
-                  {% render block %}
-                </div>
-          {%- endif -%}
-            {%- endfor -%}
+      {%- comment -%}
+        Only rendered in excerpt mode now. With the excerpt off the full
+        description lives in the buy column beside the gallery, and reviews are
+        their own section further down the template, so this wrapper would
+        otherwise be an empty div drawing its own top margin.
+      {%- endcomment -%}
+      {%- if section.settings.hp_show_excerpt and product.description != blank -%}
+        <div class="hp-pdp-below hp-container quick-add-hidden">
+          <div class="hp-pdp-block" id="hp-description">
+            <h2 class="hp-pdp-block__title">{{ section.settings.hp_description_title | default: 'Product Description' }}</h2>
+            <div class="hp-pdp-block__body rte">{{ product.description }}</div>
           </div>
+        </div>
+      {%- endif -%}
     {%- endif -%}
 
     {% render 'product-media-modal', variant_images: variant_images %}

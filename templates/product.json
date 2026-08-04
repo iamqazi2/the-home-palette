@@ -42,10 +42,6 @@
           "settings": {
             "share_label": "Share"
           }
-        },
-        "judge_me_reviews_review_widget_nE74rW": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
         }
       },
       "block_order": [
@@ -56,8 +52,7 @@
         "quantity_selector",
         "buy_buttons",
         "description",
-        "share",
-        "judge_me_reviews_review_widget_nE74rW"
+        "share"
       ],
       "settings": {
         "enable_sticky_info": false,
@@ -65,17 +60,17 @@
         "media_size": "large",
         "constrain_to_viewport": true,
         "media_fit": "contain",
-        "gallery_layout": "thumbnail",
+        "gallery_layout": "thumbnail_slider",
         "media_position": "left",
         "image_zoom": "lightbox",
-        "mobile_thumbnails": "columns",
+        "mobile_thumbnails": "show",
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 28,
         "padding_bottom": 20,
         "hp_layout": "sidebar",
         "hp_description_title": "Product Description",
-        "hp_show_excerpt": true,
+        "hp_show_excerpt": false,
         "hp_excerpt_words": 45,
         "hp_show_meta": true,
         "hp_sidebar_recs": true,
@@ -119,11 +114,141 @@
     "hp_recs": {
       "type": "hp-recommendations",
       "settings": {}
+    },
+    "hp_reviews_slider": {
+      "type": "hp-video-reviews",
+      "blocks": {
+        "rev_1": {
+          "type": "video",
+          "settings": {
+            "name": "Ayesha K.",
+            "role": "Home Chef · Lahore"
+          }
+        },
+        "rev_2": {
+          "type": "text",
+          "settings": {
+            "quote": "Packaging was immaculate and the pieces feel like heirlooms. Our whole restaurant switched over. Worth every rupee.",
+            "name": "Bilal R.",
+            "role": "Restaurateur · Karachi",
+            "stars": 5
+          }
+        },
+        "rev_3": {
+          "type": "video",
+          "settings": {
+            "name": "Sana M.",
+            "role": "Host · Islamabad"
+          }
+        },
+        "rev_4": {
+          "type": "text",
+          "settings": {
+            "quote": "The reactive glaze is even more beautiful in person. Every guest asks where the set is from.",
+            "name": "Hina F.",
+            "role": "Event Stylist",
+            "stars": 5
+          }
+        },
+        "rev_5": {
+          "type": "video",
+          "settings": {
+            "name": "Usman T.",
+            "role": "Cafe Owner · Multan"
+          }
+        },
+        "rev_6": {
+          "type": "text",
+          "settings": {
+            "quote": "Bought the dinner set for our new home — it made the whole table feel special. Ordering the tea set next.",
+            "name": "Zara A.",
+            "role": "Newlywed · Rawalpindi",
+            "stars": 5
+          }
+        },
+        "rev_7": {
+          "type": "video",
+          "settings": {
+            "name": "Fatima R.",
+            "role": "Food Blogger"
+          }
+        },
+        "rev_8": {
+          "type": "text",
+          "settings": {
+            "quote": "Consistent quality across every reorder. Hand-inspected really shows. Our go-to for banquet serveware now.",
+            "name": "Omar S.",
+            "role": "Hotel F&B Manager",
+            "stars": 5
+          }
+        },
+        "rev_9": {
+          "type": "text",
+          "settings": {
+            "quote": "Ordered twice for our restaurant. The glaze survives a full service and still looks handmade.",
+            "name": "Imran S.",
+            "role": "Chef · Islamabad",
+            "stars": 5
+          }
+        },
+        "rev_10": {
+          "type": "text",
+          "settings": {
+            "quote": "Gifted a dinner set for my sister’s wedding — she called it the best gift of the day.",
+            "name": "Mahnoor A.",
+            "role": "Lahore",
+            "stars": 5
+          }
+        },
+        "rev_11": {
+          "type": "video",
+          "settings": {
+            "name": "Rabia N.",
+            "role": "Home Stylist · Faisalabad"
+          }
+        },
+        "rev_12": {
+          "type": "text",
+          "settings": {
+            "quote": "Delivery was quick and every piece arrived perfectly wrapped. Zero breakage.",
+            "name": "Danish K.",
+            "role": "Karachi",
+            "stars": 5
+          }
+        }
+      },
+      "block_order": [
+        "rev_1",
+        "rev_2",
+        "rev_3",
+        "rev_4",
+        "rev_5",
+        "rev_6",
+        "rev_7",
+        "rev_8",
+        "rev_9",
+        "rev_10",
+        "rev_11",
+        "rev_12"
+      ],
+      "settings": {
+        "eyebrow": "Real Tables · Real Reviews",
+        "heading": "Loved Across Pakistan",
+        "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
+        "speed": 5,
+        "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
+        "loop_previews": false,
+        "bg_color": "#257575",
+        "text_color": "#fff9df",
+        "eyebrow_color": "#fff9df",
+        "card_color": "#1c5b5b"
+      }
     }
   },
   "order": [
     "main",
     "related-products",
+    "hp_reviews_slider",
     "1735728895025f6c98",
     "1735729851cc5a66a8",
     "hp_recs"
