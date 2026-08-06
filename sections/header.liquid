@@ -19,14 +19,9 @@
   }
 
   {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
-    {%- comment -%}
-      Scales the lockup rather than the old single logo image, which no longer
-      exists. Both parts shrink together so the icon and wordmark keep their
-      proportion as the sticky header shortens.
-    {%- endcomment -%}
-    .scrolled-past-header .hp-logo__mark { width: 4.2rem; height: 4.2rem; }
-    .scrolled-past-header .hp-logo__name { font-size: 1.7rem; }
-    .scrolled-past-header .hp-logo__tag { display: none; }
+    .scrolled-past-header .header__heading-logo-wrapper {
+      width: 75%;
+    }
   {%- endif -%}
 
   {%- if section.settings.menu_type_desktop != "drawer" -%}
@@ -133,18 +128,11 @@
     .header-wrapper.hp-band > .header > .header__inline-menu .header__menu-item > span::after {
       background: {{ section.settings.hp_band_text }};
     }
-    {%- comment -%}
-      The icon is a JPEG, so it has no transparency and always paints its own
-      background. Matching the band colour to the icon's own background is what
-      makes that square disappear — see the band colour setting. The wordmark
-      beside it is text, so it simply takes the band's text colour.
-    {%- endcomment -%}
-    .header-wrapper.hp-band .hp-logo,
-    .header-wrapper.hp-band .hp-logo__name,
-    .header-wrapper.hp-band .hp-logo__tag {
-      color: {{ section.settings.hp_band_text }};
+    .header-wrapper.hp-band .header__heading-logo-wrapper,
+    .header-wrapper.hp-band .header__heading-logo {
+      background: transparent;
+      mix-blend-mode: normal;
     }
-    .header-wrapper.hp-band .hp-logo__mark { background: transparent; mix-blend-mode: normal; }
     .header-wrapper.hp-band { border-bottom: 1px solid rgba(255, 249, 223, 0.16); }
     .header-wrapper.hp-band .cart-count-bubble {
       background-color: {{ section.settings.hp_band_text }};
@@ -218,18 +206,25 @@
         <h1 class="header__heading">
       {%- endif -%}
           <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-            {%- comment -%}
-              Both logo placements render the same snippet so the lockup can
-              never drift between them — this one is used when the logo sits
-              anywhere other than middle-centre, the one below when it does.
-            {%- endcomment -%}
-            {% render 'hp-logo',
-              mark: section.settings.hp_logo_mark,
-              wordmark: section.settings.hp_logo_wordmark,
-              name: section.settings.hp_logo_text,
-              tagline: section.settings.hp_logo_tagline,
-              fallback: settings.logo
-            %}
+            {%- if settings.logo != blank -%}
+              <div class="header__heading-logo-wrapper">
+                {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+                {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+                {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+                {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+                {{ settings.logo | image_url: width: 600 | image_tag:
+                  class: 'header__heading-logo motion-reduce',
+                  widths: widths,
+                  height: logo_height,
+                  width: settings.logo_width,
+                  alt: logo_alt,
+                  sizes: sizes,
+                  preload: true
+                }}
+              </div>
+            {%- else -%}
+              <span class="h2">{{ shop.name }}</span>
+            {%- endif -%}
           </a>
       {%- if request.page_type == 'index' -%}
         </h1>
@@ -251,18 +246,25 @@
         <h1 class="header__heading">
       {%- endif -%}
           <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-            {%- comment -%}
-              Both logo placements render the same snippet so the lockup can
-              never drift between them — this one is used when the logo sits
-              anywhere other than middle-centre, the one below when it does.
-            {%- endcomment -%}
-            {% render 'hp-logo',
-              mark: section.settings.hp_logo_mark,
-              wordmark: section.settings.hp_logo_wordmark,
-              name: section.settings.hp_logo_text,
-              tagline: section.settings.hp_logo_tagline,
-              fallback: settings.logo
-            %}
+            {%- if settings.logo != blank -%}
+              <div class="header__heading-logo-wrapper">
+                {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+                {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+                {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
+                {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+                {{ settings.logo | image_url: width: 600 | image_tag:
+                  class: 'header__heading-logo',
+                  widths: widths,
+                  height: logo_height,
+                  width: settings.logo_width,
+                  alt: logo_alt,
+                  sizes: sizes,
+                  preload: true
+                }}
+              </div>
+            {%- else -%}
+              <span class="h2">{{ shop.name }}</span>
+            {%- endif -%}
           </a>
       {%- if request.page_type == 'index' -%}
         </h1>
@@ -529,36 +531,6 @@
       "label": "Full-width brand band behind logo",
       "info": "Fills the whole header with your brand colour so the logo's square background disappears into it.",
       "default": true
-    },
-    {
-      "type": "header",
-      "content": "Logo lockup"
-    },
-    {
-      "type": "image_picker",
-      "id": "hp_logo_mark",
-      "label": "Logo icon (left)",
-      "info": "The mark only, without any text. Falls back to the theme's main logo if left empty."
-    },
-    {
-      "type": "text",
-      "id": "hp_logo_text",
-      "label": "Logo text (right)",
-      "default": "The Home Palette",
-      "info": "Set as live text rather than an image so it stays sharp at any size and is readable by search engines."
-    },
-    {
-      "type": "text",
-      "id": "hp_logo_tagline",
-      "label": "Tagline",
-      "default": "Curated treasures for your home",
-      "info": "Hidden on phones, where there is no room for it beside the icon."
-    },
-    {
-      "type": "image_picker",
-      "id": "hp_logo_wordmark",
-      "label": "Logo text as an image (optional)",
-      "info": "Use only if you have a transparent PNG or SVG wordmark. Replaces the text above. A JPG will show as a solid rectangle."
     },
     {
       "type": "color",

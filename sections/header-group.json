@@ -21,11 +21,8 @@
         "padding_bottom": 0,
         "hp_search_right": false,
         "hp_band_enable": true,
-        "hp_band_color": "#257576",
-        "hp_band_text": "#fff9df",
-        "hp_logo_mark": "shopify://shop_images/WhatsApp_Image_2026-07-31_at_17.30.02.jpg",
-        "hp_logo_text": "The Home Palette",
-        "hp_logo_tagline": "Curated treasures for your home"
+        "hp_band_color": "#257575",
+        "hp_band_text": "#fff9df"
       }
     },
     "17358360248ef50bda": {
