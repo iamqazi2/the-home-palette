@@ -960,23 +960,69 @@ sticky-header.shopify-section-header-sticky {
   .header__heading, .header__heading-link { grid-area: heading; justify-self: start; margin: 0; }
   .header__icons { grid-area: icons; justify-self: end; }
 }
-/* logo: fixed 120x120 as requested, at every breakpoint. The wrapper's forced
-   width and Dawn's logo_width cap are both released so this is the only thing
-   controlling the rendered size. */
-.header__heading-logo {
-  height: 12rem;
-  width: 12rem;
-  max-height: none;
-  max-width: none;
-  object-fit: contain;
-}
-.header__heading-logo-wrapper {
-  display: flex;
+/* ---- logo lockup: icon left, wordmark right ----------------------------
+   The wordmark is live text, not an image, so it stays sharp at any size and
+   reads as the brand name to search engines. The icon is the only image, and
+   it is sized off the wordmark's own line-height so the two always sit in
+   proportion no matter which breakpoint retunes the type. */
+.hp-logo {
+  display: inline-flex;
   align-items: center;
-  width: auto !important;
-  max-width: none !important;
-  height: 12rem;
+  gap: 1.1rem;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
 }
+.hp-logo__mark {
+  flex: 0 0 auto;
+  display: block;
+  width: 5.6rem;
+  height: 5.6rem;
+  /* The supplied mark is a JPEG, so it carries its own solid background rather
+     than transparency. Rounding the corners turns that unavoidable square into
+     a deliberate shape instead of a hard-edged tile sitting on the band. */
+  border-radius: 12px;
+  overflow: hidden;
+}
+.hp-logo__mark-img {
+  width: 100%;
+  height: 100%;
+  /* contain, not cover: the supplied icon is 1280x1024, so cover would crop a
+     slice off each side of the artwork, and any future icon of a different
+     shape would be cropped differently again. The letterboxing contain leaves
+     is invisible here because the icon's own background is the same teal as the
+     band behind it. */
+  object-fit: contain;
+  display: block;
+}
+.hp-logo__type {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+.hp-logo__name {
+  font-family: var(--hp-font-display);
+  font-weight: 400;
+  font-size: 2.1rem;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.hp-logo__tag {
+  font-family: var(--hp-font-ui);
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  white-space: nowrap;
+}
+.hp-logo__type--image { display: block; }
+.hp-logo__type-img { display: block; height: 3.4rem; width: auto; max-width: 100%; }
+
 .header__heading, .header__heading-link { padding: 0; margin: 0; display: flex; align-items: center; }
 
 .header__inline-menu .list-menu--inline { gap: 0.2rem; row-gap: 0; }
@@ -1098,20 +1144,17 @@ sticky-header.shopify-section-header-sticky {
   }
   .header__icons { grid-column: 3; justify-self: end; gap: 0.1rem; }
 
-  .header__heading-logo-wrapper {
-    height: auto;
-    width: auto;
-    max-width: none !important;
-    justify-content: center;
-  }
-  /* Sized by width only, height auto — the logo is a wide wordmark lockup, so
-     constraining height instead would letterbox it. */
-  .header__heading-logo {
-    height: auto !important;
-    width: clamp(15rem, 48vw, 19rem) !important;
-    max-height: none !important;
-    max-width: none !important;
-  }
+  /* The lockup is now icon + text side by side, so it is far wider than the old
+     stacked logo at the same height. Both parts come down together, and the
+     tagline is dropped entirely — at this width it would be the widest line in
+     the header for the least useful information. Sizes are chosen so the whole
+     lockup stays narrower than the space between the two icon clusters;
+     otherwise the equal side columns collapse and the logo un-centres. */
+  .hp-logo { gap: 0.8rem; }
+  .hp-logo__mark { width: 4rem; height: 4rem; border-radius: 9px; }
+  .hp-logo__name { font-size: 1.35rem; letter-spacing: 0.1em; }
+  .hp-logo__tag { display: none; }
+  .hp-logo__type-img { height: 2.4rem; }
 
   /* Covers the hamburger too — header-drawer's <summary> carries
      .header__icon .header__icon--menu, so it tracks these sizes automatically
@@ -1160,7 +1203,10 @@ sticky-header.shopify-section-header-sticky {
   /* Tightest phones: shrink both sides of the equation so the centred logo
      still clears the icon cluster. */
   .header { column-gap: 0.4rem; padding-left: 1.4rem !important; padding-right: 1.4rem !important; }
-  .header__heading-logo { width: clamp(12rem, 45vw, 15rem) !important; }
+  .hp-logo { gap: 0.6rem; }
+  .hp-logo__mark { width: 3.4rem; height: 3.4rem; border-radius: 8px; }
+  .hp-logo__name { font-size: 1.15rem; letter-spacing: 0.07em; }
+  .hp-logo__type-img { height: 2rem; }
   .header__icons { gap: 0; }
   .header__icon,
   .header__icon--cart,

@@ -1,0 +1,49 @@
+{%- comment -%}
+  THP horizontal logo lockup — icon on the left, wordmark on the right.
+
+  Replaces the single stacked logo image. The mark is an image; the wordmark is
+  live text by default rather than a second image, which is both sharper at
+  every size and readable by search engines and screen readers. A wordmark image
+  can still be supplied and takes over when set.
+
+  The mark's alt is intentionally empty: the shop name sits right beside it as
+  real text, so giving the image an alt as well would make a screen reader
+  announce the brand twice for one link.
+
+  Accepts:
+    mark      {image}  icon shown on the left
+    wordmark  {image}  optional image wordmark; replaces the text when set
+    name      {string} wordmark text (falls back to shop.name)
+    tagline   {string} optional small line under the name
+    fallback  {image}  legacy single-image logo, used when no mark is set
+{%- endcomment -%}
+
+{%- liquid
+  assign hp_mark = mark | default: fallback
+  assign hp_name = name | default: shop.name
+-%}
+
+<span class="hp-logo">
+  {%- if hp_mark != blank -%}
+    <span class="hp-logo__mark">
+      {{
+        hp_mark
+        | image_url: width: 400
+        | image_tag: class: 'hp-logo__mark-img', widths: '80, 120, 200, 300, 400', alt: '', preload: true
+      }}
+    </span>
+  {%- endif -%}
+
+  {%- if wordmark != blank -%}
+    <span class="hp-logo__type hp-logo__type--image">
+      {{ wordmark | image_url: width: 900 | image_tag: class: 'hp-logo__type-img', widths: '200, 400, 600, 900', alt: hp_name }}
+    </span>
+  {%- elsif hp_name != blank -%}
+    <span class="hp-logo__type">
+      <span class="hp-logo__name">{{ hp_name }}</span>
+      {%- if tagline != blank -%}
+        <span class="hp-logo__tag">{{ tagline }}</span>
+      {%- endif -%}
+    </span>
+  {%- endif -%}
+</span>
