@@ -1,1 +1,19 @@
-{"sections":{"main":{"type":"main-list-collections","settings":{"title":"Collections","sort":"products_high","image_ratio":"portrait","columns_desktop":3,"columns_mobile":"2"}}},"order":["main"]}
+{
+  "sections": {
+    "main": {
+      "type": "main-list-collections",
+      "settings": {
+        "title": "Collections",
+        "sort": "products_high",
+        "image_ratio": "portrait",
+        "columns_desktop": 3,
+        "columns_mobile": "2",
+        "hp_eyebrow": "The Collections",
+        "hp_tagline": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

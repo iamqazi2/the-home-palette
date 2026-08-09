@@ -1,10 +1,59 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
 
+{%- comment -%}
+  THP: the categories page opened on a bare <h1> on cream while every collection
+  page opens on a full hero, so the two read as different sites. Same hero
+  treatment here — teal band, eyebrow, title, tagline — minus the photo, since
+  this page has no single image to represent all collections.
+{%- endcomment -%}
+{%- style -%}
+  .hp-listing-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(24rem, 30vw, 34rem);
+    background: var(--hp-teal);
+    color: var(--hp-cream);
+    overflow: hidden;
+  }
+  .hp-listing-hero__inner {
+    width: 100%;
+    padding-top: clamp(3.2rem, 6vw, 6rem);
+    padding-bottom: clamp(3.2rem, 6vw, 6rem);
+  }
+  .hp-listing-hero__eyebrow { margin: 0 0 1.4rem; }
+  .hp-listing-hero .title {
+    margin: 0;
+    color: var(--hp-cream);
+  }
+  .hp-listing-hero__tagline {
+    margin: 1.4rem 0 0;
+    max-width: 56rem;
+    font-size: 1.55rem;
+    line-height: 1.75;
+    color: rgba(255, 249, 223, 0.88);
+  }
+  @media screen and (max-width: 749px) {
+    .hp-listing-hero__tagline { font-size: 1.4rem; }
+  }
+{%- endstyle -%}
+
+<div class="hp-listing-hero">
+  <div class="hp-listing-hero__inner page-width">
+    {%- if section.settings.hp_eyebrow != blank -%}
+      <p class="hp-eyebrow hp-eyebrow--light hp-listing-hero__eyebrow">{{ section.settings.hp_eyebrow | escape }}</p>
+    {%- endif -%}
+    <h1 class="title title--primary inline-richtext">
+      {{ section.settings.title }}
+    </h1>
+    {%- if section.settings.hp_tagline != blank -%}
+      <p class="hp-listing-hero__tagline">{{ section.settings.hp_tagline }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
 <div class="page-width">
-  <h1 class="title title--primary inline-richtext{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-    {{ section.settings.title }}
-  </h1>
   {%- liquid
     case section.settings.sort
       when 'products_high', 'products_low'
@@ -139,6 +188,22 @@
       ],
       "default": "2",
       "label": "t:sections.main-list-collections.settings.columns_mobile.label"
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "hp_eyebrow",
+      "label": "Eyebrow",
+      "default": "The Collections"
+    },
+    {
+      "type": "textarea",
+      "id": "hp_tagline",
+      "label": "Tagline",
+      "default": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets."
     }
   ]
 }
