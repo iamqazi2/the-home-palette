@@ -31,7 +31,15 @@
   assign hp_nav_url = ''
 
   unless prefer_blog == false
+    # Try the handle the article script creates, then the handle Shopify gives
+    # the blog it ships with, and only then fall back to iterating. The explicit
+    # lookups are not redundant: `blogs` is documented as a lookup-by-handle
+    # object and iterating it is not dependable, so a store whose only blog is
+    # the default "news" would otherwise never be found.
     assign hp_blog = blogs['journal']
+    if hp_blog.handle == blank
+      assign hp_blog = blogs['news']
+    endif
     if hp_blog.handle == blank
       for b in blogs
         assign hp_blog = b
