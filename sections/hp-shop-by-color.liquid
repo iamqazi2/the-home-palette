@@ -169,6 +169,11 @@
     gap: 1.2rem;
     transition: opacity 0.22s ease;
   }
+  /* The `hidden` attribute alone would NOT hide these: the browser's own
+     [hidden] { display: none } is a UA-stylesheet rule, so the author-level
+     `display: grid` above beats it and every colour would render stacked on top
+     of each other. This restores it at author level. */
+  .hp-colors__grid[hidden] { display: none; }
   @media screen and (min-width: 750px) {
     .hp-colors__grid { grid-template-columns: repeat({{ per_row }}, minmax(0, 1fr)); gap: 1.8rem; }
   }
@@ -200,11 +205,9 @@
       <div class="hp-colors__row" role="group" aria-label="{{ section.settings.heading | escape }}">
         {%- for block in section.blocks -%}
           {%- liquid
-            # Each swatch points at Shopify's own product search for its colour
-            # name. Search indexes titles AND tags, so an untagged product whose
-            # name contains the colour is found today, and a tagged one is found
-            # once tags exist — one mechanism covering both, with the matching
-            # done by Shopify rather than scanned in Liquid.
+            # "View all" goes to a real search results page for the colour, which
+            # is a page that genuinely exists and is not limited by how many
+            # products this section chooses to show.
             assign target = routes.search_url | append: '?q=' | append: block.settings.title | url_encode | append: '&type=product'
             assign count = null
           -%}
@@ -212,6 +215,7 @@
             type="button"
             class="hp-colors__item{% if forloop.index0 == requested %} is-active{% endif %}"
             data-hp-colour
+            data-hp-colour-key="{{ block.settings.title | handleize }}"
             data-hp-url="{{ target }}"
             data-hp-label="{{ block.settings.title | escape }}"
             aria-pressed="{% if forloop.index0 == requested %}true{% else %}false{% endif %}"
@@ -243,90 +247,106 @@
       </div>
 
       {%- comment -%}
-        When Shopify re-renders this section for a /search URL, `search` is
-        populated — that is what fills the grid on each swatch click.
+        Every colour's products are rendered here, up front, and the swatches
+        just show/hide them. There is no fetch.
 
-        Search alone is too loose to trust: querying "Aqua" also returns
-        Aqua-grey pieces, and a colour word in a description would pull in
-        something unrelated. So every result is re-checked below against this
-        section's own colour list, and only exact belongers are drawn.
+        The previous versions asked the Section Rendering API for this section at
+        a /collections or /search URL, which cannot work: that API resolves the
+        section id against the template of the URL being requested, and this
+        section only exists in index.json. Every one of those requests came back
+        without the section, which is why the grid was always empty.
+
+        Rendering up front costs nothing extra in practice — a product belongs to
+        exactly one colour, so the total number of cards here is the number of
+        matched products, not colours x limit. Hidden groups use the `hidden`
+        attribute, so their lazy images are never downloaded until shown.
       {%- endcomment -%}
-      {%- liquid
-        assign active = ''
-        if search.performed and search.terms != blank
-          assign active = search.terms | downcase | strip
-        endif
-        assign shown = 0
-      -%}
-      <div class="hp-colors__grid" data-hp-colour-results data-hp-stagger>
-        {%- if search.performed -%}
-          {%- capture hp_cards -%}
+      <div class="hp-colors__results" data-hp-colour-results>
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign cname = block.settings.title | downcase
+            assign ctag = block.settings.tag | default: block.settings.title | handleize
+            assign gid = block.settings.title | handleize
+
+            # Colour names that CONTAIN this one, e.g. "Aqua-grey" contains
+            # "Aqua". Without this, every Aqua-grey piece would also be filed
+            # under Aqua. Built once per colour rather than once per product.
+            assign rivals = ''
+            for other in section.blocks
+              assign oname = other.settings.title | downcase
+              if oname != cname and oname contains cname
+                assign rivals = rivals | append: oname | append: '||'
+              endif
+            endfor
+            assign rival_list = rivals | split: '||'
+          -%}
+          <div
+            class="hp-colors__grid"
+            data-hp-colour-group="{{ gid }}"
+            data-hp-stagger
+            {% unless forloop.index0 == requested %}hidden{% endunless %}
+          >
+            {%- liquid
+              assign seen = ','
+              assign shown = 0
+            -%}
             {%- comment -%}
-              paginate by 50 so the filter below has the full first page of
-              results to work through. Unpaginated, search.results hands back a
-              short default page, and since these results are then narrowed to
-              one exact colour, a short page can filter down to nothing.
+              Scanning the store's own collections rather than one "all" list:
+              Liquid only ever hands back the first 50 products of any single
+              collection, so walking each collection covers far more of the
+              catalogue than one capped list would. Products sitting in two
+              collections are de-duplicated by id below.
             {%- endcomment -%}
-            {%- paginate search.results by 50 -%}
-            {%- for product in search.results -%}
-              {%- if shown >= show_limit -%}{%- break -%}{%- endif -%}
-              {%- liquid
-                assign ptitle = product.title | downcase
-                assign chosen = ''
-
-                # An explicit colour tag always wins. This is the path every
-                # product should end up on, and the only one that stays correct
-                # for a product whose name does not mention its colour.
-                for b in section.blocks
-                  assign btag = b.settings.tag | default: b.settings.title | handleize
-                  if product.tags contains btag or product.tags contains b.settings.title
-                    assign chosen = b.settings.title | downcase
-                  endif
-                endfor
-
-                # Otherwise infer it from the title, keeping the LONGEST colour
-                # name that fits. Length is what makes this safe: "Aqua-grey"
-                # contains "Aqua", and "Reactive Cloud Grey" contains neither
-                # cleanly, so a first-match rule would file both under the wrong
-                # swatch. Longest-wins always picks the most specific colour.
-                if chosen == blank
-                  assign best = ''
-                  for b in section.blocks
-                    assign bt = b.settings.title | downcase
-                    if ptitle contains bt
-                      assign btl = bt | size
-                      assign bestl = best | size
-                      if btl > bestl
-                        assign best = bt
+            {%- for col in collections -%}
+              {%- for product in col.products -%}
+                {%- if shown >= show_limit -%}{%- break -%}{%- endif -%}
+                {%- liquid
+                  assign pid = product.id | append: ',' | prepend: ','
+                  assign ok = false
+                  unless seen contains pid
+                    # An explicit colour tag always wins — it is the only thing
+                    # that can be right for a product not named after its colour.
+                    if product.tags contains ctag or product.tags contains block.settings.title
+                      assign ok = true
+                    else
+                      assign ptitle = product.title | downcase
+                      if ptitle contains cname
+                        assign ok = true
+                        for rival in rival_list
+                          if rival != blank and ptitle contains rival
+                            assign ok = false
+                            break
+                          endif
+                        endfor
                       endif
                     endif
-                  endfor
-                  assign chosen = best
-                endif
-              -%}
-              {%- if chosen != blank and chosen == active -%}
-                {%- assign shown = shown | plus: 1 -%}
-                <div data-hp-reveal>
-                  {% render 'card-product',
-                    card_product: product,
-                    media_aspect_ratio: 'portrait',
-                    show_secondary_image: true,
-                    show_rating: true,
-                    quick_add: section.settings.quick_add,
-                    section_id: section.id
-                  %}
-                </div>
-              {%- endif -%}
+                  endunless
+                -%}
+                {%- if ok -%}
+                  {%- liquid
+                    assign seen = seen | append: product.id | append: ','
+                    assign shown = shown | plus: 1
+                  -%}
+                  <div data-hp-reveal>
+                    {% render 'card-product',
+                      card_product: product,
+                      media_aspect_ratio: 'portrait',
+                      show_secondary_image: true,
+                      show_rating: true,
+                      quick_add: section.settings.quick_add,
+                      lazy_load: true,
+                      section_id: section.id
+                    %}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
             {%- endfor -%}
-            {%- endpaginate -%}
-          {%- endcapture -%}
 
-          {%- if shown > 0 -%}
-            {{ hp_cards }}
-          {%- else -%}
-            <p class="hp-colors__empty">Nothing in this shade just yet — try another colour.</p>
-          {%- endif -%}
-        {%- endif -%}
+            {%- if shown == 0 -%}
+              <p class="hp-colors__empty">Nothing in this shade just yet — try another colour.</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
       </div>
     </hp-colour-shop>
   </div>

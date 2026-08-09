@@ -601,10 +601,16 @@
   })();
   if (!customElements.get('hp-rail')) customElements.define('hp-rail', HpRail);
 
-  /* ---- <hp-colour-shop> — Shop by Colour, actually functional -----------
-     Clicking a swatch fetches that colour's collection (filtered by tag when
-     one is set) through Shopify's own section-rendering API and cross-fades
-     the results in. No page reload, no fake links.
+  /* ---- <hp-colour-shop> — Shop by Colour ---------------------------------
+     Every colour's products are rendered into the page up front and this just
+     swaps which group is visible.
+
+     It used to fetch each colour through the Section Rendering API. That could
+     never work: the API resolves ?section_id= against the template of the URL
+     being requested, and this section only lives in index.json — so requesting
+     it at a /collections or /search URL always came back without the section
+     and the grid stayed empty. Toggling locally is also instant, needs no
+     network, and cannot half-fail.
   ---------------------------------------------------------------------- */
   var HpColourShop = (function () {
     function HpColourShop() { return Reflect.construct(HTMLElement, [], HpColourShop); }
@@ -613,75 +619,57 @@
 
     HpColourShop.prototype.connectedCallback = function () {
       var el = this;
-      el.results = el.querySelector('[data-hp-colour-results]');
       el.swatches = Array.prototype.slice.call(el.querySelectorAll('[data-hp-colour]'));
+      el.groups = Array.prototype.slice.call(el.querySelectorAll('[data-hp-colour-group]'));
       el.titleEl = el.querySelector('[data-hp-colour-title]');
       el.linkEl = el.querySelector('[data-hp-colour-link]');
-      el.sectionId = el.getAttribute('data-section-id');
-      el.cache = {};
-      if (!el.results || !el.swatches.length) return;
+      if (!el.swatches.length || !el.groups.length) return;
 
       el.swatches.forEach(function (btn) {
         btn.addEventListener('click', function () { el.select(btn); });
       });
-      // preselect the first swatch so the grid is never empty
-      el.select(el.swatches[0], true);
+
+      /* Start on whichever swatch the template marked active, so the visible
+         group and the highlighted swatch agree on first paint. */
+      var initial = el.swatches.filter(function (b) {
+        return b.classList.contains('is-active');
+      })[0] || el.swatches[0];
+      el.select(initial, true);
     };
 
     HpColourShop.prototype.select = function (btn, initial) {
       var el = this;
+      var key = btn.getAttribute('data-hp-colour-key');
+
       el.swatches.forEach(function (b) {
-        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
-        b.classList.toggle('is-active', b === btn);
+        var on = b === btn;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
 
+      var shownGroup = null;
+      el.groups.forEach(function (g) {
+        var on = g.getAttribute('data-hp-colour-group') === key;
+        g.hidden = !on;
+        if (on) shownGroup = g;
+      });
+
+      if (el.titleEl) el.titleEl.textContent = btn.getAttribute('data-hp-label') || '';
       var url = btn.getAttribute('data-hp-url');
-      var label = btn.getAttribute('data-hp-label') || '';
-      if (el.titleEl) el.titleEl.textContent = label;
       if (el.linkEl && url) {
         el.linkEl.href = url;
         el.linkEl.hidden = false;
       }
-      if (!url) return;
 
-      if (el.cache[url]) { el.paint(el.cache[url], initial); return; }
+      if (!shownGroup || initial) return;
 
-      el.results.setAttribute('aria-busy', 'true');
-      el.classList.add('is-loading');
-
-      var fetchUrl = url + (url.indexOf('?') > -1 ? '&' : '?') + 'section_id=' + el.sectionId;
-      fetch(fetchUrl)
-        .then(function (r) { return r.text(); })
-        .then(function (html) {
-          var parsed = new DOMParser().parseFromString(html, 'text/html');
-          var fresh = parsed.querySelector('[data-hp-colour-results]');
-          var markup = fresh ? fresh.innerHTML : '';
-          el.cache[url] = markup;
-          el.paint(markup, initial);
-        })
-        .catch(function () {
-          el.classList.remove('is-loading');
-          el.results.removeAttribute('aria-busy');
-        });
-    };
-
-    HpColourShop.prototype.paint = function (markup, initial) {
-      var el = this;
-      var swap = function () {
-        el.results.innerHTML = markup;
-        el.classList.remove('is-loading');
-        el.results.removeAttribute('aria-busy');
-        initMotion(el.results);
-        if (hasGsap && !initial) {
-          window.gsap.fromTo(el.results.children,
-            { y: 24, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.05, clearProps: 'transform' });
-        }
-      };
-      if (reducedMotion || initial || !el.results.children.length) { swap(); return; }
-      el.results.style.transition = 'opacity .22s ease';
-      el.results.style.opacity = '0';
-      setTimeout(function () { swap(); el.results.style.opacity = '1'; }, 220);
+      /* Reveal-on-scroll already ran for these cards while they were hidden, so
+         re-running initMotion would do nothing. Animate the swap directly. */
+      if (hasGsap && !reducedMotion) {
+        window.gsap.fromTo(shownGroup.children,
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out', stagger: 0.04, clearProps: 'transform,opacity' });
+      }
     };
 
     return HpColourShop;
