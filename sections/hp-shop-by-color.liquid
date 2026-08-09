@@ -3,12 +3,19 @@
 
   Clicking a swatch loads that colour's products in place, without a page
   reload: the section re-renders itself through Shopify's Section Rendering
-  API and the grid cross-fades. Each swatch points at a collection and can
-  narrow it further with a tag, so "Sea Green" can be
-  /collections/aesthetic-bowls/sea-green.
+  API and the grid cross-fades.
 
-  Merchant setup: pick a collection per swatch, optionally type the product
-  tag used for that colour. Everything else is automatic.
+  Filtering is tag-driven. Each swatch points at a collection plus a colour tag
+  and requests /collections/<collection>/<tag>, which is Shopify's own tag
+  filter — so it returns EVERY product carrying that tag, paged by Shopify
+  rather than scanned in Liquid. That matters: Liquid can only see the first 50
+  products of a collection, so filtering here in the template would silently
+  miss anything past that. It also means adding a colour to a new product is
+  just adding the tag, with no theme change.
+
+  Merchant setup: pick the collection to search (usually "All"), and type the
+  colour tag. The tag must exist on the products themselves — tags are store
+  data, not theme data, so they are added in the Shopify admin.
 {% endcomment %}
 
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
@@ -28,7 +35,12 @@
 {%- endunless -%}
 
 {%- liquid
-  assign per_row = section.settings.products_to_show | default: 4
+  # These used to be one setting: "products per colour" also decided how many
+  # grid columns to draw. That capped the shelf at 6 products purely because 7
+  # columns would look wrong — the two are now separate so a colour can show
+  # everything it has in a sensible 4-up grid.
+  assign per_row = section.settings.columns | default: 4
+  assign show_limit = section.settings.products_to_show | default: 12
   assign last_index = section.blocks.size | minus: 1
   assign requested = section.settings.default_index | default: 1 | minus: 1
   if requested > last_index
@@ -141,8 +153,12 @@
   .hp-colors__results-title {
     margin: 0;
     font-family: var(--hp-font-display);
-    font-weight: 600;
-    font-size: clamp(2rem, 2.6vw, 2.6rem);
+    /* Shared block tier + shared heading colour, so the selected colour's title
+       matches every other in-section heading rather than carrying its own size
+       and the old synthesised 600 weight. */
+    font-weight: 400;
+    font-size: var(--hp-h-block);
+    color: var(--hp-heading);
   }
   .hp-colors__grid {
     display: grid;
@@ -235,7 +251,7 @@
       {%- endcomment -%}
       <div class="hp-colors__grid" data-hp-colour-results data-hp-stagger>
         {%- if collection != blank and collection.products.size > 0 -%}
-          {%- for product in collection.products limit: section.settings.products_to_show -%}
+          {%- for product in collection.products limit: show_limit -%}
             <div data-hp-reveal>
               {% render 'card-product',
                 card_product: product,
@@ -259,7 +275,7 @@
 {
   "name": "THP Shop by Colour",
   "tag": "section",
-  "max_blocks": 10,
+  "max_blocks": 20,
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Palette" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Colour" },
@@ -267,10 +283,20 @@
     {
       "type": "range",
       "id": "products_to_show",
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "label": "Products per colour",
+      "default": 12,
+      "info": "How many products a colour shows before it stops. Raise it if a colour has more pieces than fit."
+    },
+    {
+      "type": "range",
+      "id": "columns",
       "min": 2,
       "max": 6,
       "step": 1,
-      "label": "Products per colour",
+      "label": "Columns (desktop)",
       "default": 4
     },
     {
