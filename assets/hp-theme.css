@@ -1249,17 +1249,22 @@ main#MainContent > .shopify-section:first-child > * { margin-top: 0; }
   background-color: rgba(37, 37, 37, 0.88) !important;
   color: var(--hp-cream) !important;
 }
+/* Sold-out products keep their photography at full strength. The greyscale
+   filter and cream wash that used to sit over them are gone — the SOLD OUT
+   badge and the disabled button already say the piece is unavailable, and
+   draining the colour out of a product shot mostly just makes the range look
+   worse to someone who is still browsing.
+
+   Both rules are explicitly reset rather than deleted, because the ::after
+   overlay is painted by an inherited rule elsewhere in the cascade for some
+   card layouts; setting content: none is what actually removes it. */
 .hp-sold-out .card__media img,
 .hp-sold-out .card__inner img {
-  filter: grayscale(0.55) opacity(0.72);
+  filter: none;
 }
 .hp-sold-out .card__inner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: rgba(255, 253, 244, 0.35);
+  content: none;
+  background: none;
 }
 .hp-sold-out .card-information .price { color: var(--hp-taupe-soft); }
 
@@ -1630,6 +1635,64 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
 /* ==========================================================================
    23. RESPONSIVE POLISH — phone-first tightening across the board
    ========================================================================== */
+
+/* ==========================================================================
+   MOBILE RAILS — no card grid anywhere on a phone
+   Every card section scrolls sideways on mobile instead of wrapping onto a
+   second row, matching the collection rails and Shop by Colour.
+
+   Specificity is doing real work here. These grids are declared inside their
+   sections' own {% style %} blocks, which Shopify renders inline in <body> —
+   later in document order than this stylesheet in <head> — so a plain
+   `.hp-cats__grid` here would lose the tie and silently do nothing. Adding the
+   section wrapper takes each selector to two classes, which wins on
+   specificity regardless of order, and avoids another wall of !important.
+   ========================================================================== */
+
+@media screen and (max-width: 749px) {
+  .hp-section .hp-cats__grid,
+  .hp-section .hp-occasion__grid,
+  .hp-section .hp-styles__grid,
+  .hp-trust .hp-trust__grid,
+  .hp-recs:not(.hp-recs--drawer):not(.hp-recs--side) .hp-recs__grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1.2rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.6rem;
+  }
+  .hp-section .hp-cats__grid::-webkit-scrollbar,
+  .hp-section .hp-occasion__grid::-webkit-scrollbar,
+  .hp-section .hp-styles__grid::-webkit-scrollbar,
+  .hp-trust .hp-trust__grid::-webkit-scrollbar,
+  .hp-recs .hp-recs__grid::-webkit-scrollbar { display: none; }
+
+  /* 2.2 per view: the fraction is the point — a partly visible next card is
+     what tells a touch visitor the row scrolls, which a flush 2-up grid never
+     communicated. */
+  .hp-section .hp-cats__grid > *,
+  .hp-section .hp-occasion__grid > *,
+  .hp-section .hp-styles__grid > *,
+  .hp-recs:not(.hp-recs--drawer):not(.hp-recs--side) .hp-recs__grid > * {
+    flex: 0 0 calc((100% - (1.2rem * 1.2)) / 2.2);
+    width: calc((100% - (1.2rem * 1.2)) / 2.2);
+    max-width: calc((100% - (1.2rem * 1.2)) / 2.2);
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+  /* Trust badges are short labels rather than cards, so they size to their own
+     content instead of a fixed per-view width — forcing them to card width
+     would leave each one mostly empty. */
+  .hp-trust .hp-trust__grid > * {
+    flex: 0 0 auto;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+}
 
 @media screen and (max-width: 749px) {
   /* Retune the shared scale once; every heading that points at these tokens
