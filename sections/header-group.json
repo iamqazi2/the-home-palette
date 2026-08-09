@@ -23,7 +23,9 @@
         "hp_band_enable": true,
         "hp_band_color": "#257575",
         "hp_band_text": "#fff9df",
-        "hp_show_account": false
+        "hp_show_account": false,
+        "hp_extra_link_label": "Journal",
+        "hp_extra_link_url": "/blogs/journal"
       }
     },
     "17358360248ef50bda": {
