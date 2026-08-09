@@ -100,31 +100,10 @@
       </li>
     {%- endfor -%}
 
-{%- comment -%}
-  One extra nav item defined in the theme rather than the Shopify menu.
-
-  Navigation menus are store data, so the theme cannot add an item to them — but
-  it can render one of its own alongside them. That is what this is: it puts the
-  Journal in the nav straight away, with no admin step. Once the link is added
-  to Online Store -> Navigation -> Main menu, clear the "Extra nav link" label
-  in the header settings so it does not appear twice.
-{%- endcomment -%}
-    {%- if section.settings.hp_extra_link_label != blank and section.settings.hp_extra_link_url != blank -%}
-      {%- assign hp_extra_active = false -%}
-      {%- if request.path contains section.settings.hp_extra_link_url -%}
-        {%- assign hp_extra_active = true -%}
-      {%- endif -%}
-      <li>
-        <a
-          href="{{ section.settings.hp_extra_link_url }}"
-          class="header__menu-item list-menu__item link link--text focus-inset"
-          {% if hp_extra_active %}aria-current="page"{% endif %}
-        >
-          <span{% if hp_extra_active %} class="header__active-menu-item"{% endif %}>
-            {{- section.settings.hp_extra_link_label | escape -}}
-          </span>
-        </a>
-      </li>
-    {%- endif -%}
+    {% render 'hp-nav-extra',
+      label: section.settings.hp_extra_link_label,
+      url: section.settings.hp_extra_link_url,
+      item_class: 'header__menu-item list-menu__item link link--text focus-inset'
+    %}
   </ul>
 </nav>

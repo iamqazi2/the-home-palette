@@ -1,0 +1,61 @@
+{%- comment -%}
+  One extra nav item defined by the theme rather than the Shopify menu.
+
+  Navigation menus are store data, so the theme cannot add an item to the Main
+  menu — but it can render one of its own beside it. That is what this is, and
+  it is why the Journal appears in the nav with no admin step.
+
+  The URL resolves to a blog that actually EXISTS rather than a hard-coded path:
+  a fresh Shopify store ships a "News" blog, and whichever blog is present is a
+  better target than a handle that may not have been created yet. The configured
+  URL is only used when the store has no blog at all.
+
+  Rendered by both header-dropdown-menu and header-drawer so the desktop nav and
+  the mobile menu can never disagree about what is in the navigation.
+
+  Accepts:
+    label       {string}  link text; nothing renders when blank
+    url         {string}  fallback URL, used only if the store has no blog
+    item_class  {string}  the host menu's own item class, so this is
+                          indistinguishable from a real menu entry
+    prefer_blog {boolean} resolve to the store's blog (default true)
+{%- endcomment -%}
+
+{%- liquid
+  assign hp_nav_url = url
+
+  unless prefer_blog == false
+    # Prefer the handle the article script creates, then fall back to whatever
+    # blog the store does have, so the link is never a dead end.
+    assign hp_blog = blogs['journal']
+    if hp_blog.handle == blank
+      for b in blogs
+        assign hp_blog = b
+        break
+      endfor
+    endif
+    if hp_blog.handle != blank
+      assign hp_nav_url = hp_blog.url
+    endif
+  endunless
+-%}
+
+{%- if label != blank and hp_nav_url != blank -%}
+  {%- liquid
+    assign hp_nav_active = false
+    if request.path contains hp_nav_url
+      assign hp_nav_active = true
+    endif
+  -%}
+  <li>
+    <a
+      href="{{ hp_nav_url }}"
+      class="{{ item_class }}"
+      {% if hp_nav_active %}aria-current="page"{% endif %}
+    >
+      <span{% if hp_nav_active %} class="header__active-menu-item"{% endif %}>
+        {{- label | escape -}}
+      </span>
+    </a>
+  </li>
+{%- endif -%}
