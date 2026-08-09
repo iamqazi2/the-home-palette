@@ -22,11 +22,15 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign hp_nav_url = url
+  # Resolve in order of how likely each is to be a working link, and never end
+  # up blank — a blank href was what made this item vanish entirely rather than
+  # merely point somewhere unhelpful.
+  #   1. a blog that actually exists (a Shopify store ships with one)
+  #   2. the configured path
+  #   3. /blogs/journal, the handle the article script creates
+  assign hp_nav_url = ''
 
   unless prefer_blog == false
-    # Prefer the handle the article script creates, then fall back to whatever
-    # blog the store does have, so the link is never a dead end.
     assign hp_blog = blogs['journal']
     if hp_blog.handle == blank
       for b in blogs
@@ -38,9 +42,21 @@
       assign hp_nav_url = hp_blog.url
     endif
   endunless
+
+  if hp_nav_url == blank
+    assign hp_nav_url = url
+  endif
+  if hp_nav_url == blank
+    assign hp_nav_url = '/blogs/journal'
+  endif
 -%}
 
-{%- if label != blank and hp_nav_url != blank -%}
+{%- comment -%}
+  Only the label gates rendering. The URL cannot be blank by this point, so
+  tying visibility to it would only ever hide the item for a reason nobody
+  could see on the page.
+{%- endcomment -%}
+{%- if label != blank -%}
   {%- liquid
     assign hp_nav_active = false
     if request.path contains hp_nav_url
