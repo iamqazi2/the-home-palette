@@ -1463,46 +1463,13 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
    19. COLLECTION / CATEGORY PAGES
    ========================================================================== */
 
-.collection-hero {
-  position: relative;
-  background: var(--hp-teal);
-  color: var(--hp-cream);
-  overflow: hidden;
-}
-.collection-hero__inner {
-  padding-top: clamp(3.2rem, 6vw, 6rem) !important;
-  padding-bottom: clamp(3.2rem, 6vw, 6rem) !important;
-  position: relative;
-  z-index: 1;
-}
-.collection-hero__title {
-  font-size: var(--hp-h-page) !important;
-  color: var(--hp-cream);
-  margin: 0;
-}
-.collection-hero__description {
-  margin-top: 1.4rem;
-  max-width: 56rem;
-  font-size: 1.45rem;
-  line-height: 1.75;
-  color: rgba(255, 249, 223, 0.85);
-}
-.collection-hero--with-image .collection-hero__image-container {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: 0;
-}
-.collection-hero--with-image .collection-hero__image-container img { object-fit: cover; filter: brightness(0.5); }
-.collection-hero--with-image::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: linear-gradient(90deg, rgba(12, 38, 39, 0.86), rgba(37, 117, 117, 0.55));
-}
-.collection-hero--with-image .collection-hero__title,
-.collection-hero--with-image .collection-hero__description { text-shadow: 0 2px 16px rgba(12, 38, 39, 0.65); }
+/* Collection banner styling lives in sections/main-collection-banner.liquid,
+   not here. It has to: that section loads component-collection-hero.css with a
+   stylesheet_tag in <body>, which is later in document order than this file in
+   <head>, so Dawn's own hero rules beat anything written here at equal
+   specificity. Keeping the whole treatment in the section's own style block —
+   which renders after that stylesheet_tag — is what lets it win without a wall
+   of !important, and keeps the layout in one readable place. */
 
 /* facets → pills */
 .facets__summary, .facet-filters__label, .facets__heading {
@@ -1706,7 +1673,6 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
   .hp-section-head__text { font-size: 1.35rem; }
   .hp-btn { padding: 1.2rem 2rem; font-size: 1.1rem; }
   .hp-recs__grid, .hp-colors__grid { gap: 1rem; }
-  .collection-hero__inner { padding-top: 2.8rem !important; padding-bottom: 2.8rem !important; }
   .product__info-wrapper { padding-left: 0; }
   .hp-story__body { padding: 2.4rem var(--hp-gap-x) 3.2rem; }
   .hp-cta__inner { padding: 2.8rem 2rem; }

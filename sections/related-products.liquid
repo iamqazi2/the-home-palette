@@ -23,6 +23,32 @@
   resolves to the actual runtime id itself — nothing here is guessed.
 {%- endcomment -%}
 {%- style -%}
+  .related-products__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    margin-bottom: 1.6rem;
+  }
+  .related-products__head .related-products__heading { margin: 0; }
+  .related-products__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .related-products__all:hover { color: var(--hp-teal-deep); }
+  .related-products__all .hp-icon { transition: transform 0.35s var(--hp-ease); }
+  .related-products__all:hover .hp-icon { transform: translateX(4px); }
+
   @media screen and (max-width: 749px) {
     #shopify-section-{{ section.id }} .product-grid {
       display: grid !important;
@@ -63,9 +89,25 @@
     data-product-id="{{ product.id }}"
   >
     {% if recommendations.performed and recommendations.products_count > 0 %}
-      <h2 class="related-products__heading inline-richtext {{ section.settings.heading_size }}">
-        {{ section.settings.heading }}
-      </h2>
+      {%- liquid
+        # "View all" needs somewhere real to go. Recommendations come from the
+        # recommendations API, not a collection, so there is no "collection of
+        # related products" to link to — the closest honest target is the
+        # collection this product itself sits in, falling back to all products.
+        assign va_collection = product.collections.first
+        assign va_url = va_collection.url | default: routes.all_products_collection_url
+      -%}
+      <div class="related-products__head">
+        <h2 class="related-products__heading inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h2>
+        {%- if section.settings.show_view_all and va_url != blank -%}
+          <a class="related-products__all" href="{{ va_url }}">
+            {{ section.settings.view_all_label | default: 'View all' | escape }}
+            {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+          </a>
+        {%- endif -%}
+      </div>
       <ul
         class="grid product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
         role="list"
@@ -247,6 +289,19 @@
       "default": false,
       "label": "t:sections.related-products.settings.show_rating.label",
       "info": "t:sections.related-products.settings.show_rating.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Show \"view all\" link",
+      "info": "Links to the collection this product belongs to."
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View-all label",
+      "default": "View all"
     },
     {
       "type": "select",

@@ -1,11 +1,120 @@
 {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
 {{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
 
+{%- comment -%}
+  THP: full-bleed collection banner — photo covering the whole band with the
+  title over it, instead of Dawn's side-by-side "text left / image right".
+
+  This lives here rather than in hp-theme.css on purpose. The stylesheet_tag
+  above loads component-collection-hero.css into <body>, which is later in
+  document order than hp-theme.css in <head>, so Dawn's hero rules beat that
+  file at equal specificity. This block renders after the stylesheet_tag, so it
+  wins on order and needs almost no !important.
+
+  What was broken: hp-theme.css absolutely positioned the image container but
+  also made .collection-hero__inner position: relative. The image container is
+  a CHILD of that inner (see the markup below), so inset: 0 sized it to the
+  padded, page-width inner rather than the full band — that is the photo
+  floating with teal margins around it. And because the image was the only
+  positioned element in that context, it painted over the heading, which is why
+  the collection title had vanished entirely.
+{%- endcomment -%}
 {%- style -%}
+  .collection-hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--hp-teal);
+    color: var(--hp-cream);
+    padding: 0;
+  }
+
+  /* Plain padded block, not Dawn's flex row — and critically position: static,
+     so the absolutely positioned image below anchors to .collection-hero (the
+     full band) rather than to this padded, page-width box. */
+  .collection-hero__inner {
+    display: block;
+    position: static;
+    padding-top: clamp(3.2rem, 6vw, 6rem);
+    padding-bottom: clamp(3.2rem, 6vw, 6rem);
+  }
+
+  /* Positioned with a z-index so the title sits above both the photo and its
+     scrim. Without this the heading is painted over by the image. */
+  .collection-hero__text-wrapper {
+    position: relative;
+    z-index: 2;
+    flex-basis: auto;
+    padding: 0;
+  }
+  .collection-hero__title {
+    margin: 0;
+    color: var(--hp-cream);
+  }
+  .collection-hero__description {
+    margin-top: 1.4rem;
+    max-width: 56rem;
+    font-size: 1.45rem;
+    line-height: 1.75;
+    color: rgba(255, 249, 223, 0.85);
+  }
+
+  /* With the photo taken out of flow, nothing is left to give the band height
+     but the title, so it would collapse to a thin strip. A min-height restores
+     a proper banner, and centring the inner puts the title in the middle of the
+     image rather than pinned to its top edge. */
+  .collection-hero--with-image {
+    display: flex;
+    align-items: center;
+    min-height: clamp(20rem, 26vw, 30rem);
+  }
+  .collection-hero--with-image .collection-hero__inner { width: 100%; }
+
+  /* Photo fills the band. Dawn's border, radius, shadow, fixed heights and
+     flex sizing all assume the side-by-side layout, so each is reset. */
+  .collection-hero--with-image .collection-hero__inner { padding-bottom: clamp(3.2rem, 6vw, 6rem); }
+  .collection-hero--with-image .collection-hero__text-wrapper { padding: 0; }
+  .collection-hero--with-image .collection-hero__image-container {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    margin: 0;
+    height: auto;
+    min-height: 0;
+    align-self: auto;
+    flex: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .collection-hero--with-image .collection-hero__image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Scrim between photo and text, so the title stays readable over a light or
+     busy image. Sits at z-index 1: above the photo, below the text. */
+  .collection-hero--with-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(90deg, rgba(12, 38, 39, 0.86), rgba(18, 53, 54, 0.5));
+  }
+  .collection-hero--with-image .collection-hero__title,
+  .collection-hero--with-image .collection-hero__description {
+    text-shadow: 0 2px 16px rgba(12, 38, 39, 0.65);
+  }
+
+  /* Dawn re-applies the split layout and its own band padding above 750px. */
+  @media screen and (min-width: 750px) {
+    .collection-hero.collection-hero--with-image { padding: 0; overflow: hidden; }
+    .collection-hero__inner { display: block; align-items: initial; flex-direction: column; padding-bottom: clamp(3.2rem, 6vw, 6rem); }
+    .collection-hero--with-image .collection-hero__text-wrapper { padding: 0; flex-basis: auto; }
+    .collection-hero--with-image .collection-hero__image-container { margin-left: 0; flex: none; min-height: 0; }
+  }
   @media screen and (max-width: 749px) {
-    .collection-hero--with-image .collection-hero__inner {
-      padding-bottom: calc({{ settings.media_shadow_vertical_offset | at_least: 0 }}px + 2rem);
-    }
+    .collection-hero--with-image .collection-hero__image-container { height: auto; }
+    .collection-hero--with-image .collection-hero__inner { padding-bottom: clamp(3.2rem, 6vw, 6rem); }
   }
 {%- endstyle -%}
 
