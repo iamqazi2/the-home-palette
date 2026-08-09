@@ -1,0 +1,66 @@
+{
+  "sections": {
+    "main": {
+      "type": "hp-journal",
+      "blocks": {
+        "post_1": {
+          "type": "post",
+          "settings": {
+            "title": "How to Set a Beautiful Dining Table for Every Occasion",
+            "excerpt": "From choosing the right dinnerware to adding subtle decorative touches, a few simple details can turn an ordinary table into one that feels warm, elegant and inviting.",
+            "tag": "Styling",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
+            "handle": "journal-how-to-set-a-beautiful-dining-table"
+          }
+        },
+        "post_2": {
+          "type": "post",
+          "settings": {
+            "title": "Dinner Set Size Guide: How Many Plates Do You Really Need?",
+            "excerpt": "The right size means you're ready for everyday meals, unexpected guests and special occasions — without running short on plates or overfilling your cabinets.",
+            "tag": "Buying Guide",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
+            "handle": "journal-dinner-set-size-guide"
+          }
+        },
+        "post_3": {
+          "type": "post",
+          "settings": {
+            "title": "Ceramic vs Porcelain Dinnerware: Which One Is Better for Your Home?",
+            "excerpt": "Both are beautiful, durable and widely loved — yet they serve slightly different purposes. Here's how to choose the one that suits your table.",
+            "tag": "Buying Guide",
+            "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
+            "handle": "journal-ceramic-vs-porcelain-dinnerware"
+          }
+        },
+        "post_4": {
+          "type": "post",
+          "settings": {
+            "title": "How to Style the Perfect Yellow-Themed Brunch Table",
+            "excerpt": "Vibrant without being overwhelming, and timeless enough for every season — here's how to build a yellow brunch table that feels sophisticated rather than loud.",
+            "tag": "Styling",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+            "handle": "journal-yellow-themed-brunch-table"
+          }
+        }
+      },
+      "block_order": [
+        "post_1",
+        "post_2",
+        "post_3",
+        "post_4"
+      ],
+      "settings": {
+        "hero_image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+        "eyebrow": "The Journal",
+        "heading": "The Journal",
+        "text": "Styling notes, care guides and table stories from The Home Palette.",
+        "bg_color": "#fffdf4",
+        "read_label": "Read the story"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

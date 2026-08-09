@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "hp-journal-post",
+      "settings": {
+        "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
+        "eyebrow": "The Journal",
+        "back_url": "/pages/journals",
+        "back_label": "Back to the Journal"
+      }
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,132 @@
+{% comment %}
+  THP — a single Journal post, rendered from a Shopify Page.
+
+  Used via the `journal-post` template suffix, which create-journal-pages.mjs
+  sets on each page it creates. The body comes from page.content, so the post is
+  edited in the admin like any other page — the theme only supplies the frame
+  and the typography.
+{% endcomment %}
+
+{%- style -%}
+  .hp-post-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(30rem, 40vw, 46rem);
+    background: var(--hp-teal);
+    color: var(--hp-cream);
+    overflow: hidden;
+  }
+  .hp-post-hero__media { position: absolute; inset: 0; z-index: 0; }
+  .hp-post-hero__media img { width: 100%; height: 100%; object-fit: cover; }
+  .hp-post-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(12, 38, 39, 0.25) 30%, rgba(12, 38, 39, 0.85) 100%);
+  }
+  .hp-post-hero__inner { position: relative; z-index: 2; width: 100%; padding: clamp(3.2rem, 6vw, 6rem) 0; }
+  .hp-post-hero__eyebrow { margin: 0 0 1.4rem; }
+  .hp-post-hero__title {
+    margin: 0;
+    max-width: 24ch;
+    color: var(--hp-cream);
+    font-size: var(--hp-h-page);
+    text-shadow: 0 2px 16px rgba(12, 38, 39, 0.6);
+  }
+
+  .hp-post { background: var(--hp-cream-soft); padding-bottom: clamp(3rem, 6vw, 6rem); }
+  .hp-post__body {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 5vw, 5.5rem) var(--hp-gap-x) 0;
+    font-size: 1.65rem;
+    line-height: 1.85;
+    color: var(--hp-ink);
+  }
+  .hp-post__body h2 {
+    margin: clamp(3rem, 4.5vw, 4.4rem) 0 1.2rem;
+    font-size: var(--hp-h-section);
+    color: var(--hp-heading);
+  }
+  .hp-post__body h3 {
+    margin: clamp(2.4rem, 3.4vw, 3.2rem) 0 1rem;
+    font-size: var(--hp-h-block);
+    color: var(--hp-heading);
+  }
+  .hp-post__body p { margin: 0 0 1.6rem; }
+  .hp-post__body ul,
+  .hp-post__body ol { margin: 0 0 1.8rem; padding-left: 2rem; }
+  .hp-post__body li { margin-bottom: 0.7rem; }
+  .hp-post__body a {
+    color: var(--hp-teal);
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+    text-decoration-thickness: 1px;
+  }
+  .hp-post__body a:hover { color: var(--hp-teal-deep); }
+  .hp-post__body strong { font-weight: 600; }
+  .hp-post__body img { border-radius: var(--hp-r-card); margin: 2.4rem 0; max-width: 100%; height: auto; }
+  .hp-post__body blockquote {
+    margin: 2.4rem 0;
+    padding: 0 0 0 2rem;
+    border-left: 3px solid var(--hp-teal-chip);
+    font-family: var(--hp-font-display);
+    font-size: 2rem;
+    line-height: 1.5;
+    color: var(--hp-heading);
+  }
+
+  .hp-post__back { text-align: center; padding-top: clamp(2.4rem, 4vw, 4rem); }
+{%- endstyle -%}
+
+<div class="hp-post-hero">
+  {%- if section.settings.image != blank -%}
+    <div class="hp-post-hero__media">
+      {{
+        section.settings.image
+        | image_url: width: 2200
+        | image_tag: widths: '600, 900, 1200, 1600, 2200', sizes: '100vw', alt: page.title, fetchpriority: 'high'
+      }}
+    </div>
+  {%- endif -%}
+  <div class="hp-post-hero__inner page-width">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="hp-eyebrow hp-eyebrow--light hp-post-hero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    <h1 class="hp-post-hero__title">{{ page.title | escape }}</h1>
+  </div>
+</div>
+
+<div class="hp-post">
+  <div class="hp-post__body rte" data-hp-reveal>
+    {{ page.content }}
+  </div>
+
+  {%- if section.settings.back_url != blank -%}
+    <div class="hp-post__back">
+      <a class="hp-btn hp-btn--outline" href="{{ section.settings.back_url }}">
+        {{ section.settings.back_label | default: 'Back to the Journal' | escape }}
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "THP Journal Post",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero image",
+      "info": "Shared by every post using this template. For a per-post image, put one at the top of the page content instead."
+    },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Journal" },
+    { "type": "text", "id": "back_url", "label": "Back link URL", "default": "/pages/journals" },
+    { "type": "text", "id": "back_label", "label": "Back link label", "default": "Back to the Journal" }
+  ]
+}
+{% endschema %}

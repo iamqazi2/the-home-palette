@@ -22,40 +22,34 @@
 {%- endcomment -%}
 
 {%- liquid
-  # Resolve in order of how likely each is to be a working link, and never end
-  # up blank — a blank href was what made this item vanish entirely rather than
-  # merely point somewhere unhelpful.
-  #   1. a blog that actually exists (a Shopify store ships with one)
-  #   2. the configured path
-  #   3. /blogs/journal, the handle the article script creates
-  assign hp_nav_url = ''
-
-  unless prefer_blog == false
-    # Try the handle the article script creates, then the handle Shopify gives
-    # the blog it ships with, and only then fall back to iterating. The explicit
-    # lookups are not redundant: `blogs` is documented as a lookup-by-handle
-    # object and iterating it is not dependable, so a store whose only blog is
-    # the default "news" would otherwise never be found.
-    assign hp_blog = blogs['journal']
-    if hp_blog.handle == blank
-      assign hp_blog = blogs['news']
-    endif
-    if hp_blog.handle == blank
-      for b in blogs
-        assign hp_blog = b
-        break
-      endfor
-    endif
-    if hp_blog.handle != blank
-      assign hp_nav_url = hp_blog.url
-    endif
-  endunless
+  # A configured URL wins outright. It used to come second, behind blog
+  # auto-detect, which was wrong the moment the Journal was pointed at a Page:
+  # detection would have silently redirected the nav item to a blog instead of
+  # the page that was actually built. Auto-detect is now only a fallback for
+  # when nothing is configured.
+  assign hp_nav_url = url
 
   if hp_nav_url == blank
-    assign hp_nav_url = url
+    unless prefer_blog == false
+      assign hp_blog = blogs['journal']
+      if hp_blog.handle == blank
+        assign hp_blog = blogs['news']
+      endif
+      if hp_blog.handle == blank
+        for b in blogs
+          assign hp_blog = b
+          break
+        endfor
+      endif
+      if hp_blog.handle != blank
+        assign hp_nav_url = hp_blog.url
+      endif
+    endunless
   endif
+
+  # Never blank: a blank href is what made this item vanish entirely once before.
   if hp_nav_url == blank
-    assign hp_nav_url = '/blogs/journal'
+    assign hp_nav_url = '/pages/journals'
   endif
 -%}
 
