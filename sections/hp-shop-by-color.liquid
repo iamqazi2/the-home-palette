@@ -5,17 +5,20 @@
   reload: the section re-renders itself through Shopify's Section Rendering
   API and the grid cross-fades.
 
-  Filtering is tag-driven. Each swatch points at a collection plus a colour tag
-  and requests /collections/<collection>/<tag>, which is Shopify's own tag
-  filter — so it returns EVERY product carrying that tag, paged by Shopify
-  rather than scanned in Liquid. That matters: Liquid can only see the first 50
-  products of a collection, so filtering here in the template would silently
-  miss anything past that. It also means adding a colour to a new product is
-  just adding the tag, with no theme change.
+  Each swatch queries Shopify's product search for its colour name. Search
+  indexes titles AND tags, which is the point: a product called "Selin Tea Set -
+  Teal" is found today with no tagging done, and a product tagged `teal` is
+  found whether or not its name says so. One mechanism, and the catalogue-wide
+  matching is done by Shopify rather than scanned in Liquid (Liquid can only see
+  the first 50 products of a collection, so template-side filtering would
+  silently drop products as the catalogue grows).
 
-  Merchant setup: pick the collection to search (usually "All"), and type the
-  colour tag. The tag must exist on the products themselves — tags are store
-  data, not theme data, so they are added in the Shopify admin.
+  Search on its own is too loose to trust, so every result is re-checked against
+  this section's colour list before it is drawn — see the results grid below.
+
+  Tags remain the reliable long-term answer, because a product whose name does
+  not mention its colour can only ever be found by tag. Tags are store data, not
+  theme data, so they are added in the Shopify admin.
 {% endcomment %}
 
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
@@ -197,19 +200,13 @@
       <div class="hp-colors__row" role="group" aria-label="{{ section.settings.heading | escape }}">
         {%- for block in section.blocks -%}
           {%- liquid
-            assign col = block.settings.collection
-            assign target = ''
-            if col != blank
-              if block.settings.tag != blank
-                assign target = col.url | append: '/' | append: block.settings.tag | handleize
-              else
-                assign target = col.url
-              endif
-            endif
-            assign count = col.all_products_count
-            if block.settings.tag != blank
-              assign count = null
-            endif
+            # Each swatch points at Shopify's own product search for its colour
+            # name. Search indexes titles AND tags, so an untagged product whose
+            # name contains the colour is found today, and a tagged one is found
+            # once tags exist — one mechanism covering both, with the matching
+            # done by Shopify rather than scanned in Liquid.
+            assign target = routes.search_url | append: '?q=' | append: block.settings.title | url_encode | append: '&type=product'
+            assign count = null
           -%}
           <button
             type="button"
@@ -246,25 +243,89 @@
       </div>
 
       {%- comment -%}
-        When Shopify re-renders this section for a collection URL, `collection`
-        is populated — that is what fills the grid on each swatch click.
+        When Shopify re-renders this section for a /search URL, `search` is
+        populated — that is what fills the grid on each swatch click.
+
+        Search alone is too loose to trust: querying "Aqua" also returns
+        Aqua-grey pieces, and a colour word in a description would pull in
+        something unrelated. So every result is re-checked below against this
+        section's own colour list, and only exact belongers are drawn.
       {%- endcomment -%}
+      {%- liquid
+        assign active = ''
+        if search.performed and search.terms != blank
+          assign active = search.terms | downcase | strip
+        endif
+        assign shown = 0
+      -%}
       <div class="hp-colors__grid" data-hp-colour-results data-hp-stagger>
-        {%- if collection != blank and collection.products.size > 0 -%}
-          {%- for product in collection.products limit: show_limit -%}
-            <div data-hp-reveal>
-              {% render 'card-product',
-                card_product: product,
-                media_aspect_ratio: 'portrait',
-                show_secondary_image: true,
-                show_rating: true,
-                quick_add: section.settings.quick_add,
-                section_id: section.id
-              %}
-            </div>
-          {%- endfor -%}
-        {%- elsif collection != blank -%}
-          <p class="hp-colors__empty">Nothing in this shade just yet — try another colour.</p>
+        {%- if search.performed -%}
+          {%- capture hp_cards -%}
+            {%- comment -%}
+              paginate by 50 so the filter below has the full first page of
+              results to work through. Unpaginated, search.results hands back a
+              short default page, and since these results are then narrowed to
+              one exact colour, a short page can filter down to nothing.
+            {%- endcomment -%}
+            {%- paginate search.results by 50 -%}
+            {%- for product in search.results -%}
+              {%- if shown >= show_limit -%}{%- break -%}{%- endif -%}
+              {%- liquid
+                assign ptitle = product.title | downcase
+                assign chosen = ''
+
+                # An explicit colour tag always wins. This is the path every
+                # product should end up on, and the only one that stays correct
+                # for a product whose name does not mention its colour.
+                for b in section.blocks
+                  assign btag = b.settings.tag | default: b.settings.title | handleize
+                  if product.tags contains btag or product.tags contains b.settings.title
+                    assign chosen = b.settings.title | downcase
+                  endif
+                endfor
+
+                # Otherwise infer it from the title, keeping the LONGEST colour
+                # name that fits. Length is what makes this safe: "Aqua-grey"
+                # contains "Aqua", and "Reactive Cloud Grey" contains neither
+                # cleanly, so a first-match rule would file both under the wrong
+                # swatch. Longest-wins always picks the most specific colour.
+                if chosen == blank
+                  assign best = ''
+                  for b in section.blocks
+                    assign bt = b.settings.title | downcase
+                    if ptitle contains bt
+                      assign btl = bt | size
+                      assign bestl = best | size
+                      if btl > bestl
+                        assign best = bt
+                      endif
+                    endif
+                  endfor
+                  assign chosen = best
+                endif
+              -%}
+              {%- if chosen != blank and chosen == active -%}
+                {%- assign shown = shown | plus: 1 -%}
+                <div data-hp-reveal>
+                  {% render 'card-product',
+                    card_product: product,
+                    media_aspect_ratio: 'portrait',
+                    show_secondary_image: true,
+                    show_rating: true,
+                    quick_add: section.settings.quick_add,
+                    section_id: section.id
+                  %}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- endpaginate -%}
+          {%- endcapture -%}
+
+          {%- if shown > 0 -%}
+            {{ hp_cards }}
+          {%- else -%}
+            <p class="hp-colors__empty">Nothing in this shade just yet — try another colour.</p>
+          {%- endif -%}
         {%- endif -%}
       </div>
     </hp-colour-shop>
@@ -337,16 +398,10 @@
           "info": "Shown inside the dot instead of the flat colour."
         },
         {
-          "type": "collection",
-          "id": "collection",
-          "label": "Collection",
-          "info": "Products shown when this swatch is picked."
-        },
-        {
           "type": "text",
           "id": "tag",
-          "label": "Product tag (optional)",
-          "info": "Narrows the collection to products tagged with this colour, e.g. 'sea-green'."
+          "label": "Product tag",
+          "info": "The tag used on products of this colour, e.g. 'sage-green'. Products whose name already contains the colour are matched without it, but tagging is what makes a colour reliable for products that are not named after it."
         }
       ]
     }

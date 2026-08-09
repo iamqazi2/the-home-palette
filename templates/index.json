@@ -419,7 +419,6 @@
           "settings": {
             "title": "Sage Green",
             "swatch": "#6e7c4f",
-            "collection": "all",
             "tag": "sage-green"
           }
         },
@@ -428,7 +427,6 @@
           "settings": {
             "title": "Ivory White",
             "swatch": "#f0ead9",
-            "collection": "all",
             "tag": "ivory-white"
           }
         },
@@ -437,7 +435,6 @@
           "settings": {
             "title": "Aqua",
             "swatch": "#93c9c2",
-            "collection": "all",
             "tag": "aqua"
           }
         },
@@ -446,7 +443,6 @@
           "settings": {
             "title": "Burnt Maple",
             "swatch": "#c4703a",
-            "collection": "all",
             "tag": "burnt-maple"
           }
         },
@@ -455,7 +451,6 @@
           "settings": {
             "title": "Whimsy Yellow",
             "swatch": "#e3c10c",
-            "collection": "all",
             "tag": "whimsy-yellow"
           }
         },
@@ -464,7 +459,6 @@
           "settings": {
             "title": "Riviera Blue",
             "swatch": "#33506f",
-            "collection": "all",
             "tag": "riviera-blue"
           }
         },
@@ -473,7 +467,6 @@
           "settings": {
             "title": "Coconut Terra",
             "swatch": "#8a6660",
-            "collection": "all",
             "tag": "coconut-terra"
           }
         },
@@ -482,7 +475,6 @@
           "settings": {
             "title": "Teal",
             "swatch": "#1e5560",
-            "collection": "all",
             "tag": "teal"
           }
         },
@@ -491,7 +483,6 @@
           "settings": {
             "title": "Reactive Santorini Blue",
             "swatch": "#1e3468",
-            "collection": "all",
             "tag": "reactive-santorini-blue"
           }
         },
@@ -500,7 +491,6 @@
           "settings": {
             "title": "Reactive Cloud Grey",
             "swatch": "#bbb0a2",
-            "collection": "all",
             "tag": "reactive-cloud-grey"
           }
         },
@@ -509,7 +499,6 @@
           "settings": {
             "title": "Limone Yellow",
             "swatch": "#f0b71c",
-            "collection": "all",
             "tag": "limone-yellow"
           }
         },
@@ -518,7 +507,6 @@
           "settings": {
             "title": "Windsor Red",
             "swatch": "#be4a55",
-            "collection": "all",
             "tag": "windsor-red"
           }
         },
@@ -527,7 +515,6 @@
           "settings": {
             "title": "Boho Floral",
             "swatch": "#efe7d7",
-            "collection": "all",
             "tag": "boho-floral"
           }
         },
@@ -536,7 +523,6 @@
           "settings": {
             "title": "Aqua-grey",
             "swatch": "#afc7c0",
-            "collection": "all",
             "tag": "aqua-grey"
           }
         }
