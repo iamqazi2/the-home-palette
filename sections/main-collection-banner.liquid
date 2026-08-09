@@ -2,6 +2,16 @@
 {{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
+  # Collections like "All products" have no image of their own, which left those
+  # heroes as a flat teal band. Fall back to a section-level image so every
+  # collection page gets a photo without one having to be set per collection.
+  assign hero_image = collection.image | default: section.settings.hp_fallback_image
+  assign hero_alt = hero_image.alt | default: collection.title | escape
+  assign has_hero_image = false
+  if section.settings.show_collection_image and hero_image != blank
+    assign has_hero_image = true
+  endif
+
   case section.settings.hp_height
     when 'small'
       assign hp_band_height = 'clamp(26rem, 32vw, 36rem)'
@@ -137,7 +147,7 @@
   }
 {%- endstyle -%}
 
-<div class="collection-hero{% if section.settings.show_collection_image and collection.image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient">
+<div class="collection-hero{% if has_hero_image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient">
   <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
     <div class="collection-hero__text-wrapper">
       {%- if section.settings.hp_eyebrow != blank -%}
@@ -178,24 +188,17 @@
       {%- endif -%}
     </div>
 
-    {%- if section.settings.show_collection_image and collection.image -%}
+    {%- if has_hero_image -%}
       <div class="collection-hero__image-container media gradient">
-        <img
-          srcset="
-            {%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
-            {%- if collection.image.width >= 360 -%}{{ collection.image | image_url: width: 360 }} 360w,{%- endif -%}
-            {%- if collection.image.width >= 535 -%}{{ collection.image | image_url: width: 535 }} 535w,{%- endif -%}
-            {%- if collection.image.width >= 750 -%}{{ collection.image | image_url: width: 750 }} 750w,{%- endif -%}
-            {%- if collection.image.width >= 1070 -%}{{ collection.image | image_url: width: 1070 }} 1070w,{%- endif -%}
-            {%- if collection.image.width >= 1500 -%}{{ collection.image | image_url: width: 1500 }} 1500w,{%- endif -%}
-            {{ collection.image | image_url }} {{ collection.image.width }}w
-          "
-          src="{{ collection.image | image_url: width: 750 }}"
-          sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
-          alt="{{ collection.image.alt | escape }}"
-          width="{{ collection.image.width }}"
-          height="{{ collection.image.height }}"
-        >
+        {{
+          hero_image
+          | image_url: width: 2200
+          | image_tag:
+            widths: '600, 900, 1200, 1600, 2200',
+            sizes: '100vw',
+            alt: hero_alt,
+            fetchpriority: 'high'
+        }}
       </div>
     {%- endif -%}
   </div>
@@ -279,6 +282,12 @@
       "label": "Button label",
       "default": "Shop the collection",
       "info": "Scrolls down to the products. Leave empty to hide the button."
+    },
+    {
+      "type": "image_picker",
+      "id": "hp_fallback_image",
+      "label": "Fallback banner image",
+      "info": "Used on collections that have no image of their own, such as All products."
     }
   ]
 }

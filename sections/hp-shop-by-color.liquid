@@ -67,9 +67,12 @@
        circular swatch with no card framing around it reads as flush against
        the edge at the same numeric inset a bordered tile would use, so it
        needs a bit more room than gap-x alone gives it. */
-    margin: -1.4rem calc(var(--hp-gap-x) * -1) 0;
-    padding-left: calc(var(--hp-gap-x) + 1rem);
-    padding-right: calc(var(--hp-gap-x) + 1rem);
+    /* Sits inside the container's own padding rather than bleeding past it.
+       The bleed let the first swatch's label run under the viewport edge, where
+       a horizontal scroller clips it and it cannot be scrolled back into view. */
+    margin: -1.4rem 0 0;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
   }
   .hp-colors__row::-webkit-scrollbar { display: none; }
   @media screen and (min-width: 990px) {
