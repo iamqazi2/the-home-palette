@@ -1,0 +1,55 @@
+{%- comment -%}
+  THP blog card — used for both the lead story and the grid items, so the two
+  can never drift apart visually. The lead variant only changes layout, which is
+  handled in CSS by .hp-blog__lead, not by a different card here.
+
+  Accepts:
+    article      {object}  the article
+    show_date    {boolean}
+    show_author  {boolean}
+    lead         {boolean} marks the featured story (affects image size only)
+{%- endcomment -%}
+
+{%- liquid
+  # Liquid has no ternary, so the two sizes strings are picked here rather than
+  # inline in the image_tag arguments.
+  if lead
+    assign card_sizes = '(min-width: 900px) 55vw, 100vw'
+  else
+    assign card_sizes = '(min-width: 1200px) 30vw, (min-width: 750px) 45vw, 100vw'
+  endif
+  assign card_alt = article.image.alt | default: article.title | escape
+-%}
+
+<a class="hp-blog__card" href="{{ article.url }}">
+  {%- if article.image -%}
+    <span class="hp-blog__media">
+      {{
+        article.image
+        | image_url: width: 1400
+        | image_tag: widths: '400, 600, 900, 1200, 1400', sizes: card_sizes, alt: card_alt, loading: 'lazy'
+      }}
+    </span>
+  {%- endif -%}
+
+  <span class="hp-blog__body">
+    {%- if show_date or show_author -%}
+      <span class="hp-blog__meta">
+        {%- if show_date -%}{{ article.published_at | date: format: 'date' }}{%- endif -%}
+        {%- if show_date and show_author and article.author != blank -%} · {% endif %}
+        {%- if show_author and article.author != blank -%}{{ article.author }}{%- endif -%}
+      </span>
+    {%- endif -%}
+
+    <h2 class="hp-blog__title">{{ article.title | escape }}</h2>
+
+    {%- if article.excerpt_or_content != blank -%}
+      <p class="hp-blog__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 32 }}</p>
+    {%- endif -%}
+
+    <span class="hp-blog__more">
+      Read the story
+      {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+    </span>
+  </span>
+</a>

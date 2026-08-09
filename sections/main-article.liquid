@@ -1,5 +1,107 @@
 {{ 'section-blog-post.css' | asset_url | stylesheet_tag }}
 
+{%- comment -%}
+  THP: article styling. Kept in this section's own style block rather than
+  hp-theme.css because section-blog-post.css is loaded into <body> by the
+  template and would beat that file on document order.
+{%- endcomment -%}
+{%- style -%}
+  .article-template { background: var(--hp-cream-soft); padding-bottom: clamp(3rem, 6vw, 6rem); }
+
+  /* Hero image spans the full width and carries a soft teal wash, so an
+     article opens with the same weight as a collection page. */
+  .article-template__hero-container { max-width: none; padding: 0; }
+  .article-template__hero {
+    border-radius: 0;
+    overflow: hidden;
+  }
+  .article-template__hero-container .media img { object-fit: cover; }
+
+  .article-template__title {
+    max-width: 20ch;
+    margin: 0 auto;
+    text-align: center;
+    font-size: var(--hp-h-page);
+    color: var(--hp-heading);
+  }
+  .article-template header { padding: clamp(3rem, 5vw, 5.5rem) 0 0; }
+  .article-template header .circle-divider {
+    display: block;
+    margin-top: 1.2rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+  }
+
+  /* Reading column: a measure that is comfortable for long copy, with the
+     in-article headings picked up by the shared heading system. */
+  .article-template__content {
+    padding-top: clamp(2.4rem, 4vw, 4rem);
+    font-size: 1.65rem;
+    line-height: 1.85;
+    color: var(--hp-ink);
+  }
+  .article-template__content > * + * { margin-top: 1.6rem; }
+  .article-template__content h2 {
+    margin: clamp(3rem, 4.5vw, 4.4rem) 0 1.2rem;
+    font-size: var(--hp-h-section);
+    color: var(--hp-heading);
+  }
+  .article-template__content h3 {
+    margin: clamp(2.4rem, 3.4vw, 3.2rem) 0 1rem;
+    font-size: var(--hp-h-block);
+    color: var(--hp-heading);
+  }
+  .article-template__content p { margin: 0 0 1.6rem; }
+  .article-template__content ul,
+  .article-template__content ol { margin: 0 0 1.8rem; padding-left: 2rem; }
+  .article-template__content li { margin-bottom: 0.7rem; }
+  .article-template__content a {
+    color: var(--hp-teal);
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+    text-decoration-thickness: 1px;
+  }
+  .article-template__content a:hover { color: var(--hp-teal-deep); }
+  .article-template__content strong { font-weight: 600; color: var(--hp-ink); }
+  .article-template__content img { border-radius: var(--hp-r-card); margin: 2.4rem 0; }
+  .article-template__content blockquote {
+    margin: 2.4rem 0;
+    padding: 0 0 0 2rem;
+    border-left: 3px solid var(--hp-teal-chip);
+    font-family: var(--hp-font-display);
+    font-size: 2rem;
+    line-height: 1.5;
+    color: var(--hp-heading);
+  }
+
+  /* Back link as a pill, matching the buttons used everywhere else. */
+  .article-template__back { padding-top: clamp(2.4rem, 4vw, 4rem); }
+  .article-template__back .article-template__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.2rem 2.4rem;
+    border: 1.5px solid var(--hp-teal);
+    border-radius: var(--hp-r-pill);
+    font-family: var(--hp-font-ui);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+    text-decoration: none;
+    transition: background-color 0.3s var(--hp-ease), color 0.3s var(--hp-ease);
+  }
+  .article-template__back .article-template__link:hover {
+    background: var(--hp-teal);
+    color: var(--hp-cream);
+  }
+{%- endstyle -%}
+
 <article class="article-template">
   {%- for block in section.blocks -%}
     {%- case block.type -%}
