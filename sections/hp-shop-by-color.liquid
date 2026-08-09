@@ -1,24 +1,21 @@
 {% comment %}
   THP — Shop by Colour (interactive).
 
-  Clicking a swatch loads that colour's products in place, without a page
-  reload: the section re-renders itself through Shopify's Section Rendering
-  API and the grid cross-fades.
+  Every colour's products are rendered up front and the swatches show and hide
+  them. There is no fetch, so switching colour is instant.
 
-  Each swatch queries Shopify's product search for its colour name. Search
-  indexes titles AND tags, which is the point: a product called "Selin Tea Set -
-  Teal" is found today with no tagging done, and a product tagged `teal` is
-  found whether or not its name says so. One mechanism, and the catalogue-wide
-  matching is done by Shopify rather than scanned in Liquid (Liquid can only see
-  the first 50 products of a collection, so template-side filtering would
-  silently drop products as the catalogue grows).
+  Earlier versions asked the Section Rendering API for this section at a
+  /collections or /search URL. That cannot work: the API resolves the section id
+  against the template of the URL being requested, and this section only exists
+  in index.json — so those requests never returned the section and the grid was
+  always empty.
 
-  Search on its own is too loose to trust, so every result is re-checked against
-  this section's colour list before it is drawn — see the results grid below.
-
-  Tags remain the reliable long-term answer, because a product whose name does
-  not mention its colour can only ever be found by tag. Tags are store data, not
-  theme data, so they are added in the Shopify admin.
+  A product is matched to a colour by its tag first, and failing that by its
+  title, excluding any longer colour name that contains the shorter one so
+  Aqua-grey pieces never fall under Aqua. Tags stay the reliable long-term
+  answer, because a product whose name does not mention its colour can only ever
+  be found by tag — and tags are store data, added in the Shopify admin, not
+  something the theme can create.
 {% endcomment %}
 
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
@@ -26,10 +23,8 @@
 {{ 'component-rating.css' | asset_url | stylesheet_tag }}
 
 {%- comment -%}
-  Add-to-cart needs Dawn's quick-add bundle. These load on the first render and
-  stay loaded, so the cards injected later by the swatch fetch light up too —
-  custom elements upgrade themselves whenever new matching nodes appear, so the
-  re-rendered results do not need their own copy of the scripts.
+  Add-to-cart needs Dawn's quick-add bundle. Every card is present from the
+  first render now, so these simply load once and cover all of them.
 {%- endcomment -%}
 {%- unless section.settings.quick_add == 'none' -%}
   {{ 'quick-add.css' | asset_url | stylesheet_tag }}
@@ -163,23 +158,53 @@
     font-size: var(--hp-h-block);
     color: var(--hp-heading);
   }
+  /* A row that scrolls sideways instead of wrapping. Card widths come from a
+     per-view count that is deliberately fractional on small screens, so part of
+     the next card always shows — that peek is the only cue that the row scrolls,
+     since the scrollbar is hidden. */
   .hp-colors__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.2rem;
-    transition: opacity 0.22s ease;
+    display: flex;
+    gap: var(--hp-sbc-gap);
+    margin: 0;
+    padding: 0 0 0.6rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
+  .hp-colors__grid::-webkit-scrollbar { display: none; }
   /* The `hidden` attribute alone would NOT hide these: the browser's own
      [hidden] { display: none } is a UA-stylesheet rule, so the author-level
-     `display: grid` above beats it and every colour would render stacked on top
-     of each other. This restores it at author level. */
+     `display: flex` above beats it and all fourteen colours would paint stacked
+     on top of each other. This restores it at author level. */
   .hp-colors__grid[hidden] { display: none; }
+  .hp-colors__cell {
+    flex: 0 0 var(--hp-sbc-item);
+    width: var(--hp-sbc-item);
+    max-width: var(--hp-sbc-item);
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+  .hp-colors {
+    --hp-sbc-gap: 1.2rem;
+    --hp-sbc-item: calc((100% - (var(--hp-sbc-gap) * 1.2)) / 2.2);
+  }
   @media screen and (min-width: 750px) {
-    .hp-colors__grid { grid-template-columns: repeat({{ per_row }}, minmax(0, 1fr)); gap: 1.8rem; }
+    .hp-colors {
+      --hp-sbc-gap: 1.6rem;
+      --hp-sbc-item: calc((100% - (var(--hp-sbc-gap) * 2.2)) / 3.2);
+    }
+  }
+  @media screen and (min-width: 990px) {
+    .hp-colors {
+      --hp-sbc-gap: 1.8rem;
+      --hp-sbc-item: calc((100% - (var(--hp-sbc-gap) * {{ per_row | minus: 1 }})) / {{ per_row }});
+    }
   }
   hp-colour-shop.is-loading .hp-colors__grid { opacity: 0.35; }
   .hp-colors__empty {
-    grid-column: 1 / -1;
+    flex: 1 1 100%;
     text-align: center;
     padding: 3rem 1rem;
     color: var(--hp-taupe);
@@ -261,7 +286,19 @@
         matched products, not colours x limit. Hidden groups use the `hidden`
         attribute, so their lazy images are never downloaded until shown.
       {%- endcomment -%}
-      <div class="hp-colors__results" data-hp-colour-results>
+      {%- comment -%}
+        Note the absence of reveal attributes below, and the no-anim flag.
+
+        Those attributes are what made the products flash up and then vanish:
+        the stylesheet zeroes the opacity of any reveal element as soon as GSAP
+        boots, and the ScrollTrigger meant to bring them back measures every card
+        at once — including the thirteen colours that are hidden and therefore
+        have no position — so the triggers for the visible group never resolve
+        and the cards stay invisible. Swapping colours is animated directly in
+        hp-theme.js instead, which is also the only thing that can animate a
+        group that was hidden when the page loaded.
+      {%- endcomment -%}
+      <div class="hp-colors__results" data-hp-colour-results data-hp-no-anim>
         {%- for block in section.blocks -%}
           {%- liquid
             assign cname = block.settings.title | downcase
@@ -283,7 +320,6 @@
           <div
             class="hp-colors__grid"
             data-hp-colour-group="{{ gid }}"
-            data-hp-stagger
             {% unless forloop.index0 == requested %}hidden{% endunless %}
           >
             {%- liquid
@@ -327,7 +363,7 @@
                     assign seen = seen | append: product.id | append: ','
                     assign shown = shown | plus: 1
                   -%}
-                  <div data-hp-reveal>
+                  <div class="hp-colors__cell">
                     {% render 'card-product',
                       card_product: product,
                       media_aspect_ratio: 'portrait',
