@@ -9,7 +9,8 @@
         "hp_height": "medium",
         "hp_eyebrow": "The Collection",
         "hp_show_tagline": true,
-        "hp_cta_label": "Shop the collection"
+        "hp_cta_label": "Shop the collection",
+        "hp_fallback_image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp"
       }
     },
     "main-collection-product-grid": {
