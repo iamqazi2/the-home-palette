@@ -156,26 +156,38 @@
   .header__submenu .header__menu-item > span::after,
   .header__submenu .header__menu-item::after { content: none !important; }
 
-  /* Nested lists read as an indented group, not a second card inside the card.
-     base.css gives them a tinted background and vertical margins; both go. */
+  /* Nested lists expand INSIDE the panel as an indented group — no second card.
+     They were always inline in the flow; they only looked like a floating panel
+     because they were wearing the same card surface as their parent. Everything
+     that made them look detached is stripped, and a hairline rail plus an indent
+     is what says "these belong to the row above". */
   .header__submenu .header__submenu,
-  .header__submenu .header__submenu.list-menu {
+  .header__submenu .header__submenu.list-menu,
+  .header-wrapper .header__submenu .header__submenu {
     position: static;
     min-width: 0;
-    margin: 0.2rem 0 0.5rem 1.2rem !important;
-    padding: 0.2rem 0 0.2rem 1rem !important;
-    border: 0;
-    border-left: 1px solid var(--hp-hairline-teal);
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
+    width: auto;
+    margin: 0.2rem 0 0.6rem 1.5rem !important;
+    padding: 0.2rem 0 0.2rem 1.2rem !important;
+    border: 0 !important;
+    border-left: 2px solid var(--hp-teal-chip) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
   }
   .header__submenu .header__submenu .header__menu-item {
-    padding: 0.7rem 1rem;
-    font-size: 1.25rem;
-    color: var(--hp-taupe);
+    padding: 0.65rem 1rem;
+    border-radius: 9px;
   }
-  .header__submenu .header__submenu .header__menu-item:hover { color: var(--hp-teal); }
+  .header__submenu .header__submenu .header__menu-item > span,
+  .header__submenu .header__submenu .header__menu-item { font-size: 1.25rem; }
+
+  /* An open group keeps a quiet highlight, so it is obvious which row the
+     indented list underneath belongs to. */
+  .header__submenu details[open] > summary.header__menu-item {
+    background: var(--hp-teal-chip);
+    color: var(--hp-teal);
+  }
 
   /* Caret turns to point down when its group is open. */
   .header__submenu .icon-caret {
@@ -240,9 +252,16 @@
       color: {{ section.settings.hp_band_color }};
     }
 
-    /* Dropdown panels sit on cream, so their text must go back to ink —
-       otherwise the cream band colour above makes them invisible. */
-    .header-wrapper.hp-band .header__submenu,
+    /* Colour only. The panel's surface — background, border, radius, shadow,
+       padding — is set once in the dropdown block higher up and deliberately
+       NOT repeated here.
+
+       Repeating it was the bug behind nested menus looking like a card floating
+       in front of the dropdown: this selector is three classes and renders
+       after that block, so it re-painted EVERY .header__submenu as a card,
+       including the nested ones the block above had just flattened. The nested
+       list was always inline — it only looked detached because it was wearing
+       the same card as its parent. */
     .header-wrapper.hp-band .mega-menu__content {
       background: var(--hp-cream-soft);
       border: 1px solid var(--hp-hairline);
