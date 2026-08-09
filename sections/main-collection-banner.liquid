@@ -1,6 +1,17 @@
 {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
 {{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
 
+{%- liquid
+  case section.settings.hp_height
+    when 'small'
+      assign hp_band_height = 'clamp(26rem, 32vw, 36rem)'
+    when 'large'
+      assign hp_band_height = 'clamp(42rem, 58vw, 68rem)'
+    else
+      assign hp_band_height = 'clamp(34rem, 44vw, 52rem)'
+  endcase
+-%}
+
 {%- comment -%}
   THP: full-bleed collection banner — photo covering the whole band with the
   title over it, instead of Dawn's side-by-side "text left / image right".
@@ -50,24 +61,31 @@
     margin: 0;
     color: var(--hp-cream);
   }
-  .collection-hero__description {
-    margin-top: 1.4rem;
+  .collection-hero__description,
+  .collection-hero__tagline {
+    margin: 1.4rem 0 0;
     max-width: 56rem;
-    font-size: 1.45rem;
+    font-size: 1.55rem;
     line-height: 1.75;
-    color: rgba(255, 249, 223, 0.85);
+    color: rgba(255, 249, 223, 0.88);
+  }
+  .collection-hero__eyebrow { margin: 0 0 1.4rem; }
+  .collection-hero__cta { margin-top: 2.4rem; }
+  @media screen and (max-width: 749px) {
+    .collection-hero__tagline { font-size: 1.4rem; }
+    .collection-hero__cta { margin-top: 2rem; }
   }
 
   /* With the photo taken out of flow, nothing is left to give the band height
      but the title, so it would collapse to a thin strip. A min-height restores
      a proper banner, and centring the inner puts the title in the middle of the
      image rather than pinned to its top edge. */
-  .collection-hero--with-image {
+  .collection-hero {
     display: flex;
     align-items: center;
-    min-height: clamp(20rem, 26vw, 30rem);
+    min-height: {{ hp_band_height }};
   }
-  .collection-hero--with-image .collection-hero__inner { width: 100%; }
+  .collection-hero .collection-hero__inner { width: 100%; }
 
   /* Photo fills the band. Dawn's border, radius, shadow, fixed heights and
      flex sizing all assume the side-by-side layout, so each is reset. */
@@ -101,7 +119,8 @@
     background: linear-gradient(90deg, rgba(12, 38, 39, 0.86), rgba(18, 53, 54, 0.5));
   }
   .collection-hero--with-image .collection-hero__title,
-  .collection-hero--with-image .collection-hero__description {
+  .collection-hero--with-image .collection-hero__description,
+  .collection-hero--with-image .collection-hero__tagline {
     text-shadow: 0 2px 16px rgba(12, 38, 39, 0.65);
   }
 
@@ -121,13 +140,41 @@
 <div class="collection-hero{% if section.settings.show_collection_image and collection.image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient">
   <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
     <div class="collection-hero__text-wrapper">
+      {%- if section.settings.hp_eyebrow != blank -%}
+        <p class="hp-eyebrow hp-eyebrow--light collection-hero__eyebrow">{{ section.settings.hp_eyebrow | escape }}</p>
+      {%- endif -%}
+
       <h1 class="collection-hero__title">
         <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
         {{- collection.title | escape -}}
       </h1>
 
-      {%- if section.settings.show_collection_description -%}
-        <div class="collection-hero__description rte">{{ collection.description }}</div>
+      {%- liquid
+        # Tagline is per page without any per-page setting: it uses each
+        # collection's own description, which the merchant already writes in the
+        # admin. The section-level line is only a fallback for collections that
+        # have no description yet, so no page is ever left with a bare title.
+        assign hp_tagline = ''
+        if collection.description != blank
+          assign hp_tagline = collection.description | strip_html | strip | truncatewords: 28
+        elsif section.settings.hp_tagline != blank
+          assign hp_tagline = section.settings.hp_tagline
+        endif
+      -%}
+      {%- if section.settings.hp_show_tagline and hp_tagline != blank -%}
+        <p class="collection-hero__tagline">{{ hp_tagline }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.hp_cta_label != blank -%}
+        {%- comment -%}
+          The visitor is already on the collection, so this scrolls to the grid
+          rather than navigating anywhere. #ProductGridContainer is the id
+          main-collection-product-grid gives its results wrapper.
+        {%- endcomment -%}
+        <a class="hp-btn hp-btn--cream-solid collection-hero__cta" href="#ProductGridContainer">
+          {{ section.settings.hp_cta_label | escape }}
+          {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+        </a>
       {%- endif -%}
     </div>
 
@@ -181,6 +228,57 @@
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "select",
+      "id": "hp_height",
+      "label": "Banner height",
+      "default": "medium",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "hp_eyebrow",
+      "label": "Eyebrow",
+      "default": "The Collection"
+    },
+    {
+      "type": "checkbox",
+      "id": "hp_show_tagline",
+      "label": "Show tagline",
+      "default": true,
+      "info": "Uses each collection's own description, so every page gets its own line."
+    },
+    {
+      "type": "textarea",
+      "id": "hp_tagline",
+      "label": "Fallback tagline",
+      "default": "Handcrafted pieces, made for the way you actually set the table.",
+      "info": "Shown only on collections that have no description of their own."
+    },
+    {
+      "type": "text",
+      "id": "hp_cta_label",
+      "label": "Button label",
+      "default": "Shop the collection",
+      "info": "Scrolls down to the products. Leave empty to hide the button."
     }
   ]
 }

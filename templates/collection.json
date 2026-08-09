@@ -5,7 +5,11 @@
       "settings": {
         "show_collection_description": false,
         "show_collection_image": true,
-        "color_scheme": "scheme-2"
+        "color_scheme": "scheme-2",
+        "hp_height": "medium",
+        "hp_eyebrow": "The Collection",
+        "hp_show_tagline": true,
+        "hp_cta_label": "Shop the collection"
       }
     },
     "main-collection-product-grid": {
