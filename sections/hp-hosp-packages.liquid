@@ -1,0 +1,242 @@
+{% comment %}
+  THP — hospitality packages.
+
+  Three (or more) tiers as cards. One card can be marked "featured", which
+  flips it to the teal card treatment and lifts it slightly — the standard way
+  to point at the tier you actually want people to pick.
+
+  Feature lists are one item per line in a textarea rather than nested blocks:
+  a merchant editing a package should not have to add six blocks to describe it.
+{% endcomment %}
+
+{%- style -%}
+  .hp-hpack { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
+
+  .hp-hpack__grid {
+    display: grid;
+    gap: clamp(1.6rem, 2.2vw, 2.4rem);
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+  @media screen and (min-width: 750px) {
+    .hp-hpack__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media screen and (min-width: 990px) {
+    .hp-hpack__grid { grid-template-columns: repeat({{ section.blocks.size | at_least: 1 | at_most: 4 }}, minmax(0, 1fr)); }
+  }
+
+  .hp-hpack__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(2.4rem, 3vw, 3.2rem);
+    background: var(--hp-paper);
+    border: 1px solid var(--hp-hairline);
+    border-radius: var(--hp-r-card);
+    transition: transform 0.45s var(--hp-ease), box-shadow 0.45s var(--hp-ease);
+  }
+  .hp-hpack__card:hover { transform: translateY(-8px); box-shadow: var(--hp-shadow-card); }
+
+  /* featured tier */
+  .hp-hpack__card--featured {
+    background: {{ section.settings.featured_color | default: '#257575' }};
+    border-color: transparent;
+    color: var(--hp-cream);
+    box-shadow: var(--hp-shadow-card);
+  }
+  @media screen and (min-width: 990px) {
+    .hp-hpack__card--featured { transform: translateY(-14px); }
+    .hp-hpack__card--featured:hover { transform: translateY(-22px); }
+  }
+  .hp-hpack__card--featured .hp-hpack__title,
+  .hp-hpack__card--featured .hp-hpack__seats,
+  .hp-hpack__card--featured .hp-hpack__item { color: var(--hp-cream); }
+  .hp-hpack__card--featured .hp-hpack__seats { color: rgba(255, 249, 223, 0.72); }
+  .hp-hpack__card--featured .hp-hpack__item { color: rgba(255, 249, 223, 0.88); }
+  .hp-hpack__card--featured .hp-hpack__item .hp-icon { color: var(--hp-teal-soft); }
+  .hp-hpack__card--featured .hp-hpack__list { border-top-color: rgba(255, 249, 223, 0.22); }
+
+  .hp-hpack__flag {
+    position: absolute;
+    top: -1.2rem;
+    left: clamp(2.4rem, 3vw, 3.2rem);
+    padding: 0.6rem 1.4rem;
+    border-radius: var(--hp-r-pill);
+    background: var(--hp-gold);
+    color: var(--hp-espresso);
+    font-family: var(--hp-font-ui);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .hp-hpack__title {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-size: var(--hp-h-block);
+    line-height: 1.2;
+    color: var(--hp-heading);
+  }
+  .hp-hpack__seats {
+    margin: 0.8rem 0 0;
+    font-family: var(--hp-font-ui);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--hp-taupe-soft);
+  }
+  .hp-hpack__list {
+    margin: 2rem 0 0;
+    padding: 2rem 0 0;
+    border-top: 1px solid var(--hp-hairline);
+    list-style: none;
+    display: grid;
+    gap: 1.1rem;
+  }
+  .hp-hpack__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    color: var(--hp-ink);
+  }
+  .hp-hpack__item .hp-icon { flex: 0 0 auto; margin-top: 0.3rem; color: var(--hp-teal); }
+  .hp-hpack__action { margin-top: auto; padding-top: 2.4rem; }
+  /* border-box because the button carries horizontal padding and the theme
+     leaves buttons on content-box — without it the 100% width plus padding
+     overflows the card */
+  .hp-hpack__action .hp-btn { width: 100%; box-sizing: border-box; justify-content: center; }
+
+  .hp-hpack__note {
+    margin: clamp(2.4rem, 3.4vw, 3.6rem) auto 0;
+    max-width: 66rem;
+    text-align: center;
+    font-size: 1.35rem;
+    line-height: 1.75;
+    color: var(--hp-taupe);
+  }
+{%- endstyle -%}
+
+<div class="hp-hpack hp-section">
+  <div class="hp-container">
+    <div class="hp-section-head{% if section.settings.center_head %} hp-section-head--center{% endif %}">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hp-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hp-section-head__title">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="hp-section-head__text">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="hp-hpack__grid" data-hp-stagger>
+      {%- for block in section.blocks -%}
+        <div
+          class="hp-hpack__card{% if block.settings.featured %} hp-hpack__card--featured{% endif %}"
+          data-hp-reveal
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.featured and block.settings.flag != blank -%}
+            <span class="hp-hpack__flag">{{ block.settings.flag | escape }}</span>
+          {%- endif -%}
+          <h3 class="hp-hpack__title">{{ block.settings.title | escape }}</h3>
+          {%- if block.settings.seats != blank -%}
+            <p class="hp-hpack__seats">{{ block.settings.seats | escape }}</p>
+          {%- endif -%}
+
+          {%- assign items = block.settings.features | newline_to_br | split: '<br />' -%}
+          {%- if items.size > 0 -%}
+            <ul class="hp-hpack__list">
+              {%- for item in items -%}
+                {%- assign line = item | strip_newlines | strip -%}
+                {%- if line == blank -%}{%- continue -%}{%- endif -%}
+                <li class="hp-hpack__item">
+                  {% render 'hp-icon', icon: 'check', size: 15 %}
+                  <span>{{ line | escape }}</span>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- if block.settings.button_label != blank -%}
+            <div class="hp-hpack__action">
+              <a
+                {% if block.settings.button_link != blank %}href="{{ block.settings.button_link }}"{% endif %}
+                class="hp-btn{% if block.settings.featured %} hp-btn--cream-solid{% else %} hp-btn--outline{% endif %}"
+              >
+                {{ block.settings.button_label | escape }}
+              </a>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.note != blank -%}
+      <p class="hp-hpack__note" data-hp-reveal>{{ section.settings.note | escape }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP Hospitality Packages",
+  "tag": "section",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#fffdf4" },
+    { "type": "color", "id": "featured_color", "label": "Featured card", "default": "#257575" },
+    { "type": "checkbox", "id": "center_head", "label": "Centre the heading", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Packages" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Built for the Size of Your Room" },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Intro",
+      "default": "Three starting points for hospitality orders. Every one of them is adjusted to your menu, your covers and your brand before we quote."
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Closing note",
+      "default": "Not sure which fits? Send us your cover count and a photo of your table setting — we will come back with a recommendation and a quote."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "package",
+      "name": "Package",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Name", "default": "Café Starter" },
+        { "type": "text", "id": "seats", "label": "Capacity line", "default": "20–50 seats" },
+        {
+          "type": "textarea",
+          "id": "features",
+          "label": "What's included",
+          "info": "One per line.",
+          "default": "Free consultation\nQuick delivery"
+        },
+        { "type": "checkbox", "id": "featured", "label": "Feature this package", "default": false },
+        { "type": "text", "id": "flag", "label": "Flag label", "default": "Most popular" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Enquire on WhatsApp" },
+        { "type": "url", "id": "button_link", "label": "Button link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP Hospitality Packages",
+      "blocks": [
+        { "type": "package" },
+        { "type": "package", "settings": { "title": "Bistro Pro", "seats": "50–100 seats", "featured": true } },
+        { "type": "package", "settings": { "title": "Restaurant Luxe", "seats": "100+ seats" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

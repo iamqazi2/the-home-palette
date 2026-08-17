@@ -56,7 +56,14 @@
   /* Only once the layout is genuinely two-column: in the single-column stack
      the media fills the container, so an image offset past its right edge is
      clipped by the section and loses its frame. */
-  @media screen and (min-width: 990px) { .hp-abt-story__inset { display: block; } }
+  @media screen and (min-width: 990px) {
+    .hp-abt-story__inset { display: block; }
+    /* With the media column on the right, an inset hanging off its right edge
+       lands in the page margin and gets clipped by the section — so the
+       overhang swaps sides along with the layout, and the badge with it. */
+    .hp-abt-story--flip .hp-abt-story__inset { right: auto; left: -3.2rem; }
+    .hp-abt-story--flip .hp-abt-story__badge { left: auto; right: -2rem; }
+  }
 
   .hp-abt-story__badge {
     position: absolute;

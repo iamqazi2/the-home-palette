@@ -1,0 +1,373 @@
+{
+  "sections": {
+    "hosp_hero": {
+      "type": "hp-about-hero",
+      "blocks": {
+        "stat_1": { "type": "stat", "settings": { "value": "24+", "label": "Hospitality brands", "count": true } },
+        "stat_2": { "type": "stat", "settings": { "value": "100%", "label": "Made to your brief", "count": true } },
+        "stat_3": { "type": "stat", "settings": { "value": "14", "label": "Glaze colours", "count": true } },
+        "stat_4": { "type": "stat", "settings": { "value": "Free", "label": "Design consultation", "count": false } }
+      },
+      "block_order": ["stat_1", "stat_2", "stat_3", "stat_4"],
+      "settings": {
+        "image": "shopify://shop_images/IMG_0776.jpg",
+        "video_url": "",
+        "focal": "center",
+        "scrim": 80,
+        "scrim_color": "#0c2627",
+        "show_cue": true,
+        "eyebrow": "For Restaurants, Cafés, Hotels & Resorts",
+        "heading": "Tableware Designed Around Your Brand",
+        "lede": "<p>Your restaurant deserves tableware that feels as distinctive as the experience you create. We turn your brand identity into crockery your guests remember — and your kitchen can actually work with.</p>",
+        "button_label": "Start Your Order",
+        "button_link": "https://wa.me/923376111399",
+        "button_2_label": "Email the Hospitality Desk",
+        "button_2_link": "mailto:thehomepalettepk@gmail.com"
+      }
+    },
+    "hosp_trust": {
+      "type": "hp-trust-strip",
+      "blocks": {
+        "t1": { "type": "item", "settings": { "icon": "gem", "title": "Premium Craftsmanship", "text": "A-quality, hand-finished pieces" } },
+        "t2": { "type": "item", "settings": { "icon": "sparkles", "title": "Bespoke Designs", "text": "Your shapes, colours and marks" } },
+        "t3": { "type": "item", "settings": { "icon": "truck", "title": "Timely Delivery", "text": "Planned around your opening date" } },
+        "t4": { "type": "item", "settings": { "icon": "heart", "title": "Free Consultation", "text": "Theme and table design included" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"],
+      "settings": {
+        "bg_color": "#fff9df",
+        "text_color": "#252525",
+        "chip_color": "#257575",
+        "chip_icon_color": "#fff9df"
+      }
+    },
+    "hosp_brands": {
+      "type": "hp-logo-wall",
+      "blocks": {
+        "b01": { "type": "brand", "settings": { "name": "Mövenpick Hotel Centaurus Islamabad", "asset": "hp-brand-movenpick-centaurus.webp", "fit": "contain" } },
+        "b02": { "type": "brand", "settings": { "name": "Golf Club Bhurban", "asset": "hp-brand-golf-club-bhurban.webp", "fit": "" } },
+        "b03": { "type": "brand", "settings": { "name": "Escape Hotels & Resorts", "asset": "hp-brand-escape-hotels.webp", "fit": "contain" } },
+        "b04": { "type": "brand", "settings": { "name": "Loafology Bakery & Cafe", "asset": "hp-brand-loafology.webp", "fit": "contain" } },
+        "b05": { "type": "brand", "settings": { "name": "June", "asset": "hp-brand-june.webp", "fit": "" } },
+        "b06": { "type": "brand", "settings": { "name": "Basha — Turkish & Lebanese Cuisine", "asset": "hp-brand-basha.webp", "fit": "" } },
+        "b07": { "type": "brand", "settings": { "name": "Milki by Lush Crush", "asset": "hp-brand-milki.webp", "fit": "" } },
+        "b08": { "type": "brand", "settings": { "name": "The Nook Café", "asset": "hp-brand-the-nook-cafe.webp", "fit": "" } },
+        "b09": { "type": "brand", "settings": { "name": "Bakhshe's Tea House", "asset": "hp-brand-bakhshes-tea-house.webp", "fit": "" } },
+        "b10": { "type": "brand", "settings": { "name": "Infusio", "asset": "hp-brand-infusio.webp", "fit": "" } },
+        "b11": { "type": "brand", "settings": { "name": "Café Soleil", "asset": "hp-brand-cafe-soleil.webp", "fit": "" } },
+        "b12": { "type": "brand", "settings": { "name": "Alchemy", "asset": "hp-brand-alchemy.webp", "fit": "" } },
+        "b13": { "type": "brand", "settings": { "name": "Reeve's", "asset": "hp-brand-reeves.webp", "fit": "contain" } },
+        "b14": { "type": "brand", "settings": { "name": "Steak & Spaghetti Co.", "asset": "hp-brand-steak-and-spaghetti.webp", "fit": "" } },
+        "b15": { "type": "brand", "settings": { "name": "The Urban Elan", "asset": "hp-brand-the-urban-elan.webp", "fit": "" } },
+        "b16": { "type": "brand", "settings": { "name": "Voila", "asset": "hp-brand-voila.webp", "fit": "" } },
+        "b17": { "type": "brand", "settings": { "name": "Eggcellent", "asset": "hp-brand-eggcellent.webp", "fit": "contain" } },
+        "b18": { "type": "brand", "settings": { "name": "Miam'ory", "asset": "hp-brand-miamory.webp", "fit": "" } },
+        "b19": { "type": "brand", "settings": { "name": "CAP", "asset": "hp-brand-cap.webp", "fit": "" } },
+        "b20": { "type": "brand", "settings": { "name": "Lollywood Tea House", "asset": "hp-brand-lollywood-tea-house.webp", "fit": "contain" } },
+        "b21": { "type": "brand", "settings": { "name": "The Tea Lounge", "asset": "hp-brand-the-tea-lounge.webp", "fit": "" } },
+        "b22": { "type": "brand", "settings": { "name": "Tiny Troves Play Café", "asset": "hp-brand-tiny-troves.webp", "fit": "contain" } },
+        "b23": { "type": "brand", "settings": { "name": "", "asset": "hp-brand-calligraphy-mark.webp", "fit": "contain" } },
+        "b24": { "type": "brand", "settings": { "name": "", "asset": "hp-brand-z-mark.webp", "fit": "contain" } }
+      },
+      "block_order": [
+        "b01", "b02", "b03", "b04", "b05", "b06", "b07", "b08",
+        "b09", "b10", "b11", "b12", "b13", "b14", "b15", "b16",
+        "b17", "b18", "b19", "b20", "b21", "b22", "b23", "b24"
+      ],
+      "settings": {
+        "mode": "grid",
+        "columns": 6,
+        "speed": 46,
+        "fit": "cover",
+        "mute": false,
+        "bg_color": "#fffdf4",
+        "center_head": true,
+        "eyebrow": "Trusted Across Hospitality",
+        "heading": "The Tables We Already Set",
+        "text": "From hotel banquets in Islamabad to neighbourhood cafés and tea houses — these brands serve on crockery we made with them.",
+        "show_count": true,
+        "count_label": "hospitality brands and counting"
+      }
+    },
+    "hosp_story": {
+      "type": "hp-about-story",
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "icon": "ruler",
+            "title": "Custom shapes and sizes",
+            "text": "Rim profiles, depths and stack heights adjusted to your menu and your shelf space."
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Colour matched to your brand",
+            "text": "Glazes mixed and tested against your palette, then locked to a master tile so reorders match."
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "icon": "hand-platter",
+            "title": "Signature serving pieces",
+            "text": "The one platter or handi nobody else has — the piece guests photograph and remember."
+          }
+        }
+      },
+      "block_order": ["p1", "p2", "p3"],
+      "settings": {
+        "image": "shopify://shop_images/IMG_8879.heic",
+        "image_2": "shopify://shop_images/IMG_8878.heic",
+        "flip": true,
+        "bg_color": "#fffdf4",
+        "badge_value": "24+",
+        "badge_label": "Hospitality brands served",
+        "badge_color": "#257575",
+        "eyebrow": "Custom Crockery",
+        "heading": "From Custom Shapes to Signature Serving Pieces",
+        "text": "<p>At The Home Palette, we work with restaurants, cafés, hotels and hospitality brands to create premium, custom crockery and tableware that brings your vision to the table. From custom shapes and colours to signature serving pieces, we turn your brand identity into tableware your guests remember.</p><p>Trusted by leading hospitality brands, we bring together thoughtful design, consistent quality and reliable production to deliver tableware made for your space and built for everyday service.</p>",
+        "quote": "Your restaurant deserves tableware that feels as distinctive as the experience you create.",
+        "sign_name": "The Hospitality Desk",
+        "sign_role": "Paradise Commercial, Bahria Town Phase 4",
+        "button_label": "Talk to Us on WhatsApp",
+        "button_link": "https://wa.me/923376111399"
+      }
+    },
+    "hosp_venues": {
+      "type": "hp-about-values",
+      "blocks": {
+        "v1": {
+          "type": "value",
+          "settings": {
+            "icon": "utensils",
+            "title": "Restaurants",
+            "text": "Dinner plates, bowls, platters and serving pieces that survive a full service and still look handmade."
+          }
+        },
+        "v2": {
+          "type": "value",
+          "settings": {
+            "icon": "coffee",
+            "title": "Cafés & Tea Houses",
+            "text": "Cups, saucers, mugs and dessert plates in colours that photograph as well as they pour."
+          }
+        },
+        "v3": {
+          "type": "value",
+          "settings": {
+            "icon": "star",
+            "title": "Hotels & Resorts",
+            "text": "Breakfast buffets, in-room dining and banquet service, supplied at volume with consistent reorders."
+          }
+        },
+        "v4": {
+          "type": "value",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Bakeries & Patisseries",
+            "text": "Display trays, cake stands and counter pieces that make the counter do the selling."
+          }
+        },
+        "v5": {
+          "type": "value",
+          "settings": {
+            "icon": "users",
+            "title": "Banquets & Events",
+            "text": "Chafing dishes, handis, copper and steel service for weddings, iftars and large functions."
+          }
+        },
+        "v6": {
+          "type": "value",
+          "settings": {
+            "icon": "package",
+            "title": "Cloud Kitchens & Studios",
+            "text": "Photography-ready sets for menus, shoots and delivery brands building a look from scratch."
+          }
+        }
+      },
+      "block_order": ["v1", "v2", "v3", "v4", "v5", "v6"],
+      "settings": {
+        "bg_color": "#fff9df",
+        "center_head": true,
+        "show_numbers": false,
+        "columns": 3,
+        "eyebrow": "Who We Supply",
+        "heading": "Crockery for Every Kind of Service",
+        "text": "If food leaves your kitchen on a plate, we can make that plate — in the quantity your room needs and the colours your brand uses."
+      }
+    },
+    "hosp_gallery": {
+      "type": "hp-hosp-gallery",
+      "blocks": {
+        "g01": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_0774.jpg", "venue": "Breakfast, plated", "note": "Café service" } },
+        "g02": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8876.heic", "venue": "Banquet table", "note": "Hotel service" } },
+        "g03": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_0773.jpg", "venue": "Main course", "note": "Restaurant service" } },
+        "g04": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8879.heic", "venue": "Signature colour set", "note": "Custom order" } },
+        "g05": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8883.jpg", "venue": "Breakfast spread", "note": "Hotel buffet" } },
+        "g06": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_0776.jpg", "venue": "Sharing platter", "note": "Restaurant service" } },
+        "g07": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8878.heic", "venue": "Cobalt tea service", "note": "Custom order" } },
+        "g08": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8884.heic", "venue": "Chafing service", "note": "Banquet" } },
+        "g09": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8880.heic", "venue": "Bread basket & omelette", "note": "Café breakfast" } },
+        "g10": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8881.heic", "venue": "Tea on the terrace", "note": "Resort service" } },
+        "g11": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8886.heic", "venue": "Handi service", "note": "Banquet" } }
+      },
+      "block_order": ["g01", "g02", "g03", "g04", "g05", "g06", "g07", "g08", "g09", "g10", "g11"],
+      "settings": {
+        "bg_color": "#fff9df",
+        "columns": 4,
+        "center_head": true,
+        "eyebrow": "In Service",
+        "heading": "Our Crockery, Mid-Shift",
+        "text": "Not styled studio shots — plates, cups and chafing dishes photographed on the tables they were made for.",
+        "foot_text": "Want your venue on this wall? Send us a photo of your current setting and we will show you what it could look like.",
+        "button_label": "Start Your Order",
+        "button_link": "https://wa.me/923376111399"
+      }
+    },
+    "hosp_process": {
+      "type": "hp-about-process",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8881.heic",
+            "title": "Consultation",
+            "text": "Tell us the concept, the cover count and the budget. We look at your menu, your interiors and how your team actually plates, then recommend shapes and finishes that will hold up in your service.",
+            "caption": "It starts with your table, not our catalogue",
+            "meta": "Free of charge",
+            "meta_icon": "message-circle"
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8879.heic",
+            "title": "Design & colour matching",
+            "text": "We match glazes to your brand palette, adjust rim profiles and sizes, and lay out the full setting — plate, bowl, cup, platter — so you can see the table before anything is fired.",
+            "caption": "Glazes matched to your brand palette",
+            "meta": "14 colour families",
+            "meta_icon": "sparkles"
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8878.heic",
+            "title": "Sampling & approval",
+            "text": "Physical samples reach your hands before the production run. Weight, stack height, dishwasher behaviour and thermal shock all get checked against real service conditions, and nothing scales up until you sign off.",
+            "caption": "Samples before the production run",
+            "meta": "Approved by you",
+            "meta_icon": "shield-check"
+          }
+        },
+        "s4": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8886.heic",
+            "title": "Production & delivery",
+            "text": "We schedule the run against your opening or reorder date and deliver nationwide, packed to survive the journey — with every future reorder matched back to your master sample.",
+            "caption": "Delivered to your door, nationwide",
+            "meta": "Nationwide",
+            "meta_icon": "truck"
+          }
+        }
+      },
+      "block_order": ["s1", "s2", "s3", "s4"],
+      "settings": {
+        "bg_color": "#123536",
+        "accent_color": "#7fc8be",
+        "flip": true,
+        "center_head": true,
+        "eyebrow": "From Your Vision to Your Table",
+        "heading": "Have a Design in Mind? We'll Help You Bring It to Life",
+        "text": "Whether you are launching a new restaurant, refreshing an existing concept or looking for a signature collection, our team works with you from concept and design through to production and delivery.",
+        "foot_text": "Let's create tableware that makes your brand impossible to forget.",
+        "button_label": "Start the Conversation",
+        "button_link": "https://wa.me/923376111399"
+      }
+    },
+    "hosp_packages": {
+      "type": "hp-hosp-packages",
+      "blocks": {
+        "pk1": {
+          "type": "package",
+          "settings": {
+            "title": "Café Starter",
+            "seats": "20–50 seats",
+            "features": "Free theme consultation\nCurated starter set — plates, bowls, cups\nQuick delivery\nReorder support on every piece",
+            "featured": false,
+            "flag": "",
+            "button_label": "Enquire on WhatsApp",
+            "button_link": "https://wa.me/923376111399"
+          }
+        },
+        "pk2": {
+          "type": "package",
+          "settings": {
+            "title": "Bistro Pro",
+            "seats": "50–100 seats",
+            "features": "Full theme curation\nCustom colour matching\nSample set before production\nPriority dispatch",
+            "featured": true,
+            "flag": "Most popular",
+            "button_label": "Enquire on WhatsApp",
+            "button_link": "https://wa.me/923376111399"
+          }
+        },
+        "pk3": {
+          "type": "package",
+          "settings": {
+            "title": "Restaurant Luxe",
+            "seats": "100+ seats",
+            "features": "Full-service customisation\nBespoke elements and signature pieces\nDedicated production slot\nScheduled reorders against your master sample",
+            "featured": false,
+            "flag": "",
+            "button_label": "Enquire on WhatsApp",
+            "button_link": "https://wa.me/923376111399"
+          }
+        }
+      },
+      "block_order": ["pk1", "pk2", "pk3"],
+      "settings": {
+        "bg_color": "#fffdf4",
+        "featured_color": "#257575",
+        "center_head": true,
+        "eyebrow": "Packages",
+        "heading": "Built for the Size of Your Room",
+        "text": "Three starting points for hospitality orders. Every one of them is adjusted to your menu, your covers and your brand before we quote.",
+        "note": "Not sure which one fits? Send us your cover count and a photo of your current table setting — we will come back with a recommendation and a quote."
+      }
+    },
+    "hosp_cta": {
+      "type": "hp-cta-band",
+      "settings": {
+        "image": "shopify://shop_images/IMG_8884.heic",
+        "duotone": true,
+        "eyebrow": "Let's Talk",
+        "heading": "Tableware That Makes Your Brand Impossible to Forget",
+        "text": "Send us your concept, your cover count, or just a photo of your current table. We will take it from there.",
+        "button_label": "WhatsApp the Hospitality Desk",
+        "link": "https://wa.me/923376111399",
+        "scrim": 90,
+        "scrim_color": "#0c2627",
+        "layout": "split",
+        "flip": false,
+        "panel_color": "#257575",
+        "text_color": "#fff9df"
+      }
+    }
+  },
+  "order": [
+    "hosp_hero",
+    "hosp_trust",
+    "hosp_brands",
+    "hosp_story",
+    "hosp_venues",
+    "hosp_gallery",
+    "hosp_process",
+    "hosp_packages",
+    "hosp_cta"
+  ]
+}

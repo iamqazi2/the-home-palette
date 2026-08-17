@@ -1,0 +1,61 @@
+{% comment %}
+  One brand tile for the logo wall.
+
+  Accepts:
+    block    a "brand" block
+    section  the parent section (for the default fit)
+    reveal   add the stagger reveal hook (grid mode only)
+    clone    2 on the duplicated marquee pass — hidden from assistive tech so
+             the doubled track is not read out twice
+
+  The logo comes from an uploaded image if there is one, otherwise from a
+  theme asset. With neither, nothing renders — an empty tile is worse than a
+  missing one.
+{% endcomment %}
+
+{%- liquid
+  assign name = block.settings.name | default: 'Client logo'
+  assign fit = block.settings.fit | default: section.settings.fit
+  assign has_image = false
+  if block.settings.image != blank or block.settings.asset != blank
+    assign has_image = true
+  endif
+-%}
+
+{%- if has_image -%}
+  {%- capture inner -%}
+    {%- if block.settings.image != blank -%}
+      {{
+        block.settings.image
+        | image_url: width: 600
+        | image_tag: widths: '200, 300, 400, 600', sizes: '(min-width: 990px) 16vw, 44vw', loading: 'lazy', alt: name
+      }}
+    {%- else -%}
+      <img
+        src="{{ block.settings.asset | asset_url }}"
+        alt="{{ name | escape }}"
+        width="512"
+        height="512"
+        loading="lazy"
+      >
+    {%- endif -%}
+    {%- if block.settings.name != blank -%}
+      <span class="hp-brands__name">{{ block.settings.name | escape }}</span>
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- capture tile_class -%}hp-brands__tile{% if fit == 'contain' %} hp-brands__tile--contain{% endif %}{%- endcapture -%}
+  {%- capture tile_attrs -%}
+    class="{{ tile_class }}"
+    title="{{ name | escape }}"
+    {% if reveal %}data-hp-reveal{% endif %}
+    {% if clone == 2 %}aria-hidden="true" tabindex="-1"{% endif %}
+    {{ block.shopify_attributes }}
+  {%- endcapture -%}
+
+  {%- if block.settings.url != blank and clone != 2 -%}
+    <a href="{{ block.settings.url }}" target="_blank" rel="noopener" {{ tile_attrs }}>{{ inner }}</a>
+  {%- else -%}
+    <div {{ tile_attrs }}>{{ inner }}</div>
+  {%- endif -%}
+{%- endif -%}
