@@ -308,6 +308,17 @@
             assign ctag = block.settings.tag | default: block.settings.title | handleize
             assign gid = block.settings.title | handleize
 
+            # A swatch's display name is not always what the products are called.
+            # "Limone Yellow" on the palette is "Limone Gardenia" on the shelf,
+            # and matching on the display name alone found nothing at all for
+            # three of the fourteen colours. Aliases let the swatch keep its
+            # palette name while still matching the names products actually use.
+            assign match_names = block.settings.title
+            if block.settings.aliases != blank
+              assign match_names = match_names | append: ',' | append: block.settings.aliases
+            endif
+            assign name_list = match_names | downcase | split: ','
+
             # Colour names that CONTAIN this one, e.g. "Aqua-grey" contains
             # "Aqua". Without this, every Aqua-grey piece would also be filed
             # under Aqua. Built once per colour rather than once per product.
@@ -349,8 +360,16 @@
                       assign ok = true
                     else
                       assign ptitle = product.title | downcase
-                      if ptitle contains cname
-                        assign ok = true
+                      for nm in name_list
+                        assign nm_trim = nm | strip
+                        if nm_trim != blank and ptitle contains nm_trim
+                          assign ok = true
+                          break
+                        endif
+                      endfor
+                      # A longer colour name that contains this one still wins,
+                      # so Aqua-grey pieces never fall under Aqua.
+                      if ok
                         for rival in rival_list
                           if rival != blank and ptitle contains rival
                             assign ok = false
@@ -455,6 +474,12 @@
           "id": "image",
           "label": "Texture photo (optional)",
           "info": "Shown inside the dot instead of the flat colour."
+        },
+        {
+          "type": "text",
+          "id": "aliases",
+          "label": "Also match these names",
+          "info": "Comma-separated. Use when products are named differently from the swatch, e.g. Limone Yellow also matching 'Limone Gardenia'."
         },
         {
           "type": "text",

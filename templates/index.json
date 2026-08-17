@@ -491,7 +491,8 @@
           "settings": {
             "title": "Reactive Cloud Grey",
             "swatch": "#bbb0a2",
-            "tag": "reactive-cloud-grey"
+            "tag": "reactive-cloud-grey",
+            "aliases": "Cloud Grey"
           }
         },
         "colour_11": {
@@ -499,7 +500,8 @@
           "settings": {
             "title": "Limone Yellow",
             "swatch": "#f0b71c",
-            "tag": "limone-yellow"
+            "tag": "limone-yellow",
+            "aliases": "Limone Gardenia"
           }
         },
         "colour_12": {
@@ -507,7 +509,8 @@
           "settings": {
             "title": "Windsor Red",
             "swatch": "#be4a55",
-            "tag": "windsor-red"
+            "tag": "windsor-red",
+            "aliases": "Windsor Bloom"
           }
         },
         "colour_13": {
@@ -515,7 +518,8 @@
           "settings": {
             "title": "Boho Floral",
             "swatch": "#efe7d7",
-            "tag": "boho-floral"
+            "tag": "boho-floral",
+            "aliases": "Boho Garden"
           }
         },
         "colour_14": {
