@@ -1,0 +1,430 @@
+{
+  "sections": {
+    "hp_about_hero": {
+      "type": "hp-about-hero",
+      "blocks": {
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "value": "10+",
+            "label": "Collections",
+            "count": true
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "value": "1,000+",
+            "label": "Tables set",
+            "count": true
+          }
+        },
+        "stat_3": {
+          "type": "stat",
+          "settings": {
+            "value": "100%",
+            "label": "Hand-finished",
+            "count": true
+          }
+        },
+        "stat_4": {
+          "type": "stat",
+          "settings": {
+            "value": "3–5 days",
+            "label": "Nationwide delivery",
+            "count": false
+          }
+        }
+      },
+      "block_order": [
+        "stat_1",
+        "stat_2",
+        "stat_3",
+        "stat_4"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+        "video_url": "https://cdn.shopify.com/videos/c/o/v/f2058e22370f489c8d4c2a6a7eaf5f77.mp4",
+        "focal": "center",
+        "scrim": 78,
+        "scrim_color": "#0c2627",
+        "show_cue": true,
+        "eyebrow": "Our Story · Islamabad, Pakistan",
+        "heading": "Colour, Clay and the Craft of a Well-Set Table",
+        "lede": "<p>The Home Palette began with a simple frustration: beautiful tableware in Pakistan was either imported and priced out of reach, or made here and impossible to find. So we went looking for the makers ourselves — and built a palette worth setting a table around.</p>",
+        "button_label": "Shop the Collections",
+        "button_link": "shopify://collections",
+        "button_2_label": "Talk to Us on WhatsApp",
+        "button_2_link": "https://wa.me/923376111399"
+      }
+    },
+    "hp_about_trust": {
+      "type": "hp-trust-strip",
+      "blocks": {
+        "trust_1": {
+          "type": "item",
+          "settings": {
+            "icon": "gem",
+            "title": "Direct From the Workshop",
+            "text": "No importers, no middle layer"
+          }
+        },
+        "trust_2": {
+          "type": "item",
+          "settings": {
+            "icon": "shield-check",
+            "title": "Inspected by Hand",
+            "text": "Every piece, before it is packed"
+          }
+        },
+        "trust_3": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Delivered Nationwide",
+            "text": "Flat Rs. 299 — free above Rs. 8,000",
+            "link": "/policies/shipping-policy"
+          }
+        },
+        "trust_4": {
+          "type": "item",
+          "settings": {
+            "icon": "heart",
+            "title": "Made in Pakistan",
+            "text": "By family-run potteries and weavers"
+          }
+        }
+      },
+      "block_order": [
+        "trust_1",
+        "trust_2",
+        "trust_3",
+        "trust_4"
+      ],
+      "settings": {
+        "bg_color": "#fff9df",
+        "text_color": "#252525",
+        "chip_color": "#257575",
+        "chip_icon_color": "#fff9df"
+      }
+    },
+    "hp_about_story": {
+      "type": "hp-about-story",
+      "blocks": {
+        "point_1": {
+          "type": "point",
+          "settings": {
+            "icon": "gem",
+            "title": "Sourced at the source",
+            "text": "We buy straight from the potteries and weaving families we work with — no importers, no middle layer, no mystery about who made your plate."
+          }
+        },
+        "point_2": {
+          "type": "point",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Designed in colour families",
+            "text": "Fourteen glazes, chosen to sit beside one another. A bowl bought a year later still belongs with the set you already own."
+          }
+        },
+        "point_3": {
+          "type": "point",
+          "settings": {
+            "icon": "shield-check",
+            "title": "Checked piece by piece",
+            "text": "Nothing ships without being turned over, tapped for a clean ring and matched against the rest of its set."
+          }
+        }
+      },
+      "block_order": [
+        "point_1",
+        "point_2",
+        "point_3"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
+        "image_2": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
+        "flip": false,
+        "bg_color": "#fffdf4",
+        "badge_value": "Est. 2024",
+        "badge_label": "Islamabad, Pakistan",
+        "badge_color": "#257575",
+        "eyebrow": "Chapter One — The Beginning",
+        "heading": "A Palette Built in Pakistan, for Pakistani Tables",
+        "text": "<p>We started The Home Palette in 2024 with one dinner set, a small studio in Bahria Town and a long list of potteries to visit. What we found was extraordinary: family workshops turning out ceramics as good as anything imported — and almost none of it reaching the homes it was made for.</p><p>So we became the bridge. We buy directly from the workshops, agree the quality standard together, and bring the pieces to you under one palette of colours that genuinely work with each other. No catalogue of a thousand mismatched items; a considered range you can build on over years.</p><p>Today that range covers ten collections — ceramics, glass, woven jute, wood and metalware — and sets tables in homes, cafés, restaurants and hotels across Pakistan.</p>",
+        "quote": "A table should look like the people who set it — warm, colourful, and entirely their own.",
+        "sign_name": "The Home Palette",
+        "sign_role": "Paradise Commercial, Bahria Town Phase 4",
+        "button_label": "Browse Collections",
+        "button_link": "shopify://collections"
+      }
+    },
+    "hp_about_process": {
+      "type": "hp-about-process",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/IMG-20250612-WA0065.webp",
+            "title": "Clay & sourcing",
+            "text": "Every batch begins at the workshop, with clay chosen in person rather than ordered from a catalogue. We work with a small number of family-run potteries and buy whole production runs instead of cherry-picking, which is what lets those workshops plan months ahead instead of week to week.",
+            "caption": "Clay weighed and wedged by hand",
+            "meta": "Family-run partners",
+            "meta_icon": "leaf"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/IMG-20250612-WA0112.webp",
+            "title": "Shaping & casting",
+            "text": "Plates and bowls are thrown on the wheel or slip-cast in plaster moulds, then left to firm up to leather-hard before the foot is trimmed. It is the slowest stage of the whole process, and the one that decides whether a stack of six plates will sit flush on your shelf.",
+            "caption": "Trimming the foot at leather-hard",
+            "meta": "24–48 hours drying",
+            "meta_icon": "ruler"
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Sage-Green-Spiral-Platter-The-Home-Palette-41450789044523.webp",
+            "title": "The first firing",
+            "text": "Dried greenware goes into its bisque firing and comes out porous and chalky — strong enough to handle, thirsty enough to take glaze evenly. Anything that warped or cracked is pulled here, before a single rupee of glaze is spent on it.",
+            "caption": "Bisque — the first firing",
+            "meta": "≈900°C",
+            "meta_icon": "flame"
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
+            "title": "Glaze & colour matching",
+            "text": "This is where the palette is actually made. Glazes are mixed in batches and checked against the master tile for each colour — Sage Green, Limone Yellow, Reactive Cloud Grey — so the range stays consistent season after season. Reactive glazes are the deliberate exception: they are allowed to move in the kiln, which is why no two pieces come out identical.",
+            "caption": "Matched against the master tile",
+            "meta": "14 colour families",
+            "meta_icon": "sparkles"
+          }
+        },
+        "step_5": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/IMG-20250612-WA0107_3.webp",
+            "title": "Into the kiln",
+            "text": "The glost firing takes each piece well past 1,100°C, where the glaze vitrifies into a hard, food-safe surface that survives daily use and the dishwasher. Roughly twelve hours up and twelve hours back down — rush the cooling and the glaze crazes.",
+            "caption": "Twelve hours up, twelve hours down",
+            "meta": "1,100°C and beyond",
+            "meta_icon": "flame"
+          }
+        },
+        "step_6": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
+            "title": "Inspection & packing",
+            "text": "Every piece is turned over, tapped for a clean ring, checked for pinholes and measured against the rest of its set. What passes is wrapped in foam sleeves, corner-blocked and boxed in double-wall cartons — which is why breakage is the rarest email in our inbox.",
+            "caption": "Wrapped, corner-blocked, double-boxed",
+            "meta": "Piece by piece",
+            "meta_icon": "shield-check"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4",
+        "step_5",
+        "step_6"
+      ],
+      "settings": {
+        "bg_color": "#123536",
+        "accent_color": "#7fc8be",
+        "flip": false,
+        "center_head": true,
+        "eyebrow": "Chapter Two — Inside the Workshop",
+        "heading": "How a Piece Becomes Part of the Palette",
+        "text": "Six stages, most of them done by hand. It is slower than machine production — and it is the reason no two reactive-glaze pieces ever leave the kiln identical.",
+        "foot_text": "Pieces that do not pass inspection stay at the workshop. We would rather be short of stock for a week than send out a second as though it were a first.",
+        "button_label": "See the Collections",
+        "button_link": "shopify://collections"
+      }
+    },
+    "hp_about_values": {
+      "type": "hp-about-values",
+      "blocks": {
+        "value_1": {
+          "type": "value",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Colour, treated as a system",
+            "text": "Fourteen glaze families, chosen to work beside each other. Build your table over years, not in one order.",
+            "link_label": "Browse the palette",
+            "link": "shopify://collections"
+          }
+        },
+        "value_2": {
+          "type": "value",
+          "settings": {
+            "icon": "users",
+            "title": "Fair to the makers",
+            "text": "We buy direct and commit to whole runs, so the workshops we partner with can plan ahead instead of chasing one-off orders."
+          }
+        },
+        "value_3": {
+          "type": "value",
+          "settings": {
+            "icon": "shield-check",
+            "title": "Hand-checked, every piece",
+            "text": "Inspected, tapped and matched before packing. Nothing goes out as a second, and nothing goes out unwrapped."
+          }
+        },
+        "value_4": {
+          "type": "value",
+          "settings": {
+            "icon": "hand-platter",
+            "title": "Built for real use",
+            "text": "Made for weekday dinners and full restaurant service alike — not for a shelf. Care notes come with every set."
+          }
+        },
+        "value_5": {
+          "type": "value",
+          "settings": {
+            "icon": "package",
+            "title": "Packed to arrive whole",
+            "text": "Foam sleeves, corner blocks and double-wall cartons on every parcel. If something does arrive damaged, we make it right.",
+            "link_label": "Shipping policy",
+            "link": "/policies/shipping-policy"
+          }
+        },
+        "value_6": {
+          "type": "value",
+          "settings": {
+            "icon": "message-circle",
+            "title": "Answered by a human",
+            "text": "Message us on WhatsApp and you reach the same small team that packed your order — usually the same day.",
+            "link_label": "Chat with us",
+            "link": "https://wa.me/923376111399"
+          }
+        }
+      },
+      "block_order": [
+        "value_1",
+        "value_2",
+        "value_3",
+        "value_4",
+        "value_5",
+        "value_6"
+      ],
+      "settings": {
+        "bg_color": "#fff9df",
+        "center_head": true,
+        "show_numbers": true,
+        "columns": 3,
+        "eyebrow": "Chapter Three — What We Stand For",
+        "heading": "Six Promises We Keep on Every Order",
+        "text": "Not a mission statement — the working rules we hold ourselves to, order after order."
+      }
+    },
+    "hp_about_timeline": {
+      "type": "hp-about-timeline",
+      "blocks": {
+        "mile_1": {
+          "type": "milestone",
+          "settings": {
+            "year": "2024",
+            "title": "The first collection",
+            "text": "The Home Palette opens with a single dinner set, a studio in Paradise Commercial, Bahria Town Phase 4, and a long list of potteries worth visiting."
+          }
+        },
+        "mile_2": {
+          "type": "milestone",
+          "settings": {
+            "year": "2025",
+            "title": "Colour becomes the system",
+            "text": "Glazes are standardised into named colour families so pieces bought months apart still match — and Shop by Colour goes live on the site.",
+            "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp"
+          }
+        },
+        "mile_3": {
+          "type": "milestone",
+          "settings": {
+            "year": "2025",
+            "title": "The Weave Collection",
+            "text": "Hand-woven jute placemats, coasters and baskets join the ceramics — our first non-ceramic line, and still one of the most reordered.",
+            "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp"
+          }
+        },
+        "mile_4": {
+          "type": "milestone",
+          "settings": {
+            "year": "2025",
+            "title": "Hospitality begins",
+            "text": "Cafés, restaurants and hotels start ordering by the crate. Theme consultation and tailored packages follow soon after."
+          }
+        },
+        "mile_5": {
+          "type": "milestone",
+          "settings": {
+            "year": "2026",
+            "title": "Wood and metal complete the table",
+            "text": "The Wooden Line and THP Metalware arrive, taking the palette past ten collections — from the plate to the platter to the serving spoon.",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp"
+          }
+        },
+        "mile_6": {
+          "type": "milestone",
+          "settings": {
+            "year": "Today",
+            "title": "One palette, a thousand tables",
+            "text": "Ten collections, fourteen colours and deliveries to every major city in Pakistan — with the next collection already on the wheel."
+          }
+        }
+      },
+      "block_order": [
+        "mile_1",
+        "mile_2",
+        "mile_3",
+        "mile_4",
+        "mile_5",
+        "mile_6"
+      ],
+      "settings": {
+        "bg_color": "#fffdf4",
+        "accent_color": "#257575",
+        "accent_2_color": "#7fc8be",
+        "center_head": true,
+        "eyebrow": "Chapter Four — The Journey",
+        "heading": "From One Dinner Set to Ten Collections",
+        "text": "A short history of the palette — and where it is headed next."
+      }
+    },
+    "hp_about_cta": {
+      "type": "hp-cta-band",
+      "settings": {
+        "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+        "duotone": true,
+        "eyebrow": "Set Your Table With Us",
+        "heading": "Start With One Piece. Build a Palette.",
+        "text": "Browse the collections, or tell us what your table needs — homes, cafés and hotels all start with the same conversation.",
+        "button_label": "Shop All Collections",
+        "link": "shopify://collections",
+        "scrim": 90,
+        "scrim_color": "#0c2627",
+        "layout": "split",
+        "flip": true,
+        "panel_color": "#257575",
+        "text_color": "#fff9df"
+      }
+    }
+  },
+  "order": [
+    "hp_about_hero",
+    "hp_about_trust",
+    "hp_about_story",
+    "hp_about_process",
+    "hp_about_values",
+    "hp_about_timeline",
+    "hp_about_cta"
+  ]
+}

@@ -951,6 +951,200 @@
     });
   }
 
+  /* ---- Background video (About hero) ------------------------------------
+     The poster image is the real content; the video only fades in once it can
+     actually play, so a blocked autoplay or a slow connection leaves the still
+     photograph in place instead of a black rectangle.
+  ---------------------------------------------------------------------- */
+  function initBgVideo(root) {
+    (root || document).querySelectorAll('[data-hp-bg-video]').forEach(function (v) {
+      if (v.dataset.hpVidDone) return;
+      v.dataset.hpVidDone = '1';
+      if (reducedMotion) return;   // leave the still image
+      var show = function () { v.classList.add('is-playing'); };
+      if (v.readyState >= 3) show();
+      v.addEventListener('canplay', show, { once: true });
+      var p = v.play();
+      if (p && p.catch) p.catch(function () { v.classList.remove('is-playing'); });
+    });
+  }
+
+  /* ---- Count-up numbers --------------------------------------------------
+     Reads the number out of whatever the merchant typed — "1,000+", "100%",
+     "Rs. 8,000" — animates only the digits and keeps the prefix, suffix,
+     decimals and thousands separators exactly as written. Anything without a
+     number in it is left alone, so no setting can break the display.
+  ---------------------------------------------------------------------- */
+  function initCounters(root) {
+    var nodes = (root || document).querySelectorAll('[data-hp-count]');
+    if (!nodes.length) return;
+
+    var run = function (el) {
+      var raw = el.getAttribute('data-hp-count') || el.textContent;
+      var match = raw.match(/\d[\d,]*(\.\d+)?/);
+      if (!match) return;
+      var numText = match[0];
+      var prefix = raw.slice(0, match.index);
+      var suffix = raw.slice(match.index + numText.length);
+      var grouped = numText.indexOf(',') !== -1;
+      var decimals = (numText.split('.')[1] || '').length;
+      var target = parseFloat(numText.replace(/,/g, ''));
+      if (isNaN(target)) return;
+
+      var format = function (n) {
+        var s = n.toFixed(decimals);
+        if (grouped) {
+          var parts = s.split('.');
+          parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          s = parts.join('.');
+        }
+        return prefix + s + suffix;
+      };
+
+      if (reducedMotion) { el.textContent = format(target); return; }
+
+      var dur = 1400;
+      var t0 = null;
+      var step = function (t) {
+        if (t0 === null) t0 = t;
+        var p = Math.min((t - t0) / dur, 1);
+        // easeOutExpo — fast start, long settle, so the final digits land softly
+        var eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+        el.textContent = format(target * eased);
+        if (p < 1) window.requestAnimationFrame(step);
+      };
+      window.requestAnimationFrame(step);
+    };
+
+    var start = function (el) {
+      if (el.dataset.hpCountDone) return;
+      el.dataset.hpCountDone = '1';
+      run(el);
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      nodes.forEach(start);
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        start(entry.target);
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.4 });
+    nodes.forEach(function (n) { io.observe(n); });
+  }
+
+  /* ---- <hp-process> — sticky factory walk -------------------------------
+     Whichever step is nearest the middle of the viewport becomes active: its
+     photograph cross-fades into the sticky frame, its caption and number
+     update, and the progress bar advances. The observer band is a thin slice
+     across the middle of the screen, which is what makes the switch happen at
+     the point the visitor is actually reading rather than at the top edge.
+  ---------------------------------------------------------------------- */
+  var HpProcess = (function () {
+    function HpProcess() { return Reflect.construct(HTMLElement, [], HpProcess); }
+    HpProcess.prototype = Object.create(HTMLElement.prototype, { constructor: { value: HpProcess } });
+    Object.setPrototypeOf(HpProcess, HTMLElement);
+
+    HpProcess.prototype.connectedCallback = function () {
+      var el = this;
+      el.steps = Array.prototype.slice.call(el.querySelectorAll('[data-hp-proc-step]'));
+      el.layers = Array.prototype.slice.call(el.querySelectorAll('[data-hp-proc-layer]'));
+      el.numEl = el.querySelector('[data-hp-proc-num]');
+      el.capEl = el.querySelector('[data-hp-proc-caption]');
+      el.fillEl = el.querySelector('[data-hp-proc-fill]');
+      if (!el.steps.length) return;
+
+      el.setActive(0);
+      if (!('IntersectionObserver' in window)) return;
+
+      el.visible = [];
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          var i = el.steps.indexOf(entry.target);
+          var at = el.visible.indexOf(i);
+          if (entry.isIntersecting && at === -1) el.visible.push(i);
+          if (!entry.isIntersecting && at !== -1) el.visible.splice(at, 1);
+        });
+        if (!el.visible.length) return;
+        el.setActive(Math.min.apply(null, el.visible));
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+      el.steps.forEach(function (s) { io.observe(s); });
+      el.observer = io;
+    };
+
+    HpProcess.prototype.disconnectedCallback = function () {
+      if (this.observer) this.observer.disconnect();
+    };
+
+    HpProcess.prototype.setActive = function (i) {
+      var el = this;
+      if (el.active === i) return;
+      el.active = i;
+
+      el.steps.forEach(function (s, n) { s.classList.toggle('is-active', n === i); });
+      el.layers.forEach(function (l, n) { l.classList.toggle('is-active', n === i); });
+
+      var pad = i + 1 < 10 ? '0' + (i + 1) : String(i + 1);
+      if (el.numEl) el.numEl.textContent = pad;
+
+      var step = el.steps[i];
+      if (el.capEl && step) {
+        var cap = step.getAttribute('data-hp-proc-cap');
+        if (!cap) {
+          var t = step.querySelector('.hp-abt-proc__step-title');
+          cap = t ? t.textContent.trim() : '';
+        }
+        el.capEl.textContent = cap;
+      }
+      if (el.fillEl) el.fillEl.style.width = ((i + 1) / el.steps.length * 100) + '%';
+    };
+
+    return HpProcess;
+  })();
+  if (!customElements.get('hp-process')) customElements.define('hp-process', HpProcess);
+
+  /* ---- Timeline rail ----------------------------------------------------
+     The rail fills in step with the scroll (scrubbed, so it tracks the finger
+     rather than playing a canned animation) and each milestone lights its dot
+     as it reaches reading height. Without GSAP the CSS already shows the rail
+     filled, so only the dots need wiring.
+  ---------------------------------------------------------------------- */
+  function initTimeline(root) {
+    (root || document).querySelectorAll('[data-hp-timeline]').forEach(function (wrap) {
+      if (wrap.dataset.hpTimeDone) return;
+      wrap.dataset.hpTimeDone = '1';
+
+      var fill = wrap.querySelector('[data-hp-timeline-fill]');
+      var items = Array.prototype.slice.call(wrap.querySelectorAll('[data-hp-timeline-item]'));
+
+      if (fill && hasGsap) {
+        window.gsap.fromTo(fill, { height: '0%' }, {
+          height: '100%', ease: 'none',
+          scrollTrigger: { trigger: wrap, start: 'top 72%', end: 'bottom 72%', scrub: true }
+        });
+      } else if (fill) {
+        fill.style.height = '100%';
+      }
+
+      if (!items.length) return;
+      if (reducedMotion || !('IntersectionObserver' in window)) {
+        items.forEach(function (it) { it.classList.add('is-active'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-active');
+          io.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -28% 0px', threshold: 0.1 });
+      items.forEach(function (it) { io.observe(it); });
+    });
+  }
+
   /* ---- boot ------------------------------------------------------------- */
   function boot() {
     initOverlayScrollLock();
@@ -959,6 +1153,9 @@
     initMotion(document);
     initVideoTriggers(document);
     initReviewPager(document);
+    initBgVideo(document);
+    initCounters(document);
+    initTimeline(document);
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
@@ -969,6 +1166,9 @@
     initMotion(e.target);
     initVideoTriggers(e.target);
     initReviewPager(e.target);
+    initBgVideo(e.target);
+    initCounters(e.target);
+    initTimeline(e.target);
     markScrollContainers(e.target);
     initStickyChrome();
     if (hasGsap) window.ScrollTrigger.refresh();

@@ -1,0 +1,334 @@
+{% comment %}
+  THP — About story.
+
+  Editorial two-column: a layered image stack on one side (main photograph,
+  an offset second photograph, and a floating badge card), copy plus a list of
+  highlight blocks on the other. Every string, image and colour is a setting.
+{% endcomment %}
+
+{%- liquid
+  assign main_alt = section.settings.image.alt | default: section.settings.heading | escape
+  assign second_alt = section.settings.image_2.alt | default: section.settings.heading | escape
+-%}
+
+{%- style -%}
+  .hp-abt-story { background: {{ section.settings.bg_color | default: '#fffdf4' }}; overflow: hidden; }
+  .hp-abt-story__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(3.2rem, 5vw, 6rem);
+    align-items: center;
+  }
+  @media screen and (min-width: 990px) {
+    .hp-abt-story__grid { grid-template-columns: 1fr 1fr; gap: clamp(4rem, 6vw, 8rem); }
+    .hp-abt-story--flip .hp-abt-story__media { order: 2; }
+  }
+
+  /* ---------- layered media ---------- */
+  .hp-abt-story__media { position: relative; }
+  .hp-abt-story__main {
+    position: relative;
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--hp-linen);
+    box-shadow: var(--hp-shadow-card);
+  }
+  .hp-abt-story__main img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* The second photograph deliberately breaks the first one's frame — the
+     overlap is what stops the block reading as a plain image + text row.
+     It is decorative, so it is dropped entirely on phones rather than
+     shrunk into an unreadable thumbnail. */
+  .hp-abt-story__inset {
+    display: none;
+    position: absolute;
+    right: -3.2rem;
+    bottom: -3.2rem;
+    width: 42%;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    border: 8px solid {{ section.settings.bg_color | default: '#fffdf4' }};
+    background: var(--hp-linen);
+  }
+  .hp-abt-story__inset img { width: 100%; height: 100%; object-fit: cover; }
+  /* Only once the layout is genuinely two-column: in the single-column stack
+     the media fills the container, so an image offset past its right edge is
+     clipped by the section and loses its frame. */
+  @media screen and (min-width: 990px) { .hp-abt-story__inset { display: block; } }
+
+  .hp-abt-story__badge {
+    position: absolute;
+    left: -2rem;
+    top: 2.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.6rem 2rem;
+    border-radius: 14px;
+    background: {{ section.settings.badge_color | default: '#257575' }};
+    color: var(--hp-cream);
+    box-shadow: 0 24px 40px -26px rgba(18, 53, 54, 0.8);
+  }
+  .hp-abt-story__badge-value {
+    font-family: var(--hp-font-display);
+    font-size: 2.4rem;
+    line-height: 1;
+    letter-spacing: -0.004em;
+  }
+  .hp-abt-story__badge-label {
+    font-family: var(--hp-font-ui);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 249, 223, 0.78);
+  }
+  @media screen and (max-width: 749px) {
+    .hp-abt-story__badge { left: 1.2rem; top: 1.2rem; padding: 1.2rem 1.6rem; }
+    .hp-abt-story__badge-value { font-size: 2rem; }
+  }
+
+  /* ---------- copy ---------- */
+  .hp-abt-story__title {
+    margin: 1.4rem 0 0;
+    font-size: var(--hp-h-section);
+    color: var(--hp-heading);
+  }
+  .hp-abt-story__text {
+    margin: 2rem 0 0;
+    font-size: 1.5rem;
+    line-height: 1.85;
+    color: var(--hp-taupe);
+  }
+  .hp-abt-story__text p + p { margin-top: 1.4rem; }
+
+  .hp-abt-story__quote {
+    margin: 2.8rem 0 0;
+    padding: 0 0 0 2.2rem;
+    border-left: 2px solid var(--hp-teal);
+    font-family: var(--hp-font-display);
+    font-size: clamp(1.8rem, 2.2vw, 2.4rem);
+    line-height: 1.4;
+    color: var(--hp-heading);
+  }
+
+  .hp-abt-story__list {
+    margin: 2.8rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 1.6rem;
+  }
+  .hp-abt-story__item { display: flex; gap: 1.4rem; align-items: flex-start; }
+  .hp-abt-story__item .hp-chip { width: 3.8rem; height: 3.8rem; }
+  .hp-abt-story__item:hover .hp-chip { transform: translateY(-3px); background: var(--hp-teal); color: var(--hp-cream); }
+  .hp-abt-story__item-title {
+    margin: 0.3rem 0 0.4rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--hp-ink);
+  }
+  .hp-abt-story__item-text { margin: 0; font-size: 1.35rem; line-height: 1.7; color: var(--hp-taupe); }
+
+  .hp-abt-story__sign {
+    margin: 3rem 0 0;
+    padding-top: 2rem;
+    border-top: 1px solid var(--hp-hairline-teal);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.6rem 2.4rem;
+  }
+  .hp-abt-story__sign-name {
+    font-family: var(--hp-font-display);
+    font-size: 2rem;
+    line-height: 1.2;
+    color: var(--hp-heading);
+  }
+  .hp-abt-story__sign-role {
+    display: block;
+    margin-top: 0.4rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-taupe-soft);
+  }
+{%- endstyle -%}
+
+<div class="hp-abt-story hp-section{% if section.settings.flip %} hp-abt-story--flip{% endif %}">
+  <div class="hp-container">
+    <div class="hp-abt-story__grid">
+      <div class="hp-abt-story__media">
+        <div class="hp-abt-story__main" data-hp-clip>
+          {%- if section.settings.image != blank -%}
+            {{
+              section.settings.image
+              | image_url: width: 1400
+              | image_tag: widths: '500, 750, 1000, 1400', sizes: '(min-width: 990px) 44vw, 92vw', loading: 'lazy', alt: main_alt
+            }}
+          {%- else -%}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+        {%- if section.settings.image_2 != blank -%}
+          <div class="hp-abt-story__inset" data-hp-reveal>
+            {{
+              section.settings.image_2
+              | image_url: width: 800
+              | image_tag: widths: '300, 500, 800', sizes: '(min-width: 990px) 18vw, 40vw', loading: 'lazy', alt: second_alt
+            }}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.badge_value != blank -%}
+          <div class="hp-abt-story__badge" data-hp-reveal>
+            <span class="hp-abt-story__badge-value">{{ section.settings.badge_value | escape }}</span>
+            <span class="hp-abt-story__badge-label">{{ section.settings.badge_label | escape }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="hp-abt-story__body">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="hp-eyebrow" data-hp-fluid>{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="hp-abt-story__title">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="hp-abt-story__text" data-hp-fluid>{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.settings.quote != blank -%}
+          <blockquote class="hp-abt-story__quote" data-hp-reveal>{{ section.settings.quote | escape }}</blockquote>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          <ul class="hp-abt-story__list" data-hp-stagger>
+            {%- for block in section.blocks -%}
+              <li class="hp-abt-story__item" data-hp-reveal {{ block.shopify_attributes }}>
+                <span class="hp-chip">{% render 'hp-icon', icon: block.settings.icon, size: 17 %}</span>
+                <div>
+                  <h3 class="hp-abt-story__item-title">{{ block.settings.title | escape }}</h3>
+                  <p class="hp-abt-story__item-text">{{ block.settings.text | escape }}</p>
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if section.settings.sign_name != blank or section.settings.button_label != blank -%}
+          <div class="hp-abt-story__sign" data-hp-reveal>
+            {%- if section.settings.sign_name != blank -%}
+              <p class="hp-abt-story__sign-name">
+                {{ section.settings.sign_name | escape }}
+                <span class="hp-abt-story__sign-role">{{ section.settings.sign_role | escape }}</span>
+              </p>
+            {%- endif -%}
+            {%- if section.settings.button_label != blank -%}
+              <a
+                {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% endif %}
+                class="hp-btn hp-btn--outline"
+              >
+                {{ section.settings.button_label | escape }}
+                {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP About Story",
+  "tag": "section",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Main image" },
+    { "type": "image_picker", "id": "image_2", "label": "Inset image", "info": "Overlaps the main image on desktop." },
+    { "type": "checkbox", "id": "flip", "label": "Image on right", "default": false },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#fffdf4" },
+
+    { "type": "header", "content": "Badge" },
+    { "type": "text", "id": "badge_value", "label": "Badge value", "default": "Est. 2024" },
+    { "type": "text", "id": "badge_label", "label": "Badge label", "default": "Islamabad, Pakistan" },
+    { "type": "color", "id": "badge_color", "label": "Badge colour", "default": "#257575" },
+
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Chapter One — The Beginning" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A Palette Built in Pakistan, for Pakistani Tables" },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Body",
+      "default": "<p>We started The Home Palette in 2024 with one dinner set, a small studio in Bahria Town and a long list of potteries to visit. What we found was extraordinary: workshops in Gujrat, Karachi and the Punjab turning out ceramics as good as anything imported — and almost none of it reaching the homes it was made for.</p><p>So we became the bridge. We buy directly from the workshops, set the quality standard together, and bring the pieces to you under one palette of colours that actually work with each other.</p>"
+    },
+    { "type": "text", "id": "quote", "label": "Pull quote", "default": "A table should look like the people who set it — warm, colourful, and entirely their own." },
+
+    { "type": "header", "content": "Signature" },
+    { "type": "text", "id": "sign_name", "label": "Name", "default": "The Home Palette" },
+    { "type": "text", "id": "sign_role", "label": "Role / location", "default": "Paradise Commercial, Bahria Town Phase 4" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Browse Collections" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Highlight",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "gem", "label": "Gem" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "sparkles", "label": "Sparkles" },
+            { "value": "shield-check", "label": "Shield check" },
+            { "value": "award", "label": "Award" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "users", "label": "Users" },
+            { "value": "hand-platter", "label": "Serving hand" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "flame", "label": "Kiln flame" }
+          ],
+          "default": "gem"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Sourced at the source" },
+        { "type": "text", "id": "text", "label": "Text", "default": "We buy straight from the workshops — no importers, no middle layer." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP About Story",
+      "blocks": [
+        { "type": "point" },
+        {
+          "type": "point",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Designed in colour families",
+            "text": "Every glaze is chosen to sit beside the others, so pieces bought a year apart still match."
+          }
+        },
+        {
+          "type": "point",
+          "settings": {
+            "icon": "shield-check",
+            "title": "Checked piece by piece",
+            "text": "Nothing ships without being turned over, tapped and inspected by hand."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

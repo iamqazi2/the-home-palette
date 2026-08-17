@@ -1,0 +1,213 @@
+{% comment %}
+  THP — About values.
+
+  Card grid of the promises the brand makes. Uses the shared .hp-card shell and
+  teal icon chips so it sits in the same family as the trust strip and the
+  occasion cards, rather than introducing a fourth card style.
+{% endcomment %}
+
+{%- style -%}
+  .hp-abt-values { background: {{ section.settings.bg_color | default: '#fff9df' }}; }
+  .hp-abt-values__grid {
+    display: grid;
+    gap: clamp(1.4rem, 2vw, 2.2rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media screen and (min-width: 990px) {
+    .hp-abt-values__grid { grid-template-columns: repeat({{ section.settings.columns }}, minmax(0, 1fr)); }
+  }
+  @media screen and (max-width: 749px) {
+    .hp-abt-values__grid { grid-template-columns: 1fr; }
+  }
+
+  .hp-abt-values__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2rem;
+    /* no height:100% — grid items already stretch to the row, and a percentage
+       height against an auto-sized row makes Chrome size the row from content
+       that excludes the auto-margin footer, so the cards overflow and overlap
+       the row below */
+    padding: clamp(2.2rem, 2.8vw, 3rem);
+    background: var(--hp-paper);
+    border: 1px solid var(--hp-hairline);
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    transition: transform 0.45s var(--hp-ease), box-shadow 0.45s var(--hp-ease), border-color 0.45s var(--hp-ease);
+  }
+  .hp-abt-values__card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--hp-shadow-card);
+    border-color: transparent;
+  }
+  /* teal wash that wipes up from the bottom on hover — the same gesture the
+     occasion cards use, kept subtle here so the copy stays readable */
+  .hp-abt-values__card::before {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 0;
+    background: linear-gradient(180deg, rgba(37, 117, 117, 0) 0%, rgba(37, 117, 117, 0.07) 100%);
+    transition: height 0.55s var(--hp-ease);
+    pointer-events: none;
+  }
+  .hp-abt-values__card:hover::before { height: 100%; }
+  .hp-abt-values__card > * { position: relative; }
+
+  .hp-abt-values__num {
+    position: absolute;
+    top: clamp(1.4rem, 2vw, 2rem);
+    right: clamp(1.6rem, 2.2vw, 2.4rem);
+    font-family: var(--hp-font-display);
+    font-size: 3.6rem;
+    line-height: 1;
+    color: rgba(37, 117, 117, 0.1);
+    pointer-events: none;
+  }
+  .hp-abt-values__card:hover .hp-chip { transform: translateY(-4px); background: var(--hp-teal); color: var(--hp-cream); }
+  .hp-abt-values__title {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-size: var(--hp-h-block);
+    line-height: 1.2;
+    color: var(--hp-heading);
+  }
+  .hp-abt-values__text {
+    margin: 0;
+    font-size: 1.4rem;
+    line-height: 1.75;
+    color: var(--hp-taupe);
+  }
+  .hp-abt-values__link {
+    margin-top: auto;
+    padding-top: 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+    text-decoration: none;
+  }
+  .hp-abt-values__link .hp-icon { transition: transform 0.35s var(--hp-ease); }
+  .hp-abt-values__card:hover .hp-abt-values__link .hp-icon { transform: translateX(4px); }
+  a.hp-abt-values__card { text-decoration: none; }
+  a.hp-abt-values__card:focus-visible { outline: 2px solid var(--hp-teal); outline-offset: 3px; }
+{%- endstyle -%}
+
+<div class="hp-abt-values hp-section">
+  <div class="hp-container">
+    <div class="hp-section-head{% if section.settings.center_head %} hp-section-head--center{% endif %}">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hp-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hp-section-head__title">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="hp-section-head__text">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="hp-abt-values__grid" data-hp-stagger>
+      {%- for block in section.blocks -%}
+        {%- capture card_inner -%}
+          {%- if section.settings.show_numbers -%}
+            <span class="hp-abt-values__num" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          {%- endif -%}
+          <span class="hp-chip">{% render 'hp-icon', icon: block.settings.icon, size: 19 %}</span>
+          <h3 class="hp-abt-values__title">{{ block.settings.title | escape }}</h3>
+          <p class="hp-abt-values__text">{{ block.settings.text | escape }}</p>
+          {%- if block.settings.link_label != blank -%}
+            <span class="hp-abt-values__link">
+              {{ block.settings.link_label | escape }}
+              {% render 'hp-icon', icon: 'arrow-right', size: 14 %}
+            </span>
+          {%- endif -%}
+        {%- endcapture -%}
+        {%- if block.settings.link != blank -%}
+          <a href="{{ block.settings.link }}" class="hp-abt-values__card" data-hp-reveal {{ block.shopify_attributes }}>
+            {{ card_inner }}
+          </a>
+        {%- else -%}
+          <div class="hp-abt-values__card" data-hp-reveal {{ block.shopify_attributes }}>
+            {{ card_inner }}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP About Values",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#fff9df" },
+    { "type": "checkbox", "id": "center_head", "label": "Centre the heading", "default": true },
+    { "type": "checkbox", "id": "show_numbers", "label": "Show card numbers", "default": true },
+    { "type": "range", "id": "columns", "label": "Columns (desktop)", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Chapter Three — What We Stand For" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Six Promises We Keep on Every Order" },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Intro",
+      "default": "Not a mission statement — the working rules we hold ourselves to, order after order."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "sparkles", "label": "Sparkles" },
+            { "value": "gem", "label": "Gem" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "flame", "label": "Kiln flame" },
+            { "value": "shield-check", "label": "Shield check" },
+            { "value": "award", "label": "Award" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "users", "label": "Users" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "package", "label": "Package" },
+            { "value": "rotate-ccw", "label": "Returns" },
+            { "value": "message-circle", "label": "Chat" },
+            { "value": "hand-platter", "label": "Serving hand" }
+          ],
+          "default": "sparkles"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Colour first" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Describe the promise." },
+        { "type": "text", "id": "link_label", "label": "Link label" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP About Values",
+      "blocks": [
+        { "type": "value" },
+        { "type": "value", "settings": { "icon": "users", "title": "Fair to the makers" } },
+        { "type": "value", "settings": { "icon": "shield-check", "title": "Hand-checked" } },
+        { "type": "value", "settings": { "icon": "hand-platter", "title": "Built for real use" } },
+        { "type": "value", "settings": { "icon": "package", "title": "Packed to survive" } },
+        { "type": "value", "settings": { "icon": "message-circle", "title": "Answered by a human" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,396 @@
+{% comment %}
+  THP — Factory / production process.
+
+  Deep-teal band. On desktop the photography sticks while the steps scroll past
+  it: whichever step is in the middle of the viewport lights up and its image
+  cross-fades in, so one column narrates the other. On phones the sticky column
+  is dropped and each step carries its own image inline — a 40vh sticky panel on
+  a small screen fights the content instead of supporting it.
+
+  Behaviour lives in <hp-process> (assets/hp-theme.js). With JavaScript off the
+  first image shows and every step is fully legible.
+{% endcomment %}
+
+{%- liquid
+  assign band = section.settings.bg_color | default: '#123536'
+  assign accent = section.settings.accent_color | default: '#7fc8be'
+-%}
+
+{%- style -%}
+  .hp-abt-proc {
+    background: {{ band }};
+    color: var(--hp-cream);
+    --hp-heading: var(--hp-cream);
+    /* deliberately NOT overflow:hidden — an ancestor with a clipping overflow
+       becomes the scroll container for position:sticky, which silently kills
+       the sticky media column below */
+  }
+  .hp-abt-proc .hp-section-head__text { color: rgba(255, 249, 223, 0.78); }
+
+  .hp-abt-proc__grid { display: block; }
+  @media screen and (min-width: 990px) {
+    .hp-abt-proc__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(4rem, 6vw, 8rem);
+      align-items: start;
+    }
+    .hp-abt-proc--flip .hp-abt-proc__media { order: 2; }
+  }
+
+  /* ---------- sticky media ---------- */
+  .hp-abt-proc__media { display: none; }
+  @media screen and (min-width: 990px) {
+    .hp-abt-proc__media {
+      display: block;
+      position: sticky;
+      top: calc(var(--hp-header-h, 8rem) + 2.4rem);
+    }
+  }
+  .hp-abt-proc__stack {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    background: rgba(255, 249, 223, 0.06);
+    box-shadow: 0 40px 70px -40px rgba(0, 0, 0, 0.7);
+  }
+  .hp-abt-proc__layer {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 0.9s var(--hp-ease), transform 1.4s var(--hp-ease);
+  }
+  .hp-abt-proc__layer.is-active { opacity: 1; transform: scale(1); }
+  .hp-abt-proc__layer img { width: 100%; height: 100%; object-fit: cover; }
+  .hp-abt-proc__stack::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(12, 38, 39, 0) 42%, rgba(12, 38, 39, 0.82) 100%);
+  }
+  .hp-abt-proc__caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.6rem;
+    padding: 2.4rem;
+  }
+  .hp-abt-proc__caption-text {
+    margin: 0;
+    max-width: 32rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.2rem;
+    letter-spacing: 0.06em;
+    color: rgba(255, 249, 223, 0.86);
+  }
+  .hp-abt-proc__big {
+    font-family: var(--hp-font-display);
+    font-size: clamp(4rem, 6vw, 6.4rem);
+    line-height: 0.9;
+    color: {{ accent }};
+    letter-spacing: -0.01em;
+  }
+  .hp-abt-proc__track {
+    position: relative;
+    height: 2px;
+    margin-top: 2rem;
+    background: rgba(255, 249, 223, 0.18);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .hp-abt-proc__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0%;
+    background: {{ accent }};
+    transition: width 0.7s var(--hp-ease);
+  }
+
+  /* ---------- steps ---------- */
+  .hp-abt-proc__steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: hp-proc;
+  }
+  .hp-abt-proc__step {
+    position: relative;
+    padding: clamp(2.4rem, 3.4vw, 3.2rem) 0;
+    border-bottom: 1px solid rgba(255, 249, 223, 0.16);
+  }
+  .hp-abt-proc__step:last-child { border-bottom: none; }
+  @media screen and (min-width: 990px) {
+    .hp-abt-proc__step {
+      padding: clamp(3.6rem, 5vw, 5.6rem) 0 clamp(3.6rem, 5vw, 5.6rem) 3.2rem;
+      opacity: 0.42;
+      transition: opacity 0.6s var(--hp-ease);
+    }
+    .hp-abt-proc__step.is-active { opacity: 1; }
+    /* the rule on the left fills as the step becomes active — a reading
+       position indicator that costs one pseudo-element */
+    .hp-abt-proc__step::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(255, 249, 223, 0.16);
+    }
+    .hp-abt-proc__step::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2px;
+      height: 0;
+      background: {{ accent }};
+      transition: height 0.7s var(--hp-ease);
+    }
+    .hp-abt-proc__step.is-active::after { height: 100%; }
+  }
+  .hp-abt-proc__step-head { display: flex; align-items: baseline; gap: 1.4rem; }
+  .hp-abt-proc__step-index {
+    font-family: var(--hp-font-ui);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: {{ accent }};
+  }
+  .hp-abt-proc__step-title {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-size: var(--hp-h-block);
+    line-height: 1.2;
+    color: var(--hp-cream);
+  }
+  .hp-abt-proc__step-text {
+    margin: 1.2rem 0 0;
+    max-width: 52rem;
+    font-size: 1.45rem;
+    line-height: 1.85;
+    color: rgba(255, 249, 223, 0.78);
+  }
+  .hp-abt-proc__step-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1.6rem;
+    padding: 0.7rem 1.4rem;
+    border: 1px solid rgba(255, 249, 223, 0.24);
+    border-radius: var(--hp-r-pill);
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 249, 223, 0.82);
+  }
+
+  /* inline media — phones and tablets only */
+  .hp-abt-proc__step-media {
+    margin: 1.8rem 0 0;
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    background: rgba(255, 249, 223, 0.06);
+  }
+  .hp-abt-proc__step-media img { width: 100%; height: 100%; object-fit: cover; }
+  @media screen and (min-width: 990px) { .hp-abt-proc__step-media { display: none; } }
+
+  .hp-abt-proc__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.6rem 2.4rem;
+    margin-top: clamp(2.8rem, 4vw, 4rem);
+    padding-top: clamp(2.4rem, 3vw, 3.2rem);
+    border-top: 1px solid rgba(255, 249, 223, 0.16);
+  }
+  .hp-abt-proc__foot-text {
+    margin: 0;
+    max-width: 56rem;
+    font-size: 1.4rem;
+    line-height: 1.75;
+    color: rgba(255, 249, 223, 0.78);
+  }
+{%- endstyle -%}
+
+<div class="hp-abt-proc hp-section{% if section.settings.flip %} hp-abt-proc--flip{% endif %}">
+  <div class="hp-container">
+    <div class="hp-section-head{% if section.settings.center_head %} hp-section-head--center{% endif %}">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hp-eyebrow hp-eyebrow--soft">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hp-section-head__title">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="hp-section-head__text">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <hp-process class="hp-abt-proc__grid">
+      <div class="hp-abt-proc__media">
+        <div class="hp-abt-proc__stack">
+          {%- for block in section.blocks -%}
+            <figure class="hp-abt-proc__layer{% if forloop.first %} is-active{% endif %}" data-hp-proc-layer="{{ forloop.index0 }}">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 1200
+                  | image_tag: widths: '500, 800, 1200', sizes: '(min-width: 990px) 44vw, 92vw', loading: 'lazy', alt: block.settings.title
+                }}
+              {%- else -%}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </figure>
+          {%- endfor -%}
+          <div class="hp-abt-proc__caption">
+            <p class="hp-abt-proc__caption-text" data-hp-proc-caption>
+              {{- section.blocks.first.settings.caption | default: section.blocks.first.settings.title | escape -}}
+            </p>
+            <span class="hp-abt-proc__big" data-hp-proc-num aria-hidden="true">01</span>
+          </div>
+        </div>
+        <div class="hp-abt-proc__track" aria-hidden="true">
+          <span class="hp-abt-proc__fill" data-hp-proc-fill></span>
+        </div>
+      </div>
+
+      <ol class="hp-abt-proc__steps">
+        {%- for block in section.blocks -%}
+          <li
+            class="hp-abt-proc__step{% if forloop.first %} is-active{% endif %}"
+            data-hp-proc-step="{{ forloop.index0 }}"
+            data-hp-proc-cap="{{ block.settings.caption | escape }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="hp-abt-proc__step-head">
+              <span class="hp-abt-proc__step-index">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <h3 class="hp-abt-proc__step-title">{{ block.settings.title | escape }}</h3>
+            </div>
+            {%- if block.settings.image != blank -%}
+              <div class="hp-abt-proc__step-media">
+                {{
+                  block.settings.image
+                  | image_url: width: 1000
+                  | image_tag: widths: '400, 700, 1000', sizes: '92vw', loading: 'lazy', alt: block.settings.title
+                }}
+              </div>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="hp-abt-proc__step-text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.meta != blank -%}
+              <span class="hp-abt-proc__step-meta">
+                {% render 'hp-icon', icon: block.settings.meta_icon, size: 14 %}
+                {{ block.settings.meta | escape }}
+              </span>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ol>
+    </hp-process>
+
+    {%- if section.settings.foot_text != blank or section.settings.button_label != blank -%}
+      <div class="hp-abt-proc__foot" data-hp-reveal>
+        {%- if section.settings.foot_text != blank -%}
+          <p class="hp-abt-proc__foot-text">{{ section.settings.foot_text | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <a
+            {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% endif %}
+            class="hp-btn hp-btn--cream-solid"
+          >
+            {{ section.settings.button_label | escape }}
+            {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP Factory Process",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "bg_color", "label": "Band colour", "default": "#123536" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#7fc8be" },
+    { "type": "checkbox", "id": "flip", "label": "Photography on right", "default": false },
+    { "type": "checkbox", "id": "center_head", "label": "Centre the heading", "default": true },
+
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Chapter Two — Inside the Workshop" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "How a Piece Becomes Part of the Palette" },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Intro",
+      "default": "Six stages, most of them done by hand. It is slower than machine production — and it is the reason no two reactive-glaze pieces leave the kiln identical."
+    },
+    {
+      "type": "textarea",
+      "id": "foot_text",
+      "label": "Closing note",
+      "default": "Roughly one in eight pieces never makes it past inspection. Those seconds stay in the workshop rather than reaching your table."
+    },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "See the Collections" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Clay & sourcing" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Describe this stage of production." },
+        { "type": "text", "id": "caption", "label": "Image caption", "info": "Shown over the sticky photo on desktop." },
+        { "type": "text", "id": "meta", "label": "Badge", "info": "Small pill under the text, e.g. “48 hours”." },
+        {
+          "type": "select",
+          "id": "meta_icon",
+          "label": "Badge icon",
+          "options": [
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "flame", "label": "Kiln flame" },
+            { "value": "gem", "label": "Gem" },
+            { "value": "sparkles", "label": "Sparkles" },
+            { "value": "shield-check", "label": "Shield check" },
+            { "value": "package", "label": "Package" },
+            { "value": "ruler", "label": "Ruler" },
+            { "value": "hand-platter", "label": "Serving hand" }
+          ],
+          "default": "leaf"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP Factory Process",
+      "blocks": [
+        { "type": "step" },
+        { "type": "step", "settings": { "title": "Shaping", "meta_icon": "ruler" } },
+        { "type": "step", "settings": { "title": "Glazing", "meta_icon": "sparkles" } },
+        { "type": "step", "settings": { "title": "The kiln", "meta_icon": "flame" } },
+        { "type": "step", "settings": { "title": "Inspection", "meta_icon": "shield-check" } },
+        { "type": "step", "settings": { "title": "Packing", "meta_icon": "package" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

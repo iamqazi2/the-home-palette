@@ -1,0 +1,335 @@
+{% comment %}
+  THP — About hero.
+
+  Full-bleed editorial opener for /pages/about. Everything is a setting or a
+  block so the copy, media and stats can be rewritten from the customizer
+  without touching this file.
+
+  Media: an image, optionally overlaid by a muted looping video (same approach
+  as the homepage hero — the image is the poster and the fallback, so a blocked
+  or slow video never leaves an empty band).
+{% endcomment %}
+
+{%- liquid
+  assign scrim = section.settings.scrim | default: 78
+  assign a_full = scrim | divided_by: 100.0
+  assign a_mid = scrim | times: 0.78 | divided_by: 100.0
+  assign a_low = scrim | times: 0.34 | divided_by: 100.0
+  assign scrim_rgb = section.settings.scrim_color | default: '#0c2627' | color_to_rgb | remove: 'rgb(' | remove: ')'
+  assign hero_alt = section.settings.image.alt | default: section.settings.heading | escape
+-%}
+
+{%- style -%}
+  .hp-abt-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    background: var(--hp-teal-ink);
+    color: var(--hp-cream);
+    min-height: clamp(52rem, 82vh, 82rem);
+  }
+  .hp-abt-hero__media {
+    position: absolute;
+    inset: -8% 0;
+    z-index: 0;
+    height: 116%;
+    background: var(--hp-teal-ink);
+  }
+  .hp-abt-hero__media img,
+  .hp-abt-hero__media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: {{ section.settings.focal | default: 'center' }};
+  }
+  .hp-abt-hero__media video {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.2s var(--hp-ease);
+  }
+  .hp-abt-hero__media video.is-playing { opacity: 1; }
+  .hp-abt-hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(180deg, rgba({{ scrim_rgb }}, {{ a_low }}) 0%, rgba({{ scrim_rgb }}, {{ a_mid }}) 52%, rgba({{ scrim_rgb }}, {{ a_full }}) 100%),
+      linear-gradient(90deg, rgba({{ scrim_rgb }}, {{ a_mid }}) 0%, rgba({{ scrim_rgb }}, 0) 78%);
+  }
+  .hp-abt-hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding-top: clamp(10rem, 18vh, 16rem);
+    padding-bottom: clamp(3.2rem, 5vw, 5.6rem);
+  }
+  .hp-abt-hero__copy { max-width: 72rem; }
+  .hp-abt-hero__title {
+    margin: 1.6rem 0 0;
+    font-size: var(--hp-h-page);
+    color: var(--hp-cream);
+  }
+  .hp-abt-hero__rule {
+    width: 7rem;
+    height: 2px;
+    margin: 2.4rem 0 0;
+    background: var(--hp-teal-soft);
+    transform-origin: left center;
+  }
+  .hp-abt-hero__lede {
+    margin: 2.2rem 0 0;
+    max-width: 62rem;
+    font-size: clamp(1.45rem, 1.6vw, 1.75rem);
+    line-height: 1.8;
+    color: rgba(255, 249, 223, 0.86);
+  }
+  .hp-abt-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin: 3rem 0 0;
+  }
+
+  /* Stat bar — a glass shelf sitting on the bottom edge of the photograph.
+     Its own hairline grid rather than cards, so it reads as part of the hero
+     rather than a second section stacked underneath it. */
+  .hp-abt-hero__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin: clamp(3.6rem, 6vw, 6rem) 0 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid rgba(255, 249, 223, 0.22);
+    border-radius: var(--hp-r-card);
+    background: rgba(12, 38, 39, 0.42);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+  }
+  @media screen and (min-width: 990px) {
+    .hp-abt-hero__stats { grid-template-columns: repeat({{ section.blocks.size | at_least: 1 }}, minmax(0, 1fr)); }
+  }
+  .hp-abt-hero__stat {
+    padding: clamp(1.8rem, 2.4vw, 2.6rem) clamp(1.6rem, 2.2vw, 2.8rem);
+    border-top: 1px solid rgba(255, 249, 223, 0.16);
+    border-left: 1px solid rgba(255, 249, 223, 0.16);
+  }
+  .hp-abt-hero__stat:nth-child(-n + 2) { border-top: none; }
+  .hp-abt-hero__stat:nth-child(2n + 1) { border-left: none; }
+  @media screen and (min-width: 990px) {
+    .hp-abt-hero__stat { border-top: none; border-left: 1px solid rgba(255, 249, 223, 0.16); }
+    .hp-abt-hero__stat:first-child { border-left: none; }
+  }
+  .hp-abt-hero__stat-value {
+    display: block;
+    font-family: var(--hp-font-display);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 3.4vw, 3.8rem);
+    line-height: 1;
+    color: var(--hp-cream);
+    letter-spacing: -0.004em;
+  }
+  .hp-abt-hero__stat-label {
+    display: block;
+    margin-top: 0.9rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 249, 223, 0.66);
+  }
+
+  .hp-abt-hero__cue {
+    position: absolute;
+    left: 50%;
+    bottom: 1.4rem;
+    z-index: 3;
+    width: 1px;
+    height: 4.4rem;
+    background: linear-gradient(180deg, rgba(255, 249, 223, 0) 0%, rgba(255, 249, 223, 0.7) 100%);
+    transform: translateX(-50%);
+    animation: hp-abt-cue 2.4s var(--hp-ease) infinite;
+  }
+  @keyframes hp-abt-cue {
+    0% { opacity: 0; transform: translate(-50%, -12px); }
+    40% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, 12px); }
+  }
+
+  @media screen and (max-width: 749px) {
+    .hp-abt-hero { min-height: clamp(46rem, 76vh, 62rem); align-items: flex-end; }
+    .hp-abt-hero__inner { padding-top: clamp(8rem, 16vh, 12rem); }
+    .hp-abt-hero__lede { font-size: 1.35rem; line-height: 1.75; }
+    .hp-abt-hero__actions .hp-btn { flex: 1 1 auto; }
+    .hp-abt-hero__cue { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-abt-hero__cue { animation: none; }
+  }
+{%- endstyle -%}
+
+<div class="hp-abt-hero">
+  <div class="hp-abt-hero__media" data-hp-parallax>
+    {%- if section.settings.image != blank -%}
+      {{
+        section.settings.image
+        | image_url: width: 2400
+        | image_tag: widths: '800, 1200, 1600, 2000, 2400', sizes: '100vw', alt: hero_alt, fetchpriority: 'high'
+      }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+    {%- if section.settings.video_url != blank -%}
+      <video
+        src="{{ section.settings.video_url }}"
+        muted
+        loop
+        playsinline
+        autoplay
+        preload="metadata"
+        aria-hidden="true"
+        tabindex="-1"
+        data-hp-bg-video
+      ></video>
+    {%- endif -%}
+  </div>
+  <div class="hp-abt-hero__scrim"></div>
+
+  <div class="hp-abt-hero__inner hp-container">
+    <div class="hp-abt-hero__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hp-eyebrow hp-eyebrow--light" data-hp-fluid>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 class="hp-abt-hero__title" data-hp-split>{{ section.settings.heading | escape }}</h1>
+      {%- endif -%}
+      <span class="hp-abt-hero__rule" data-hp-reveal></span>
+      {%- if section.settings.lede != blank -%}
+        <div class="hp-abt-hero__lede" data-hp-fluid>{{ section.settings.lede }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank or section.settings.button_2_label != blank -%}
+        <div class="hp-abt-hero__actions" data-hp-reveal>
+          {%- if section.settings.button_label != blank -%}
+            <a
+              {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% endif %}
+              class="hp-btn hp-btn--cream-solid"
+            >
+              {{ section.settings.button_label | escape }}
+              {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.button_2_label != blank -%}
+            <a
+              {% if section.settings.button_2_link != blank %}href="{{ section.settings.button_2_link }}"{% endif %}
+              class="hp-btn hp-btn--cream"
+            >
+              {{ section.settings.button_2_label | escape }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="hp-abt-hero__stats" data-hp-reveal>
+        {%- for block in section.blocks -%}
+          <li class="hp-abt-hero__stat" {{ block.shopify_attributes }}>
+            <span
+              class="hp-abt-hero__stat-value"
+              {% if block.settings.count %}data-hp-count="{{ block.settings.value | escape }}"{% endif %}
+            >
+              {{- block.settings.value | escape -}}
+            </span>
+            <span class="hp-abt-hero__stat-label">{{ block.settings.label | escape }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.show_cue -%}
+    <span class="hp-abt-hero__cue" aria-hidden="true"></span>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "THP About Hero",
+  "tag": "section",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Background video URL",
+      "info": "Optional .mp4 file URL (Content > Files). Plays muted on top of the image."
+    },
+    {
+      "type": "select",
+      "id": "focal",
+      "label": "Image focus",
+      "options": [
+        { "value": "center", "label": "Centre" },
+        { "value": "top", "label": "Top" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    { "type": "range", "id": "scrim", "label": "Overlay strength", "min": 30, "max": 95, "step": 5, "unit": "%", "default": 78 },
+    { "type": "color", "id": "scrim_color", "label": "Overlay colour", "default": "#0c2627" },
+    { "type": "checkbox", "id": "show_cue", "label": "Show scroll cue", "default": true },
+
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our Story · Islamabad, Pakistan" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Colour, Clay and the Craft of a Well-Set Table" },
+    {
+      "type": "richtext",
+      "id": "lede",
+      "label": "Intro",
+      "default": "<p>The Home Palette began with a simple frustration: beautiful tableware in Pakistan was either imported and priced out of reach, or made locally and impossible to find. So we went looking for the makers ourselves — and built a palette worth setting a table around.</p>"
+    },
+
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "button_label", "label": "Primary button", "default": "Shop the Collections" },
+    { "type": "url", "id": "button_link", "label": "Primary link" },
+    { "type": "text", "id": "button_2_label", "label": "Secondary button", "default": "Talk to Us" },
+    { "type": "url", "id": "button_2_link", "label": "Secondary link" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "10+" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Collections" },
+        {
+          "type": "checkbox",
+          "id": "count",
+          "label": "Count up on scroll",
+          "info": "Animates the number. Leave off for values like “3–5 days”.",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "THP About Hero",
+      "blocks": [
+        { "type": "stat" },
+        { "type": "stat", "settings": { "value": "1,000+", "label": "Tables set" } },
+        { "type": "stat", "settings": { "value": "100%", "label": "Hand-finished" } },
+        { "type": "stat", "settings": { "value": "3–5 days", "label": "Nationwide delivery", "count": false } }
+      ]
+    }
+  ]
+}
+{% endschema %}
