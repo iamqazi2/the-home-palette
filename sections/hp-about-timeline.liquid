@@ -201,20 +201,18 @@
               <p class="hp-abt-time__text">{{ block.settings.text | escape }}</p>
             {%- endif -%}
             {%- comment -%}
-              The URL is captured and checked rather than testing the picker
-              value alone: a reference that no longer resolves still passes
-              `!= blank` but yields an empty src, which paints a broken-image
-              box on the card. No image is better than a broken one.
+              image_tag only accepts the direct output of image_url — capturing
+              that URL into a string first makes Shopify raise "input to
+              image_tag must be an image_url", so the chain stays inline and
+              the picker value is what gets guarded.
             {%- endcomment -%}
-            {%- capture thumb_src -%}{{ block.settings.image | image_url: width: 900 }}{%- endcapture -%}
-            {%- if thumb_src != blank -%}
+            {%- if block.settings.image != blank -%}
               <div class="hp-abt-time__thumb">
-                {% # theme-check-disable RemoteAsset %}
                 {{
-                  thumb_src
+                  block.settings.image
+                  | image_url: width: 900
                   | image_tag: widths: '360, 600, 900', sizes: '(min-width: 990px) 40vw, 92vw', loading: 'lazy', alt: block.settings.title
                 }}
-                {% # theme-check-enable RemoteAsset %}
               </div>
             {%- endif -%}
           </div>

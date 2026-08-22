@@ -176,28 +176,28 @@
   <div class="hp-container">
     <div class="hp-abt-story__grid">
       <div class="hp-abt-story__media">
-        {%- capture main_src -%}{{ section.settings.image | image_url: width: 1400 }}{%- endcapture -%}
-        {%- capture inset_src -%}{{ section.settings.image_2 | image_url: width: 800 }}{%- endcapture -%}
+        {%- comment -%}
+          image_tag only accepts the direct output of image_url; a captured
+          string raises "input to image_tag must be an image_url".
+        {%- endcomment -%}
         <div class="hp-abt-story__main" data-hp-reveal>
-          {%- if main_src != blank -%}
-            {% # theme-check-disable RemoteAsset %}
+          {%- if section.settings.image != blank -%}
             {{
-              main_src
+              section.settings.image
+              | image_url: width: 1400
               | image_tag: widths: '500, 750, 1000, 1400', sizes: '(min-width: 990px) 44vw, 92vw', loading: 'lazy', alt: main_alt
             }}
-            {% # theme-check-enable RemoteAsset %}
           {%- else -%}
             {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
           {%- endif -%}
         </div>
-        {%- if inset_src != blank -%}
+        {%- if section.settings.image_2 != blank -%}
           <div class="hp-abt-story__inset" data-hp-reveal>
-            {% # theme-check-disable RemoteAsset %}
             {{
-              inset_src
+              section.settings.image_2
+              | image_url: width: 800
               | image_tag: widths: '300, 500, 800', sizes: '(min-width: 990px) 18vw, 40vw', loading: 'lazy', alt: second_alt
             }}
-            {% # theme-check-enable RemoteAsset %}
           </div>
         {%- endif -%}
         {%- if section.settings.badge_value != blank -%}
