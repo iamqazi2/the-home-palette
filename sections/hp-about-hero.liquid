@@ -50,13 +50,28 @@
     transition: opacity 1.2s var(--hp-ease);
   }
   .hp-abt-hero__media video.is-playing { opacity: 1; }
+  /* Same three-layer treatment as the landing-page hero: a directional wash,
+     a flat floor beneath it, then a vignette. The floor is what guarantees a
+     minimum contrast no matter which frame of the video is showing — a pure
+     gradient gets washed out by bright, busy food footage, which is exactly
+     what happened here. */
   .hp-abt-hero__scrim {
     position: absolute;
     inset: 0;
     z-index: 1;
     background:
       linear-gradient(180deg, rgba({{ scrim_rgb }}, {{ a_low }}) 0%, rgba({{ scrim_rgb }}, {{ a_mid }}) 52%, rgba({{ scrim_rgb }}, {{ a_full }}) 100%),
-      linear-gradient(90deg, rgba({{ scrim_rgb }}, {{ a_mid }}) 0%, rgba({{ scrim_rgb }}, 0) 78%);
+      linear-gradient(100deg, rgba({{ scrim_rgb }}, {{ a_full }}) 0%, rgba({{ scrim_rgb }}, {{ a_mid }}) 48%, rgba({{ scrim_rgb }}, {{ a_low }}) 100%),
+      rgba({{ scrim_rgb }}, {{ a_low | at_least: 0.28 }});
+  }
+  .hp-abt-hero__vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 90% at 50% 45%, transparent 32%, rgba(8, 26, 27, 0.62) 100%),
+      linear-gradient(to top, rgba(8, 26, 27, 0.58) 0%, transparent 34%);
   }
   .hp-abt-hero__inner {
     position: relative;
@@ -66,6 +81,24 @@
     padding-bottom: clamp(3.2rem, 5vw, 5.6rem);
   }
   .hp-abt-hero__copy { max-width: 72rem; }
+  {%- if section.settings.text_shade -%}
+    /* Localised shade behind the copy block, so the heading holds up even on a
+       frame where the wide scrim alone is not quite enough. */
+    .hp-abt-hero__copy { position: relative; }
+    .hp-abt-hero__copy::before {
+      content: '';
+      position: absolute;
+      inset: -3.2rem -4rem;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse 78% 92% at 22% 50%,
+        rgba(8, 26, 27, 0.6),
+        rgba(8, 26, 27, 0.32) 55%,
+        transparent 80%
+      );
+    }
+  {%- endif -%}
   .hp-abt-hero__title {
     margin: 1.6rem 0 0;
     font-size: var(--hp-h-page);
@@ -198,6 +231,7 @@
     {%- endif -%}
   </div>
   <div class="hp-abt-hero__scrim"></div>
+  <div class="hp-abt-hero__vignette"></div>
 
   <div class="hp-abt-hero__inner hp-container">
     <div class="hp-abt-hero__copy">
@@ -286,6 +320,13 @@
     { "type": "range", "id": "scrim", "label": "Overlay strength", "min": 30, "max": 95, "step": 5, "unit": "%", "default": 80 },
     { "type": "color", "id": "scrim_color", "label": "Overlay colour", "default": "#0c2627" },
     { "type": "checkbox", "id": "show_cue", "label": "Show scroll cue", "default": true },
+    {
+      "type": "checkbox",
+      "id": "text_shade",
+      "label": "Shade behind the text",
+      "info": "Pools extra darkness behind the heading and intro. Keep on over busy or bright imagery.",
+      "default": true
+    },
 
     { "type": "header", "content": "Copy" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our Story · Islamabad, Pakistan" },

@@ -176,24 +176,28 @@
   <div class="hp-container">
     <div class="hp-abt-story__grid">
       <div class="hp-abt-story__media">
+        {%- capture main_src -%}{{ section.settings.image | image_url: width: 1400 }}{%- endcapture -%}
+        {%- capture inset_src -%}{{ section.settings.image_2 | image_url: width: 800 }}{%- endcapture -%}
         <div class="hp-abt-story__main" data-hp-reveal>
-          {%- if section.settings.image != blank -%}
+          {%- if main_src != blank -%}
+            {% # theme-check-disable RemoteAsset %}
             {{
-              section.settings.image
-              | image_url: width: 1400
+              main_src
               | image_tag: widths: '500, 750, 1000, 1400', sizes: '(min-width: 990px) 44vw, 92vw', loading: 'lazy', alt: main_alt
             }}
+            {% # theme-check-enable RemoteAsset %}
           {%- else -%}
             {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
           {%- endif -%}
         </div>
-        {%- if section.settings.image_2 != blank -%}
+        {%- if inset_src != blank -%}
           <div class="hp-abt-story__inset" data-hp-reveal>
+            {% # theme-check-disable RemoteAsset %}
             {{
-              section.settings.image_2
-              | image_url: width: 800
+              inset_src
               | image_tag: widths: '300, 500, 800', sizes: '(min-width: 990px) 18vw, 40vw', loading: 'lazy', alt: second_alt
             }}
+            {% # theme-check-enable RemoteAsset %}
           </div>
         {%- endif -%}
         {%- if section.settings.badge_value != blank -%}

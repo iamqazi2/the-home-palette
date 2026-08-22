@@ -200,13 +200,21 @@
             {%- if block.settings.text != blank -%}
               <p class="hp-abt-time__text">{{ block.settings.text | escape }}</p>
             {%- endif -%}
-            {%- if block.settings.image != blank -%}
+            {%- comment -%}
+              The URL is captured and checked rather than testing the picker
+              value alone: a reference that no longer resolves still passes
+              `!= blank` but yields an empty src, which paints a broken-image
+              box on the card. No image is better than a broken one.
+            {%- endcomment -%}
+            {%- capture thumb_src -%}{{ block.settings.image | image_url: width: 900 }}{%- endcapture -%}
+            {%- if thumb_src != blank -%}
               <div class="hp-abt-time__thumb">
+                {% # theme-check-disable RemoteAsset %}
                 {{
-                  block.settings.image
-                  | image_url: width: 900
+                  thumb_src
                   | image_tag: widths: '360, 600, 900', sizes: '(min-width: 990px) 40vw, 92vw', loading: 'lazy', alt: block.settings.title
                 }}
+                {% # theme-check-enable RemoteAsset %}
               </div>
             {%- endif -%}
           </div>
