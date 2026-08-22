@@ -1037,11 +1037,17 @@
   }
 
   /* ---- <hp-process> — sticky factory walk -------------------------------
-     Whichever step is nearest the middle of the viewport becomes active: its
+     Whichever step the reader is actually looking at becomes active: its
      photograph cross-fades into the sticky frame, its caption and number
-     update, and the progress bar advances. The observer band is a thin slice
-     across the middle of the screen, which is what makes the switch happen at
-     the point the visitor is actually reading rather than at the top edge.
+     update, and the progress bar advances.
+
+     This measures against a "reading line" — the middle of the space beside
+     the sticky frame — on every scroll frame, rather than watching an
+     IntersectionObserver band. The observer version fell a step behind:
+     entries only fire as an element crosses the band edge, so with steps
+     taller than the band two of them could be inside it at once and the
+     lowest index won, leaving the photograph showing the step above the one
+     being read.
   ---------------------------------------------------------------------- */
   var HpProcess = (function () {
     function HpProcess() { return Reflect.construct(HTMLElement, [], HpProcess); }
@@ -1055,28 +1061,66 @@
       el.numEl = el.querySelector('[data-hp-proc-num]');
       el.capEl = el.querySelector('[data-hp-proc-caption]');
       el.fillEl = el.querySelector('[data-hp-proc-fill]');
+      el.frame = el.querySelector('.hp-abt-proc__stack');
       if (!el.steps.length) return;
 
+      el.active = -1;
       el.setActive(0);
-      if (!('IntersectionObserver' in window)) return;
 
-      el.visible = [];
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          var i = el.steps.indexOf(entry.target);
-          var at = el.visible.indexOf(i);
-          if (entry.isIntersecting && at === -1) el.visible.push(i);
-          if (!entry.isIntersecting && at !== -1) el.visible.splice(at, 1);
+      var ticking = false;
+      el.onScroll = function () {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(function () {
+          ticking = false;
+          el.sync();
         });
-        if (!el.visible.length) return;
-        el.setActive(Math.min.apply(null, el.visible));
-      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
-      el.steps.forEach(function (s) { io.observe(s); });
-      el.observer = io;
+      };
+      window.addEventListener('scroll', el.onScroll, { passive: true });
+      window.addEventListener('resize', el.onScroll);
+      // images settle after layout and shift every step's position
+      window.addEventListener('load', el.onScroll);
+      el.sync();
     };
 
     HpProcess.prototype.disconnectedCallback = function () {
-      if (this.observer) this.observer.disconnect();
+      if (!this.onScroll) return;
+      window.removeEventListener('scroll', this.onScroll);
+      window.removeEventListener('resize', this.onScroll);
+      window.removeEventListener('load', this.onScroll);
+    };
+
+    /* The line to measure against: where the middle of the sticky frame sits
+       once pinned — taken from the sticky offset rather than the frame's
+       current box, because before it pins the frame sits low in the viewport
+       and would make the second step active on arrival at the section. */
+    HpProcess.prototype.readingLine = function () {
+      var vh = window.innerHeight;
+      var media = this.frame && this.frame.parentElement;
+      if (this.frame && this.frame.offsetParent && media) {
+        var top = parseFloat(window.getComputedStyle(media).top);
+        var h = this.frame.getBoundingClientRect().height;
+        if (!isNaN(top) && h) {
+          return Math.max(vh * 0.15, Math.min(top + h / 2, vh * 0.85));
+        }
+      }
+      return vh / 2;
+    };
+
+    HpProcess.prototype.sync = function () {
+      var el = this;
+      var line = el.readingLine();
+      var best = 0;
+      var bestGap = Infinity;
+
+      for (var i = 0; i < el.steps.length; i++) {
+        var r = el.steps[i].getBoundingClientRect();
+        if (line >= r.top && line <= r.bottom) { best = i; bestGap = 0; break; }
+        // in the gap between two steps (or past the ends): take the nearest
+        var gap = line < r.top ? r.top - line : line - r.bottom;
+        if (gap < bestGap) { bestGap = gap; best = i; }
+      }
+      el.setActive(best);
     };
 
     HpProcess.prototype.setActive = function (i) {

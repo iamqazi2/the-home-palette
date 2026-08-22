@@ -238,7 +238,7 @@
         "step_6"
       ],
       "settings": {
-        "bg_color": "#123536",
+        "bg_color": "#257575",
         "accent_color": "#7fc8be",
         "flip": false,
         "center_head": true,
@@ -323,7 +323,9 @@
         "columns": 3,
         "eyebrow": "Chapter Three — What We Stand For",
         "heading": "Six Promises We Keep on Every Order",
-        "text": "Not a mission statement — the working rules we hold ourselves to, order after order."
+        "text": "Not a mission statement — the working rules we hold ourselves to, order after order.",
+        "card_style": "gradient",
+        "card_color": "#257575"
       }
     },
     "hp_about_timeline": {
@@ -334,7 +336,8 @@
           "settings": {
             "year": "2024",
             "title": "The first collection",
-            "text": "The Home Palette opens with a single dinner set, a studio in Paradise Commercial, Bahria Town Phase 4, and a long list of potteries worth visiting."
+            "text": "The Home Palette opens with a single dinner set, a studio in Paradise Commercial, Bahria Town Phase 4, and a long list of potteries worth visiting.",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp"
           }
         },
         "mile_2": {
@@ -360,7 +363,8 @@
           "settings": {
             "year": "2025",
             "title": "Hospitality begins",
-            "text": "Cafés, restaurants and hotels start ordering by the crate. Theme consultation and tailored packages follow soon after."
+            "text": "Cafés, restaurants and hotels start ordering by the crate. Theme consultation and tailored packages follow soon after.",
+            "image": "shopify://shop_images/IMG_8876.heic"
           }
         },
         "mile_5": {
@@ -377,7 +381,8 @@
           "settings": {
             "year": "Today",
             "title": "One palette, a thousand tables",
-            "text": "Ten collections, fourteen colours and deliveries to every major city in Pakistan — with the next collection already on the wheel."
+            "text": "Ten collections, fourteen colours and deliveries to every major city in Pakistan — with the next collection already on the wheel.",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp"
           }
         }
       },
@@ -390,31 +395,128 @@
         "mile_6"
       ],
       "settings": {
-        "bg_color": "#fffdf4",
+        "bg_color": "#fff9df",
         "accent_color": "#257575",
         "accent_2_color": "#7fc8be",
         "center_head": true,
         "eyebrow": "Chapter Four — The Journey",
         "heading": "From One Dinner Set to Ten Collections",
-        "text": "A short history of the palette — and where it is headed next."
+        "text": "A short history of the palette — and where it is headed next.",
+        "card_style": "gradient",
+        "card_color": "#257575"
       }
     },
-    "hp_about_cta": {
-      "type": "hp-cta-band",
+    "hp_about_reviews": {
+      "type": "hp-video-reviews",
+      "blocks": {
+        "rev_01": {
+          "type": "video",
+          "settings": {
+            "name": "Ayesha K.",
+            "role": "Home Chef · Lahore"
+          }
+        },
+        "rev_02": {
+          "type": "text",
+          "settings": {
+            "quote": "Packaging was immaculate and the pieces feel like heirlooms. Our whole restaurant switched over. Worth every rupee.",
+            "name": "Bilal R.",
+            "role": "Restaurateur · Karachi",
+            "stars": 5
+          }
+        },
+        "rev_03": {
+          "type": "text",
+          "settings": {
+            "quote": "The reactive glaze is even more beautiful in person. Every guest asks where the set is from.",
+            "name": "Hina F.",
+            "role": "Event Stylist",
+            "stars": 5
+          }
+        },
+        "rev_04": {
+          "type": "video",
+          "settings": {
+            "name": "Sana M.",
+            "role": "Host · Islamabad"
+          }
+        },
+        "rev_05": {
+          "type": "text",
+          "settings": {
+            "quote": "Bought the dinner set for our new home — it made the whole table feel special. Ordering the tea set next.",
+            "name": "Zara A.",
+            "role": "Newlywed · Rawalpindi",
+            "stars": 5
+          }
+        },
+        "rev_06": {
+          "type": "text",
+          "settings": {
+            "quote": "Consistent quality across every reorder. Hand-inspected really shows. Our go-to for banquet serveware now.",
+            "name": "Omar S.",
+            "role": "Hotel F&B Manager",
+            "stars": 5
+          }
+        },
+        "rev_07": {
+          "type": "video",
+          "settings": {
+            "name": "Usman T.",
+            "role": "Cafe Owner · Multan"
+          }
+        },
+        "rev_08": {
+          "type": "text",
+          "settings": {
+            "quote": "Ordered twice for our restaurant. The glaze survives a full service and still looks handmade.",
+            "name": "Imran S.",
+            "role": "Chef · Islamabad",
+            "stars": 5
+          }
+        },
+        "rev_09": {
+          "type": "text",
+          "settings": {
+            "quote": "Gifted a dinner set for my sister’s wedding — she called it the best gift of the day.",
+            "name": "Mahnoor A.",
+            "role": "Lahore",
+            "stars": 5
+          }
+        },
+        "rev_10": {
+          "type": "text",
+          "settings": {
+            "quote": "Delivery was quick and every piece arrived perfectly wrapped. Zero breakage.",
+            "name": "Danish K.",
+            "role": "Karachi",
+            "stars": 5
+          }
+        }
+      },
+      "block_order": [
+        "rev_01",
+        "rev_02",
+        "rev_03",
+        "rev_04",
+        "rev_05",
+        "rev_06",
+        "rev_07",
+        "rev_08",
+        "rev_09",
+        "rev_10"
+      ],
       "settings": {
-        "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
-        "duotone": true,
-        "eyebrow": "Set Your Table With Us",
-        "heading": "Start With One Piece. Build a Palette.",
-        "text": "Browse the collections, or tell us what your table needs — homes, cafés and hotels all start with the same conversation.",
-        "button_label": "Shop All Collections",
-        "link": "shopify://collections",
-        "scrim": 90,
-        "scrim_color": "#0c2627",
-        "layout": "split",
-        "flip": true,
-        "panel_color": "#257575",
-        "text_color": "#fff9df"
+        "eyebrow": "Real Tables · Real Reviews",
+        "heading": "What People Say About Their Palette",
+        "text": "Homes, hosts and restaurants across Pakistan, on the pieces they set their tables with.",
+        "speed": 5,
+        "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
+        "loop_previews": false,
+        "bg_color": "#257575",
+        "text_color": "#fff9df",
+        "eyebrow_color": "#fff9df",
+        "card_color": "#1c5b5b"
       }
     }
   },
@@ -425,6 +527,6 @@
     "hp_about_process",
     "hp_about_values",
     "hp_about_timeline",
-    "hp_about_cta"
+    "hp_about_reviews"
   ]
 }

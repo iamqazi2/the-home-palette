@@ -9,6 +9,8 @@
 {%- liquid
   assign accent = section.settings.accent_color | default: '#257575'
   assign rail = 'rgba(37, 85, 80, 0.14)'
+  assign card_style = section.settings.card_style | default: 'paper'
+  assign card_base = section.settings.card_color | default: '#257575'
 -%}
 
 {%- style -%}
@@ -153,6 +155,22 @@
     .hp-abt-time__item .hp-abt-time__card::after { right: -2.7rem; }
     .hp-abt-time__item:nth-child(even) .hp-abt-time__card::after { left: -2.7rem; right: auto; }
   }
+
+  {%- if card_style != 'paper' -%}
+    /* Dark cards — the gradient sits on top of the flat colour, since on its
+       own it is fully transparent for the first 30% of the card. */
+    .hp-abt-time__card {
+      background-color: {{ card_base }};
+      {%- if card_style == 'gradient' %}
+      background-image: linear-gradient(180deg, rgba(18, 53, 54, 0) 30%, rgba(18, 53, 54, 0.55) 62%, rgba(12, 38, 39, 0.92) 100%);
+      {%- endif %}
+      border-color: rgba(255, 249, 223, 0.14);
+    }
+    .hp-abt-time__year { background: rgba(255, 249, 223, 0.16); color: var(--hp-cream); }
+    .hp-abt-time__title { color: var(--hp-cream); }
+    .hp-abt-time__text { color: rgba(255, 249, 223, 0.8); }
+    .hp-abt-time__thumb { background: rgba(255, 249, 223, 0.08); }
+  {%- endif -%}
 {%- endstyle -%}
 
 <div class="hp-abt-time hp-section">
@@ -207,6 +225,18 @@
   "max_blocks": 10,
   "settings": [
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#fffdf4" },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card style",
+      "options": [
+        { "value": "paper", "label": "White card" },
+        { "value": "teal", "label": "Solid teal" },
+        { "value": "gradient", "label": "Teal with deep gradient" }
+      ],
+      "default": "paper"
+    },
+    { "type": "color", "id": "card_color", "label": "Card colour", "info": "Used by the teal and gradient card styles.", "default": "#257575" },
     { "type": "color", "id": "accent_color", "label": "Rail colour", "default": "#257575" },
     { "type": "color", "id": "accent_2_color", "label": "Rail colour (end)", "default": "#7fc8be" },
     { "type": "checkbox", "id": "center_head", "label": "Centre the heading", "default": true },

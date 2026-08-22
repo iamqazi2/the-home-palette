@@ -157,6 +157,10 @@
       transition: height 0.7s var(--hp-ease);
     }
     .hp-abt-proc__step.is-active::after { height: 100%; }
+    /* Room below the last step so it can travel up past the reading line the
+       sticky frame is pinned at — without it the final step never becomes
+       active, because the column ends while it is still below that line. */
+    .hp-abt-proc__steps { padding-bottom: clamp(6rem, 22vh, 22rem); }
   }
   .hp-abt-proc__step-head { display: flex; align-items: baseline; gap: 1.4rem; }
   .hp-abt-proc__step-index {

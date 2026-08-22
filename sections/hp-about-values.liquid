@@ -6,6 +6,11 @@
   occasion cards, rather than introducing a fourth card style.
 {% endcomment %}
 
+{%- liquid
+  assign card_style = section.settings.card_style | default: 'paper'
+  assign card_base = section.settings.card_color | default: '#257575'
+-%}
+
 {%- style -%}
   .hp-abt-values { background: {{ section.settings.bg_color | default: '#fff9df' }}; }
   .hp-abt-values__grid {
@@ -98,6 +103,29 @@
   .hp-abt-values__card:hover .hp-abt-values__link .hp-icon { transform: translateX(4px); }
   a.hp-abt-values__card { text-decoration: none; }
   a.hp-abt-values__card:focus-visible { outline: 2px solid var(--hp-teal); outline-offset: 3px; }
+
+  {%- if card_style != 'paper' -%}
+    /* Dark cards. The gradient is painted over the flat colour rather than
+       instead of it: on its own it is transparent down to 30%, which on a
+       cream page would leave the top third of every card looking unpainted. */
+    .hp-abt-values__card {
+      background-color: {{ card_base }};
+      {%- if card_style == 'gradient' %}
+      background-image: linear-gradient(180deg, rgba(18, 53, 54, 0) 30%, rgba(18, 53, 54, 0.55) 62%, rgba(12, 38, 39, 0.92) 100%);
+      {%- endif %}
+      border-color: rgba(255, 249, 223, 0.14);
+    }
+    .hp-abt-values__card::before {
+      background: linear-gradient(180deg, rgba(255, 249, 223, 0) 0%, rgba(255, 249, 223, 0.08) 100%);
+    }
+    .hp-abt-values__num { color: rgba(255, 249, 223, 0.16); }
+    .hp-abt-values__title { color: var(--hp-cream); }
+    .hp-abt-values__text { color: rgba(255, 249, 223, 0.8); }
+    .hp-abt-values__link { color: var(--hp-teal-soft); }
+    .hp-abt-values__card .hp-chip { background: rgba(255, 249, 223, 0.14); color: var(--hp-cream); }
+    .hp-abt-values__card:hover .hp-chip { background: var(--hp-cream); color: {{ card_base }}; }
+    a.hp-abt-values__card:focus-visible { outline-color: var(--hp-cream); }
+  {%- endif -%}
 {%- endstyle -%}
 
 <div class="hp-abt-values hp-section">
@@ -151,6 +179,18 @@
   "max_blocks": 8,
   "settings": [
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#fff9df" },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card style",
+      "options": [
+        { "value": "paper", "label": "White card" },
+        { "value": "teal", "label": "Solid teal" },
+        { "value": "gradient", "label": "Teal with deep gradient" }
+      ],
+      "default": "paper"
+    },
+    { "type": "color", "id": "card_color", "label": "Card colour", "info": "Used by the teal and gradient card styles.", "default": "#257575" },
     { "type": "checkbox", "id": "center_head", "label": "Centre the heading", "default": true },
     { "type": "checkbox", "id": "show_numbers", "label": "Show card numbers", "default": true },
     { "type": "range", "id": "columns", "label": "Columns (desktop)", "min": 2, "max": 4, "step": 1, "default": 3 },

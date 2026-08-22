@@ -26,6 +26,11 @@
 
   /* ---------- layered media ---------- */
   .hp-abt-story__media { position: relative; }
+  /* Reveals with the shared fade/rise (data-hp-reveal) rather than the
+     clip-path wipe: the wipe sets the element to inset(0 0 100% 0) on load and
+     only opens it when its ScrollTrigger fires, so anywhere that trigger does
+     not run — the theme editor being the case in point — the photograph stays
+     invisible with no way to recover. */
   .hp-abt-story__main {
     position: relative;
     border-radius: var(--hp-r-card);
@@ -171,7 +176,7 @@
   <div class="hp-container">
     <div class="hp-abt-story__grid">
       <div class="hp-abt-story__media">
-        <div class="hp-abt-story__main" data-hp-clip>
+        <div class="hp-abt-story__main" data-hp-reveal>
           {%- if section.settings.image != blank -%}
             {{
               section.settings.image
