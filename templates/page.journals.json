@@ -53,10 +53,20 @@
       "settings": {
         "hero_image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
         "eyebrow": "The Journal",
-        "heading": "The Journal",
+        "heading": "Notes From the Table",
         "text": "Styling notes, care guides and table stories from The Home Palette.",
         "bg_color": "#fffdf4",
-        "read_label": "Read the story"
+        "read_label": "Read the story",
+        "scrim": 85,
+        "scrim_color": "#0c2627",
+        "show_filter": true,
+        "all_label": "All stories",
+        "ribbon_label": "Latest",
+        "lead_card_color": "#257575",
+        "flip": false,
+        "count_label": "stories",
+        "topics_label": "topics",
+        "empty_text": "Stories are on their way."
       }
     }
   },

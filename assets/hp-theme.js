@@ -1150,6 +1150,61 @@
   })();
   if (!customElements.get('hp-process')) customElements.define('hp-process', HpProcess);
 
+  /* ---- <hp-journal-filter> — topic chips on the Journal index ------------
+     Filters the posts already on the page rather than fetching anything: the
+     whole index is a handful of blocks, so hiding and showing is instant and
+     cannot half-fail. The chips are real buttons, so keyboard and screen
+     readers get the same behaviour, and with JS off the bar is hidden by CSS
+     and every post stays visible.
+  ---------------------------------------------------------------------- */
+  var HpJournalFilter = (function () {
+    function HpJournalFilter() { return Reflect.construct(HTMLElement, [], HpJournalFilter); }
+    HpJournalFilter.prototype = Object.create(HTMLElement.prototype, { constructor: { value: HpJournalFilter } });
+    Object.setPrototypeOf(HpJournalFilter, HTMLElement);
+
+    HpJournalFilter.prototype.connectedCallback = function () {
+      var el = this;
+      el.chips = Array.prototype.slice.call(el.querySelectorAll('[data-hp-topic]'));
+      var scope = el.closest('.hp-jrnl') || document;
+      el.posts = Array.prototype.slice.call(scope.querySelectorAll('[data-hp-post]'));
+      if (!el.chips.length || !el.posts.length) return;
+
+      el.chips.forEach(function (chip) {
+        chip.addEventListener('click', function () { el.select(chip); });
+      });
+    };
+
+    HpJournalFilter.prototype.select = function (chip) {
+      var el = this;
+      var topic = chip.getAttribute('data-hp-topic') || '';
+
+      el.chips.forEach(function (c) {
+        var on = c === chip;
+        c.classList.toggle('is-active', on);
+        c.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+
+      var shown = [];
+      el.posts.forEach(function (post) {
+        var match = !topic || post.getAttribute('data-hp-tag') === topic;
+        post.hidden = !match;
+        if (match) shown.push(post);
+      });
+
+      /* The reveal animations already ran for these posts, so re-running the
+         motion engine would do nothing — animate the newly shown set here. */
+      if (hasGsap && !reducedMotion && shown.length) {
+        window.gsap.fromTo(shown,
+          { y: 18, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out', stagger: 0.05, clearProps: 'transform,opacity' });
+        window.ScrollTrigger.refresh();
+      }
+    };
+
+    return HpJournalFilter;
+  })();
+  if (!customElements.get('hp-journal-filter')) customElements.define('hp-journal-filter', HpJournalFilter);
+
   /* ---- Timeline rail ----------------------------------------------------
      The rail fills in step with the scroll (scrubbed, so it tracks the finger
      rather than playing a canned animation) and each milestone lights its dot

@@ -1,55 +1,270 @@
 {% comment %}
-  THP — Journal.
+  THP — Journal index.
 
   Built for a Shopify PAGE rather than a Blog, because that is what exists on
-  this store (/pages/journals). The trade-off is worth knowing: a Page has no
-  article list of its own, so each post is a block here and each post's own page
-  is a separate Shopify Page. A real Blog would give article URLs, tags, RSS and
-  article schema for free — if one is ever created, this section keeps working
-  and can simply be swapped for the blog template.
+  this store (/pages/journals). Each post is a block here and each post's own
+  page is a separate Shopify Page, linked by handle. A real Blog would give
+  article URLs, tags, RSS and article schema for free — if one is ever created,
+  this section keeps working and can simply be swapped for the blog template.
 
-  Posts link to /pages/<handle>, using the handle typed on each block, which is
-  what create-journal-pages.mjs creates. Get the handles matching and the whole
-  thing wires itself up.
+  Layout: a full-bleed parallax hero, a topic filter, one lead story whose copy
+  card overlaps its photograph, then a grid of the rest. Filtering lives in
+  <hp-journal-filter> (assets/hp-theme.js) and degrades to every post showing.
 {% endcomment %}
 
 {%- liquid
   assign hero_alt = section.settings.hero_image.alt | default: section.settings.heading | escape
+  assign scrim_rgb = section.settings.scrim_color | default: '#0c2627' | color_to_rgb | remove: 'rgb(' | remove: ')'
+  assign a_full = section.settings.scrim | default: 85 | divided_by: 100.0
+  assign a_mid = section.settings.scrim | default: 85 | times: 0.7 | divided_by: 100.0
+  assign a_low = section.settings.scrim | default: 85 | times: 0.28 | divided_by: 100.0
+
+  comment
+    Unique topics, in the order the posts are arranged, for the filter chips.
+    Liquid has no set type, so membership is tested against a string of keys
+    wrapped in pipes, while the names accumulate in a separate list — keeping
+    the two apart is what stops the delimiters ending up in the chip labels.
+  endcomment
+  assign topic_keys = ''
+  assign topic_names = ''
+  for block in section.blocks
+    assign tag = block.settings.tag | strip
+    if tag == blank
+      continue
+    endif
+    assign key = '|' | append: tag | append: '|'
+    unless topic_keys contains key
+      assign topic_keys = topic_keys | append: key
+      assign topic_names = topic_names | append: tag | append: '~~'
+    endunless
+  endfor
+  assign topic_list = topic_names | split: '~~'
 -%}
 
 {%- style -%}
-  .hp-journal-hero {
+  /* ---------------- hero ---------------- */
+  .hp-jrnl-hero {
     position: relative;
     display: flex;
-    align-items: center;
-    min-height: clamp(28rem, 34vw, 40rem);
-    background: var(--hp-teal);
-    color: var(--hp-cream);
+    align-items: flex-end;
     overflow: hidden;
+    min-height: clamp(38rem, 62vh, 60rem);
+    background: var(--hp-teal-ink);
+    color: var(--hp-cream);
+    --hp-heading: var(--hp-cream);
   }
-  .hp-journal-hero__media { position: absolute; inset: 0; z-index: 0; }
-  .hp-journal-hero__media img { width: 100%; height: 100%; object-fit: cover; }
-  .hp-journal-hero::after {
-    content: '';
+  .hp-jrnl-hero__media { position: absolute; inset: -8% 0; z-index: 0; height: 116%; }
+  .hp-jrnl-hero__media img { width: 100%; height: 100%; object-fit: cover; }
+  .hp-jrnl-hero__scrim {
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: linear-gradient(90deg, rgba(12, 38, 39, 0.88), rgba(18, 53, 54, 0.55));
+    background:
+      linear-gradient(180deg, rgba({{ scrim_rgb }}, {{ a_low }}) 0%, rgba({{ scrim_rgb }}, {{ a_mid }}) 55%, rgba({{ scrim_rgb }}, {{ a_full }}) 100%),
+      linear-gradient(90deg, rgba({{ scrim_rgb }}, {{ a_mid }}) 0%, rgba({{ scrim_rgb }}, 0) 80%);
   }
-  .hp-journal-hero__inner { position: relative; z-index: 2; width: 100%; padding: clamp(3.2rem, 6vw, 6rem) 0; }
-  .hp-journal-hero__eyebrow { margin: 0 0 1.4rem; }
-  .hp-journal-hero__title { margin: 0; color: var(--hp-cream); font-size: var(--hp-h-page); }
-  .hp-journal-hero__text {
+  .hp-jrnl-hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding-top: clamp(9rem, 16vh, 14rem);
+    padding-bottom: clamp(3.2rem, 5vw, 5.2rem);
+  }
+  .hp-jrnl-hero__title {
     margin: 1.4rem 0 0;
+    font-size: var(--hp-h-page);
+    color: var(--hp-cream);
+  }
+  .hp-jrnl-hero__text {
+    margin: 1.8rem 0 0;
     max-width: 56rem;
-    font-size: 1.55rem;
-    line-height: 1.75;
-    color: rgba(255, 249, 223, 0.88);
+    font-size: clamp(1.45rem, 1.5vw, 1.7rem);
+    line-height: 1.8;
+    color: rgba(255, 249, 223, 0.86);
+  }
+  .hp-jrnl-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+    margin: 2.6rem 0 0;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 249, 223, 0.72);
+  }
+  .hp-jrnl-hero__meta span { display: inline-flex; align-items: center; gap: 0.7rem; }
+
+  /* ---------------- body ---------------- */
+  .hp-jrnl { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
+
+  /* ---------------- filter ---------------- */
+  .hp-jrnl__filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: clamp(2.4rem, 3.4vw, 3.6rem);
+    padding-bottom: clamp(2rem, 2.6vw, 2.6rem);
+    border-bottom: 1px solid var(--hp-hairline-teal);
+  }
+  .hp-jrnl__chip {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.8rem;
+    border: 1.5px solid var(--hp-hairline-strong);
+    border-radius: var(--hp-r-pill);
+    background: transparent;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+    cursor: pointer;
+    transition: background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease),
+      border-color 0.35s var(--hp-ease), transform 0.35s var(--hp-ease);
+  }
+  .hp-jrnl__chip:hover { transform: translateY(-2px); border-color: var(--hp-teal); }
+  .hp-jrnl__chip.is-active {
+    background: var(--hp-teal);
+    border-color: var(--hp-teal);
+    color: var(--hp-cream);
+  }
+  .hp-jrnl__chip-count { opacity: 0.6; font-size: 1rem; }
+  .hp-jrnl__filter-note {
+    margin: 0 0 0 auto;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-taupe-soft);
+  }
+  /* Without JS the chips cannot filter anything, so they are not shown at all
+     rather than sitting there inert. */
+  html:not(.hp-js) .hp-jrnl__filter { display: none; }
+
+  /* a filtered-out post collapses out of the grid */
+  .hp-jrnl__post[hidden] { display: none; }
+
+  /* ---------------- lead story ---------------- */
+  .hp-jrnl__lead { position: relative; margin-bottom: clamp(3.2rem, 5vw, 5.6rem); }
+  .hp-jrnl__lead-link { display: block; text-decoration: none; color: inherit; }
+  .hp-jrnl__lead-media {
+    position: relative;
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: var(--hp-linen);
+  }
+  @media screen and (min-width: 990px) {
+    .hp-jrnl__lead-media { width: 78%; aspect-ratio: 16 / 9; }
+    .hp-jrnl--flip .hp-jrnl__lead-media { margin-left: auto; }
+  }
+  .hp-jrnl__lead-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.4s var(--hp-ease);
+  }
+  .hp-jrnl__lead-link:hover .hp-jrnl__lead-media img { transform: scale(1.05); }
+  .hp-jrnl__lead-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(12, 38, 39, 0) 45%, rgba(12, 38, 39, 0.5) 100%);
+    pointer-events: none;
+  }
+  .hp-jrnl__ribbon {
+    position: absolute;
+    top: 1.8rem;
+    left: 1.8rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1.5rem;
+    border-radius: var(--hp-r-pill);
+    background: var(--hp-cream);
+    color: var(--hp-teal);
+    font-family: var(--hp-font-ui);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
-  .hp-journal { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
+  /* The copy card lifts off the photograph rather than sitting under it — the
+     overlap is what makes the lead read as a feature rather than a big card. */
+  .hp-jrnl__lead-card {
+    position: relative;
+    margin: -4rem 1.6rem 0;
+    padding: clamp(2.4rem, 3.2vw, 3.6rem);
+    background: {{ section.settings.lead_card_color | default: '#257575' }};
+    background-image: linear-gradient(180deg, rgba(18, 53, 54, 0) 30%, rgba(18, 53, 54, 0.55) 62%, rgba(12, 38, 39, 0.92) 100%);
+    color: var(--hp-cream);
+    border-radius: var(--hp-r-card);
+    box-shadow: var(--hp-shadow-card);
+  }
+  @media screen and (min-width: 990px) {
+    .hp-jrnl__lead-card {
+      position: absolute;
+      right: 0;
+      bottom: -3.2rem;
+      width: 42%;
+      margin: 0;
+    }
+    .hp-jrnl--flip .hp-jrnl__lead-card { right: auto; left: 0; }
+    .hp-jrnl__lead { margin-bottom: clamp(6rem, 8vw, 9rem); }
+  }
+  .hp-jrnl__lead-tag {
+    display: inline-block;
+    margin-bottom: 1.2rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: var(--hp-r-pill);
+    background: rgba(255, 249, 223, 0.16);
+    font-family: var(--hp-font-ui);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--hp-cream);
+  }
+  .hp-jrnl__lead-title {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-size: clamp(2.4rem, 3.2vw, 3.6rem);
+    line-height: 1.16;
+    color: var(--hp-cream);
+  }
+  .hp-jrnl__lead-excerpt {
+    margin: 1.4rem 0 0;
+    font-size: 1.45rem;
+    line-height: 1.8;
+    color: rgba(255, 249, 223, 0.82);
+  }
+  .hp-jrnl__lead-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 2.2rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-cream);
+  }
+  .hp-jrnl__lead-more .hp-icon { transition: transform 0.35s var(--hp-ease); }
+  .hp-jrnl__lead-link:hover .hp-jrnl__lead-more .hp-icon { transform: translateX(5px); }
 
-  .hp-journal__card {
+  /* ---------------- post card ---------------- */
+  .hp-jrnl__card {
+    position: relative;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -59,27 +274,50 @@
     overflow: hidden;
     text-decoration: none;
     color: var(--hp-ink);
-    transition: transform 0.45s var(--hp-ease), box-shadow 0.45s var(--hp-ease);
+    transition: transform 0.45s var(--hp-ease), box-shadow 0.45s var(--hp-ease), border-color 0.45s var(--hp-ease);
   }
-  .hp-journal__card:hover { transform: translateY(-8px); box-shadow: var(--hp-shadow-card); }
-  .hp-journal__media {
+  .hp-jrnl__card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--hp-shadow-card);
+    border-color: transparent;
+  }
+  .hp-jrnl__card-media {
+    position: relative;
     display: block;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     background: var(--hp-linen);
   }
-  .hp-journal__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--hp-ease); }
-  .hp-journal__card:hover .hp-journal__media img { transform: scale(1.06); }
-  .hp-journal__body { display: flex; flex-direction: column; gap: 0.9rem; padding: 2rem 1.8rem 2.2rem; flex: 1 1 auto; }
-  .hp-journal__tag {
+  .hp-jrnl__card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--hp-ease); }
+  .hp-jrnl__card:hover .hp-jrnl__card-media img { transform: scale(1.06); }
+  .hp-jrnl__card-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(12, 38, 39, 0) 55%, rgba(12, 38, 39, 0.45) 100%);
+    opacity: 0;
+    transition: opacity 0.45s var(--hp-ease);
+  }
+  .hp-jrnl__card:hover .hp-jrnl__card-media::after { opacity: 1; }
+  .hp-jrnl__card-tag {
+    position: absolute;
+    left: 1.2rem;
+    bottom: 1.2rem;
+    z-index: 2;
+    padding: 0.55rem 1.2rem;
+    border-radius: var(--hp-r-pill);
+    background: rgba(255, 249, 223, 0.92);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
     font-family: var(--hp-font-ui);
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--hp-teal);
   }
-  .hp-journal__title {
+  .hp-jrnl__card-body { display: flex; flex-direction: column; gap: 1rem; padding: 2.2rem 2rem 2.4rem; flex: 1 1 auto; }
+  .hp-jrnl__card-title {
     margin: 0;
     font-family: var(--hp-font-display);
     font-weight: 400;
@@ -88,7 +326,7 @@
     letter-spacing: -0.004em;
     color: var(--hp-heading);
   }
-  .hp-journal__excerpt {
+  .hp-jrnl__card-excerpt {
     margin: 0;
     font-size: 1.4rem;
     line-height: 1.7;
@@ -98,82 +336,169 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .hp-journal__more {
+  .hp-jrnl__card-more {
     margin-top: auto;
-    padding-top: 1rem;
+    padding-top: 1.2rem;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     font-family: var(--hp-font-ui);
     font-size: 1.05rem;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--hp-teal);
   }
-  .hp-journal__more .hp-icon { transition: transform 0.35s var(--hp-ease); }
-  .hp-journal__card:hover .hp-journal__more .hp-icon { transform: translateX(4px); }
+  .hp-jrnl__card-more .hp-icon { transition: transform 0.35s var(--hp-ease); }
+  .hp-jrnl__card:hover .hp-jrnl__card-more .hp-icon { transform: translateX(5px); }
 
-  /* Lead story: the first post takes the full width, so the page opens with a
-     focal point rather than a flat wall of equal cards. */
-  .hp-journal__lead { margin-bottom: clamp(2.4rem, 4vw, 4rem); }
-  @media screen and (min-width: 900px) {
-    .hp-journal__lead .hp-journal__card { flex-direction: row; }
-    .hp-journal__lead .hp-journal__media { flex: 0 0 55%; aspect-ratio: auto; }
-    .hp-journal__lead .hp-journal__body { justify-content: center; padding: clamp(2.4rem, 3.4vw, 4rem); }
-    .hp-journal__lead .hp-journal__title { font-size: var(--hp-h-section); }
-    .hp-journal__lead .hp-journal__excerpt { -webkit-line-clamp: 4; font-size: 1.5rem; }
+  /* ---------------- grid ---------------- */
+  .hp-jrnl__grid {
+    display: grid;
+    gap: clamp(1.8rem, 2.6vw, 2.8rem);
+    grid-template-columns: 1fr;
   }
+  @media screen and (min-width: 750px) { .hp-jrnl__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media screen and (min-width: 1200px) { .hp-jrnl__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
-  .hp-journal__grid { display: grid; gap: clamp(1.6rem, 2.4vw, 2.4rem); grid-template-columns: 1fr; }
-  @media screen and (min-width: 750px) { .hp-journal__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media screen and (min-width: 1200px) { .hp-journal__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .hp-jrnl__empty {
+    margin: 0;
+    padding: clamp(3rem, 5vw, 5rem) 0;
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--hp-taupe);
+  }
 {%- endstyle -%}
 
-<div class="hp-journal-hero">
-  {%- if section.settings.hero_image != blank -%}
-    <div class="hp-journal-hero__media">
+<div class="hp-jrnl-hero">
+  <div class="hp-jrnl-hero__media" data-hp-parallax>
+    {%- if section.settings.hero_image != blank -%}
       {{
         section.settings.hero_image
-        | image_url: width: 2200
-        | image_tag: widths: '600, 900, 1200, 1600, 2200', sizes: '100vw', alt: hero_alt, fetchpriority: 'high'
+        | image_url: width: 2400
+        | image_tag: widths: '800, 1200, 1600, 2000, 2400', sizes: '100vw', alt: hero_alt, fetchpriority: 'high'
       }}
-    </div>
-  {%- endif -%}
-  <div class="hp-journal-hero__inner page-width">
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+  <div class="hp-jrnl-hero__scrim"></div>
+
+  <div class="hp-jrnl-hero__inner hp-container">
     {%- if section.settings.eyebrow != blank -%}
-      <p class="hp-eyebrow hp-eyebrow--light hp-journal-hero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <p class="hp-eyebrow hp-eyebrow--light" data-hp-fluid>{{ section.settings.eyebrow | escape }}</p>
     {%- endif -%}
-    <h1 class="hp-journal-hero__title">{{ section.settings.heading | default: page.title | escape }}</h1>
+    <h1 class="hp-jrnl-hero__title" data-hp-split>
+      {{- section.settings.heading | default: page.title | escape -}}
+    </h1>
     {%- if section.settings.text != blank -%}
-      <p class="hp-journal-hero__text">{{ section.settings.text }}</p>
+      <p class="hp-jrnl-hero__text" data-hp-fluid>{{ section.settings.text }}</p>
     {%- endif -%}
+    <p class="hp-jrnl-hero__meta" data-hp-reveal>
+      <span>
+        {% render 'hp-icon', icon: 'gem', size: 14 %}
+        {{ section.blocks.size }} {{ section.settings.count_label | default: 'stories' | escape }}
+      </span>
+      {%- if topic_list.size > 0 -%}
+        <span>
+          {% render 'hp-icon', icon: 'sparkles', size: 14 %}
+          {{ topic_list.size }} {{ section.settings.topics_label | default: 'topics' | escape }}
+        </span>
+      {%- endif -%}
+    </p>
   </div>
 </div>
 
-<div class="hp-journal hp-section">
+<div class="hp-jrnl hp-section{% if section.settings.flip %} hp-jrnl--flip{% endif %}">
   <div class="hp-container">
-    {%- comment -%}
-      Lead story rendered outside the loop, and the grid loop then starts at
-      offset 1. Opening the grid <div> inside the loop's first iteration and
-      closing it after the loop does render correctly, but it leaves the markup
-      unbalanced as written — which theme check flags, and which is genuinely
-      harder to edit safely later.
-    {%- endcomment -%}
-    {%- if section.blocks.size > 0 -%}
-      <div class="hp-journal__lead" data-hp-reveal {{ section.blocks.first.shopify_attributes }}>
-        {% render 'hp-journal-card', block: section.blocks.first, read_label: section.settings.read_label %}
-      </div>
-    {%- endif -%}
+    {%- if section.blocks.size == 0 -%}
+      <p class="hp-jrnl__empty">{{ section.settings.empty_text | default: 'Stories are on their way.' | escape }}</p>
+    {%- else -%}
 
-    {%- if section.blocks.size > 1 -%}
-      <div class="hp-journal__grid" data-hp-stagger>
-        {%- for block in section.blocks offset: 1 -%}
-          <div data-hp-reveal {{ block.shopify_attributes }}>
-            {% render 'hp-journal-card', block: block, read_label: section.settings.read_label %}
+      {%- if section.settings.show_filter and topic_list.size > 1 -%}
+        <hp-journal-filter class="hp-jrnl__filter" data-hp-reveal>
+          <button type="button" class="hp-jrnl__chip is-active" data-hp-topic="" aria-pressed="true">
+            {{ section.settings.all_label | default: 'All stories' | escape }}
+            <span class="hp-jrnl__chip-count">{{ section.blocks.size }}</span>
+          </button>
+          {%- for topic in topic_list -%}
+            {%- assign topic_name = topic | strip -%}
+            {%- if topic_name == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign topic_count = 0 -%}
+            {%- for block in section.blocks -%}
+              {%- assign block_tag = block.settings.tag | strip -%}
+              {%- if block_tag == topic_name -%}
+                {%- assign topic_count = topic_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+            <button type="button" class="hp-jrnl__chip" data-hp-topic="{{ topic_name | escape }}" aria-pressed="false">
+              {{ topic_name | escape }}
+              <span class="hp-jrnl__chip-count">{{ topic_count }}</span>
+            </button>
+          {%- endfor -%}
+        </hp-journal-filter>
+      {%- endif -%}
+
+      {%- assign lead = section.blocks.first -%}
+      {%- liquid
+        assign lead_url = lead.settings.url
+        if lead_url == blank and lead.settings.handle != blank
+          assign lead_url = '/pages/' | append: lead.settings.handle
+        endif
+      -%}
+      <div
+        class="hp-jrnl__lead hp-jrnl__post"
+        data-hp-post
+        data-hp-tag="{{ lead.settings.tag | strip | escape }}"
+        {{ lead.shopify_attributes }}
+      >
+        <a class="hp-jrnl__lead-link" {% if lead_url != blank %}href="{{ lead_url }}"{% endif %}>
+          <div class="hp-jrnl__lead-media" data-hp-reveal>
+            {%- if lead.settings.image != blank -%}
+              {{
+                lead.settings.image
+                | image_url: width: 1800
+                | image_tag: widths: '600, 900, 1200, 1500, 1800', sizes: '(min-width: 990px) 78vw, 100vw', loading: 'eager', alt: lead.settings.title
+              }}
+            {%- endif -%}
+            {%- if section.settings.ribbon_label != blank -%}
+              <span class="hp-jrnl__ribbon">
+                {% render 'hp-icon', icon: 'sparkles', size: 13 %}
+                {{ section.settings.ribbon_label | escape }}
+              </span>
+            {%- endif -%}
           </div>
-        {%- endfor -%}
+          <div class="hp-jrnl__lead-card" data-hp-reveal>
+            {%- if lead.settings.tag != blank -%}
+              <span class="hp-jrnl__lead-tag">{{ lead.settings.tag | escape }}</span>
+            {%- endif -%}
+            <h2 class="hp-jrnl__lead-title">{{ lead.settings.title | escape }}</h2>
+            {%- if lead.settings.excerpt != blank -%}
+              <p class="hp-jrnl__lead-excerpt">{{ lead.settings.excerpt }}</p>
+            {%- endif -%}
+            <span class="hp-jrnl__lead-more">
+              {{ section.settings.read_label | default: 'Read the story' | escape }}
+              {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+            </span>
+          </div>
+        </a>
       </div>
+
+      {%- if section.blocks.size > 1 -%}
+        <div class="hp-jrnl__grid" data-hp-stagger>
+          {%- for block in section.blocks offset: 1 -%}
+            <div
+              class="hp-jrnl__post"
+              data-hp-post
+              data-hp-tag="{{ block.settings.tag | strip | escape }}"
+              data-hp-reveal
+              {{ block.shopify_attributes }}
+            >
+              {% render 'hp-journal-card', block: block, read_label: section.settings.read_label %}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
     {%- endif -%}
   </div>
 </div>
@@ -184,17 +509,30 @@
   "tag": "section",
   "max_blocks": 24,
   "settings": [
+    { "type": "header", "content": "Hero" },
     { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "range", "id": "scrim", "label": "Overlay strength", "min": 40, "max": 95, "step": 5, "unit": "%", "default": 85 },
+    { "type": "color", "id": "scrim_color", "label": "Overlay colour", "default": "#0c2627" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Journal" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "The Journal" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Notes From the Table" },
     {
       "type": "textarea",
       "id": "text",
       "label": "Tagline",
       "default": "Styling notes, care guides and table stories from The Home Palette."
     },
+    { "type": "text", "id": "count_label", "label": "Story count label", "default": "stories" },
+    { "type": "text", "id": "topics_label", "label": "Topic count label", "default": "topics" },
+
+    { "type": "header", "content": "Stories" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#fffdf4" },
-    { "type": "text", "id": "read_label", "label": "Link label", "default": "Read the story" }
+    { "type": "color", "id": "lead_card_color", "label": "Lead story card", "default": "#257575" },
+    { "type": "checkbox", "id": "flip", "label": "Lead story card on the left", "default": false },
+    { "type": "checkbox", "id": "show_filter", "label": "Show topic filter", "default": true },
+    { "type": "text", "id": "all_label", "label": "“All” chip label", "default": "All stories" },
+    { "type": "text", "id": "ribbon_label", "label": "Lead story ribbon", "default": "Latest" },
+    { "type": "text", "id": "read_label", "label": "Link label", "default": "Read the story" },
+    { "type": "text", "id": "empty_text", "label": "Empty state", "default": "Stories are on their way." }
   ],
   "blocks": [
     {
@@ -203,7 +541,7 @@
       "settings": [
         { "type": "text", "id": "title", "label": "Title" },
         { "type": "textarea", "id": "excerpt", "label": "Excerpt" },
-        { "type": "text", "id": "tag", "label": "Category" },
+        { "type": "text", "id": "tag", "label": "Category", "info": "Also becomes a filter chip." },
         { "type": "image_picker", "id": "image", "label": "Image" },
         {
           "type": "text",

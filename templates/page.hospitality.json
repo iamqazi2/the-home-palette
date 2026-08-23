@@ -3,12 +3,45 @@
     "hosp_hero": {
       "type": "hp-about-hero",
       "blocks": {
-        "stat_1": { "type": "stat", "settings": { "value": "24+", "label": "Hospitality brands", "count": true } },
-        "stat_2": { "type": "stat", "settings": { "value": "100%", "label": "Made to your brief", "count": true } },
-        "stat_3": { "type": "stat", "settings": { "value": "14", "label": "Glaze colours", "count": true } },
-        "stat_4": { "type": "stat", "settings": { "value": "Free", "label": "Design consultation", "count": false } }
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "value": "24+",
+            "label": "Hospitality brands",
+            "count": true
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "value": "100%",
+            "label": "Made to your brief",
+            "count": true
+          }
+        },
+        "stat_3": {
+          "type": "stat",
+          "settings": {
+            "value": "14",
+            "label": "Glaze colours",
+            "count": true
+          }
+        },
+        "stat_4": {
+          "type": "stat",
+          "settings": {
+            "value": "Free",
+            "label": "Design consultation",
+            "count": false
+          }
+        }
       },
-      "block_order": ["stat_1", "stat_2", "stat_3", "stat_4"],
+      "block_order": [
+        "stat_1",
+        "stat_2",
+        "stat_3",
+        "stat_4"
+      ],
       "settings": {
         "image": "shopify://shop_images/IMG_0776.jpg",
         "video_url": "",
@@ -28,12 +61,45 @@
     "hosp_trust": {
       "type": "hp-trust-strip",
       "blocks": {
-        "t1": { "type": "item", "settings": { "icon": "gem", "title": "Premium Craftsmanship", "text": "A-quality, hand-finished pieces" } },
-        "t2": { "type": "item", "settings": { "icon": "sparkles", "title": "Bespoke Designs", "text": "Your shapes, colours and marks" } },
-        "t3": { "type": "item", "settings": { "icon": "truck", "title": "Timely Delivery", "text": "Planned around your opening date" } },
-        "t4": { "type": "item", "settings": { "icon": "heart", "title": "Free Consultation", "text": "Theme and table design included" } }
+        "t1": {
+          "type": "item",
+          "settings": {
+            "icon": "gem",
+            "title": "Premium Craftsmanship",
+            "text": "A-quality, hand-finished pieces"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Bespoke Designs",
+            "text": "Your shapes, colours and marks"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Timely Delivery",
+            "text": "Planned around your opening date"
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "icon": "heart",
+            "title": "Free Consultation",
+            "text": "Theme and table design included"
+          }
+        }
       },
-      "block_order": ["t1", "t2", "t3", "t4"],
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ],
       "settings": {
         "bg_color": "#fff9df",
         "text_color": "#252525",
@@ -44,35 +110,224 @@
     "hosp_brands": {
       "type": "hp-logo-wall",
       "blocks": {
-        "b01": { "type": "brand", "settings": { "name": "Mövenpick Hotel Centaurus Islamabad", "asset": "hp-brand-movenpick-centaurus.webp", "fit": "contain" } },
-        "b02": { "type": "brand", "settings": { "name": "Golf Club Bhurban", "asset": "hp-brand-golf-club-bhurban.webp", "fit": "" } },
-        "b03": { "type": "brand", "settings": { "name": "Escape Hotels & Resorts", "asset": "hp-brand-escape-hotels.webp", "fit": "contain" } },
-        "b04": { "type": "brand", "settings": { "name": "Loafology Bakery & Cafe", "asset": "hp-brand-loafology.webp", "fit": "contain" } },
-        "b05": { "type": "brand", "settings": { "name": "June", "asset": "hp-brand-june.webp", "fit": "" } },
-        "b06": { "type": "brand", "settings": { "name": "Basha — Turkish & Lebanese Cuisine", "asset": "hp-brand-basha.webp", "fit": "" } },
-        "b07": { "type": "brand", "settings": { "name": "Milki by Lush Crush", "asset": "hp-brand-milki.webp", "fit": "" } },
-        "b08": { "type": "brand", "settings": { "name": "The Nook Café", "asset": "hp-brand-the-nook-cafe.webp", "fit": "" } },
-        "b09": { "type": "brand", "settings": { "name": "Bakhshe's Tea House", "asset": "hp-brand-bakhshes-tea-house.webp", "fit": "" } },
-        "b10": { "type": "brand", "settings": { "name": "Infusio", "asset": "hp-brand-infusio.webp", "fit": "" } },
-        "b11": { "type": "brand", "settings": { "name": "Café Soleil", "asset": "hp-brand-cafe-soleil.webp", "fit": "" } },
-        "b12": { "type": "brand", "settings": { "name": "Alchemy", "asset": "hp-brand-alchemy.webp", "fit": "" } },
-        "b13": { "type": "brand", "settings": { "name": "Reeve's", "asset": "hp-brand-reeves.webp", "fit": "contain" } },
-        "b14": { "type": "brand", "settings": { "name": "Steak & Spaghetti Co.", "asset": "hp-brand-steak-and-spaghetti.webp", "fit": "" } },
-        "b15": { "type": "brand", "settings": { "name": "The Urban Elan", "asset": "hp-brand-the-urban-elan.webp", "fit": "" } },
-        "b16": { "type": "brand", "settings": { "name": "Voila", "asset": "hp-brand-voila.webp", "fit": "" } },
-        "b17": { "type": "brand", "settings": { "name": "Eggcellent", "asset": "hp-brand-eggcellent.webp", "fit": "contain" } },
-        "b18": { "type": "brand", "settings": { "name": "Miam'ory", "asset": "hp-brand-miamory.webp", "fit": "" } },
-        "b19": { "type": "brand", "settings": { "name": "CAP", "asset": "hp-brand-cap.webp", "fit": "" } },
-        "b20": { "type": "brand", "settings": { "name": "Lollywood Tea House", "asset": "hp-brand-lollywood-tea-house.webp", "fit": "contain" } },
-        "b21": { "type": "brand", "settings": { "name": "The Tea Lounge", "asset": "hp-brand-the-tea-lounge.webp", "fit": "" } },
-        "b22": { "type": "brand", "settings": { "name": "Tiny Troves Play Café", "asset": "hp-brand-tiny-troves.webp", "fit": "contain" } },
-        "b23": { "type": "brand", "settings": { "name": "", "asset": "hp-brand-calligraphy-mark.webp", "fit": "contain" } },
-        "b24": { "type": "brand", "settings": { "name": "", "asset": "hp-brand-z-mark.webp", "fit": "contain" } }
+        "b01": {
+          "type": "brand",
+          "settings": {
+            "name": "Mövenpick Hotel Centaurus Islamabad",
+            "asset": "hp-brand-movenpick-centaurus.webp",
+            "fit": "contain"
+          }
+        },
+        "b02": {
+          "type": "brand",
+          "settings": {
+            "name": "Golf Club Bhurban",
+            "asset": "hp-brand-golf-club-bhurban.webp",
+            "fit": ""
+          }
+        },
+        "b03": {
+          "type": "brand",
+          "settings": {
+            "name": "Escape Hotels & Resorts",
+            "asset": "hp-brand-escape-hotels.webp",
+            "fit": "contain"
+          }
+        },
+        "b04": {
+          "type": "brand",
+          "settings": {
+            "name": "Loafology Bakery & Cafe",
+            "asset": "hp-brand-loafology.webp",
+            "fit": "contain"
+          }
+        },
+        "b05": {
+          "type": "brand",
+          "settings": {
+            "name": "June",
+            "asset": "hp-brand-june.webp",
+            "fit": ""
+          }
+        },
+        "b06": {
+          "type": "brand",
+          "settings": {
+            "name": "Basha — Turkish & Lebanese Cuisine",
+            "asset": "hp-brand-basha.webp",
+            "fit": ""
+          }
+        },
+        "b07": {
+          "type": "brand",
+          "settings": {
+            "name": "Milki by Lush Crush",
+            "asset": "hp-brand-milki.webp",
+            "fit": ""
+          }
+        },
+        "b08": {
+          "type": "brand",
+          "settings": {
+            "name": "The Nook Café",
+            "asset": "hp-brand-the-nook-cafe.webp",
+            "fit": ""
+          }
+        },
+        "b09": {
+          "type": "brand",
+          "settings": {
+            "name": "Bakhshe's Tea House",
+            "asset": "hp-brand-bakhshes-tea-house.webp",
+            "fit": ""
+          }
+        },
+        "b10": {
+          "type": "brand",
+          "settings": {
+            "name": "Infusio",
+            "asset": "hp-brand-infusio.webp",
+            "fit": ""
+          }
+        },
+        "b11": {
+          "type": "brand",
+          "settings": {
+            "name": "Café Soleil",
+            "asset": "hp-brand-cafe-soleil.webp",
+            "fit": ""
+          }
+        },
+        "b12": {
+          "type": "brand",
+          "settings": {
+            "name": "Alchemy",
+            "asset": "hp-brand-alchemy.webp",
+            "fit": ""
+          }
+        },
+        "b13": {
+          "type": "brand",
+          "settings": {
+            "name": "Reeve's",
+            "asset": "hp-brand-reeves.webp",
+            "fit": "contain"
+          }
+        },
+        "b14": {
+          "type": "brand",
+          "settings": {
+            "name": "Steak & Spaghetti Co.",
+            "asset": "hp-brand-steak-and-spaghetti.webp",
+            "fit": ""
+          }
+        },
+        "b15": {
+          "type": "brand",
+          "settings": {
+            "name": "The Urban Elan",
+            "asset": "hp-brand-the-urban-elan.webp",
+            "fit": ""
+          }
+        },
+        "b16": {
+          "type": "brand",
+          "settings": {
+            "name": "Voila",
+            "asset": "hp-brand-voila.webp",
+            "fit": ""
+          }
+        },
+        "b17": {
+          "type": "brand",
+          "settings": {
+            "name": "Eggcellent",
+            "asset": "hp-brand-eggcellent.webp",
+            "fit": "contain"
+          }
+        },
+        "b18": {
+          "type": "brand",
+          "settings": {
+            "name": "Miam'ory",
+            "asset": "hp-brand-miamory.webp",
+            "fit": ""
+          }
+        },
+        "b19": {
+          "type": "brand",
+          "settings": {
+            "name": "CAP",
+            "asset": "hp-brand-cap.webp",
+            "fit": ""
+          }
+        },
+        "b20": {
+          "type": "brand",
+          "settings": {
+            "name": "Lollywood Tea House",
+            "asset": "hp-brand-lollywood-tea-house.webp",
+            "fit": "contain"
+          }
+        },
+        "b21": {
+          "type": "brand",
+          "settings": {
+            "name": "The Tea Lounge",
+            "asset": "hp-brand-the-tea-lounge.webp",
+            "fit": ""
+          }
+        },
+        "b22": {
+          "type": "brand",
+          "settings": {
+            "name": "Tiny Troves Play Café",
+            "asset": "hp-brand-tiny-troves.webp",
+            "fit": "contain"
+          }
+        },
+        "b23": {
+          "type": "brand",
+          "settings": {
+            "name": "",
+            "asset": "hp-brand-calligraphy-mark.webp",
+            "fit": "contain"
+          }
+        },
+        "b24": {
+          "type": "brand",
+          "settings": {
+            "name": "",
+            "asset": "hp-brand-z-mark.webp",
+            "fit": "contain"
+          }
+        }
       },
       "block_order": [
-        "b01", "b02", "b03", "b04", "b05", "b06", "b07", "b08",
-        "b09", "b10", "b11", "b12", "b13", "b14", "b15", "b16",
-        "b17", "b18", "b19", "b20", "b21", "b22", "b23", "b24"
+        "b01",
+        "b02",
+        "b03",
+        "b04",
+        "b05",
+        "b06",
+        "b07",
+        "b08",
+        "b09",
+        "b10",
+        "b11",
+        "b12",
+        "b13",
+        "b14",
+        "b15",
+        "b16",
+        "b17",
+        "b18",
+        "b19",
+        "b20",
+        "b21",
+        "b22",
+        "b23",
+        "b24"
       ],
       "settings": {
         "mode": "grid",
@@ -117,7 +372,11 @@
           }
         }
       },
-      "block_order": ["p1", "p2", "p3"],
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ],
       "settings": {
         "image": "shopify://shop_images/IMG_8879.heic",
         "image_2": "shopify://shop_images/IMG_8878.heic",
@@ -188,7 +447,14 @@
           }
         }
       },
-      "block_order": ["v1", "v2", "v3", "v4", "v5", "v6"],
+      "block_order": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5",
+        "v6"
+      ],
       "settings": {
         "bg_color": "#fff9df",
         "center_head": true,
@@ -196,25 +462,127 @@
         "columns": 3,
         "eyebrow": "Who We Supply",
         "heading": "Crockery for Every Kind of Service",
-        "text": "If food leaves your kitchen on a plate, we can make that plate — in the quantity your room needs and the colours your brand uses."
+        "text": "If food leaves your kitchen on a plate, we can make that plate — in the quantity your room needs and the colours your brand uses.",
+        "card_style": "gradient",
+        "card_color": "#257575"
       }
     },
     "hosp_gallery": {
       "type": "hp-hosp-gallery",
       "blocks": {
-        "g01": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_0774.jpg", "venue": "Breakfast, plated", "note": "Café service" } },
-        "g02": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8876.heic", "venue": "Banquet table", "note": "Hotel service" } },
-        "g03": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_0773.jpg", "venue": "Main course", "note": "Restaurant service" } },
-        "g04": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8879.heic", "venue": "Signature colour set", "note": "Custom order" } },
-        "g05": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8883.jpg", "venue": "Breakfast spread", "note": "Hotel buffet" } },
-        "g06": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_0776.jpg", "venue": "Sharing platter", "note": "Restaurant service" } },
-        "g07": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8878.heic", "venue": "Cobalt tea service", "note": "Custom order" } },
-        "g08": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8884.heic", "venue": "Chafing service", "note": "Banquet" } },
-        "g09": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8880.heic", "venue": "Bread basket & omelette", "note": "Café breakfast" } },
-        "g10": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8881.heic", "venue": "Tea on the terrace", "note": "Resort service" } },
-        "g11": { "type": "shot", "settings": { "image": "shopify://shop_images/IMG_8886.heic", "venue": "Handi service", "note": "Banquet" } }
+        "g01": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_0774.jpg",
+            "venue": "Breakfast, plated",
+            "note": "Café service",
+            "size": "standard"
+          }
+        },
+        "g02": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8876.heic",
+            "venue": "Banquet table",
+            "note": "Hotel service",
+            "size": "standard"
+          }
+        },
+        "g03": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_0773.jpg",
+            "venue": "Main course",
+            "note": "Restaurant service",
+            "size": "wide"
+          }
+        },
+        "g04": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8879.heic",
+            "venue": "Signature colour set",
+            "note": "Custom order",
+            "size": "standard"
+          }
+        },
+        "g05": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8883.jpg",
+            "venue": "Breakfast spread",
+            "note": "Hotel buffet",
+            "size": "standard"
+          }
+        },
+        "g06": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_0776.jpg",
+            "venue": "Sharing platter",
+            "note": "Restaurant service",
+            "size": "standard"
+          }
+        },
+        "g07": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8878.heic",
+            "venue": "Cobalt tea service",
+            "note": "Custom order",
+            "size": "standard"
+          }
+        },
+        "g08": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8884.heic",
+            "venue": "Chafing service",
+            "note": "Banquet",
+            "size": "standard"
+          }
+        },
+        "g09": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8880.heic",
+            "venue": "Bread basket & omelette",
+            "note": "Café breakfast",
+            "size": "standard"
+          }
+        },
+        "g10": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8881.heic",
+            "venue": "Tea on the terrace",
+            "note": "Resort service",
+            "size": "standard"
+          }
+        },
+        "g11": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8886.heic",
+            "venue": "Handi service",
+            "note": "Banquet",
+            "size": "standard"
+          }
+        }
       },
-      "block_order": ["g01", "g02", "g03", "g04", "g05", "g06", "g07", "g08", "g09", "g10", "g11"],
+      "block_order": [
+        "g01",
+        "g02",
+        "g03",
+        "g04",
+        "g05",
+        "g06",
+        "g07",
+        "g08",
+        "g09",
+        "g10",
+        "g11"
+      ],
       "settings": {
         "bg_color": "#fff9df",
         "columns": 4,
@@ -275,9 +643,14 @@
           }
         }
       },
-      "block_order": ["s1", "s2", "s3", "s4"],
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
       "settings": {
-        "bg_color": "#123536",
+        "bg_color": "#257575",
         "accent_color": "#7fc8be",
         "flip": true,
         "center_head": true,
@@ -329,7 +702,11 @@
           }
         }
       },
-      "block_order": ["pk1", "pk2", "pk3"],
+      "block_order": [
+        "pk1",
+        "pk2",
+        "pk3"
+      ],
       "settings": {
         "bg_color": "#fffdf4",
         "featured_color": "#257575",
@@ -340,22 +717,117 @@
         "note": "Not sure which one fits? Send us your cover count and a photo of your current table setting — we will come back with a recommendation and a quote."
       }
     },
-    "hosp_cta": {
-      "type": "hp-cta-band",
+    "hosp_reviews": {
+      "type": "hp-video-reviews",
+      "blocks": {
+        "rev_01": {
+          "type": "video",
+          "settings": {
+            "name": "Ayesha K.",
+            "role": "Home Chef · Lahore"
+          }
+        },
+        "rev_02": {
+          "type": "text",
+          "settings": {
+            "quote": "Packaging was immaculate and the pieces feel like heirlooms. Our whole restaurant switched over. Worth every rupee.",
+            "name": "Bilal R.",
+            "role": "Restaurateur · Karachi",
+            "stars": 5
+          }
+        },
+        "rev_03": {
+          "type": "text",
+          "settings": {
+            "quote": "The reactive glaze is even more beautiful in person. Every guest asks where the set is from.",
+            "name": "Hina F.",
+            "role": "Event Stylist",
+            "stars": 5
+          }
+        },
+        "rev_04": {
+          "type": "video",
+          "settings": {
+            "name": "Sana M.",
+            "role": "Host · Islamabad"
+          }
+        },
+        "rev_05": {
+          "type": "text",
+          "settings": {
+            "quote": "Bought the dinner set for our new home — it made the whole table feel special. Ordering the tea set next.",
+            "name": "Zara A.",
+            "role": "Newlywed · Rawalpindi",
+            "stars": 5
+          }
+        },
+        "rev_06": {
+          "type": "text",
+          "settings": {
+            "quote": "Consistent quality across every reorder. Hand-inspected really shows. Our go-to for banquet serveware now.",
+            "name": "Omar S.",
+            "role": "Hotel F&B Manager",
+            "stars": 5
+          }
+        },
+        "rev_07": {
+          "type": "video",
+          "settings": {
+            "name": "Usman T.",
+            "role": "Cafe Owner · Multan"
+          }
+        },
+        "rev_08": {
+          "type": "text",
+          "settings": {
+            "quote": "Ordered twice for our restaurant. The glaze survives a full service and still looks handmade.",
+            "name": "Imran S.",
+            "role": "Chef · Islamabad",
+            "stars": 5
+          }
+        },
+        "rev_09": {
+          "type": "text",
+          "settings": {
+            "quote": "Gifted a dinner set for my sister’s wedding — she called it the best gift of the day.",
+            "name": "Mahnoor A.",
+            "role": "Lahore",
+            "stars": 5
+          }
+        },
+        "rev_10": {
+          "type": "text",
+          "settings": {
+            "quote": "Delivery was quick and every piece arrived perfectly wrapped. Zero breakage.",
+            "name": "Danish K.",
+            "role": "Karachi",
+            "stars": 5
+          }
+        }
+      },
+      "block_order": [
+        "rev_01",
+        "rev_02",
+        "rev_03",
+        "rev_04",
+        "rev_05",
+        "rev_06",
+        "rev_07",
+        "rev_08",
+        "rev_09",
+        "rev_10"
+      ],
       "settings": {
-        "image": "shopify://shop_images/IMG_8884.heic",
-        "duotone": true,
-        "eyebrow": "Let's Talk",
-        "heading": "Tableware That Makes Your Brand Impossible to Forget",
-        "text": "Send us your concept, your cover count, or just a photo of your current table. We will take it from there.",
-        "button_label": "WhatsApp the Hospitality Desk",
-        "link": "https://wa.me/923376111399",
-        "scrim": 90,
-        "scrim_color": "#0c2627",
-        "layout": "split",
-        "flip": false,
-        "panel_color": "#257575",
-        "text_color": "#fff9df"
+        "eyebrow": "Real Tables · Real Reviews",
+        "heading": "What Our Clients Say",
+        "text": "Restaurants, cafés and homes across Pakistan, on the pieces they serve with.",
+        "speed": 5,
+        "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
+        "loop_previews": false,
+        "bg_color": "#257575",
+        "text_color": "#fff9df",
+        "eyebrow_color": "#fff9df",
+        "card_color": "#1c5b5b"
       }
     }
   },
@@ -368,6 +840,6 @@
     "hosp_gallery",
     "hosp_process",
     "hosp_packages",
-    "hosp_cta"
+    "hosp_reviews"
   ]
 }

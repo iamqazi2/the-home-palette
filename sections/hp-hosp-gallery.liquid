@@ -1,43 +1,63 @@
 {% comment %}
   THP — hospitality gallery.
 
-  A column-flow (masonry) wall: photographs keep their own proportions instead
-  of being cropped into a uniform grid, which is what stops a mixed set of
-  portrait and landscape service shots looking like stock filler. Each tile
-  can carry a venue caption that rises on hover.
+  A mosaic on a fixed grid: tiles are one cell, two cells tall, or two cells
+  wide, packed densely so the wall ends on a straight edge.
 
-  Columns rather than grid because the shots arrive in whatever shape the
-  kitchen photographed them in, and CSS columns tile any mix without gaps.
+  It used to be a CSS column layout, which kept each photograph's own
+  proportions but balanced the columns by height — with a handful of large
+  portrait shots that left one column hanging far below the others and a band
+  of empty page beneath the rest. A fixed grid crops a little but always tiles.
+
+  Tile size defaults to the photograph's own orientation (portrait becomes a
+  tall tile) and can be overridden per block.
 {% endcomment %}
 
 {%- style -%}
   .hp-hgal { background: {{ section.settings.bg_color | default: '#fff9df' }}; }
 
   .hp-hgal__wall {
-    column-count: 2;
-    column-gap: clamp(1rem, 1.6vw, 1.8rem);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* Rows are portrait-shaped, because most service photography is shot on a
+       phone held upright — landscape shots centre-crop into them far more
+       gracefully than portraits crop into a landscape cell. */
+    grid-auto-rows: clamp(19rem, 52vw, 26rem);
+    grid-auto-flow: dense;
+    gap: clamp(1rem, 1.6vw, 1.8rem);
   }
-  @media screen and (min-width: 750px) { .hp-hgal__wall { column-count: 3; } }
-  @media screen and (min-width: 1200px) { .hp-hgal__wall { column-count: {{ section.settings.columns }}; } }
+  @media screen and (min-width: 990px) {
+    .hp-hgal__wall {
+      grid-template-columns: repeat({{ section.settings.columns }}, minmax(0, 1fr));
+      grid-auto-rows: clamp(24rem, 24vw, 34rem);
+    }
+  }
+  .hp-hgal__item--tall { grid-row: span 2; }
+  .hp-hgal__item--wide { grid-column: span 2; }
+
+  /* Safety net for a ragged final row: the last tile stretches from wherever
+     it lands to the end of the grid, so the wall always closes on a straight
+     edge no matter how many photographs are in it. A tile that already sits in
+     the last column is unaffected. */
+  .hp-hgal__item:last-child { grid-column-end: -1; }
 
   .hp-hgal__item {
     position: relative;
     display: block;
     width: 100%;
-    margin: 0 0 clamp(1rem, 1.6vw, 1.8rem);
+    height: 100%;
+    margin: 0;
     border-radius: var(--hp-r-card);
     overflow: hidden;
     background: var(--hp-linen);
-    /* a tile must not be split across two columns */
-    break-inside: avoid;
-    -webkit-column-break-inside: avoid;
     transition: transform 0.5s var(--hp-ease), box-shadow 0.5s var(--hp-ease);
   }
   .hp-hgal__item:hover { transform: translateY(-6px); box-shadow: var(--hp-shadow-card); }
   .hp-hgal__item img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     transition: transform 1.2s var(--hp-ease);
   }
   .hp-hgal__item:hover img { transform: scale(1.05); }
@@ -125,11 +145,20 @@
       {%- for block in section.blocks -%}
         {%- if block.settings.image == blank -%}{%- continue -%}{%- endif -%}
         {%- assign alt = block.settings.venue | default: section.settings.heading -%}
-        <figure class="hp-hgal__item" data-hp-reveal {{ block.shopify_attributes }}>
+        {%- liquid
+          assign size = block.settings.size
+          if size == blank or size == 'auto'
+            assign size = 'standard'
+            if block.settings.image.height > block.settings.image.width
+              assign size = 'tall'
+            endif
+          endif
+        -%}
+        <figure class="hp-hgal__item hp-hgal__item--{{ size }}" data-hp-reveal {{ block.shopify_attributes }}>
           {{
             block.settings.image
             | image_url: width: 1400
-            | image_tag: widths: '400, 600, 800, 1100, 1400', sizes: '(min-width: 1200px) 24vw, (min-width: 750px) 31vw, 47vw', loading: 'lazy', alt: alt
+            | image_tag: widths: '400, 600, 800, 1100, 1400', sizes: '(min-width: 990px) 26vw, 48vw', loading: 'lazy', alt: alt
           }}
           <span class="hp-hgal__veil"></span>
           {%- if block.settings.venue != blank or block.settings.note != blank -%}
@@ -172,7 +201,7 @@
   "max_blocks": 24,
   "settings": [
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#fff9df" },
-    { "type": "range", "id": "columns", "label": "Columns (large screens)", "min": 3, "max": 5, "step": 1, "default": 4 },
+    { "type": "range", "id": "columns", "label": "Columns (desktop)", "min": 3, "max": 5, "step": 1, "default": 4 },
     { "type": "checkbox", "id": "center_head", "label": "Centre the heading", "default": true },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "In Service" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Our Crockery, Mid-Shift" },
@@ -193,7 +222,20 @@
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Photo" },
         { "type": "text", "id": "venue", "label": "Caption", "info": "Shown on hover, e.g. the venue or the dish." },
-        { "type": "text", "id": "note", "label": "Sub-caption", "info": "Small uppercase line under the caption." }
+        { "type": "text", "id": "note", "label": "Sub-caption", "info": "Small uppercase line under the caption." },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Tile size",
+          "info": "Auto makes portrait photos tall and everything else a single cell.",
+          "options": [
+            { "value": "auto", "label": "Auto" },
+            { "value": "standard", "label": "Single cell" },
+            { "value": "tall", "label": "Tall (2 rows)" },
+            { "value": "wide", "label": "Wide (2 columns)" }
+          ],
+          "default": "auto"
+        }
       ]
     }
   ],

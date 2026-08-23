@@ -1,6 +1,7 @@
 {%- comment -%}
-  A single Journal post card. Shared by the lead story and the grid so the two
-  cannot drift apart; the lead's different shape is CSS only (.hp-journal__lead).
+  A single Journal post card for the grid. The lead story has its own markup in
+  the section, because its shape (overlapping copy card) is different enough
+  that sharing one template made both harder to read.
 
   Accepts:
     block       {object} a "post" block from the THP Journal section
@@ -15,30 +16,30 @@
   assign card_alt = block.settings.title | escape
 -%}
 
-<a class="hp-journal__card" {% if post_url != blank %}href="{{ post_url }}"{% endif %}>
+<a class="hp-jrnl__card" {% if post_url != blank %}href="{{ post_url }}"{% endif %}>
   {%- if block.settings.image != blank -%}
-    <span class="hp-journal__media">
+    <span class="hp-jrnl__card-media">
       {{
         block.settings.image
-        | image_url: width: 1400
+        | image_url: width: 1200
         | image_tag:
-          widths: '400, 600, 900, 1200, 1400',
+          widths: '400, 600, 900, 1200',
           sizes: '(min-width: 1200px) 30vw, (min-width: 750px) 45vw, 100vw',
           alt: card_alt,
           loading: 'lazy'
       }}
+      {%- if block.settings.tag != blank -%}
+        <span class="hp-jrnl__card-tag">{{ block.settings.tag | escape }}</span>
+      {%- endif -%}
     </span>
   {%- endif -%}
 
-  <span class="hp-journal__body">
-    {%- if block.settings.tag != blank -%}
-      <span class="hp-journal__tag">{{ block.settings.tag | escape }}</span>
-    {%- endif -%}
-    <h2 class="hp-journal__title">{{ block.settings.title | escape }}</h2>
+  <span class="hp-jrnl__card-body">
+    <h2 class="hp-jrnl__card-title">{{ block.settings.title | escape }}</h2>
     {%- if block.settings.excerpt != blank -%}
-      <p class="hp-journal__excerpt">{{ block.settings.excerpt }}</p>
+      <p class="hp-jrnl__card-excerpt">{{ block.settings.excerpt }}</p>
     {%- endif -%}
-    <span class="hp-journal__more">
+    <span class="hp-jrnl__card-more">
       {{ read_label | default: 'Read the story' | escape }}
       {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
     </span>
