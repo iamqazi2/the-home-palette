@@ -1,0 +1,99 @@
+{% comment %}
+  Advance payment gate — cart-side notice.
+
+  Orders at or above a threshold take a percentage up front (paid by XPay link
+  after checkout) and the balance on delivery. Shopify's checkout cannot split a
+  payment, so this snippet is UX and record-keeping only: it shows the customer
+  the split, takes their consent, and writes the figures onto the cart as
+  attributes so the resulting order carries them in Additional details. Actual
+  enforcement — no dispatch until the advance is recorded — lives server-side.
+
+  Rendered inside both cart surfaces, which Shopify re-renders on every cart
+  change, so the Liquid figures below recompute themselves. Only the consent
+  state needs JS (assets/hp-advance-gate.js).
+
+  Money in Liquid is in the minor unit: Rs 10,000 is 1000000. The threshold
+  setting is entered in rupees, hence `times: 100`.
+
+  The advance divides by 10000.0 rather than 100 twice: the float divisor forces
+  float division, and `floor` then rounds down explicitly. Dividing two integers
+  in Shopify Liquid silently truncates, which would give the same answer here by
+  accident — this way the intent is on the page and the result does not depend
+  on the operand types. Flooring means the advance never rounds up past the
+  stated percentage, and the balance absorbs the paisa.
+{% endcomment %}
+
+{%- liquid
+  assign threshold = settings.hp_advance_threshold | times: 100
+  assign percent = settings.hp_advance_percent
+
+  assign applies = false
+  if settings.hp_advance_enabled and threshold > 0 and percent > 0
+    if cart.total_price >= threshold
+      assign applies = true
+    endif
+  endif
+
+  assign advance = cart.total_price | times: percent | divided_by: 10000.0 | floor | times: 100
+  assign balance = cart.total_price | minus: advance
+-%}
+
+<div
+  class="hp-advance{% unless applies %} hp-advance--off{% endunless %}"
+  data-hp-advance
+  data-form-id="{{ form_id }}"
+  data-applies="{% if applies %}true{% else %}false{% endif %}"
+  data-require-consent="{{ settings.hp_advance_require_consent }}"
+  {% unless applies %}
+    hidden
+  {% endunless %}
+>
+  <p class="hp-advance__eyebrow">{{ percent }}% advance required</p>
+
+  {%- if settings.hp_advance_copy != blank -%}
+    <div class="hp-advance__copy rte">{{ settings.hp_advance_copy }}</div>
+  {%- endif -%}
+
+  <dl class="hp-advance__split">
+    <div class="hp-advance__cell">
+      <dt>Pay now</dt>
+      <dd>{{ advance | money }}</dd>
+      <p>{{ percent }}% advance via XPay</p>
+    </div>
+    <div class="hp-advance__cell">
+      <dt>Pay on delivery</dt>
+      <dd>{{ balance | money }}</dd>
+      <p>Cash to the courier</p>
+    </div>
+  </dl>
+
+  {%- if applies -%}
+    <input type="hidden" name="attributes[Advance required]" value="Yes" form="{{ form_id }}">
+    <input
+      type="hidden"
+      name="attributes[Advance due]"
+      value="{{ advance | money_without_currency }} ({{ percent }}%)"
+      form="{{ form_id }}"
+    >
+    <input
+      type="hidden"
+      name="attributes[Balance on delivery]"
+      value="{{ balance | money_without_currency }}"
+      form="{{ form_id }}"
+    >
+  {%- endif -%}
+
+  {%- if settings.hp_advance_require_consent -%}
+    <label class="hp-advance__consent" for="{{ consent_id }}">
+      <input type="checkbox" id="{{ consent_id }}" data-hp-advance-consent>
+      <span>
+        I understand a {{ percent }}% advance is required to confirm this order, and that the balance is paid on
+        delivery.
+      </span>
+    </label>
+
+    <p class="hp-advance__error" data-hp-advance-error hidden role="status">
+      Please confirm the advance payment terms to continue.
+    </p>
+  {%- endif -%}
+</div>

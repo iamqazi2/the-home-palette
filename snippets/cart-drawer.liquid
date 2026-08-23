@@ -566,6 +566,11 @@
 
         <!-- CTAs -->
 
+        {% render 'hp-advance-notice',
+          form_id: 'CartDrawer-Form',
+          consent_id: 'CartDrawerAdvanceConsent'
+        %}
+
         <div class="cart__ctas" {{ block.shopify_attributes }}>
           <button
             type="submit"
