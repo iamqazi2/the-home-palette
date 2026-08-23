@@ -120,10 +120,6 @@
     "show_cart_note": true,
     "cart_drawer_collection": "platters",
     "cart_color_scheme": "scheme-2",
-    "hp_advance_enabled": true,
-    "hp_advance_threshold": 100,
-    "hp_advance_percent": 20,
-    "hp_advance_require_consent": true,
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
