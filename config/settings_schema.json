@@ -1477,7 +1477,7 @@
         "type": "checkbox",
         "id": "hp_advance_enabled",
         "label": "Enable advance payment gate",
-        "default": false
+        "default": true
       },
       {
         "type": "number",
