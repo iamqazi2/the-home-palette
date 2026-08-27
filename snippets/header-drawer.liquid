@@ -139,6 +139,22 @@
                 url: section.settings.hp_extra_link_url,
                 item_class: 'menu-drawer__menu-item list-menu__item link link--text focus-inset'
               %}
+
+              {%- comment -%}
+                Phone-only shortcuts to two home-page sections. Not rendered in
+                the desktop dropdown at all — the desktop nav is short and both
+                sections are a short scroll away there.
+              {%- endcomment -%}
+              {% render 'hp-nav-jump',
+                label: section.settings.hp_jump_1_label,
+                anchor: section.settings.hp_jump_1_anchor,
+                item_class: 'menu-drawer__menu-item list-menu__item link link--text focus-inset'
+              %}
+              {% render 'hp-nav-jump',
+                label: section.settings.hp_jump_2_label,
+                anchor: section.settings.hp_jump_2_anchor,
+                item_class: 'menu-drawer__menu-item list-menu__item link link--text focus-inset'
+              %}
             </ul>
           </nav>
           <div class="menu-drawer__utility-links">

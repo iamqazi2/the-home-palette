@@ -884,7 +884,25 @@
       "label": "Extra nav link URL",
       "default": "/blogs/journal",
       "info": "A path such as /blogs/journal. Left empty, the link points at whichever blog the store has."
-    }
+    },
+    {
+      "type": "header",
+      "content": "Phone menu shortcuts"
+    },
+    {
+      "type": "paragraph",
+      "content": "Two extra items in the phone menu that scroll to a section of the home page. They are not shown on tablets or desktop. Clear a label to remove that one."
+    },
+    { "type": "text", "id": "hp_jump_1_label", "label": "Shortcut 1", "default": "Shop by Colour" },
+    {
+      "type": "text",
+      "id": "hp_jump_1_anchor",
+      "label": "Shortcut 1 target",
+      "default": "hp-colours",
+      "info": "The id of the section to scroll to: hp-colours for Shop by Colour, hp-styles for Shop by Style."
+    },
+    { "type": "text", "id": "hp_jump_2_label", "label": "Shortcut 2", "default": "Shop by Style" },
+    { "type": "text", "id": "hp_jump_2_anchor", "label": "Shortcut 2 target", "default": "hp-styles" }
   ],
   "blocks": [
     {

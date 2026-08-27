@@ -1262,6 +1262,64 @@
     });
   }
 
+  /* ---- Jump links — phone menu shortcuts to a section -------------------
+     The href is a real URL (home page + anchor), so this only takes over when
+     the target is on the page already: it closes the menu drawer first, then
+     scrolls with the sticky header's height subtracted, which a plain anchor
+     jump cannot do — the browser would leave the section's heading tucked
+     underneath the header.
+  ---------------------------------------------------------------------- */
+  function headerOffset() {
+    var raw = getComputedStyle(doc).getPropertyValue('--hp-header-h');
+    var h = parseFloat(raw);
+    if (!isNaN(h) && h > 0) return h + 12;
+    var wrapper = document.querySelector('.header-wrapper');
+    return (wrapper ? wrapper.offsetHeight : 0) + 12;
+  }
+
+  function scrollToEl(el) {
+    var top = el.getBoundingClientRect().top + window.scrollY - headerOffset();
+    if (top < 0) top = 0;
+    if (lenis) { lenis.scrollTo(top, { duration: 1.1 }); return; }
+    window.scrollTo({ top: top, behavior: reducedMotion ? 'auto' : 'smooth' });
+  }
+
+  function closeMenuDrawer() {
+    var drawer = document.querySelector('header-drawer');
+    if (drawer && typeof drawer.closeMenuDrawer === 'function') {
+      // Dawn's own close: restores focus, unlocks the body scroll and clears
+      // the classes the overlay lock watches.
+      try { drawer.closeMenuDrawer(); return; } catch (e) {}
+    }
+    var details = document.querySelector('header-drawer details[open]');
+    if (details) details.removeAttribute('open');
+    document.body.classList.remove('overflow-hidden-mobile', 'overflow-hidden-tablet');
+  }
+
+  function initJumpLinks(root) {
+    (root || document).querySelectorAll('[data-hp-jump]').forEach(function (a) {
+      if (a.dataset.hpJumpDone) return;
+      a.dataset.hpJumpDone = '1';
+      a.addEventListener('click', function (e) {
+        var target = document.getElementById(a.getAttribute('data-hp-jump'));
+        if (!target) return;          // another page — let the href do the work
+        e.preventDefault();
+        closeMenuDrawer();
+        // let the drawer's own closing transition start before scrolling
+        window.setTimeout(function () { scrollToEl(target); }, 60);
+      });
+    });
+  }
+
+  /* Arriving from another page as /#hp-colours: the browser lands the section
+     under the sticky header, so nudge it into place once things have settled. */
+  function honourHashOffset() {
+    if (!window.location.hash) return;
+    var el = document.getElementById(window.location.hash.slice(1));
+    if (!el) return;
+    window.setTimeout(function () { scrollToEl(el); }, 250);
+  }
+
   /* ---- boot ------------------------------------------------------------- */
   function boot() {
     initOverlayScrollLock();
@@ -1273,6 +1331,8 @@
     initBgVideo(document);
     initCounters(document);
     initTimeline(document);
+    initJumpLinks(document);
+    honourHashOffset();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
@@ -1286,6 +1346,7 @@
     initBgVideo(e.target);
     initCounters(e.target);
     initTimeline(e.target);
+    initJumpLinks(e.target);
     markScrollContainers(e.target);
     initStickyChrome();
     if (hasGsap) window.ScrollTrigger.refresh();

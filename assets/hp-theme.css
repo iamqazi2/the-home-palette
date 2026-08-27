@@ -1158,6 +1158,14 @@ sticky-header.shopify-section-header-sticky {
   .header__icon--account.small-hide { display: none !important; }
 }
 
+/* Phone-menu shortcuts to home-page sections. The drawer itself is used up to
+   989px, so these are hidden from 750px up rather than relying on the drawer's
+   own breakpoint — they are meant for a phone, where those sections are a long
+   way down the page. */
+@media screen and (min-width: 750px) {
+  .hp-nav-jump { display: none !important; }
+}
+
 @media screen and (max-width: 380px) {
   /* Tightest phones: shrink both sides of the equation so the centred logo
      still clears the icon cluster. */
