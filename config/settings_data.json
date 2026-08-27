@@ -1,8 +1,17 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "logo": "shopify://shop_images/thp-logo-teal.png",
-    "logo_width": 220,
-    "favicon": "shopify://shop_images/last.png",
+    "logo_width": 150,
+    "favicon": "shopify://shop_images/thp-logo-teal.png",
     "type_header_font": "archivo_narrow_n7",
     "heading_scale": 120,
     "type_body_font": "archivo_narrow_n4",
@@ -11,11 +20,11 @@
     "spacing_sections": 0,
     "spacing_grid_horizontal": 20,
     "spacing_grid_vertical": 20,
-    "animations_reveal_on_scroll": false,
+    "animations_reveal_on_scroll": true,
     "animations_hover_elements": "none",
     "buttons_border_thickness": 1,
     "buttons_border_opacity": 100,
-    "buttons_radius": 40,
+    "buttons_radius": 6,
     "buttons_shadow_opacity": 0,
     "buttons_shadow_horizontal_offset": 0,
     "buttons_shadow_vertical_offset": 4,
@@ -29,18 +38,18 @@
     "variant_pills_shadow_blur": 5,
     "inputs_border_thickness": 1,
     "inputs_border_opacity": 55,
-    "inputs_radius": 14,
+    "inputs_radius": 6,
     "inputs_shadow_opacity": 0,
     "inputs_shadow_horizontal_offset": 0,
     "inputs_shadow_vertical_offset": 4,
     "inputs_shadow_blur": 5,
-    "card_style": "card",
+    "card_style": "standard",
     "card_image_padding": 0,
     "card_text_alignment": "left",
     "card_color_scheme": "scheme-2",
     "card_border_thickness": 1,
-    "card_border_opacity": 9,
-    "card_corner_radius": 18,
+    "card_border_opacity": 10,
+    "card_corner_radius": 6,
     "card_shadow_opacity": 0,
     "card_shadow_horizontal_offset": 0,
     "card_shadow_vertical_offset": 4,
@@ -51,7 +60,7 @@
     "collection_card_color_scheme": "scheme-2",
     "collection_card_border_thickness": 1,
     "collection_card_border_opacity": 10,
-    "collection_card_corner_radius": 18,
+    "collection_card_corner_radius": 6,
     "collection_card_shadow_opacity": 0,
     "collection_card_shadow_horizontal_offset": 0,
     "collection_card_shadow_vertical_offset": 4,
@@ -62,7 +71,7 @@
     "blog_card_color_scheme": "scheme-2",
     "blog_card_border_thickness": 1,
     "blog_card_border_opacity": 10,
-    "blog_card_corner_radius": 18,
+    "blog_card_corner_radius": 6,
     "blog_card_shadow_opacity": 0,
     "blog_card_shadow_horizontal_offset": 0,
     "blog_card_shadow_vertical_offset": 4,
@@ -76,14 +85,14 @@
     "text_boxes_shadow_blur": 5,
     "media_border_thickness": 0,
     "media_border_opacity": 10,
-    "media_radius": 18,
+    "media_radius": 6,
     "media_shadow_opacity": 0,
     "media_shadow_horizontal_offset": 0,
     "media_shadow_vertical_offset": 4,
     "media_shadow_blur": 5,
     "popup_border_thickness": 1,
     "popup_border_opacity": 50,
-    "popup_corner_radius": 18,
+    "popup_corner_radius": 6,
     "popup_shadow_opacity": 0,
     "popup_shadow_horizontal_offset": 0,
     "popup_shadow_vertical_offset": 4,
@@ -95,7 +104,7 @@
     "drawer_shadow_vertical_offset": 4,
     "drawer_shadow_blur": 5,
     "badge_position": "bottom left",
-    "badge_corner_radius": 20,
+    "badge_corner_radius": 6,
     "sale_badge_color_scheme": "scheme-4",
     "sold_out_badge_color_scheme": "scheme-5",
     "brand_headline": "Handicrafts redefined!",
@@ -160,7 +169,7 @@
       },
       "12120936241911852800": {
         "type": "shopify://apps/judge-me-reviews/blocks/reviews_tab/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-        "disabled": true,
+        "disabled": false,
         "settings": {
           "position": "left"
         }
@@ -172,9 +181,9 @@
           "background": "#fff9df",
           "background_gradient": "",
           "text": "#252525",
-          "button": "#257575",
-          "button_label": "#fff9df",
-          "secondary_button_label": "#257575",
+          "button": "#0e0606",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#000000",
           "shadow": "#0e0606"
         }
       },
@@ -183,9 +192,9 @@
           "background": "#ffffff",
           "background_gradient": "",
           "text": "#252525",
-          "button": "#257575",
-          "button_label": "#fff9df",
-          "secondary_button_label": "#257575",
+          "button": "#252525",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#252525",
           "shadow": "#252525"
         }
       },
@@ -194,9 +203,9 @@
           "background": "#716a56",
           "background_gradient": "",
           "text": "#efecec",
-          "button": "#fff9df",
+          "button": "#efecec",
           "button_label": "#716a56",
-          "secondary_button_label": "#fff9df",
+          "secondary_button_label": "#efecec",
           "shadow": "#252525"
         }
       },
@@ -205,9 +214,9 @@
           "background": "#2c332f",
           "background_gradient": "",
           "text": "#efecec",
-          "button": "#fff9df",
+          "button": "#efecec",
           "button_label": "#2c332f",
-          "secondary_button_label": "#fff9df",
+          "secondary_button_label": "#efecec",
           "shadow": "#252525"
         }
       },
@@ -216,9 +225,9 @@
           "background": "#3f5147",
           "background_gradient": "linear-gradient(57deg, rgba(249, 119, 255, 1) 8%, rgba(54, 212, 255, 1) 47%, rgba(43, 252, 135, 1) 83%)",
           "text": "#efecec",
-          "button": "#fff9df",
+          "button": "#efecec",
           "button_label": "#3f5147",
-          "secondary_button_label": "#fff9df",
+          "secondary_button_label": "#efecec",
           "shadow": "#252525"
         }
       },
@@ -227,9 +236,9 @@
           "background": "{{ shop.brand.colors.primary[0].background }}",
           "background_gradient": "",
           "text": "#252525",
-          "button": "#257575",
-          "button_label": "#fff9df",
-          "secondary_button_label": "#257575",
+          "button": "#0e0606",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#000000",
           "shadow": "#0e0606"
         }
       }
