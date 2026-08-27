@@ -266,8 +266,19 @@
           {%- liquid
             # "View all" goes to a real search results page for the colour, which
             # is a page that genuinely exists and is not limited by how many
-            # products this section chooses to show.
-            assign target = routes.search_url | append: '?q=' | append: block.settings.title | url_encode | append: '&type=product'
+            # products this section chooses to show. Search covers all three ways
+            # a colour is expressed here — product title, colour tag and variant
+            # title — so a listing sold in nine colours turns up under each.
+            #
+            # Only the term is encoded. The whole chain used to run through
+            # url_encode, which escaped the slash and the "?" as well and left
+            # href="%2Fsearch%3Fq%3DSage+Green&type=product" — a relative path to
+            # a page that does not exist, hence the 404.
+            assign colour_query = block.settings.title | url_encode
+            assign target = routes.search_url | append: '?q=' | append: colour_query | append: '&type=product'
+            if block.settings.view_all_url != blank
+              assign target = block.settings.view_all_url
+            endif
             assign count = null
           -%}
           <button
@@ -589,6 +600,12 @@
           "id": "image",
           "label": "Texture photo (optional)",
           "info": "Shown inside the dot instead of the flat colour."
+        },
+        {
+          "type": "url",
+          "id": "view_all_url",
+          "label": "“View all” link",
+          "info": "Optional. Point this colour at a collection you have built for it; otherwise the link searches the store for the colour."
         },
         {
           "type": "text",
