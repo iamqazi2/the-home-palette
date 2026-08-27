@@ -437,7 +437,8 @@
           "settings": {
             "title": "Ivory White",
             "swatch": "#f0ead9",
-            "tag": "ivory-white"
+            "tag": "ivory-white",
+            "aliases": "Cream"
           }
         },
         "colour_3": {
@@ -541,6 +542,66 @@
             "swatch": "#afc7c0",
             "tag": "aqua-grey"
           }
+        },
+        "colour_15": {
+          "type": "colour",
+          "settings": {
+            "title": "Jute Natural",
+            "swatch": "#c2a878",
+            "tag": "jute-natural",
+            "aliases": "Jute, Rattan, Rustic, Rope, Handwoven"
+          }
+        },
+        "colour_16": {
+          "type": "colour",
+          "settings": {
+            "title": "Stone Grey",
+            "swatch": "#8c9091",
+            "tag": "stone-grey",
+            "aliases": "Stone"
+          }
+        },
+        "colour_17": {
+          "type": "colour",
+          "settings": {
+            "title": "Gold",
+            "swatch": "#c9a227",
+            "tag": "gold",
+            "aliases": "Golden"
+          }
+        },
+        "colour_18": {
+          "type": "colour",
+          "settings": {
+            "title": "Copper",
+            "swatch": "#b87333",
+            "tag": "copper"
+          }
+        },
+        "colour_19": {
+          "type": "colour",
+          "settings": {
+            "title": "Silver",
+            "swatch": "#b9bcc0",
+            "tag": "silver"
+          }
+        },
+        "colour_20": {
+          "type": "colour",
+          "settings": {
+            "title": "Black",
+            "swatch": "#1f1f1f",
+            "tag": "black",
+            "aliases": "Matte black, Black Matte"
+          }
+        },
+        "colour_21": {
+          "type": "colour",
+          "settings": {
+            "title": "Turquoise",
+            "swatch": "#3fb8ad",
+            "tag": "turquoise"
+          }
         }
       },
       "block_order": [
@@ -557,7 +618,14 @@
         "colour_11",
         "colour_12",
         "colour_13",
-        "colour_14"
+        "colour_14",
+        "colour_15",
+        "colour_16",
+        "colour_17",
+        "colour_18",
+        "colour_19",
+        "colour_20",
+        "colour_21"
       ],
       "settings": {
         "eyebrow": "The Palette",
