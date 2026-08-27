@@ -1320,6 +1320,85 @@
     window.setTimeout(function () { scrollToEl(el); }, 250);
   }
 
+  /* ---- <hp-journal-reader> — open a post in place ------------------------
+     A post can only have a URL of its own if a Shopify Page exists for it, and
+     the theme cannot create pages, so every /pages/journal-… link 404'd. The
+     posts are rendered into this page instead and shown at ?post=<handle>,
+     which is a URL that genuinely resolves, survives a refresh and can be
+     shared. History is pushed so Back returns to the index rather than leaving
+     the site.
+  ---------------------------------------------------------------------- */
+  function initJournalReader(root) {
+    var scope = root && root.querySelector ? root : document;
+    var reader = scope.querySelector('[data-hp-journal-reader]');
+    var index = scope.querySelector('[data-hp-journal-index]');
+    if (!reader || !index || reader.dataset.hpReaderDone) return;
+    reader.dataset.hpReaderDone = '1';
+
+    var views = Array.prototype.slice.call(reader.querySelectorAll('[data-hp-post-view]'));
+    var baseTitle = document.title;
+
+    function slugFromUrl() {
+      var m = window.location.search.match(/[?&]post=([^&]+)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function show(slug, scrollTop) {
+      var found = null;
+      views.forEach(function (v) {
+        var on = v.getAttribute('data-hp-post-view') === slug;
+        v.hidden = !on;
+        if (on) found = v;
+      });
+      reader.classList.toggle('is-open', !!found);
+      index.hidden = !!found;
+
+      if (found) {
+        var h = found.querySelector('.hp-jrnl__post-title');
+        document.title = (h ? h.textContent.trim() + ' — ' : '') + baseTitle;
+      } else {
+        document.title = baseTitle;
+      }
+      if (scrollTop) {
+        if (lenis) { lenis.scrollTo(0, { immediate: true }); } else { window.scrollTo(0, 0); }
+      }
+      if (hasGsap) window.ScrollTrigger.refresh();
+      return !!found;
+    }
+
+    scope.querySelectorAll('[data-hp-post-link]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        // let modified clicks open a new tab as usual
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        var slug = a.getAttribute('data-hp-post-link');
+        if (!slug) return;
+        e.preventDefault();
+        if (show(slug, true)) {
+          window.history.pushState({ hpPost: slug }, '', a.getAttribute('href'));
+        }
+      });
+    });
+
+    scope.querySelectorAll('[data-hp-post-back]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        show('', true);
+        // Drop the parameter from the URL we are actually on rather than
+        // trusting the href — that keeps Back correct even if the link is
+        // rendered without a path.
+        var url = new URL(window.location.href);
+        url.searchParams.delete('post');
+        window.history.pushState({ hpPost: '' }, '', url.pathname + url.search + url.hash);
+      });
+    });
+
+    window.addEventListener('popstate', function () { show(slugFromUrl(), false); });
+
+    // first paint: a shared or refreshed ?post= link opens straight into the post
+    show(slugFromUrl(), false);
+  }
+
   /* ---- boot ------------------------------------------------------------- */
   function boot() {
     initOverlayScrollLock();
@@ -1332,6 +1411,7 @@
     initCounters(document);
     initTimeline(document);
     initJumpLinks(document);
+    initJournalReader(document);
     honourHashOffset();
   }
   if (document.readyState === 'loading') {
@@ -1347,6 +1427,7 @@
     initCounters(e.target);
     initTimeline(e.target);
     initJumpLinks(e.target);
+    initJournalReader(e.target);
     markScrollContainers(e.target);
     initStickyChrome();
     if (hasGsap) window.ScrollTrigger.refresh();

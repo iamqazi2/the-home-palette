@@ -6,17 +6,29 @@
   Accepts:
     block       {object} a "post" block from the THP Journal section
     read_label  {string} link text
+    use_pages   {boolean} true when a Shopify page exists per post
+    base_path   {string} the Journal page's own path, for the ?post= link
 {%- endcomment -%}
 
 {%- liquid
+  assign slug = block.settings.handle | default: block.settings.title | handleize
   assign post_url = block.settings.url
-  if post_url == blank and block.settings.handle != blank
-    assign post_url = '/pages/' | append: block.settings.handle
+  if use_pages
+    if post_url == blank and block.settings.handle != blank
+      assign post_url = '/pages/' | append: block.settings.handle
+    endif
+  else
+    # No standalone page exists, so the story opens on the Journal page itself.
+    assign post_url = base_path | default: '/pages/journals' | append: '?post=' | append: slug
   endif
   assign card_alt = block.settings.title | escape
 -%}
 
-<a class="hp-jrnl__card" {% if post_url != blank %}href="{{ post_url }}"{% endif %}>
+<a
+  class="hp-jrnl__card"
+  {% if post_url != blank %}href="{{ post_url }}"{% endif %}
+  {% unless use_pages %}data-hp-post-link="{{ slug }}"{% endunless %}
+>
   {%- if block.settings.image != blank -%}
     <span class="hp-jrnl__card-media">
       {{

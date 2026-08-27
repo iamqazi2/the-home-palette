@@ -10,6 +10,16 @@
   Layout: a full-bleed parallax hero, a topic filter, one lead story whose copy
   card overlaps its photograph, then a grid of the rest. Filtering lives in
   <hp-journal-filter> (assets/hp-theme.js) and degrades to every post showing.
+
+  READING A POST. Each post's body lives on its block and is rendered here, at
+  ?post=<handle> on this same page, by <hp-journal-reader>. That is because a
+  post can only have a URL of its own if a Shopify Page exists for it, and
+  pages are store data the theme cannot create — every /pages/journal-… link
+  was a 404 for exactly that reason.
+
+  Turn on "Posts have their own pages" once those pages exist and the cards go
+  back to linking at /pages/<handle>, where templates/page.journal-post.json
+  renders the same content from page.content.
 {% endcomment %}
 
 {%- liquid
@@ -361,6 +371,64 @@
   @media screen and (min-width: 750px) { .hp-jrnl__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media screen and (min-width: 1200px) { .hp-jrnl__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
+  /* ---------------- post view ---------------- */
+  .hp-jrnl__reader:not(.is-open) { display: none; }
+  .hp-jrnl__post-view { max-width: 76rem; margin: 0 auto; }
+  .hp-jrnl__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: clamp(1.8rem, 2.6vw, 2.6rem);
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+    text-decoration: none;
+  }
+  .hp-jrnl__back:hover { color: var(--hp-teal-deep); }
+  .hp-jrnl__post-media {
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: var(--hp-linen);
+    margin-bottom: clamp(2.4rem, 3.4vw, 3.4rem);
+  }
+  .hp-jrnl__post-media img { width: 100%; height: 100%; object-fit: cover; }
+  .hp-jrnl__post-tag { margin: 0 0 1.2rem; }
+  .hp-jrnl__post-title {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-size: var(--hp-h-section);
+    line-height: 1.15;
+    color: var(--hp-heading);
+  }
+  .hp-jrnl__post-lede {
+    margin: 1.8rem 0 0;
+    font-size: clamp(1.6rem, 1.9vw, 1.9rem);
+    line-height: 1.7;
+    color: var(--hp-heading);
+  }
+  .hp-jrnl__post-body {
+    margin-top: clamp(2.4rem, 3.4vw, 3.2rem);
+    font-size: 1.55rem;
+    line-height: 1.9;
+    color: var(--hp-taupe);
+  }
+  .hp-jrnl__post-body h2 {
+    margin: clamp(2.6rem, 3.4vw, 3.4rem) 0 1rem;
+    font-family: var(--hp-font-display);
+    font-size: var(--hp-h-block);
+    line-height: 1.25;
+    color: var(--hp-heading);
+  }
+  .hp-jrnl__post-body p { margin: 0 0 1.6rem; }
+  .hp-jrnl__post-body ul, .hp-jrnl__post-body ol { margin: 0 0 1.6rem; padding-left: 2.2rem; }
+  .hp-jrnl__post-body li { margin-bottom: 0.8rem; }
+  .hp-jrnl__post-body strong { color: var(--hp-ink); }
+  .hp-jrnl__post-foot { margin-top: clamp(2.4rem, 3.4vw, 3.4rem); }
+
   .hp-jrnl__empty {
     margin: 0;
     padding: clamp(3rem, 5vw, 5rem) 0;
@@ -414,6 +482,7 @@
     {%- if section.blocks.size == 0 -%}
       <p class="hp-jrnl__empty">{{ section.settings.empty_text | default: 'Stories are on their way.' | escape }}</p>
     {%- else -%}
+      <div class="hp-jrnl__index" data-hp-journal-index>
 
       {%- if section.settings.show_filter and topic_list.size > 1 -%}
         <hp-journal-filter class="hp-jrnl__filter" data-hp-reveal>
@@ -441,9 +510,15 @@
 
       {%- assign lead = section.blocks.first -%}
       {%- liquid
+        assign lead_slug = lead.settings.handle | default: lead.settings.title | handleize
         assign lead_url = lead.settings.url
-        if lead_url == blank and lead.settings.handle != blank
-          assign lead_url = '/pages/' | append: lead.settings.handle
+        if section.settings.use_pages
+          if lead_url == blank and lead.settings.handle != blank
+            assign lead_url = '/pages/' | append: lead.settings.handle
+          endif
+        else
+          assign journal_path = request.path | default: '/pages/journals'
+          assign lead_url = journal_path | append: '?post=' | append: lead_slug
         endif
       -%}
       <div
@@ -452,7 +527,11 @@
         data-hp-tag="{{ lead.settings.tag | strip | escape }}"
         {{ lead.shopify_attributes }}
       >
-        <a class="hp-jrnl__lead-link" {% if lead_url != blank %}href="{{ lead_url }}"{% endif %}>
+        <a
+          class="hp-jrnl__lead-link"
+          {% if lead_url != blank %}href="{{ lead_url }}"{% endif %}
+          {% unless section.settings.use_pages %}data-hp-post-link="{{ lead_slug }}"{% endunless %}
+        >
           <div class="hp-jrnl__lead-media" data-hp-reveal>
             {%- if lead.settings.image != blank -%}
               {{
@@ -494,11 +573,68 @@
               data-hp-reveal
               {{ block.shopify_attributes }}
             >
-              {% render 'hp-journal-card', block: block, read_label: section.settings.read_label %}
+              {% render 'hp-journal-card',
+                block: block,
+                read_label: section.settings.read_label,
+                use_pages: section.settings.use_pages,
+                base_path: request.path
+              %}
             </div>
           {%- endfor -%}
         </div>
       {%- endif -%}
+      </div>
+
+      {%- comment -%}
+        Every post's full text, inert until <hp-journal-reader> is asked for
+        one. Four short articles is a few kilobytes — cheaper than a fetch, and
+        it means a shared ?post= link works on first paint with no round trip.
+      {%- endcomment -%}
+      <div class="hp-jrnl__reader" data-hp-journal-reader>
+        {%- for block in section.blocks -%}
+          {%- assign slug = block.settings.handle | default: block.settings.title | handleize -%}
+          <article class="hp-jrnl__post-view" data-hp-post-view="{{ slug }}" hidden {{ block.shopify_attributes }}>
+            <a class="hp-jrnl__back" href="{{ request.path | default: '/pages/journals' }}" data-hp-post-back>
+              {% render 'hp-icon', icon: 'chevron-left', size: 14 %}
+              {{ section.settings.back_label | default: 'All stories' | escape }}
+            </a>
+
+            {%- if block.settings.image != blank -%}
+              <div class="hp-jrnl__post-media">
+                {{
+                  block.settings.image
+                  | image_url: width: 1800
+                  | image_tag: widths: '600, 900, 1200, 1500, 1800', sizes: '(min-width: 990px) 76vw, 100vw', loading: 'lazy', alt: block.settings.title
+                }}
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.tag != blank -%}
+              <p class="hp-eyebrow hp-jrnl__post-tag">{{ block.settings.tag | escape }}</p>
+            {%- endif -%}
+            <h2 class="hp-jrnl__post-title">{{ block.settings.title | escape }}</h2>
+            {%- if block.settings.excerpt != blank -%}
+              <p class="hp-jrnl__post-lede">{{ block.settings.excerpt }}</p>
+            {%- endif -%}
+
+            <div class="hp-jrnl__post-body rte">
+              {%- if block.settings.body != blank -%}
+                {{ block.settings.body }}
+              {%- else -%}
+                <p>{{ block.settings.excerpt }}</p>
+              {%- endif -%}
+            </div>
+
+            <a
+              class="hp-btn hp-btn--outline hp-jrnl__post-foot"
+              href="{{ request.path | default: '/pages/journals' }}"
+              data-hp-post-back
+            >
+              {{ section.settings.back_label | default: 'All stories' | escape }}
+            </a>
+          </article>
+        {%- endfor -%}
+      </div>
     {%- endif -%}
   </div>
 </div>
@@ -532,6 +668,14 @@
     { "type": "text", "id": "all_label", "label": "“All” chip label", "default": "All stories" },
     { "type": "text", "id": "ribbon_label", "label": "Lead story ribbon", "default": "Latest" },
     { "type": "text", "id": "read_label", "label": "Link label", "default": "Read the story" },
+    { "type": "text", "id": "back_label", "label": "Back link label", "default": "All stories" },
+    {
+      "type": "checkbox",
+      "id": "use_pages",
+      "label": "Posts have their own pages",
+      "info": "Off: a story opens on this page at ?post=… — the theme cannot create Shopify pages, so this is what keeps the links working. Turn it on once you have created a page per post (template journal-post) and the cards will link to /pages/<handle> instead.",
+      "default": false
+    },
     { "type": "text", "id": "empty_text", "label": "Empty state", "default": "Stories are on their way." }
   ],
   "blocks": [
@@ -541,6 +685,12 @@
       "settings": [
         { "type": "text", "id": "title", "label": "Title" },
         { "type": "textarea", "id": "excerpt", "label": "Excerpt" },
+        {
+          "type": "html",
+          "id": "body",
+          "label": "Article",
+          "info": "The full post, shown when the story is opened. Headings, paragraphs and lists are all fine here."
+        },
         { "type": "text", "id": "tag", "label": "Category", "info": "Also becomes a filter chip." },
         { "type": "image_picker", "id": "image", "label": "Image" },
         {
