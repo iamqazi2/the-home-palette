@@ -1296,6 +1296,30 @@
     document.body.classList.remove('overflow-hidden-mobile', 'overflow-hidden-tablet');
   }
 
+  /* ---- Menu drawer: close on any link ----------------------------------
+     Tapping a menu item used to leave the drawer standing open — for a link to
+     another page it stayed up until the new page painted, and for a link to
+     the page you are already on (or an in-page one) nothing closed it at all.
+     Delegated from the drawer itself so items added later are covered too.
+
+     Only <a href> closes it: the submenu rows are <summary> elements, and
+     closing the whole drawer when someone opens "Categories" would make the
+     submenus unusable.
+  ---------------------------------------------------------------------- */
+  function initDrawerAutoClose(root) {
+    (root || document).querySelectorAll('header-drawer').forEach(function (drawer) {
+      if (drawer.dataset.hpAutoCloseDone) return;
+      drawer.dataset.hpAutoCloseDone = '1';
+      drawer.addEventListener('click', function (e) {
+        var el = e.target;
+        if (!el || !el.closest) return;
+        var link = el.closest('a[href]');
+        if (!link || el.closest('summary')) return;
+        closeMenuDrawer();
+      });
+    });
+  }
+
   function initJumpLinks(root) {
     (root || document).querySelectorAll('[data-hp-jump]').forEach(function (a) {
       if (a.dataset.hpJumpDone) return;
@@ -1411,6 +1435,7 @@
     initCounters(document);
     initTimeline(document);
     initJumpLinks(document);
+    initDrawerAutoClose(document);
     initJournalReader(document);
     honourHashOffset();
   }
@@ -1427,6 +1452,7 @@
     initCounters(e.target);
     initTimeline(e.target);
     initJumpLinks(e.target);
+    initDrawerAutoClose(e.target);
     initJournalReader(e.target);
     markScrollContainers(e.target);
     initStickyChrome();
