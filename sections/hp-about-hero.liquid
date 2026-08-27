@@ -216,17 +216,22 @@
     {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
     {%- endif -%}
-    {%- if section.settings.video_url != blank -%}
+    {%- if section.settings.video_url != blank or section.settings.video_url_mobile != blank -%}
+      {%- comment -%}
+        No src attribute: <hp-bg-video> in hp-theme.js picks the desktop or the
+        phone clip once, on load, so only the one that will actually be shown is
+        ever fetched. Without JS the poster image above stands on its own.
+      {%- endcomment -%}
       <video
-        src="{{ section.settings.video_url }}"
         muted
         loop
         playsinline
-        autoplay
-        preload="metadata"
+        preload="none"
         aria-hidden="true"
         tabindex="-1"
         data-hp-bg-video
+        data-src-desktop="{{ section.settings.video_url }}"
+        data-src-mobile="{{ section.settings.video_url_mobile }}"
       ></video>
     {%- endif -%}
   </div>
@@ -303,6 +308,12 @@
       "id": "video_url",
       "label": "Background video URL",
       "info": "Optional .mp4 file URL (Content > Files). Plays muted on top of the image."
+    },
+    {
+      "type": "text",
+      "id": "video_url_mobile",
+      "label": "Background video URL (phones)",
+      "info": "Used below 750px — a portrait clip suits a phone far better than a cropped landscape one. Falls back to the video above."
     },
     {
       "type": "select",

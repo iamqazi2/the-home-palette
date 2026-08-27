@@ -1,0 +1,188 @@
+{% comment %}
+  THP — About manifesto.
+
+  A long piece of brand copy set as an editorial page rather than a wall of
+  text: a lede at display size, the body in two reading columns on desktop,
+  and the closing line pulled out as a quote band.
+
+  Columns are safe here in a way they were not in the hospitality gallery —
+  prose reflows to whatever height it needs, so the two columns balance.
+{% endcomment %}
+
+{%- style -%}
+  .hp-mnfst { background: {{ section.settings.bg_color | default: '#fffdf4' }}; }
+
+  .hp-mnfst__head { max-width: 78rem; }
+  .hp-mnfst--center .hp-mnfst__head { margin-inline: auto; text-align: center; }
+  .hp-mnfst--center .hp-eyebrow::after {
+    content: '';
+    width: 2.2rem;
+    height: 1.5px;
+    background: currentColor;
+  }
+  .hp-mnfst__title {
+    margin: 1.4rem 0 0;
+    font-size: var(--hp-h-section);
+    color: var(--hp-heading);
+  }
+
+  .hp-mnfst__lede {
+    margin: clamp(2rem, 3vw, 3rem) 0 0;
+    max-width: 82rem;
+    font-family: var(--hp-font-display);
+    font-size: clamp(1.9rem, 2.4vw, 2.6rem);
+    line-height: 1.45;
+    color: var(--hp-heading);
+  }
+  .hp-mnfst--center .hp-mnfst__lede { margin-inline: auto; text-align: center; }
+  .hp-mnfst__lede p { margin: 0; }
+  .hp-mnfst__lede p + p { margin-top: 1.2rem; }
+
+  .hp-mnfst__body {
+    margin: clamp(2.6rem, 4vw, 4rem) 0 0;
+    font-size: 1.5rem;
+    line-height: 1.9;
+    color: var(--hp-taupe);
+  }
+  .hp-mnfst__body p { margin: 0; }
+  .hp-mnfst__body p + p { margin-top: 1.6rem; }
+  @media screen and (min-width: 990px) {
+    .hp-mnfst__body {
+      column-count: 2;
+      column-gap: clamp(3.2rem, 5vw, 6rem);
+    }
+    /* a paragraph should not be split across the fold between columns */
+    .hp-mnfst__body p { break-inside: avoid; }
+  }
+
+  /* An old-style opening capital, sized off the line height so it lands on the
+     baseline of the third line rather than floating. */
+  {%- if section.settings.drop_cap -%}
+    .hp-mnfst__body > p:first-child::first-letter {
+      float: left;
+      margin: 0.6rem 1.2rem 0 0;
+      font-family: var(--hp-font-display);
+      font-size: 5.6rem;
+      line-height: 0.78;
+      color: var(--hp-teal);
+    }
+  {%- endif -%}
+
+  .hp-mnfst__quote {
+    margin: clamp(3.2rem, 5vw, 5.6rem) auto 0;
+    max-width: 74rem;
+    padding: clamp(2.6rem, 3.4vw, 4rem) clamp(2rem, 3vw, 3.6rem);
+    text-align: center;
+    border-top: 1px solid var(--hp-hairline-teal);
+    border-bottom: 1px solid var(--hp-hairline-teal);
+  }
+  .hp-mnfst__quote-text {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-size: clamp(2.2rem, 3.2vw, 3.4rem);
+    line-height: 1.28;
+    color: var(--hp-heading);
+  }
+  .hp-mnfst__quote-lead {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--hp-taupe-soft);
+  }
+
+  .hp-mnfst__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-top: clamp(2.4rem, 3.4vw, 3.4rem);
+  }
+{%- endstyle -%}
+
+<div class="hp-mnfst hp-section{% if section.settings.center_head %} hp-mnfst--center{% endif %}">
+  <div class="hp-container">
+    <div class="hp-mnfst__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hp-eyebrow{% if section.settings.center_head %} hp-eyebrow--rule-after{% endif %}">
+          {{- section.settings.eyebrow | escape -}}
+        </p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hp-mnfst__title">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.lede != blank -%}
+      <div class="hp-mnfst__lede" data-hp-fluid>{{ section.settings.lede }}</div>
+    {%- endif -%}
+
+    {%- if section.settings.body != blank -%}
+      <div class="hp-mnfst__body" data-hp-reveal>{{ section.settings.body }}</div>
+    {%- endif -%}
+
+    {%- if section.settings.quote != blank -%}
+      <blockquote class="hp-mnfst__quote" data-hp-reveal>
+        <p class="hp-mnfst__quote-text">
+          {%- if section.settings.quote_lead != blank -%}
+            <span class="hp-mnfst__quote-lead">{{ section.settings.quote_lead | escape }}</span>
+          {%- endif -%}
+          {{ section.settings.quote | escape }}
+        </p>
+      </blockquote>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank or section.settings.button_2_label != blank -%}
+      <div class="hp-mnfst__actions" data-hp-reveal>
+        {%- if section.settings.button_label != blank -%}
+          <a
+            {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% endif %}
+            class="hp-btn"
+          >
+            {{ section.settings.button_label | escape }}
+            {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.button_2_label != blank -%}
+          <a
+            {% if section.settings.button_2_link != blank %}href="{{ section.settings.button_2_link }}"{% endif %}
+            class="hp-btn hp-btn--outline"
+          >
+            {{ section.settings.button_2_label | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "THP About Manifesto",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#fffdf4" },
+    { "type": "checkbox", "id": "center_head", "label": "Centre the heading and lede", "default": true },
+    { "type": "checkbox", "id": "drop_cap", "label": "Opening capital on the body", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "About Us" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A Home Is Made in the Details" },
+    {
+      "type": "richtext",
+      "id": "lede",
+      "label": "Opening",
+      "default": "<p>At The Home Palette, we believe that a beautiful home is created through the little details — the pieces you choose, the way you style them, and the moments you create around them.</p>"
+    },
+    { "type": "richtext", "id": "body", "label": "Body" },
+    { "type": "text", "id": "quote_lead", "label": "Quote lead-in" },
+    { "type": "text", "id": "quote", "label": "Closing quote" },
+    { "type": "text", "id": "button_label", "label": "Primary button" },
+    { "type": "url", "id": "button_link", "label": "Primary link" },
+    { "type": "text", "id": "button_2_label", "label": "Secondary button" },
+    { "type": "url", "id": "button_2_link", "label": "Secondary link" }
+  ],
+  "presets": [{ "name": "THP About Manifesto" }]
+}
+{% endschema %}

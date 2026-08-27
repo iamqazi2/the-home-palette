@@ -55,7 +55,8 @@
         "button_label": "Shop the Collections",
         "button_link": "shopify://collections",
         "button_2_label": "Talk to Us on WhatsApp",
-        "button_2_link": "https://wa.me/923376111399"
+        "button_2_link": "https://wa.me/923376111399",
+        "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4"
       }
     },
     "hp_about_trust": {
@@ -165,10 +166,10 @@
         "step_1": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/IMG-20250612-WA0065.webp",
+            "image": "shopify://shop_images/thp-workshop-bowls-drying.jpg",
             "title": "Clay & sourcing",
             "text": "Every batch begins at the workshop, with clay chosen in person rather than ordered from a catalogue. We work with a small number of family-run potteries and buy whole production runs instead of cherry-picking, which is what lets those workshops plan months ahead instead of week to week.",
-            "caption": "Clay weighed and wedged by hand",
+            "caption": "Greenware on the workshop racks",
             "meta": "Family-run partners",
             "meta_icon": "leaf"
           }
@@ -176,10 +177,10 @@
         "step_2": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/IMG-20250612-WA0112.webp",
+            "image": "shopify://shop_images/thp-workshop-plates-drying.jpg",
             "title": "Shaping & casting",
             "text": "Plates and bowls are thrown on the wheel or slip-cast in plaster moulds, then left to firm up to leather-hard before the foot is trimmed. It is the slowest stage of the whole process, and the one that decides whether a stack of six plates will sit flush on your shelf.",
-            "caption": "Trimming the foot at leather-hard",
+            "caption": "Cast plates firming up on plaster",
             "meta": "24–48 hours drying",
             "meta_icon": "ruler"
           }
@@ -187,10 +188,10 @@
         "step_3": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/Sage-Green-Spiral-Platter-The-Home-Palette-41450789044523.webp",
+            "image": "shopify://shop_images/thp-workshop-platters-drying.jpg",
             "title": "The first firing",
             "text": "Dried greenware goes into its bisque firing and comes out porous and chalky — strong enough to handle, thirsty enough to take glaze evenly. Anything that warped or cracked is pulled here, before a single rupee of glaze is spent on it.",
-            "caption": "Bisque — the first firing",
+            "caption": "Waiting on the racks for the kiln",
             "meta": "≈900°C",
             "meta_icon": "flame"
           }
@@ -242,7 +243,7 @@
         "accent_color": "#7fc8be",
         "flip": false,
         "center_head": true,
-        "eyebrow": "Chapter Two — Inside the Workshop",
+        "eyebrow": "Chapter Three — Inside the Workshop",
         "heading": "How a Piece Becomes Part of the Palette",
         "text": "Six stages, most of them done by hand. It is slower than machine production — and it is the reason no two reactive-glaze pieces ever leave the kiln identical.",
         "foot_text": "Pieces that do not pass inspection stay at the workshop. We would rather be short of stock for a week than send out a second as though it were a first.",
@@ -321,7 +322,7 @@
         "center_head": true,
         "show_numbers": true,
         "columns": 3,
-        "eyebrow": "Chapter Three — What We Stand For",
+        "eyebrow": "Chapter Four — What We Stand For",
         "heading": "Six Promises We Keep on Every Order",
         "text": "Not a mission statement — the working rules we hold ourselves to, order after order.",
         "card_style": "gradient",
@@ -399,7 +400,7 @@
         "accent_color": "#257575",
         "accent_2_color": "#7fc8be",
         "center_head": true,
-        "eyebrow": "Chapter Four — The Journey",
+        "eyebrow": "Chapter Five — The Journey",
         "heading": "From One Dinner Set to Ten Collections",
         "text": "A short history of the palette — and where it is headed next.",
         "card_style": "gradient",
@@ -518,12 +519,31 @@
         "eyebrow_color": "#fff9df",
         "card_color": "#1c5b5b"
       }
+    },
+    "hp_about_manifesto": {
+      "type": "hp-about-manifesto",
+      "settings": {
+        "bg_color": "#fff9df",
+        "center_head": true,
+        "drop_cap": true,
+        "eyebrow": "Chapter Two — What We Believe",
+        "heading": "A Home Is Made in the Details",
+        "lede": "<p>At The Home Palette, we believe that a beautiful home is created through the little details — the pieces you choose, the way you style them, and the moments you create around them.</p>",
+        "body": "<p>We are a home and tableware brand bringing together thoughtfully crafted ceramics, woven pieces, metalware, cutlery and wooden accessories, designed to add warmth, character and personality to your spaces.</p><p>But for us, it’s about more than just beautiful products. We’re passionate about supporting local women artisans and celebrating the craftsmanship behind every piece. From hand-finished ceramics to beautifully woven placemats, runners, tissue boxes and accessories, each piece represents skill, creativity, and the hands that bring it to life.</p><p>We believe beautiful tableware should also be made for real living. That’s why we focus on pieces that are safe, durable, functional and made to be enjoyed every day — whether it’s a quiet breakfast at home, a dinner with loved ones, or a table set for a special celebration.</p><p>Today, The Home Palette is loved not only by individuals and families, but also by hotels and restaurants across Pakistan, who choose our pieces to bring a distinctive touch to their spaces and tables.</p><p>From everyday homes to hospitality spaces, we’re proud to be a part of the places where people gather, connect, celebrate and create memories.</p>",
+        "quote_lead": "Because we don’t just want to decorate your table",
+        "quote": "We want to make every tablescape a moment.",
+        "button_label": "Shop the Collections",
+        "button_link": "shopify://collections",
+        "button_2_label": "For Hospitality",
+        "button_2_link": "/pages/hospitality"
+      }
     }
   },
   "order": [
     "hp_about_hero",
     "hp_about_trust",
     "hp_about_story",
+    "hp_about_manifesto",
     "hp_about_process",
     "hp_about_values",
     "hp_about_timeline",

@@ -961,6 +961,21 @@
       if (v.dataset.hpVidDone) return;
       v.dataset.hpVidDone = '1';
       if (reducedMotion) return;   // leave the still image
+
+      /* Pick the clip for this screen before touching the network, so a phone
+         never downloads the desktop cut (or the other way round). Either
+         attribute may be empty, in which case the other one covers both. */
+      var phone = window.matchMedia('(max-width: 749px)').matches;
+      var desktopSrc = v.getAttribute('data-src-desktop') || '';
+      var mobileSrc = v.getAttribute('data-src-mobile') || '';
+      var src = phone ? (mobileSrc || desktopSrc) : (desktopSrc || mobileSrc);
+      if (!src && !v.getAttribute('src')) return;
+      if (src) {
+        v.setAttribute('src', src);
+        v.preload = 'metadata';
+        v.load();
+      }
+
       var show = function () { v.classList.add('is-playing'); };
       if (v.readyState >= 3) show();
       v.addEventListener('canplay', show, { once: true });
