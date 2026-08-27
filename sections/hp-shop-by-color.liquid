@@ -10,12 +10,22 @@
   in index.json — so those requests never returned the section and the grid was
   always empty.
 
-  A product is matched to a colour by its tag first, and failing that by its
-  title, excluding any longer colour name that contains the shorter one so
-  Aqua-grey pieces never fall under Aqua. Tags stay the reliable long-term
-  answer, because a product whose name does not mention its colour can only ever
-  be found by tag — and tags are store data, added in the Shopify admin, not
-  something the theme can create.
+  Matching, in order:
+
+  1. If the product has a colour OPTION (a "Color"/"Colour"/"Shade"/"Glaze"
+     option), only its variants decide where it appears. The Hand-Painted Handi
+     sells in nine colours from one product, so it belongs in nine groups — each
+     showing that colour's own variant image, not the product's cover shot.
+     Such a product is deliberately NOT matched by tag or title: doing both is
+     what put one-colour-per-card products into colours they do not come in.
+  2. Otherwise by colour tag, which is the only thing that can be right for a
+     product whose name does not mention its colour.
+  3. Otherwise by title, excluding any longer colour name that contains the
+     shorter one so Aqua-grey pieces never fall under Aqua.
+
+  A variant colour matches a swatch only on an exact name (or alias) — no
+  partial matching, because "Aqua" and "Aqua-grey" are different glazes and a
+  contains-check cannot tell which way round it should go.
 {% endcomment %}
 
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
@@ -206,6 +216,27 @@
     }
   }
   hp-colour-shop.is-loading .hp-colors__grid { opacity: 0.35; }
+  /* Which glaze this card is showing — the cards sit in a grid of nine
+     near-identical handis otherwise. */
+  .hp-colour-card__chip {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    z-index: 2;
+    padding: 0.5rem 1.1rem;
+    border-radius: var(--hp-r-pill);
+    background: rgba(255, 249, 223, 0.94);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    font-family: var(--hp-font-ui);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+    pointer-events: none;
+  }
+
   .hp-colors__empty {
     flex: 1 1 100%;
     text-align: center;
@@ -326,7 +357,8 @@
             for other in section.blocks
               assign oname = other.settings.title | downcase
               if oname != cname and oname contains cname
-                assign rivals = rivals | append: oname | append: '||'
+                assign ohandle = other.settings.title | handleize
+                assign rivals = rivals | append: ohandle | append: '||'
               endif
             endfor
             assign rival_list = rivals | split: '||'
@@ -353,29 +385,102 @@
                 {%- liquid
                   assign pid = product.id | append: ',' | prepend: ','
                   assign ok = false
+                  assign colour_variant = null
+
                   unless seen contains pid
-                    # An explicit colour tag always wins — it is the only thing
-                    # that can be right for a product not named after its colour.
-                    if product.tags contains ctag or product.tags contains block.settings.title
-                      assign ok = true
-                    else
-                      assign ptitle = product.title | downcase
+                    # Does this product carry its colours as an option?
+                    assign colour_pos = 0
+                    assign colour_values = ''
+                    for opt in product.options_with_values
+                      assign oname = opt.name | downcase | strip
+                      if oname == 'color' or oname == 'colour' or oname == 'shade' or oname == 'glaze'
+                        assign colour_pos = forloop.index
+                        # Handleized so "Matte black", "matte-black" and
+                        # "Matte  Black" all compare equal, and wrapped in
+                        # separators so the probe below is exact.
+                        assign colour_values = '~'
+                        for val in opt.values
+                          assign vh = val | handleize
+                          assign colour_values = colour_values | append: vh | append: '~'
+                        endfor
+                        break
+                      endif
+                    endfor
+
+                    if colour_pos > 0
+                      # Variant-coloured: the option decides, and nothing else.
+                      #
+                      # The option's value list is checked before any variant is
+                      # touched. Walking every variant of every product for all
+                      # fourteen swatches is tens of thousands of iterations and
+                      # would blow Liquid's render budget; this settles most
+                      # products with one string comparison. Values are joined
+                      # and probed wrapped in separators so the test is exact —
+                      # a plain `contains` would file every Aqua-grey piece
+                      # under Aqua as well.
+                      assign matched_colour = ''
                       for nm in name_list
-                        assign nm_trim = nm | strip
-                        if nm_trim != blank and ptitle contains nm_trim
-                          assign ok = true
+                        assign nm_handle = nm | handleize
+                        if nm_handle == blank
+                          continue
+                        endif
+                        assign needle = '~' | append: nm_handle | append: '~'
+                        if colour_values contains needle
+                          assign matched_colour = nm_handle
                           break
                         endif
                       endfor
-                      # A longer colour name that contains this one still wins,
-                      # so Aqua-grey pieces never fall under Aqua.
-                      if ok
-                        for rival in rival_list
-                          if rival != blank and ptitle contains rival
-                            assign ok = false
+
+                      if matched_colour != blank
+                        assign colour_idx = colour_pos | minus: 1
+                        for variant in product.variants
+                          assign vcolour = variant.options[colour_idx] | handleize
+                          if vcolour == matched_colour
+                            assign ok = true
+                            assign colour_variant = variant
                             break
                           endif
                         endfor
+                      endif
+                    else
+                      # An explicit colour tag always wins — it is the only thing
+                      # that can be right for a product not named after its colour.
+                      if product.tags contains ctag or product.tags contains block.settings.title
+                        assign ok = true
+                      else
+                        # Handleized and wrapped in dashes, so a title written
+                        # "Aqua - Grey Day to Dine Set" reads as "aqua-grey" and
+                        # is caught by the rival guard below. Comparing raw text
+                        # missed it — the spaces around the dash meant the title
+                        # never literally contained "aqua-grey", so the set was
+                        # filed under Aqua and Aqua-grey stayed empty.
+                        assign ptitle = product.title | handleize
+                        assign phandle = '-' | append: ptitle | append: '-'
+                        for nm in name_list
+                          assign nm_handle = nm | handleize
+                          if nm_handle == blank
+                            continue
+                          endif
+                          assign needle = '-' | append: nm_handle | append: '-'
+                          if phandle contains needle
+                            assign ok = true
+                            break
+                          endif
+                        endfor
+                        # A longer colour name that contains this one still wins,
+                        # so Aqua-grey pieces never fall under Aqua.
+                        if ok
+                          for rival in rival_list
+                            if rival == blank
+                              continue
+                            endif
+                            assign rneedle = '-' | append: rival | append: '-'
+                            if phandle contains rneedle
+                              assign ok = false
+                              break
+                            endif
+                          endfor
+                        endif
                       endif
                     endif
                   endunless
@@ -386,15 +491,25 @@
                     assign shown = shown | plus: 1
                   -%}
                   <div class="hp-colors__cell">
-                    {% render 'card-product',
-                      card_product: product,
-                      media_aspect_ratio: 'portrait',
-                      show_secondary_image: true,
-                      show_rating: true,
-                      quick_add: section.settings.quick_add,
-                      lazy_load: true,
-                      section_id: section.id
-                    %}
+                    {%- if colour_variant -%}
+                      {% render 'hp-colour-card',
+                        product: product,
+                        variant: colour_variant,
+                        colour_label: block.settings.title,
+                        quick_add: section.settings.quick_add,
+                        section_id: section.id
+                      %}
+                    {%- else -%}
+                      {% render 'card-product',
+                        card_product: product,
+                        media_aspect_ratio: 'portrait',
+                        show_secondary_image: true,
+                        show_rating: true,
+                        quick_add: section.settings.quick_add,
+                        lazy_load: true,
+                        section_id: section.id
+                      %}
+                    {%- endif -%}
                   </div>
                 {%- endif -%}
               {%- endfor -%}
@@ -485,7 +600,7 @@
           "type": "text",
           "id": "tag",
           "label": "Product tag",
-          "info": "The tag used on products of this colour, e.g. 'sage-green'. Products whose name already contains the colour are matched without it, but tagging is what makes a colour reliable for products that are not named after it."
+          "info": "The tag used on products of this colour, e.g. 'sage-green'. Products that sell several colours from one listing are matched on their Color option instead and show that colour's own variant photo; tags and names only decide the rest."
         }
       ]
     }

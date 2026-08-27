@@ -1,0 +1,145 @@
+{%- comment -%}
+  A product card for ONE colour variant, used by Shop by Colour.
+
+  Dawn's card-product always paints the product's own featured image, which is
+  wrong here: the Hand-Painted Handi appears under nine colours and would show
+  the same cover shot in all nine. This card takes the variant that matched the
+  swatch and shows that variant's photograph, price and stock, links straight to
+  the variant, and adds that exact variant to the cart.
+
+  It borrows Dawn's card class names on purpose — .card-wrapper / .card /
+  .card__inner / .card__media / .card__content — so it inherits every card style
+  the theme already has and sits in a grid beside card-product without looking
+  like a different component.
+
+  Accepts:
+    product       {object}
+    variant       {object} the variant whose colour matched
+    colour_label  {string} the swatch's name, shown as a chip
+    quick_add     {string} 'standard' | 'bulk' | 'none'
+    section_id    {string}
+{%- endcomment -%}
+
+{%- liquid
+  assign image = variant.featured_media | default: product.featured_media
+  assign ratio = 0.8
+  if image and image.aspect_ratio
+    assign ratio = 0.8
+  endif
+  assign variant_url = product.url | append: '?variant=' | append: variant.id
+  assign form_id = 'hp-colour-' | append: section_id | append: '-' | append: variant.id
+-%}
+
+<div class="card-wrapper product-card-wrapper underline-links-hover{% unless variant.available %} hp-sold-out{% endunless %}">
+  <div
+    class="card card--{{ settings.card_style }} card--media{% if settings.card_style == 'card' %} color-{{ settings.card_color_scheme }} gradient{% endif %}"
+    style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+  >
+    <div
+      class="card__inner {% if settings.card_style == 'standard' %}color-{{ settings.card_color_scheme }} gradient{% endif %} ratio"
+      style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+    >
+      <div class="card__media">
+        <div class="media media--transparent media--hover-effect">
+          {%- if image -%}
+            {{
+              image
+              | image_url: width: 1066
+              | image_tag:
+                widths: '165, 360, 533, 720, 940, 1066',
+                sizes: '(min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)',
+                class: 'motion-reduce',
+                loading: 'lazy',
+                alt: product.title
+            }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+      </div>
+      {%- if colour_label != blank -%}
+        <span class="hp-colour-card__chip">{{ colour_label | escape }}</span>
+      {%- endif -%}
+      <div class="card__badge {{ settings.badge_position }}">
+        {%- if variant.available == false -%}
+          <span class="badge badge--bottom-left hp-badge--sold">{{ 'products.product.sold_out' | t }}</span>
+        {%- elsif variant.compare_at_price > variant.price -%}
+          <span class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}">
+            {{- 'products.product.on_sale' | t -}}
+          </span>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="card__content">
+      <div class="card__information">
+        <h3 class="card__heading h5" id="title-{{ section_id }}-{{ variant.id }}">
+          <a href="{{ variant_url }}" id="CardLink-{{ section_id }}-{{ variant.id }}" class="full-unstyled-link">
+            {{ product.title | escape }}
+          </a>
+        </h3>
+        <div class="card-information">
+          {% render 'hp-rating', product: product %}
+          <div class="price">
+            <div class="price__container">
+              <div class="price__regular">
+                <span class="price-item price-item--regular">{{ variant.price | money }}</span>
+              </div>
+              {%- if variant.compare_at_price > variant.price -%}
+                <div class="price__sale">
+                  <s class="price-item price-item--regular">{{ variant.compare_at_price | money }}</s>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- if quick_add == 'standard' -%}
+        {%- comment -%}
+          Straight to the cart, with no options modal: the colour is already
+          chosen by the swatch the visitor clicked, and this variant is the one
+          they are looking at. Any other option (size, piece) is why the link
+          through to the product page still exists.
+        {%- endcomment -%}
+        <div class="quick-add no-js-hidden">
+          <product-form data-section-id="{{ section_id }}">
+            {%- form 'product', product, id: form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              <input
+                type="hidden"
+                name="id"
+                value="{{ variant.id }}"
+                class="product-variant-id"
+                {% unless variant.available %}
+                  disabled
+                {% endunless %}
+              >
+              <button
+                id="{{ form_id }}-submit"
+                type="submit"
+                name="add"
+                class="quick-add__submit button button--full-width button--secondary"
+                aria-labelledby="{{ form_id }}-submit title-{{ section_id }}-{{ variant.id }}"
+                aria-live="polite"
+                data-sold-out-message="true"
+                {% unless variant.available %}
+                  disabled
+                {% endunless %}
+              >
+                <span>
+                  {%- if variant.available -%}
+                    {{ 'products.product.add_to_cart' | t }}
+                  {%- else -%}
+                    {{ 'products.product.sold_out' | t }}
+                  {%- endif -%}
+                </span>
+                <span class="sold-out-message hidden">{{ 'products.product.sold_out' | t }}</span>
+                {%- render 'loading-spinner' -%}
+              </button>
+            {%- endform -%}
+          </product-form>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

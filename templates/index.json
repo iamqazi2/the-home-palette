@@ -467,7 +467,8 @@
           "settings": {
             "title": "Coconut Terra",
             "swatch": "#8a6660",
-            "tag": "coconut-terra"
+            "tag": "coconut-terra",
+            "aliases": "Coconut"
           }
         },
         "colour_8": {
@@ -483,7 +484,8 @@
           "settings": {
             "title": "Reactive Santorini Blue",
             "swatch": "#1e3468",
-            "tag": "reactive-santorini-blue"
+            "tag": "reactive-santorini-blue",
+            "aliases": "Santorini Blue"
           }
         },
         "colour_10": {
