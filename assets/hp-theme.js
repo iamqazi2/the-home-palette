@@ -970,7 +970,10 @@
       var mobileSrc = v.getAttribute('data-src-mobile') || '';
       var src = phone ? (mobileSrc || desktopSrc) : (desktopSrc || mobileSrc);
       if (!src && !v.getAttribute('src')) return;
-      if (src) {
+      // Only touch the element when the file actually differs — the homepage
+      // hero ships its desktop clip on the src attribute so it plays without
+      // JS, and reloading the same file would restart it for no reason.
+      if (src && v.getAttribute('src') !== src) {
         v.setAttribute('src', src);
         v.preload = 'metadata';
         v.load();

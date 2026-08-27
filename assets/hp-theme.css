@@ -1104,13 +1104,15 @@ sticky-header.shopify-section-header-sticky {
     max-width: none !important;
     justify-content: center;
   }
-  /* Sized by width only, height auto — the logo is a wide wordmark lockup, so
-     constraining height instead would letterbox it. */
+  /* Sized by HEIGHT, width auto. The mark is a square roundel, so the old
+     width-based sizing (up to 19rem) made it 190px tall as well and it
+     swallowed the phone header. Height is the dimension that has to fit a
+     header bar, whatever shape the logo is. */
   .header__heading-logo {
-    height: auto !important;
-    width: clamp(15rem, 48vw, 19rem) !important;
+    height: clamp(4.8rem, 14vw, 6rem) !important;
+    width: auto !important;
     max-height: none !important;
-    max-width: none !important;
+    max-width: 60vw !important;
   }
 
   /* Covers the hamburger too — header-drawer's <summary> carries
@@ -1160,7 +1162,7 @@ sticky-header.shopify-section-header-sticky {
   /* Tightest phones: shrink both sides of the equation so the centred logo
      still clears the icon cluster. */
   .header { column-gap: 0.4rem; padding-left: 1.4rem !important; padding-right: 1.4rem !important; }
-  .header__heading-logo { width: clamp(12rem, 45vw, 15rem) !important; }
+  .header__heading-logo { height: 4.4rem !important; width: auto !important; }
   .header__icons { gap: 0; }
   .header__icon,
   .header__icon--cart,

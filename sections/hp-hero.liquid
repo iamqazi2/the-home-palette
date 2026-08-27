@@ -351,10 +351,19 @@
           | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', image_size: '1920x'
         }}
       {%- else -%}
+        {%- comment -%}
+          The desktop clip stays on the src attribute so the stage is never
+          empty without JavaScript — the slide images are suppressed while a
+          video is set, so an empty <video> would leave nothing at all.
+          <hp-bg-video> in hp-theme.js swaps in the phone cut on small screens.
+        {%- endcomment -%}
         <video
           autoplay loop muted playsinline preload="auto"
           {% if section.settings.video_poster %}poster="{{ section.settings.video_poster | image_url: width: 2400 }}"{% endif %}
           src="{{ section.settings.video_url }}"
+          data-src-desktop="{{ section.settings.video_url }}"
+          data-src-mobile="{{ section.settings.video_url_mobile }}"
+          data-hp-bg-video
         ></video>
       {%- endif -%}
     </div>
@@ -487,6 +496,12 @@
       "id": "video",
       "label": "Hero video",
       "info": "Muted, autoplaying loop behind the rotating copy. When set, slide images are ignored."
+    },
+    {
+      "type": "text",
+      "id": "video_url_mobile",
+      "label": "Hero video URL (phones)",
+      "info": "Used below 750px — a portrait clip suits a phone far better than a cropped landscape one. Falls back to the video below."
     },
     {
       "type": "text",

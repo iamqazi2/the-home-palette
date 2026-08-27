@@ -92,7 +92,8 @@
         "grain": true,
         "show_cue": true,
         "focal": "center",
-        "typewriter": true
+        "typewriter": true,
+        "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4"
       }
     },
     "hp_trust": {
