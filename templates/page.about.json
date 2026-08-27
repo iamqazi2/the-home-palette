@@ -450,7 +450,7 @@
         "rev_01": {
           "type": "video",
           "settings": {
-            "video_url": "",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/a31d3e87af5f4e1382d5d8d796452f64/a31d3e87af5f4e1382d5d8d796452f64.HD-720p-4.5Mbps-86196205.mp4",
             "name": "Ayesha K.",
             "role": "Home Chef · Lahore"
           }
@@ -476,7 +476,7 @@
         "rev_04": {
           "type": "video",
           "settings": {
-            "video_url": "",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/912ee1c9abfe40ccaebd553d9d5efa13/912ee1c9abfe40ccaebd553d9d5efa13.HD-720p-4.5Mbps-86196203.mp4",
             "name": "Sana M.",
             "role": "Host · Islamabad"
           }
@@ -502,7 +502,7 @@
         "rev_07": {
           "type": "video",
           "settings": {
-            "video_url": "",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/a699d89d216448b08b9934f7dd1b27e8/a699d89d216448b08b9934f7dd1b27e8.HD-720p-4.5Mbps-86196204.mp4",
             "name": "Usman T.",
             "role": "Cafe Owner · Multan"
           }

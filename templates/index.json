@@ -647,7 +647,8 @@
           "type": "video",
           "settings": {
             "name": "Ayesha K.",
-            "role": "Home Chef · Lahore"
+            "role": "Home Chef · Lahore",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/340ca6de791b4cada29eabb68842708a/340ca6de791b4cada29eabb68842708a.HD-720p-4.5Mbps-56941057.mp4"
           }
         },
         "rev_2": {
@@ -663,7 +664,8 @@
           "type": "video",
           "settings": {
             "name": "Sana M.",
-            "role": "Host · Islamabad"
+            "role": "Host · Islamabad",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/8fb1353a013e4ebc9d38aa30166a5a08/8fb1353a013e4ebc9d38aa30166a5a08.HD-720p-4.5Mbps-57024876.mp4"
           }
         },
         "rev_4": {
@@ -679,7 +681,8 @@
           "type": "video",
           "settings": {
             "name": "Usman T.",
-            "role": "Cafe Owner · Multan"
+            "role": "Cafe Owner · Multan",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/e58909218dab456496dae7065f2a72ec/e58909218dab456496dae7065f2a72ec.HD-720p-4.5Mbps-57381773.mp4"
           }
         },
         "rev_6": {
@@ -695,7 +698,8 @@
           "type": "video",
           "settings": {
             "name": "Fatima R.",
-            "role": "Food Blogger"
+            "role": "Food Blogger",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/31620027b47546deba157dc51f231ce5/31620027b47546deba157dc51f231ce5.HD-720p-4.5Mbps-86189754.mp4"
           }
         },
         "rev_8": {
@@ -729,7 +733,8 @@
           "type": "video",
           "settings": {
             "name": "Rabia N.",
-            "role": "Home Stylist · Faisalabad"
+            "role": "Home Stylist · Faisalabad",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/c59e73c4577147e19fac75d1dcb86e65/c59e73c4577147e19fac75d1dcb86e65.HD-720p-4.5Mbps-86189755.mp4"
           }
         },
         "rev_12": {

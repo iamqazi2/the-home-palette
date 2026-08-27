@@ -82,11 +82,18 @@
         margin-top: 1.1rem;
         margin-bottom: 0.4rem;
       }
-      /* Covers the badge wherever the merchant orders the blocks, not just
-         directly after the title. */
-      .product__info-container .jdgm-widget.jdgm-preview-badge:not(:empty) {
-        display: block;
-        margin: 1.1rem 0 0.4rem;
+      /* The review app's preview badge is a second star row for the same
+         rating the chip under the title already shows, and it landed above the
+         quantity picker. Hidden here rather than in the app block, which the
+         theme cannot edit — deleting the app block in the customizer has the
+         same effect and makes this rule redundant. */
+      .product__info-container .jdgm-widget.jdgm-preview-badge {
+        display: none !important;
+      }
+      /* …and the app block wrapping it, so its margins do not leave a gap
+         where the badge used to be. */
+      .product__info-container .shopify-app-block:has(> .jdgm-preview-badge) {
+        display: none !important;
       }
 
       /* ---- full description, in the buy column beside the gallery ---- */

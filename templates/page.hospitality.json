@@ -724,7 +724,8 @@
           "type": "video",
           "settings": {
             "name": "Ayesha K.",
-            "role": "Home Chef · Lahore"
+            "role": "Home Chef · Lahore",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/ffbf98149d8545db94b0a7966be33a7a/ffbf98149d8545db94b0a7966be33a7a.HD-720p-4.5Mbps-86196737.mp4"
           }
         },
         "rev_02": {
@@ -749,7 +750,8 @@
           "type": "video",
           "settings": {
             "name": "Sana M.",
-            "role": "Host · Islamabad"
+            "role": "Host · Islamabad",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/ad9b028f2eb74b9aa7dbc13ea9a5f34e/ad9b028f2eb74b9aa7dbc13ea9a5f34e.HD-720p-4.5Mbps-86196738.mp4"
           }
         },
         "rev_05": {
@@ -774,7 +776,8 @@
           "type": "video",
           "settings": {
             "name": "Usman T.",
-            "role": "Cafe Owner · Multan"
+            "role": "Cafe Owner · Multan",
+            "video_url": "https://cdn.shopify.com/videos/c/vp/4c92cb98194b4e82bf4ff42bb63a64ba/4c92cb98194b4e82bf4ff42bb63a64ba.HD-720p-4.5Mbps-86196736.mp4"
           }
         },
         "rev_08": {
