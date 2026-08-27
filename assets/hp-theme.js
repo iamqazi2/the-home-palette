@@ -1278,10 +1278,28 @@
   }
 
   function scrollToEl(el) {
-    var top = el.getBoundingClientRect().top + window.scrollY - headerOffset();
-    if (top < 0) top = 0;
-    if (lenis) { lenis.scrollTo(top, { duration: 1.1 }); return; }
-    window.scrollTo({ top: top, behavior: reducedMotion ? 'auto' : 'smooth' });
+    var doScroll = function () {
+      var top = el.getBoundingClientRect().top + window.scrollY - headerOffset();
+      if (top < 0) top = 0;
+      if (lenis) {
+        /* Lenis is paused whenever an overlay holds the body scroll-lock, and
+           the menu drawer only releases that lock when its close animation
+           ends — so a scrollTo issued in the meantime was being dropped and
+           the page never moved. Resume before asking it to scroll. */
+        try { lenis.start(); } catch (e) {}
+        lenis.scrollTo(top, { duration: 1.1 });
+        return;
+      }
+      window.scrollTo({ top: top, behavior: reducedMotion ? 'auto' : 'smooth' });
+    };
+
+    doScroll();
+
+    /* Once more after the drawer has finished closing: the lock may have been
+       released late, or media above the target may have loaded and moved it. */
+    window.setTimeout(function () {
+      if (Math.abs(el.getBoundingClientRect().top - headerOffset()) > 40) doScroll();
+    }, 480);
   }
 
   function closeMenuDrawer() {
