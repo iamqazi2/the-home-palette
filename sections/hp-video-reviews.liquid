@@ -7,7 +7,17 @@
 {% endcomment %}
 
 {%- liquid
-  assign total = section.blocks.size
+  # Which cards this page shows. The landing page runs the full mix of customer
+  # video cards and written testimonials; every other page shows the written
+  # ones only. Filtering here rather than skipping inside the loop matters: the
+  # row split below is index-based, so counting blocks that never render would
+  # push all the visible cards into one row and leave the other nearly empty.
+  assign cards = section.blocks
+  unless section.settings.show_video_cards
+    assign cards = section.blocks | where: 'type', 'text'
+  endunless
+
+  assign total = cards.size
   assign split = total | plus: 1 | divided_by: 2
   if total < 4
     assign split = total
@@ -161,7 +171,7 @@
       <div class="hp-marquee hp-marquee--pause">
         <div class="hp-marquee__track{% if row == 2 %} hp-marquee__track--reverse{% endif %}" style="animation-duration: {{ row_dur }}s;">
           {%- for i in (1..2) -%}
-            {%- for block in section.blocks -%}
+            {%- for block in cards -%}
               {%- liquid
                 if row == 1 and forloop.index > split
                   continue
@@ -281,6 +291,13 @@
       "id": "fallback_poster",
       "label": "Fallback thumbnail",
       "info": "Optional. With no thumbnail the clip's own first frame is shown."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video_cards",
+      "label": "Show customer video cards",
+      "info": "Off shows the written testimonials only. Video blocks keep their clips and come straight back when this is switched on.",
+      "default": true
     },
     {
       "type": "checkbox",

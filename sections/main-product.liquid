@@ -222,6 +222,7 @@
       }
       @media screen and (min-width: 990px) {
         .hp-pdp-below { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+        .hp-pdp-below--single { grid-template-columns: minmax(0, 1fr); }
       }
       .hp-pdp-block { padding-top: 0; min-width: 0; }
       .hp-pdp-block + .hp-pdp-block { margin-top: 0; border-top: none; }
@@ -292,8 +293,12 @@
         margin-top: 0;
         padding-top: 0;
       }
-      /* the block supplies the heading */
+      /* Hide the app's own heading ONLY when this block prints one, otherwise
+         the section ends up with no heading at all — which is what happened
+         with "Reviews heading" left empty, as the setting's own hint suggests. */
+      {%- if section.settings.hp_reviews_title != blank %}
       #hp-reviews .jdgm-rev-widg__title { display: none !important; }
+      {%- endif %}
 
       /* type: identical to the description column */
       #hp-reviews,
@@ -1256,12 +1261,58 @@
         their own section further down the template, so this wrapper would
         otherwise be an empty div drawing its own top margin.
       {%- endcomment -%}
-      {%- if section.settings.hp_show_excerpt and product.description != blank -%}
-        <div class="hp-pdp-below hp-container quick-add-hidden">
-          <div class="hp-pdp-block" id="hp-description">
-            <h2 class="hp-pdp-block__title">{{ section.settings.hp_description_title | default: 'Product Description' }}</h2>
-            <div class="hp-pdp-block__body rte">{{ product.description }}</div>
-          </div>
+      {%- liquid
+        assign show_desc = false
+        if section.settings.hp_show_excerpt and product.description != blank
+          assign show_desc = true
+        endif
+        assign show_reviews = section.settings.hp_show_reviews
+      -%}
+      {%- if show_desc or show_reviews -%}
+        {%- comment -%}
+          Two columns at desktop, description beside reviews. With only one of
+          them on, drop to a single column — the grid would otherwise leave the
+          lone block sitting in the left half with dead space beside it.
+        {%- endcomment -%}
+        <div class="hp-pdp-below hp-container quick-add-hidden{% unless show_desc and show_reviews %} hp-pdp-below--single{% endunless %}">
+          {%- if show_desc -%}
+            <div class="hp-pdp-block" id="hp-description">
+              <h2 class="hp-pdp-block__title">{{ section.settings.hp_description_title | default: 'Product Description' }}</h2>
+              <div class="hp-pdp-block__body rte">{{ product.description }}</div>
+            </div>
+          {%- endif -%}
+          {%- if show_reviews -%}
+            <div
+              class="hp-pdp-block"
+              id="hp-reviews"
+              {%- if section.settings.hp_reviews_per_page > 0 %}
+                data-hp-reviews-pager="{{ section.settings.hp_reviews_per_page }}"
+                data-hp-star="{{ section.settings.hp_star_color | default: '#e0a422' }}"
+              {%- endif %}
+            >
+              {%- if section.settings.hp_reviews_title != blank -%}
+                <h2 class="hp-pdp-block__title">{{ section.settings.hp_reviews_title }}</h2>
+              {%- endif -%}
+              {%- comment -%}
+                Judge.me's documented manual embed, rather than an app block: the
+                app-block handle is not knowable from the theme, and this form is
+                what pins the widget to a specific product. `data-id` is the id of
+                the product currently open, so a product page can only ever show
+                its own reviews. The metafield carries that product's
+                server-rendered widget, so the reviews are in the HTML on first
+                paint instead of waiting on the app's script; when it is empty
+                Judge.me's own JS fills the container from the same data-id.
+              {%- endcomment -%}
+              <div
+                id="judgeme_product_reviews"
+                class="jdgm-widget jdgm-review-widget"
+                data-product-title="{{ product.title | escape }}"
+                data-id="{{ product.id }}"
+              >
+                {{ product.metafields.judgeme.widget }}
+              </div>
+            </div>
+          {%- endif -%}
         </div>
       {%- endif -%}
     {%- endif -%}
@@ -2709,7 +2760,8 @@
     { "type": "checkbox", "id": "hp_show_excerpt", "label": "Show a short excerpt in the sidebar", "default": true },
     { "type": "range", "id": "hp_excerpt_words", "min": 20, "max": 90, "step": 5, "label": "Excerpt length (words)", "default": 45 },
     { "type": "checkbox", "id": "hp_show_meta", "label": "Show SKU & categories", "default": true },
-    { "type": "text", "id": "hp_reviews_title", "label": "Reviews heading", "info": "Leave empty — the review app already prints its own title." },
+    { "type": "checkbox", "id": "hp_show_reviews", "label": "Show product reviews", "info": "Judge.me reviews for this product only, beside the description.", "default": true },
+    { "type": "text", "id": "hp_reviews_title", "label": "Reviews heading", "info": "Leave empty to keep the review app's own title, or type one here to replace it." },
     { "type": "range", "id": "hp_reviews_per_page", "min": 0, "max": 10, "step": 1, "label": "Reviews per page", "info": "0 shows them all with the app's own paging.", "default": 2 },
     { "type": "color", "id": "hp_star_color", "label": "Review star colour", "default": "#e0a422" },
     { "type": "checkbox", "id": "hp_sidebar_recs", "label": "Show 'You might also like' in the sidebar", "default": true },
