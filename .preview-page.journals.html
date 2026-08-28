@@ -1,0 +1,634 @@
+<!doctype html><html lang="en" class="no-js"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>page.journals.json</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/hp-theme.css">
+<style>html{font-size:62.5%}body{margin:0;font-family:'DM Sans',sans-serif;font-size:1.5rem}
+.fake-header{position:sticky;top:0;z-index:40;height:7rem;display:flex;align-items:center;justify-content:center;background:#257575;color:#fff9df;font-family:'DM Serif Display',serif;font-size:2rem}</style></head>
+<body><div class="fake-header">THE HOME PALETTE</div><main>
+<section id="shopify-section-main" class="shopify-section"><style>/* ---------------- hero ---------------- */
+  .hp-jrnl-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    min-height: clamp(38rem, 62vh, 60rem);
+    background: var(--hp-teal-ink);
+    color: var(--hp-cream);
+    --hp-heading: var(--hp-cream);
+  }
+  .hp-jrnl-hero__media { position: absolute; inset: -8% 0; z-index: 0; height: 116%; }
+  .hp-jrnl-hero__media img { width: 100%; height: 100%; object-fit: cover; }
+  .hp-jrnl-hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(180deg, rgba(10, 35, 32, 0.23800000000000002) 0%, rgba(10, 35, 32, 0.595) 55%, rgba(10, 35, 32, 0.85) 100%),
+      linear-gradient(90deg, rgba(10, 35, 32, 0.595) 0%, rgba(10, 35, 32, 0) 80%);
+  }
+  .hp-jrnl-hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding-top: clamp(9rem, 16vh, 14rem);
+    padding-bottom: clamp(3.2rem, 5vw, 5.2rem);
+  }
+  .hp-jrnl-hero__title {
+    margin: 1.4rem 0 0;
+    font-size: var(--hp-h-page);
+    color: var(--hp-cream);
+  }
+  .hp-jrnl-hero__text {
+    margin: 1.8rem 0 0;
+    max-width: 56rem;
+    font-size: clamp(1.45rem, 1.5vw, 1.7rem);
+    line-height: 1.8;
+    color: rgba(255, 249, 223, 0.86);
+  }
+  .hp-jrnl-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+    margin: 2.6rem 0 0;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 249, 223, 0.72);
+  }
+  .hp-jrnl-hero__meta span { display: inline-flex; align-items: center; gap: 0.7rem; }
+
+  /* ---------------- body ---------------- */
+  .hp-jrnl { background: #fffdf4; }
+
+  /* ---------------- filter ---------------- */
+  .hp-jrnl__filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: clamp(2.4rem, 3.4vw, 3.6rem);
+    padding-bottom: clamp(2rem, 2.6vw, 2.6rem);
+    border-bottom: 1px solid var(--hp-hairline-teal);
+  }
+  .hp-jrnl__chip {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.8rem;
+    border: 1.5px solid var(--hp-hairline-strong);
+    border-radius: var(--hp-r-pill);
+    background: transparent;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+    cursor: pointer;
+    transition: background-color 0.35s var(--hp-ease), color 0.35s var(--hp-ease),
+      border-color 0.35s var(--hp-ease), transform 0.35s var(--hp-ease);
+  }
+  .hp-jrnl__chip:hover { transform: translateY(-2px); border-color: var(--hp-teal); }
+  .hp-jrnl__chip.is-active {
+    background: var(--hp-teal);
+    border-color: var(--hp-teal);
+    color: var(--hp-cream);
+  }
+  .hp-jrnl__chip-count { opacity: 0.6; font-size: 1rem; }
+  .hp-jrnl__filter-note {
+    margin: 0 0 0 auto;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-taupe-soft);
+  }
+  /* Without JS the chips cannot filter anything, so they are not shown at all
+     rather than sitting there inert. */
+  html:not(.hp-js) .hp-jrnl__filter { display: none; }
+
+  /* a filtered-out post collapses out of the grid */
+  .hp-jrnl__post[hidden] { display: none; }
+
+  /* ---------------- lead story ---------------- */
+  .hp-jrnl__lead { position: relative; margin-bottom: clamp(3.2rem, 5vw, 5.6rem); }
+  .hp-jrnl__lead-link { display: block; text-decoration: none; color: inherit; }
+  .hp-jrnl__lead-media {
+    position: relative;
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: var(--hp-linen);
+  }
+  @media screen and (min-width: 990px) {
+    .hp-jrnl__lead-media { width: 78%; aspect-ratio: 16 / 9; }
+    .hp-jrnl--flip .hp-jrnl__lead-media { margin-left: auto; }
+  }
+  .hp-jrnl__lead-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.4s var(--hp-ease);
+  }
+  .hp-jrnl__lead-link:hover .hp-jrnl__lead-media img { transform: scale(1.05); }
+  .hp-jrnl__lead-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 35, 32, 0) 45%, rgba(10, 35, 32, 0.5) 100%);
+    pointer-events: none;
+  }
+  .hp-jrnl__ribbon {
+    position: absolute;
+    top: 1.8rem;
+    left: 1.8rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1.5rem;
+    border-radius: var(--hp-r-pill);
+    background: var(--hp-cream);
+    color: var(--hp-teal);
+    font-family: var(--hp-font-ui);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* The copy card lifts off the photograph rather than sitting under it — the
+     overlap is what makes the lead read as a feature rather than a big card. */
+  .hp-jrnl__lead-card {
+    position: relative;
+    margin: -4rem 1.6rem 0;
+    padding: clamp(2.4rem, 3.2vw, 3.6rem);
+    background: #1a4b46;
+    background-image: linear-gradient(180deg, rgba(16, 48, 44, 0) 30%, rgba(16, 48, 44, 0.55) 62%, rgba(10, 35, 32, 0.92) 100%);
+    color: var(--hp-cream);
+    border-radius: var(--hp-r-card);
+    box-shadow: var(--hp-shadow-card);
+  }
+  @media screen and (min-width: 990px) {
+    .hp-jrnl__lead-card {
+      position: absolute;
+      right: 0;
+      bottom: -3.2rem;
+      width: 42%;
+      margin: 0;
+    }
+    .hp-jrnl--flip .hp-jrnl__lead-card { right: auto; left: 0; }
+    .hp-jrnl__lead { margin-bottom: clamp(6rem, 8vw, 9rem); }
+  }
+  .hp-jrnl__lead-tag {
+    display: inline-block;
+    margin-bottom: 1.2rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: var(--hp-r-pill);
+    background: rgba(255, 249, 223, 0.16);
+    font-family: var(--hp-font-ui);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--hp-cream);
+  }
+  .hp-jrnl__lead-title {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-size: clamp(2.4rem, 3.2vw, 3.6rem);
+    line-height: 1.16;
+    color: var(--hp-cream);
+  }
+  .hp-jrnl__lead-excerpt {
+    margin: 1.4rem 0 0;
+    font-size: 1.45rem;
+    line-height: 1.8;
+    color: rgba(255, 249, 223, 0.82);
+  }
+  .hp-jrnl__lead-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 2.2rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-cream);
+  }
+  .hp-jrnl__lead-more .hp-icon { transition: transform 0.35s var(--hp-ease); }
+  .hp-jrnl__lead-link:hover .hp-jrnl__lead-more .hp-icon { transform: translateX(5px); }
+
+  /* ---------------- post card ---------------- */
+  .hp-jrnl__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--hp-paper);
+    border: 1px solid var(--hp-hairline);
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--hp-ink);
+    transition: transform 0.45s var(--hp-ease), box-shadow 0.45s var(--hp-ease), border-color 0.45s var(--hp-ease);
+  }
+  .hp-jrnl__card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--hp-shadow-card);
+    border-color: transparent;
+  }
+  .hp-jrnl__card-media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--hp-linen);
+  }
+  .hp-jrnl__card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--hp-ease); }
+  .hp-jrnl__card:hover .hp-jrnl__card-media img { transform: scale(1.06); }
+  .hp-jrnl__card-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 35, 32, 0) 55%, rgba(10, 35, 32, 0.45) 100%);
+    opacity: 0;
+    transition: opacity 0.45s var(--hp-ease);
+  }
+  .hp-jrnl__card:hover .hp-jrnl__card-media::after { opacity: 1; }
+  .hp-jrnl__card-tag {
+    position: absolute;
+    left: 1.2rem;
+    bottom: 1.2rem;
+    z-index: 2;
+    padding: 0.55rem 1.2rem;
+    border-radius: var(--hp-r-pill);
+    background: rgba(255, 249, 223, 0.92);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    font-family: var(--hp-font-ui);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+  }
+  .hp-jrnl__card-body { display: flex; flex-direction: column; gap: 1rem; padding: 2.2rem 2rem 2.4rem; flex: 1 1 auto; }
+  .hp-jrnl__card-title {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-weight: 400;
+    font-size: var(--hp-h-block);
+    line-height: 1.25;
+    letter-spacing: -0.004em;
+    color: var(--hp-heading);
+  }
+  .hp-jrnl__card-excerpt {
+    margin: 0;
+    font-size: 1.4rem;
+    line-height: 1.7;
+    color: var(--hp-taupe);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .hp-jrnl__card-more {
+    margin-top: auto;
+    padding-top: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+  }
+  .hp-jrnl__card-more .hp-icon { transition: transform 0.35s var(--hp-ease); }
+  .hp-jrnl__card:hover .hp-jrnl__card-more .hp-icon { transform: translateX(5px); }
+
+  /* ---------------- grid ---------------- */
+  .hp-jrnl__grid {
+    display: grid;
+    gap: clamp(1.8rem, 2.6vw, 2.8rem);
+    grid-template-columns: 1fr;
+  }
+  @media screen and (min-width: 750px) { .hp-jrnl__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media screen and (min-width: 1200px) { .hp-jrnl__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+  /* ---------------- post view ---------------- */
+  .hp-jrnl__reader:not(.is-open) { display: none; }
+  .hp-jrnl__post-view { max-width: 76rem; margin: 0 auto; }
+  .hp-jrnl__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: clamp(1.8rem, 2.6vw, 2.6rem);
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+    text-decoration: none;
+  }
+  .hp-jrnl__back:hover { color: var(--hp-teal-deep); }
+  .hp-jrnl__post-media {
+    border-radius: var(--hp-r-card);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: var(--hp-linen);
+    margin-bottom: clamp(2.4rem, 3.4vw, 3.4rem);
+  }
+  .hp-jrnl__post-media img { width: 100%; height: 100%; object-fit: cover; }
+  .hp-jrnl__post-tag { margin: 0 0 1.2rem; }
+  .hp-jrnl__post-title {
+    margin: 0;
+    font-family: var(--hp-font-display);
+    font-size: var(--hp-h-section);
+    line-height: 1.15;
+    color: var(--hp-heading);
+  }
+  .hp-jrnl__post-lede {
+    margin: 1.8rem 0 0;
+    font-size: clamp(1.6rem, 1.9vw, 1.9rem);
+    line-height: 1.7;
+    color: var(--hp-heading);
+  }
+  .hp-jrnl__post-body {
+    margin-top: clamp(2.4rem, 3.4vw, 3.2rem);
+    font-size: 1.55rem;
+    line-height: 1.9;
+    color: var(--hp-taupe);
+  }
+  .hp-jrnl__post-body h2 {
+    margin: clamp(2.6rem, 3.4vw, 3.4rem) 0 1rem;
+    font-family: var(--hp-font-display);
+    font-size: var(--hp-h-block);
+    line-height: 1.25;
+    color: var(--hp-heading);
+  }
+  .hp-jrnl__post-body p { margin: 0 0 1.6rem; }
+  .hp-jrnl__post-body ul, .hp-jrnl__post-body ol { margin: 0 0 1.6rem; padding-left: 2.2rem; }
+  .hp-jrnl__post-body li { margin-bottom: 0.8rem; }
+  .hp-jrnl__post-body strong { color: var(--hp-ink); }
+  .hp-jrnl__post-foot { margin-top: clamp(2.4rem, 3.4vw, 3.4rem); }
+
+  .hp-jrnl__empty {
+    margin: 0;
+    padding: clamp(3rem, 5vw, 5rem) 0;
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--hp-taupe);
+  }</style><div class="hp-jrnl-hero">
+  <div class="hp-jrnl-hero__media" data-hp-parallax><img src="https://cdn.shopify.com/s/files/1/0915/5028/6123/files/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg?width=1200&format=jpg" ></div>
+  <div class="hp-jrnl-hero__scrim"></div>
+
+  <div class="hp-jrnl-hero__inner hp-container"><p class="hp-eyebrow hp-eyebrow--light" data-hp-fluid>The Journal</p><h1 class="hp-jrnl-hero__title" data-hp-split>Notes From the Table</h1><p class="hp-jrnl-hero__text" data-hp-fluid>Styling notes, care guides and table stories from The Home Palette.</p><p class="hp-jrnl-hero__meta" data-hp-reveal>
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg>
+
+        4 stories
+      </span><span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+
+          2 topics
+        </span></p>
+  </div>
+</div>
+
+<div class="hp-jrnl hp-section">
+  <div class="hp-container"><div class="hp-jrnl__index" data-hp-journal-index><hp-journal-filter class="hp-jrnl__filter" data-hp-reveal>
+          <button type="button" class="hp-jrnl__chip is-active" data-hp-topic="" aria-pressed="true">
+            All stories
+            <span class="hp-jrnl__chip-count">4</span>
+          </button><button type="button" class="hp-jrnl__chip" data-hp-topic="Styling" aria-pressed="false">
+              Styling
+              <span class="hp-jrnl__chip-count">2</span>
+            </button><button type="button" class="hp-jrnl__chip" data-hp-topic="Buying Guide" aria-pressed="false">
+              Buying Guide
+              <span class="hp-jrnl__chip-count">2</span>
+            </button></hp-journal-filter><div
+        class="hp-jrnl__lead hp-jrnl__post"
+        data-hp-post
+        data-hp-tag="Styling"
+        
+      >
+        <a
+          class="hp-jrnl__lead-link"
+          href="/pages/journals?post=journal-how-to-set-a-beautiful-dining-table"
+          data-hp-post-link="journal-how-to-set-a-beautiful-dining-table"
+        >
+          <div class="hp-jrnl__lead-media" data-hp-reveal><img src="https://cdn.shopify.com/s/files/1/0915/5028/6123/files/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp?width=1200&format=jpg" ><span class="hp-jrnl__ribbon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+
+                Latest
+              </span></div>
+          <div class="hp-jrnl__lead-card" data-hp-reveal><span class="hp-jrnl__lead-tag">Styling</span><h2 class="hp-jrnl__lead-title">How to Set a Beautiful Dining Table for Every Occasion</h2><p class="hp-jrnl__lead-excerpt">From choosing the right dinnerware to adding subtle decorative touches, a few simple details can turn an ordinary table into one that feels warm, elegant and inviting.</p><span class="hp-jrnl__lead-more">
+              Read the story
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+
+            </span>
+          </div>
+        </a>
+      </div><div class="hp-jrnl__grid" data-hp-stagger><div
+              class="hp-jrnl__post"
+              data-hp-post
+              data-hp-tag="Buying Guide"
+              data-hp-reveal
+              
+            >
+              <a
+  class="hp-jrnl__card"
+  href="/pages/journals?post=journal-dinner-set-size-guide"
+  data-hp-post-link="journal-dinner-set-size-guide"
+><span class="hp-jrnl__card-media">
+      <img src="https://cdn.shopify.com/s/files/1/0915/5028/6123/files/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp?width=1200&format=jpg" ><span class="hp-jrnl__card-tag">Buying Guide</span></span><span class="hp-jrnl__card-body">
+    <h2 class="hp-jrnl__card-title">Dinner Set Size Guide: How Many Plates Do You Really Need?</h2><p class="hp-jrnl__card-excerpt">The right size means you're ready for everyday meals, unexpected guests and special occasions — without running short on plates or overfilling your cabinets.</p><span class="hp-jrnl__card-more">
+      Read the story
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+
+    </span>
+  </span>
+</a>
+
+            </div><div
+              class="hp-jrnl__post"
+              data-hp-post
+              data-hp-tag="Buying Guide"
+              data-hp-reveal
+              
+            >
+              <a
+  class="hp-jrnl__card"
+  href="/pages/journals?post=journal-ceramic-vs-porcelain-dinnerware"
+  data-hp-post-link="journal-ceramic-vs-porcelain-dinnerware"
+><span class="hp-jrnl__card-media">
+      <img src="https://cdn.shopify.com/s/files/1/0915/5028/6123/files/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp?width=1200&format=jpg" ><span class="hp-jrnl__card-tag">Buying Guide</span></span><span class="hp-jrnl__card-body">
+    <h2 class="hp-jrnl__card-title">Ceramic vs Porcelain Dinnerware: Which One Is Better for Your Home?</h2><p class="hp-jrnl__card-excerpt">Both are beautiful, durable and widely loved — yet they serve slightly different purposes. Here's how to choose the one that suits your table.</p><span class="hp-jrnl__card-more">
+      Read the story
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+
+    </span>
+  </span>
+</a>
+
+            </div><div
+              class="hp-jrnl__post"
+              data-hp-post
+              data-hp-tag="Styling"
+              data-hp-reveal
+              
+            >
+              <a
+  class="hp-jrnl__card"
+  href="/pages/journals?post=journal-yellow-themed-brunch-table"
+  data-hp-post-link="journal-yellow-themed-brunch-table"
+><span class="hp-jrnl__card-media">
+      <img src="https://cdn.shopify.com/s/files/1/0915/5028/6123/files/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg?width=1200&format=jpg" ><span class="hp-jrnl__card-tag">Styling</span></span><span class="hp-jrnl__card-body">
+    <h2 class="hp-jrnl__card-title">How to Style the Perfect Yellow-Themed Brunch Table</h2><p class="hp-jrnl__card-excerpt">Vibrant without being overwhelming, and timeless enough for every season — here's how to build a yellow brunch table that feels sophisticated rather than loud.</p><span class="hp-jrnl__card-more">
+      Read the story
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+
+    </span>
+  </span>
+</a>
+
+            </div></div></div><div class="hp-jrnl__reader" data-hp-journal-reader><article class="hp-jrnl__post-view" data-hp-post-view="journal-how-to-set-a-beautiful-dining-table" hidden >
+            <a class="hp-jrnl__back" href="/pages/journals" data-hp-post-back>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg>
+
+              All stories
+            </a><div class="hp-jrnl__post-media">
+                <img src="https://cdn.shopify.com/s/files/1/0915/5028/6123/files/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp?width=1200&format=jpg" >
+              </div><p class="hp-eyebrow hp-jrnl__post-tag">Styling</p><h2 class="hp-jrnl__post-title">How to Set a Beautiful Dining Table for Every Occasion</h2><p class="hp-jrnl__post-lede">From choosing the right dinnerware to adding subtle decorative touches, a few simple details can turn an ordinary table into one that feels warm, elegant and inviting.</p><div class="hp-jrnl__post-body rte"><p>A beautiful table is rarely about owning more — it is about how a few good pieces are arranged, and how much room you leave for the food and the people. Here is the order we work in, whether it is a Tuesday dinner or a table laid for twenty.</p>
+<h2>Start with the surface</h2>
+<p>Before a single plate goes down, decide what the table itself is wearing. A runner down the centre gives you a spine to build around; placemats give each guest a defined space, which is what stops a long table looking cluttered. Woven jute and cotton weaves are the easiest place to start because they read as texture rather than pattern, so they never compete with the food. If your table is beautiful in its own right — wood grain, marble, a painted finish — leave the middle bare and use placemats alone.</p>
+<h2>Build each setting from the inside out</h2>
+<p>The dinner plate sits at the centre of each place. A side plate goes to the upper left; a bowl stacks on the dinner plate if soup or salad comes first. Cutlery follows the order of the meal from the outside in — fork on the left, knife and spoon on the right, blade facing the plate — and dessert cutlery lies flat above the plate. Glassware sits above the knife, angled slightly right. Two glasses, one for water and one for everything else, is plenty for most tables.</p>
+<h2>Choose one colour and let it lead</h2>
+<p>The tables that look considered are usually the ones that commit to a direction. Pick a single glaze family and repeat it: sage green plates with cream weaves, or a burnt maple platter surrounded by ivory. Everything else — napkins, candles, flowers — should either match that colour or disappear into the neutral. Reactive glazes do some of this work for you: because the glaze moves in the kiln, no two pieces are identical, so a table in one colour still has depth rather than looking flat.</p>
+<h2>Give the centre something to hold</h2>
+<p>A centrepiece does not have to be flowers. A platter of fruit, bread stacked in a jute basket, a low bowl of water with petals, or a pair of candles will all do the job. The only real rule is height: keep it below eye level so people can see each other across the table.</p>
+<h2>Adjust for the occasion</h2>
+<ul>
+<li><strong>Everyday:</strong> placemats, dinner plates, cutlery, water glasses. Nothing more.</li>
+<li><strong>Guests for dinner:</strong> add a side plate, a second glass, cloth napkins, and one shared serving piece for every two or three people.</li>
+<li><strong>Celebrations:</strong> add a runner, a centrepiece, and one statement serving piece — a large platter or a handi — for the whole table to look at.</li>
+</ul>
+<p>Set the table before you start cooking if you can. It is the part that makes a room feel ready, and it is much harder to enjoy doing with a pan on the heat.</p></div>
+
+            <a
+              class="hp-btn hp-btn--outline hp-jrnl__post-foot"
+              href="/pages/journals"
+              data-hp-post-back
+            >
+              All stories
+            </a>
+          </article><article class="hp-jrnl__post-view" data-hp-post-view="journal-dinner-set-size-guide" hidden >
+            <a class="hp-jrnl__back" href="/pages/journals" data-hp-post-back>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg>
+
+              All stories
+            </a><div class="hp-jrnl__post-media">
+                <img src="https://cdn.shopify.com/s/files/1/0915/5028/6123/files/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp?width=1200&format=jpg" >
+              </div><p class="hp-eyebrow hp-jrnl__post-tag">Buying Guide</p><h2 class="hp-jrnl__post-title">Dinner Set Size Guide: How Many Plates Do You Really Need?</h2><p class="hp-jrnl__post-lede">The right size means you're ready for everyday meals, unexpected guests and special occasions — without running short on plates or overfilling your cabinets.</p><div class="hp-jrnl__post-body rte"><p>Most people buy a dinner set once and then discover, three months later, that they are washing plates halfway through a dinner party. Sizing is not about the biggest box on the shelf — it is about how many people actually sit at your table, and how often you host more.</p>
+<h2>Count place settings, not pieces</h2>
+<p>Sets are advertised by piece count, which flatters big numbers: a 45-piece set and a 33-piece set can seat the same number of people with different amounts of serveware. What matters is the <strong>place setting</strong> — one person's share. A full place setting is usually a dinner plate, a side or quarter plate, and a bowl, with a cup and saucer if tea is part of the meal.</p>
+<h2>The rule we give most homes</h2>
+<ul>
+<li><strong>Two to three people:</strong> six place settings. It survives a week of washing-up delays and covers a small dinner.</li>
+<li><strong>Family of four to six:</strong> eight. The two spare settings absorb breakages and unexpected guests.</li>
+<li><strong>You host often, or it is a joint family:</strong> twelve, or eight plus a second set of plates in a matching colour.</li>
+</ul>
+<p>Whatever the household, the practical version of the rule is: <strong>seats at your table, plus two</strong>.</p>
+<h2>Serveware is a separate calculation</h2>
+<p>Serving pieces are what run out first at a real dinner. As a starting point, plan one large platter for every four guests, at least two serving bowls, and one dedicated rice or biryani dish if that is how you eat. A handi or a chafing dish earns its place the moment you serve anything that needs to stay hot.</p>
+<h2>Check the cabinet before you buy</h2>
+<p>Two numbers decide whether a set is comfortable to live with: the diameter of the dinner plate and the height of a stack of six. Measure the depth of your shelf and the clearance above it. A 10-inch plate is generous and looks right under a full plate of food; an 8-inch plate stacks and stores far more easily. Many homes are happiest with both.</p>
+<h2>Buying over time</h2>
+<p>You do not have to buy everything at once, but you do have to buy in a way that lets you add later. That is the whole argument for choosing within one colour family: a bowl bought next year should still belong beside the plates you own now. Stay inside a glaze family and a set can grow with the household instead of being replaced by it.</p></div>
+
+            <a
+              class="hp-btn hp-btn--outline hp-jrnl__post-foot"
+              href="/pages/journals"
+              data-hp-post-back
+            >
+              All stories
+            </a>
+          </article><article class="hp-jrnl__post-view" data-hp-post-view="journal-ceramic-vs-porcelain-dinnerware" hidden >
+            <a class="hp-jrnl__back" href="/pages/journals" data-hp-post-back>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg>
+
+              All stories
+            </a><div class="hp-jrnl__post-media">
+                <img src="https://cdn.shopify.com/s/files/1/0915/5028/6123/files/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp?width=1200&format=jpg" >
+              </div><p class="hp-eyebrow hp-jrnl__post-tag">Buying Guide</p><h2 class="hp-jrnl__post-title">Ceramic vs Porcelain Dinnerware: Which One Is Better for Your Home?</h2><p class="hp-jrnl__post-lede">Both are beautiful, durable and widely loved — yet they serve slightly different purposes. Here's how to choose the one that suits your table.</p><div class="hp-jrnl__post-body rte"><p>Both are fired clay, both are sold as "dinnerware", and the labels are used loosely enough that the difference gets lost. Here is what actually separates them, and which one suits which household.</p>
+<h2>What the two words mean</h2>
+<p>Porcelain is made from a finer, whiter clay body and fired at a higher temperature. The result is dense and vitrified — it absorbs almost no water — which is why porcelain can be made thin and still feel strong, and why it often has that slight translucency at the rim when held to light.</p>
+<p>Ceramic, in everyday use, usually means stoneware: a coarser clay fired at a lower temperature. It is thicker, heavier in the hand, and it takes glaze in a way porcelain does not — reactive and speckled finishes, colour that moves and pools, the surface variation that makes two pieces from one batch slightly different.</p>
+<h2>How that feels at the table</h2>
+<ul>
+<li><strong>Weight:</strong> porcelain is lighter for its strength; stoneware feels substantial, which many people prefer for everyday meals.</li>
+<li><strong>Heat:</strong> stoneware holds warmth longer, useful for food that sits on the table through a long meal.</li>
+<li><strong>Chipping:</strong> porcelain's density makes rims more chip-resistant; stoneware's thicker rim takes knocks but shows them more.</li>
+<li><strong>Character:</strong> porcelain is uniform by design. Stoneware is not, and that is the point of it.</li>
+</ul>
+<h2>Caring for either</h2>
+<p>Both are happy with normal washing-up, and most modern pieces are dishwasher and microwave friendly — but check the piece rather than the category, because a metallic rim or a hand-painted detail changes the answer. What harms both is thermal shock: do not take a dish from the fridge to a hot oven, or run cold water into a hot pan. Grey metal marks from cutlery are surface, not damage, and lift with a little bicarbonate paste.</p>
+<h2>So which should you buy?</h2>
+<p>If you want a table that feels warm, tactile and a little different from everyone else's — and you eat at home most nights — stoneware is the honest answer. If you want uniformity across many covers, need to reorder identical pieces for years, or you are furnishing a restaurant or a hotel, porcelain's consistency is worth more than character.</p>
+<p>Plenty of good tables use both: porcelain for the plates that must match, stoneware for the bowls and platters that carry the personality.</p></div>
+
+            <a
+              class="hp-btn hp-btn--outline hp-jrnl__post-foot"
+              href="/pages/journals"
+              data-hp-post-back
+            >
+              All stories
+            </a>
+          </article><article class="hp-jrnl__post-view" data-hp-post-view="journal-yellow-themed-brunch-table" hidden >
+            <a class="hp-jrnl__back" href="/pages/journals" data-hp-post-back>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hp-icon" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg>
+
+              All stories
+            </a><div class="hp-jrnl__post-media">
+                <img src="https://cdn.shopify.com/s/files/1/0915/5028/6123/files/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg?width=1200&format=jpg" >
+              </div><p class="hp-eyebrow hp-jrnl__post-tag">Styling</p><h2 class="hp-jrnl__post-title">How to Style the Perfect Yellow-Themed Brunch Table</h2><p class="hp-jrnl__post-lede">Vibrant without being overwhelming, and timeless enough for every season — here's how to build a yellow brunch table that feels sophisticated rather than loud.</p><div class="hp-jrnl__post-body rte"><p>Yellow is the colour people most want on a brunch table and are most nervous about buying. Used carelessly it shouts; used properly it does what morning light does, which is make everything on the table look better.</p>
+<h2>Pick one yellow and stay with it</h2>
+<p>The mistake is mixing yellows. A warm, deep yellow and a cool, lemony one on the same table read as a mismatch rather than a palette. Choose one — a soft whimsy yellow, or a sharper limone — and repeat it in two or three places: plates, a teapot, a bowl of fruit. Repetition is what makes a colour look deliberate.</p>
+<h2>Ground it in neutrals</h2>
+<p>Yellow needs somewhere to sit. Jute placemats, a cream runner and ivory side plates give it a base and stop it floating. As a rough proportion: about a quarter of the table in yellow, the rest in neutrals and the food itself. If the table looks busy, the fix is almost always to remove a yellow piece, not to add a neutral.</p>
+<h2>Give it one companion colour</h2>
+<p>One accent is enough. Teal is the safest — it sits opposite yellow and makes both look cleaner. Deep green works if you want it quieter; terracotta if you want it warmer. Introduce it in something small: the cups, a bowl, the napkins.</p>
+<h2>Let the food do half the work</h2>
+<p>Brunch is a gift here. Eggs, honey, banana bread, mangoes, orange juice — a yellow table is already half-laid by what you serve. Put the yellows of the food near the yellows of the crockery and it reads as one composition rather than a colour scheme with breakfast on top.</p>
+<h2>Mind the light</h2>
+<p>Yellow glaze changes character through the day: warm and golden in the morning, flatter and greener under cool indoor light in the afternoon. If you are styling for photographs, shoot near a window in the first half of the day. If the room is dark, choose the deeper yellow — pale yellow needs daylight to look like anything at all.</p>
+<h2>Keep the middle low</h2>
+<p>Whatever goes in the centre — flowers, fruit, a cake stand — keep it below eye level so the table stays a conversation rather than an arrangement.</p></div>
+
+            <a
+              class="hp-btn hp-btn--outline hp-jrnl__post-foot"
+              href="/pages/journals"
+              data-hp-post-back
+            >
+              All stories
+            </a>
+          </article></div></div>
+</div>
+
+
+</section>
+</main>
+<script src="/assets/hp-gsap.min.js"></script><script src="/assets/hp-scrolltrigger.min.js"></script>
+<script src="/assets/hp-lenis.min.js"></script><script src="/assets/hp-theme.js"></script>
+<script>document.documentElement.style.setProperty('--hp-header-h','70px');</script></body></html>

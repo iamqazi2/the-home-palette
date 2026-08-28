@@ -7,10 +7,10 @@
 {% endcomment %}
 
 {%- liquid
-  assign accent = section.settings.accent_color | default: '#257575'
-  assign rail = 'rgba(37, 85, 80, 0.14)'
+  assign accent = section.settings.accent_color | default: '#1a4b46'
+  assign rail = 'rgba(26, 75, 70, 0.14)'
   assign card_style = section.settings.card_style | default: 'paper'
-  assign card_base = section.settings.card_color | default: '#257575'
+  assign card_base = section.settings.card_color | default: '#1a4b46'
 -%}
 
 {%- style -%}
@@ -41,7 +41,7 @@
     position: absolute;
     inset: 0 0 auto 0;
     height: 0;
-    background: linear-gradient(180deg, {{ accent }} 0%, {{ section.settings.accent_2_color | default: '#7fc8be' }} 100%);
+    background: linear-gradient(180deg, {{ accent }} 0%, {{ section.settings.accent_2_color | default: '#7dc6bb' }} 100%);
     transform-origin: top center;
   }
   /* without GSAP there is nothing to scrub the fill, so show the rail complete
@@ -77,7 +77,7 @@
   }
   .hp-abt-time__item.is-active .hp-abt-time__dot::after { transform: scale(1); }
   .hp-abt-time__item.is-active .hp-abt-time__dot {
-    box-shadow: 0 0 0 6px rgba(37, 117, 117, 0.1);
+    box-shadow: 0 0 0 6px rgba(26, 75, 70, 0.1);
   }
 
   .hp-abt-time__card {
@@ -162,7 +162,7 @@
     .hp-abt-time__card {
       background-color: {{ card_base }};
       {%- if card_style == 'gradient' %}
-      background-image: linear-gradient(180deg, rgba(18, 53, 54, 0) 30%, rgba(18, 53, 54, 0.55) 62%, rgba(12, 38, 39, 0.92) 100%);
+      background-image: linear-gradient(180deg, rgba(16, 48, 44, 0) 30%, rgba(16, 48, 44, 0.55) 62%, rgba(10, 35, 32, 0.92) 100%);
       {%- endif %}
       border-color: rgba(255, 249, 223, 0.14);
     }
@@ -242,9 +242,9 @@
       ],
       "default": "paper"
     },
-    { "type": "color", "id": "card_color", "label": "Card colour", "info": "Used by the teal and gradient card styles.", "default": "#257575" },
-    { "type": "color", "id": "accent_color", "label": "Rail colour", "default": "#257575" },
-    { "type": "color", "id": "accent_2_color", "label": "Rail colour (end)", "default": "#7fc8be" },
+    { "type": "color", "id": "card_color", "label": "Card colour", "info": "Used by the teal and gradient card styles.", "default": "#1a4b46" },
+    { "type": "color", "id": "accent_color", "label": "Rail colour", "default": "#1a4b46" },
+    { "type": "color", "id": "accent_2_color", "label": "Rail colour (end)", "default": "#7dc6bb" },
     { "type": "checkbox", "id": "center_head", "label": "Centre the heading", "default": true },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Chapter Four — The Journey" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "From One Dinner Set to Ten Collections" },

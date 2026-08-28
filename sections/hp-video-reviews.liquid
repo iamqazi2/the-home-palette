@@ -16,13 +16,13 @@
 
 {%- style -%}
   .hp-vrev {
-    background: {{ section.settings.bg_color | default: '#123536' }};
+    background: {{ section.settings.bg_color | default: '#1a4b46' }};
     color: {{ section.settings.text_color | default: '#fff9df' }};
     overflow: hidden;
   }
   .hp-vrev .hp-section-head__title { color: {{ section.settings.text_color | default: '#fff9df' }}; }
   .hp-vrev .hp-section-head__text { color: {{ section.settings.text_color | default: '#fff9df' | color_modify: 'alpha', 0.62 }}; }
-  .hp-vrev .hp-eyebrow--soft { color: {{ section.settings.eyebrow_color | default: '#7fc8be' }}; }
+  .hp-vrev .hp-eyebrow--soft { color: {{ section.settings.eyebrow_color | default: '#7dc6bb' }}; }
   .hp-vrev__row-wrap { display: grid; gap: 2rem; }
   .hp-vrev .hp-marquee__track { padding: 0.2rem 0; }
   .hp-vrev__card {
@@ -44,7 +44,7 @@
   .hp-vrev__card--video {
     border: 1px solid rgba(255, 249, 223, 0.16);
     padding: 0;
-    background: {{ section.settings.card_color | default: '#1c5b5b' }};
+    background: {{ section.settings.card_color | default: '#1a4b46' }};
     cursor: pointer;
     text-align: left;
   }
@@ -57,7 +57,7 @@
     height: 100%;
     object-fit: cover;
   }
-  .hp-vrev__poster video { pointer-events: none; background: {{ section.settings.card_color | default: '#1c5b5b' }}; }
+  .hp-vrev__poster video { pointer-events: none; background: {{ section.settings.card_color | default: '#1a4b46' }}; }
   .hp-vrev__card--video::after {
     content: '';
     position: absolute;
@@ -76,7 +76,7 @@
 
   /* text card */
   .hp-vrev__card--text {
-    background: {{ section.settings.card_color | default: '#1c5b5b' }};
+    background: {{ section.settings.card_color | default: '#1a4b46' }};
     border: 1px solid rgba(255, 249, 223, 0.18);
     padding: 2.6rem 2.4rem;
     justify-content: space-between;
@@ -124,7 +124,7 @@
   .hp-vrev__stars { margin-bottom: 0.6rem; }
   .hp-vrev .hp-play {
     background: rgba(255, 249, 223, 0.95);
-    color: {{ section.settings.bg_color | default: '#257575' }};
+    color: {{ section.settings.bg_color | default: '#1a4b46' }};
   }
   @media screen and (max-width: 560px) {
     .hp-vrev__card { width: 25rem; height: 33rem; margin-right: 1.2rem; }
@@ -290,10 +290,10 @@
       "default": false
     },
     { "type": "header", "content": "Colours" },
-    { "type": "color", "id": "bg_color", "label": "Background", "default": "#123536" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#1a4b46" },
     { "type": "color", "id": "text_color", "label": "Heading & text", "default": "#fff9df" },
-    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow", "default": "#7fc8be" },
-    { "type": "color", "id": "card_color", "label": "Testimonial card", "default": "#173f40" }
+    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow", "default": "#7dc6bb" },
+    { "type": "color", "id": "card_color", "label": "Testimonial card", "default": "#1a4b46" }
   ],
   "blocks": [
     {

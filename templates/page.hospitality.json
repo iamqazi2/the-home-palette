@@ -47,7 +47,7 @@
         "video_url": "",
         "focal": "center",
         "scrim": 80,
-        "scrim_color": "#0c2627",
+        "scrim_color": "#1a4b46",
         "show_cue": true,
         "eyebrow": "For Restaurants, Cafés, Hotels & Resorts",
         "heading": "Tableware Designed Around Your Brand",
@@ -103,7 +103,7 @@
       "settings": {
         "bg_color": "#fff9df",
         "text_color": "#252525",
-        "chip_color": "#257575",
+        "chip_color": "#1a4b46",
         "chip_icon_color": "#fff9df"
       }
     },
@@ -384,7 +384,7 @@
         "bg_color": "#fffdf4",
         "badge_value": "24+",
         "badge_label": "Hospitality brands served",
-        "badge_color": "#257575",
+        "badge_color": "#1a4b46",
         "eyebrow": "Custom Crockery",
         "heading": "From Custom Shapes to Signature Serving Pieces",
         "text": "<p>At The Home Palette, we work with restaurants, cafés, hotels and hospitality brands to create premium, custom crockery and tableware that brings your vision to the table. From custom shapes and colours to signature serving pieces, we turn your brand identity into tableware your guests remember.</p><p>Trusted by leading hospitality brands, we bring together thoughtful design, consistent quality and reliable production to deliver tableware made for your space and built for everyday service.</p>",
@@ -464,7 +464,7 @@
         "heading": "Crockery for Every Kind of Service",
         "text": "If food leaves your kitchen on a plate, we can make that plate — in the quantity your room needs and the colours your brand uses.",
         "card_style": "gradient",
-        "card_color": "#257575"
+        "card_color": "#1a4b46"
       }
     },
     "hosp_gallery": {
@@ -650,8 +650,8 @@
         "s4"
       ],
       "settings": {
-        "bg_color": "#257575",
-        "accent_color": "#7fc8be",
+        "bg_color": "#1a4b46",
+        "accent_color": "#7dc6bb",
         "flip": true,
         "center_head": true,
         "eyebrow": "From Your Vision to Your Table",
@@ -709,7 +709,7 @@
       ],
       "settings": {
         "bg_color": "#fffdf4",
-        "featured_color": "#257575",
+        "featured_color": "#1a4b46",
         "center_head": true,
         "eyebrow": "Packages",
         "heading": "Built for the Size of Your Room",
@@ -827,10 +827,10 @@
         "speed": 5,
         "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
         "loop_previews": false,
-        "bg_color": "#257575",
+        "bg_color": "#1a4b46",
         "text_color": "#fff9df",
         "eyebrow_color": "#fff9df",
-        "card_color": "#1c5b5b"
+        "card_color": "#1a4b46"
       }
     }
   },

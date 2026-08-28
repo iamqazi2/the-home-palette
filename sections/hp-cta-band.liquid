@@ -13,9 +13,9 @@
 
 {%- liquid
   assign layout = section.settings.layout | default: 'split'
-  assign panel = section.settings.panel_color | default: '#257575'
+  assign panel = section.settings.panel_color | default: '#1a4b46'
   assign txt = section.settings.text_color | default: '#fff9df'
-  assign scrim_rgb = section.settings.scrim_color | default: '#0c2627' | color_to_rgb | remove: 'rgb(' | remove: ')'
+  assign scrim_rgb = section.settings.scrim_color | default: '#1a4b46' | color_to_rgb | remove: 'rgb(' | remove: ')'
   assign a_full = section.settings.scrim | default: 90 | divided_by: 100.0
   assign a_mid = section.settings.scrim | default: 90 | times: 0.72 | divided_by: 100.0
   assign a_low = section.settings.scrim | default: 90 | times: 0.3 | divided_by: 100.0
@@ -216,8 +216,8 @@
     { "type": "textarea", "id": "text", "label": "Text", "default": "Hand-woven placemats and baskets that ground every table setting in warmth." },
     { "type": "header", "content": "Colours" },
     { "type": "color", "id": "bg_color", "label": "Section background", "default": "#fffdf4" },
-    { "type": "color", "id": "panel_color", "label": "Copy panel", "default": "#257575" },
-    { "type": "color", "id": "scrim_color", "label": "Overlay colour", "default": "#0c2627" },
+    { "type": "color", "id": "panel_color", "label": "Copy panel", "default": "#1a4b46" },
+    { "type": "color", "id": "scrim_color", "label": "Overlay colour", "default": "#1a4b46" },
     { "type": "color", "id": "text_color", "label": "Text", "default": "#fff9df" },
     { "type": "header", "content": "Button" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore THP Weaves" },

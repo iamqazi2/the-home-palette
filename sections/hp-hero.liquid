@@ -29,7 +29,7 @@
   assign shade = section.settings.overlay_strength | divided_by: 100.0
   assign shade_mid = shade | times: 0.6
   assign shade_low = shade | times: 0.22
-  assign shade_rgb = section.settings.overlay_color | default: '#123536' | color_to_rgb | remove: 'rgb(' | remove: ')'
+  assign shade_rgb = section.settings.overlay_color | default: '#1a4b46' | color_to_rgb | remove: 'rgb(' | remove: ')'
   assign hero_text = section.settings.text_color | default: '#fff9df'
 -%}
 
@@ -41,7 +41,7 @@
     min-height: 58rem;
     max-height: 110rem;
     overflow: hidden;
-    background: {{ section.settings.overlay_color | default: '#123536' }};
+    background: {{ section.settings.overlay_color | default: '#1a4b46' }};
     color: {{ hero_text }};
     isolation: isolate;
   }
@@ -549,7 +549,7 @@
       "label": "Extra shade behind text",
       "default": true
     },
-    { "type": "color", "id": "overlay_color", "label": "Overlay colour", "default": "#123536" },
+    { "type": "color", "id": "overlay_color", "label": "Overlay colour", "default": "#1a4b46" },
     { "type": "checkbox", "id": "grain", "label": "Film-grain texture", "info": "Fine vintage grain over the footage — adds depth and masks compression.", "default": true },
     { "type": "checkbox", "id": "typewriter", "label": "Typewriter effect on the kicker", "default": true },
     { "type": "checkbox", "id": "show_cue", "label": "Show scroll cue", "default": true },

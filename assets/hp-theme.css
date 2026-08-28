@@ -1,20 +1,29 @@
 /* ==========================================================================
    THE HOME PALETTE — v3 "Modern Vintage, Teal & Cream" design system
    Brand palette (client-approved):
-   teal #257575 · teal-deep #1c5b5b · teal-ink #123536 · teal-card #173f40
-   chip #eaf1f0 · cream #fff9df · page #fffdf4 · card #ffffff · ink #252525
+   teal #1a4b46 — ONE teal for the whole site: bands, cards, headings, buttons,
+   eyebrows, prices. teal-deep #123532 is not a second brand colour, it is the
+   pressed/hover shade of that one teal and is only ever used on :hover.
+   chip #ebf4f3 · cream #fff9df · page #fffdf4 · card #ffffff · ink #252525
    taupe #716a56 · gold #e0a422 (stars) · linen #efecec
    Type: DM Serif Display 400 (display) + DM Sans 300-700 (UI/body)
    Primitives: pill buttons (r40) · white rounded cards (r18) · teal eyebrows
    ========================================================================== */
 
 :root {
-  --hp-teal: #257575;
-  --hp-teal-deep: #1c5b5b;
-  --hp-teal-ink: #123536;
-  --hp-teal-card: #173f40;
-  --hp-teal-chip: #eaf1f0;
-  --hp-teal-soft: #7fc8be;      /* light accent on dark teal */
+  --hp-teal: #1a4b46;
+  /* Hover/pressed shade only — never a surface. Flattening this onto --hp-teal
+     would leave every teal button and link with no visible hover state. */
+  --hp-teal-deep: #123532;
+  /* Were three darker teals (ink/card) for bands and cards. Collapsed onto the
+     one brand teal; kept as aliases so the ~120 call sites did not all have to
+     move, and so a future re-split is one line here rather than a sweep. */
+  --hp-teal-ink: #1a4b46;
+  --hp-teal-card: #1a4b46;
+  /* Light accents. Deliberately NOT flattened: they exist to stay legible ON
+     the teal, so making them teal would erase the text that uses them. */
+  --hp-teal-chip: #ebf4f3;
+  --hp-teal-soft: #7dc6bb;      /* light accent on dark teal */
   --hp-cream: #fff9df;
   --hp-cream-soft: #fffdf4;
   --hp-paper: #ffffff;
@@ -25,14 +34,14 @@
   --hp-gold: #e0a422;
   --hp-linen: #efecec;
   /* legacy aliases kept so nothing breaks mid-migration */
-  --hp-moss: #123536;
-  --hp-fern: #257575;
+  --hp-moss: #1a4b46;
+  --hp-fern: #1a4b46;
 
   /* Headings are deep teal, never black. Set as a variable rather than a colour
      literal on each selector so the dark bands further down can flip the whole
      heading system to cream by overriding this one property — see "dark bands"
      below. Anything that inherits it automatically stays legible. */
-  --hp-heading: #1c5b5b;
+  --hp-heading: #1a4b46;
 
   /* One heading scale for the entire site, in three tiers:
        --hp-h-page     the title of a page (collection hero, page, article,
@@ -50,7 +59,7 @@
   --hp-hairline: rgba(37, 37, 37, 0.09);
   --hp-hairline-strong: rgba(37, 37, 37, 0.3);
   --hp-hairline-light: rgba(255, 249, 223, 0.22);
-  --hp-hairline-teal: rgba(37, 85, 80, 0.12);
+  --hp-hairline-teal: rgba(26, 75, 70, 0.12);
 
   --hp-font-display: 'DM Serif Display', 'Georgia', 'Times New Roman', serif;
   --hp-font-ui: 'DM Sans', system-ui, -apple-system, sans-serif;
@@ -84,8 +93,8 @@
   --hp-dur: 0.8s;
   --hp-dur-slow: 1.3s;
 
-  --hp-shadow-card: 0 30px 50px -30px rgba(18, 53, 54, 0.55);
-  --hp-shadow-btn: 0 10px 24px -12px rgba(28, 91, 91, 0.7);
+  --hp-shadow-card: 0 30px 50px -30px rgba(16, 48, 44, 0.55);
+  --hp-shadow-btn: 0 10px 24px -12px rgba(18, 53, 50, 0.7);
 
   /* Single source of truth for section rhythm — tightened so bands sit close
      together with no dead space, and much tighter again on phones. */
@@ -335,7 +344,7 @@ button.shopify-payment-button__button--unbranded {
   border-bottom: 1px solid var(--hp-hairline);
   transition: box-shadow 0.3s ease;
 }
-.header-wrapper.hp-scrolled { box-shadow: 0 12px 30px -18px rgba(18, 53, 54, 0.35); }
+.header-wrapper.hp-scrolled { box-shadow: 0 12px 30px -18px rgba(16, 48, 44, 0.35); }
 .header-wrapper .header { background: transparent; }
 
 .header__heading-link .h2,
@@ -516,10 +525,10 @@ button.shopify-payment-button__button--unbranded {
 
 .section-footer-group .newsletter,
 .footer {
-  --color-background: 37, 117, 117;
+  --color-background: 26, 75, 70;
   --color-foreground: 255, 249, 223;
   --color-button: 255, 249, 223;
-  --color-button-text: 37, 117, 117;
+  --color-button-text: 26, 75, 70;
   background: var(--hp-teal) !important;
   color: var(--hp-cream);
 }
@@ -1251,7 +1260,7 @@ main#MainContent > .shopify-section:first-child > * { margin-top: 0; }
   font-weight: 600;
   letter-spacing: 0.1em;
   border-radius: 20px;
-  box-shadow: 0 6px 16px -8px rgba(18, 53, 54, 0.6);
+  box-shadow: 0 6px 16px -8px rgba(16, 48, 44, 0.6);
 }
 /* sold-out badge overrides the teal sale badge */
 .card__badge .badge--sold-out,
@@ -1308,7 +1317,7 @@ main#MainContent > .shopify-section:first-child > * { margin-top: 0; }
   background: rgba(255, 253, 244, 0.94);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  box-shadow: 0 6px 18px -10px rgba(18, 53, 54, 0.5);
+  box-shadow: 0 6px 18px -10px rgba(16, 48, 44, 0.5);
 }
 .hp-rating-chip--lg { padding: 0.7rem 1.3rem; font-size: 1.3rem; }
 /* Dawn's inline rating row */
@@ -1341,7 +1350,7 @@ main#MainContent > .shopify-section:first-child > * { margin-top: 0; }
   letter-spacing: 0.04em;
   line-height: 1;
 }
-.hp-stock-pill--in { background: rgba(37, 117, 117, 0.1); color: var(--hp-teal); border: 1px solid rgba(37, 117, 117, 0.28); }
+.hp-stock-pill--in { background: rgba(26, 75, 70, 0.1); color: var(--hp-teal); border: 1px solid rgba(26, 75, 70, 0.28); }
 .hp-stock-pill--low { background: rgba(224, 164, 34, 0.14); color: #8a6410; border: 1px solid rgba(224, 164, 34, 0.4); }
 .hp-stock-pill--out { background: rgba(37, 37, 37, 0.08); color: var(--hp-ink); border: 1px solid rgba(37, 37, 37, 0.2); }
 
@@ -1498,13 +1507,13 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
 .facets__disclosure .facets__display, .facets__display-vertical {
   border-radius: var(--hp-r-card);
   border: 1px solid var(--hp-hairline);
-  box-shadow: 0 20px 40px -28px rgba(18, 53, 54, 0.5);
+  box-shadow: 0 20px 40px -28px rgba(16, 48, 44, 0.5);
 }
 .active-facets__button-inner {
   border-radius: var(--hp-r-pill) !important;
   border: 1.5px solid var(--hp-teal) !important;
   color: var(--hp-teal) !important;
-  background: rgba(37, 117, 117, 0.06);
+  background: rgba(26, 75, 70, 0.06);
   font-family: var(--hp-font-ui);
   font-size: 1.1rem;
   font-weight: 600;
@@ -1919,7 +1928,7 @@ body.overflow-hidden { overflow: hidden; }
   padding: 1.6rem var(--hp-drawer-pad) 2rem;
 }
 .hp-drawer-scroll::-webkit-scrollbar { width: 5px; }
-.hp-drawer-scroll::-webkit-scrollbar-thumb { background: rgba(37, 117, 117, 0.3); border-radius: 3px; }
+.hp-drawer-scroll::-webkit-scrollbar-thumb { background: rgba(26, 75, 70, 0.3); border-radius: 3px; }
 /* neutralise Dawn's flex-grow chain so our wrapper owns the scroll */
 .cart-drawer .cart-drawer__form,
 .cart-drawer .drawer__contents,
@@ -2279,7 +2288,7 @@ body.overflow-hidden { overflow: hidden; }
   font-family: var(--hp-font-display);
   font-size: 2.4rem;
   line-height: 1.1;
-  color: var(--hp-teal-deep);
+  color: var(--hp-teal);
   font-variant-numeric: tabular-nums;
 }
 

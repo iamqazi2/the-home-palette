@@ -21,7 +21,7 @@
         "padding_bottom": 0,
         "hp_search_right": false,
         "hp_band_enable": true,
-        "hp_band_color": "#257575",
+        "hp_band_color": "#1a4b46",
         "hp_band_text": "#fff9df",
         "hp_show_account": false,
         "hp_extra_link_label": "Journal",
@@ -81,7 +81,7 @@
         "promo_5"
       ],
       "settings": {
-        "bg_color": "#257575",
+        "bg_color": "#1a4b46",
         "text_color": "#fff9df",
         "speed": 34
       }

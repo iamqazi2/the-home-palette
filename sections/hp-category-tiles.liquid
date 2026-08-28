@@ -23,9 +23,9 @@
     border-radius: inherit;
     background: linear-gradient(
       180deg,
-      rgba(18, 53, 54, 0) 30%,
-      rgba(18, 53, 54, {{ section.settings.scrim | default: 92 | times: 0.6 | divided_by: 100.0 }}) 62%,
-      rgba(12, 38, 39, {{ section.settings.scrim | default: 92 | divided_by: 100.0 }}) 100%
+      rgba(16, 48, 44, 0) 30%,
+      rgba(16, 48, 44, {{ section.settings.scrim | default: 92 | times: 0.6 | divided_by: 100.0 }}) 62%,
+      rgba(10, 35, 32, {{ section.settings.scrim | default: 92 | divided_by: 100.0 }}) 100%
     );
   }
   .hp-cats__tile-inner {
@@ -46,7 +46,7 @@
     font-size: clamp(1.9rem, 2vw, 2.3rem);
     line-height: 1.1;
     color: #fff9df;
-    text-shadow: 0 2px 12px rgba(12, 38, 39, 0.75);
+    text-shadow: 0 2px 12px rgba(10, 35, 32, 0.75);
   }
   .hp-cats__count {
     margin: 0.4rem 0 0;
@@ -56,7 +56,7 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: rgba(255, 249, 223, 0.92);
-    text-shadow: 0 1px 8px rgba(12, 38, 39, 0.8);
+    text-shadow: 0 1px 8px rgba(10, 35, 32, 0.8);
   }
   .hp-cats__arrow {
     flex-shrink: 0;

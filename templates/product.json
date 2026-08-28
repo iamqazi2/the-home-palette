@@ -239,10 +239,10 @@
         "speed": 5,
         "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
         "loop_previews": false,
-        "bg_color": "#257575",
+        "bg_color": "#1a4b46",
         "text_color": "#fff9df",
         "eyebrow_color": "#fff9df",
-        "card_color": "#1c5b5b"
+        "card_color": "#1a4b46"
       }
     }
   },

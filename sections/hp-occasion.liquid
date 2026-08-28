@@ -1,10 +1,10 @@
 {% comment %}
   THP — v3 Shop by Occasion.
 
-  Cards are solid brand teal (#257575) on the cream band. Earlier passes tried
+  Cards are solid brand teal (#1a4b46) on the cream band. Earlier passes tried
   white and then a pale teal tint; both sat too close to the cream behind them
   to read as distinct cards. Note this is the *brand* teal, not the deep
-  #173f40 tried before it — that one was dark enough to read as a near-black
+  #1a4b46 tried before it — that one was dark enough to read as a near-black
   slab rather than a teal card.
 
   Going dark inverts everything that sits on the card: title, caption, icon
@@ -23,8 +23,8 @@
 {% endcomment %}
 
 {%- liquid
-  assign card_bg = section.settings.card_color | default: '#257575'
-  assign card_bg_hover = section.settings.card_color_hover | default: '#1c5b5b'
+  assign card_bg = section.settings.card_color | default: '#1a4b46'
+  assign card_bg_hover = section.settings.card_color_hover | default: '#123532'
 -%}
 
 {%- style -%}
@@ -225,14 +225,14 @@
       "type": "color",
       "id": "card_color",
       "label": "Card background",
-      "default": "#257575",
+      "default": "#1a4b46",
       "info": "Card text, icon and count pill are all cream, so this needs to stay dark enough to read against."
     },
     {
       "type": "color",
       "id": "card_color_hover",
       "label": "Card background on hover",
-      "default": "#1c5b5b",
+      "default": "#123532",
       "info": "Also used as the icon colour once the circle fills cream on hover."
     },
     { "type": "checkbox", "id": "show_count", "label": "Show live product counts", "default": true },

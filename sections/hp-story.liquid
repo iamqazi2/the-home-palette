@@ -8,7 +8,7 @@
   elsif bg == 'cream'
     assign band_bg = 'var(--hp-cream)'
   elsif bg == 'custom'
-    assign band_bg = section.settings.custom_bg | default: '#257575'
+    assign band_bg = section.settings.custom_bg | default: '#1a4b46'
   endif
 -%}
 
@@ -168,7 +168,7 @@
       ],
       "default": "teal"
     },
-    { "type": "color", "id": "custom_bg", "label": "Custom band colour", "info": "Used when Band colour is set to Custom.", "default": "#257575" },
+    { "type": "color", "id": "custom_bg", "label": "Custom band colour", "info": "Used when Band colour is set to Custom.", "default": "#1a4b46" },
     { "type": "checkbox", "id": "sepia", "label": "Sepia treatment on image", "default": false },
     { "type": "checkbox", "id": "flip", "label": "Image on right", "default": false },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Chapter Two — The Craft" },

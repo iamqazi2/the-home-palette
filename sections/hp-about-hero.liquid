@@ -15,7 +15,7 @@
   assign a_full = scrim | divided_by: 100.0
   assign a_mid = scrim | times: 0.78 | divided_by: 100.0
   assign a_low = scrim | times: 0.34 | divided_by: 100.0
-  assign scrim_rgb = section.settings.scrim_color | default: '#0c2627' | color_to_rgb | remove: 'rgb(' | remove: ')'
+  assign scrim_rgb = section.settings.scrim_color | default: '#1a4b46' | color_to_rgb | remove: 'rgb(' | remove: ')'
   assign hero_alt = section.settings.image.alt | default: section.settings.heading | escape
 -%}
 
@@ -137,7 +137,7 @@
     list-style: none;
     border: 1px solid rgba(255, 249, 223, 0.22);
     border-radius: var(--hp-r-card);
-    background: rgba(12, 38, 39, 0.42);
+    background: rgba(26, 75, 70, 0.42);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     overflow: hidden;
@@ -329,7 +329,7 @@
       "default": "center"
     },
     { "type": "range", "id": "scrim", "label": "Overlay strength", "min": 30, "max": 95, "step": 5, "unit": "%", "default": 80 },
-    { "type": "color", "id": "scrim_color", "label": "Overlay colour", "default": "#0c2627" },
+    { "type": "color", "id": "scrim_color", "label": "Overlay colour", "default": "#1a4b46" },
     { "type": "checkbox", "id": "show_cue", "label": "Show scroll cue", "default": true },
     {
       "type": "checkbox",

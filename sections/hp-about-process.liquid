@@ -12,8 +12,8 @@
 {% endcomment %}
 
 {%- liquid
-  assign band = section.settings.bg_color | default: '#123536'
-  assign accent = section.settings.accent_color | default: '#7fc8be'
+  assign band = section.settings.bg_color | default: '#1a4b46'
+  assign accent = section.settings.accent_color | default: '#7dc6bb'
 -%}
 
 {%- style -%}
@@ -70,7 +70,7 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(180deg, rgba(12, 38, 39, 0) 42%, rgba(12, 38, 39, 0.82) 100%);
+    background: linear-gradient(180deg, rgba(10, 35, 32, 0) 42%, rgba(10, 35, 32, 0.82) 100%);
   }
   .hp-abt-proc__caption {
     position: absolute;
@@ -331,8 +331,8 @@
   "max_blocks": 8,
   "settings": [
     { "type": "header", "content": "Colours" },
-    { "type": "color", "id": "bg_color", "label": "Band colour", "default": "#123536" },
-    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#7fc8be" },
+    { "type": "color", "id": "bg_color", "label": "Band colour", "default": "#1a4b46" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#7dc6bb" },
     { "type": "checkbox", "id": "flip", "label": "Photography on right", "default": false },
     { "type": "checkbox", "id": "center_head", "label": "Centre the heading", "default": true },
 

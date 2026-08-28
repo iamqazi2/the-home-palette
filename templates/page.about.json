@@ -57,7 +57,7 @@
         "video_url_mobile": "https://cdn.shopify.com/videos/c/o/v/41de3e81715c4d2da707a88034efa437.mp4",
         "focal": "center",
         "scrim": 80,
-        "scrim_color": "#0c2627",
+        "scrim_color": "#1a4b46",
         "show_cue": true,
         "text_shade": true,
         "eyebrow": "Our Story · Islamabad, Pakistan",
@@ -118,7 +118,7 @@
       "settings": {
         "bg_color": "#fff9df",
         "text_color": "#252525",
-        "chip_color": "#257575",
+        "chip_color": "#1a4b46",
         "chip_icon_color": "#fff9df"
       }
     },
@@ -162,7 +162,7 @@
         "bg_color": "#fffdf4",
         "badge_value": "Est. 2024",
         "badge_label": "Islamabad, Pakistan",
-        "badge_color": "#257575",
+        "badge_color": "#1a4b46",
         "eyebrow": "Chapter One — The Beginning",
         "heading": "A Palette Built in Pakistan, for Pakistani Tables",
         "text": "<p>We started The Home Palette in 2024 with one dinner set, a small studio in Bahria Town and a long list of potteries to visit. What we found was extraordinary: family workshops turning out ceramics as good as anything imported — and almost none of it reaching the homes it was made for.</p><p>So we became the bridge. We buy directly from the workshops, agree the quality standard together, and bring the pieces to you under one palette of colours that genuinely work with each other. No catalogue of a thousand mismatched items; a considered range you can build on over years.</p><p>Today that range covers ten collections — ceramics, glass, woven jute, wood and metalware — and sets tables in homes, cafés, restaurants and hotels across Pakistan.</p>",
@@ -270,8 +270,8 @@
         "step_6"
       ],
       "settings": {
-        "bg_color": "#257575",
-        "accent_color": "#7fc8be",
+        "bg_color": "#1a4b46",
+        "accent_color": "#7dc6bb",
         "flip": false,
         "center_head": true,
         "eyebrow": "Chapter Three — Inside the Workshop",
@@ -357,7 +357,7 @@
       "settings": {
         "bg_color": "#fff9df",
         "card_style": "gradient",
-        "card_color": "#257575",
+        "card_color": "#1a4b46",
         "center_head": true,
         "show_numbers": true,
         "columns": 3,
@@ -435,9 +435,9 @@
       "settings": {
         "bg_color": "#fff9df",
         "card_style": "gradient",
-        "card_color": "#257575",
-        "accent_color": "#257575",
-        "accent_2_color": "#7fc8be",
+        "card_color": "#1a4b46",
+        "accent_color": "#1a4b46",
+        "accent_2_color": "#7dc6bb",
         "center_head": true,
         "eyebrow": "Chapter Five — The Journey",
         "heading": "From One Dinner Set to Ten Collections",
@@ -554,10 +554,10 @@
         "speed": 5,
         "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
         "loop_previews": false,
-        "bg_color": "#257575",
+        "bg_color": "#1a4b46",
         "text_color": "#fff9df",
         "eyebrow_color": "#fff9df",
-        "card_color": "#1c5b5b"
+        "card_color": "#1a4b46"
       }
     }
   },
