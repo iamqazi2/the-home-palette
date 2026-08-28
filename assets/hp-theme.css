@@ -1376,7 +1376,7 @@ main#MainContent > .shopify-section:first-child > * { margin-top: 0; }
   padding: 1.5rem 2rem;
 }
 .product-form__input .form__label { font-family: var(--hp-font-ui); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; font-size: 1.1rem; }
-.product-form__input input[type='radio'] + label { border-radius: var(--hp-r-pill); }
+.product-form__input input[type='radio'] + label:not(.swatch-input__label) { border-radius: var(--hp-r-pill); }
 .product__accordion .accordion__title { font-family: var(--hp-font-display); font-size: 1.9rem; }
 .product .quantity { border-radius: var(--hp-r-pill); overflow: hidden; }
 .product__info-wrapper { padding-left: clamp(0rem, 4vw, 5rem); }
@@ -1627,12 +1627,14 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
    nothing sets --swatch-input--size, which is what made the colour circles on
    the product page so large. Both custom properties are set because the older
    radio-label swatches read the first and the newer .swatch element the
-   second. */
+   second. Smaller on mobile, not larger: the previous version of this rule
+   had the breakpoints backwards (3.2rem below 750px, 2.8rem above it), which
+   is why mobile still looked oversized despite the override existing. */
 .product-form__input--swatch .swatch-input__input + .swatch-input__label,
 .product__info-container .swatch,
 variant-selects .swatch {
-  --swatch-input--size: 3.2rem;
-  --swatch--size: 3.2rem;
+  --swatch-input--size: 2.4rem;
+  --swatch--size: 2.4rem;
 }
 @media screen and (min-width: 750px) {
   .product-form__input--swatch .swatch-input__input + .swatch-input__label,
@@ -1641,6 +1643,37 @@ variant-selects .swatch {
     --swatch-input--size: 2.8rem;
     --swatch--size: 2.8rem;
   }
+}
+
+/* No ring on the circle itself — the colour fill is the whole swatch, not a
+   colour sitting inside a bordered frame. `:not(.swatch--unavailable)`
+   because that variant's dashed "out of stock" line depends on this same
+   border property for its width; removing it there would leave sold-out
+   variants with no visual difference from in-stock ones. */
+.product__info-container .swatch:not(.swatch--unavailable),
+variant-selects .swatch:not(.swatch--unavailable) {
+  border: none;
+}
+
+/* Selected swatch reads as a ring around the circle, never a fill behind it.
+   The full shorthand is set here rather than just overriding outline-color on
+   top of Dawn's own rule (component-swatch-input.css): that rule builds its
+   colour from rgb(var(--color-foreground)), and if that variable is ever
+   missing in a given context the whole shorthand is invalid and the outline
+   fails to render at all — silently losing the selected-state indicator.
+   Spelling out style/width/colour here doesn't depend on that variable or on
+   which of the two rules the cascade applies last. */
+.product-form__input--swatch .swatch-input__input:active + .swatch-input__label,
+.product-form__input--swatch .swatch-input__input:checked + .swatch-input__label {
+  outline: 0.15rem solid var(--hp-teal);
+  outline-offset: 0.2rem;
+  background: none;
+}
+.product-form__input--swatch .swatch-input__input + .swatch-input__label:hover,
+.product-form__input--swatch .swatch-input__input:hover + .swatch-input__label {
+  outline: 0.15rem solid rgba(26, 75, 70, 0.45);
+  outline-offset: 0.2rem;
+  background: none;
 }
 
 /* ==========================================================================
@@ -1811,9 +1844,17 @@ html, body { overflow-x: clip; }
   transition: background 0.3s ease, transform 0.3s var(--hp-ease);
 }
 .quick-add-modal__toggle:hover { background: var(--hp-teal) !important; color: var(--hp-cream) !important; transform: rotate(90deg); }
-/* variant pills + buy row inside the modal */
-.quick-add-modal .product-form__input input[type='radio'] + label,
-.product-form__input input[type='radio'] + label {
+/* variant pills + buy row inside the modal
+   :not(.swatch-input__label) on every rule here: this selector is generic
+   enough (input[type='radio'] + label) to also match colour swatches, which
+   use the same radio+label structure. That's what was giving swatches a
+   pill-shaped text-button border, oversized padding, AND — on :checked — a
+   solid teal fill behind the selected circle, none of which were meant for
+   them. Swatches get their own selection styling below (an outline around
+   the circle, not a background behind it); this block is for text-only
+   variant pills like a Size selector. */
+.quick-add-modal .product-form__input input[type='radio'] + label:not(.swatch-input__label),
+.product-form__input input[type='radio'] + label:not(.swatch-input__label) {
   border-radius: var(--hp-r-pill);
   border: 1.5px solid var(--hp-hairline-strong);
   font-family: var(--hp-font-ui);
@@ -1822,13 +1863,13 @@ html, body { overflow-x: clip; }
   padding: 0.9rem 1.8rem;
   transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
-.product-form__input input[type='radio']:checked + label {
+.product-form__input input[type='radio']:checked + label:not(.swatch-input__label) {
   background: var(--hp-teal);
   border-color: var(--hp-teal);
   color: var(--hp-cream);
 }
-.product-form__input input[type='radio']:disabled + label,
-.product-form__input input[type='radio'].disabled + label { opacity: 0.45; }
+.product-form__input input[type='radio']:disabled + label:not(.swatch-input__label),
+.product-form__input input[type='radio'].disabled + label:not(.swatch-input__label) { opacity: 0.45; }
 .quick-add-modal .product-form__submit,
 .quick-add-modal .shopify-payment-button__button--unbranded {
   border-radius: var(--hp-r-pill) !important;
