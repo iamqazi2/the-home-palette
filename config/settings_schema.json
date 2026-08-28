@@ -1465,50 +1465,5 @@
         "default": "scheme-1"
       }
     ]
-  },
-  {
-    "name": "Advance payment gate",
-    "settings": [
-      {
-        "type": "paragraph",
-        "content": "Shows a payment split on the cart when the total reaches the threshold. This is customer-facing messaging only \u2014 the advance itself is collected by XPay payment link after checkout."
-      },
-      {
-        "type": "checkbox",
-        "id": "hp_advance_enabled",
-        "label": "Enable advance payment gate",
-        "default": true
-      },
-      {
-        "type": "number",
-        "id": "hp_advance_threshold",
-        "label": "Threshold",
-        "info": "In rupees. Carts at or above this total show the notice.",
-        "default": 10000
-      },
-      {
-        "type": "range",
-        "id": "hp_advance_percent",
-        "min": 5,
-        "max": 50,
-        "step": 5,
-        "unit": "%",
-        "label": "Advance percentage",
-        "default": 20
-      },
-      {
-        "type": "checkbox",
-        "id": "hp_advance_require_consent",
-        "label": "Require a consent checkbox before checkout",
-        "info": "Holds the checkout button until the customer confirms the terms.",
-        "default": true
-      },
-      {
-        "type": "richtext",
-        "id": "hp_advance_copy",
-        "label": "Notice text",
-        "default": "<p>You'll receive a secure XPay payment link right after checkout. Your order is confirmed once the advance is received.</p>"
-      }
-    ]
   }
 ]
