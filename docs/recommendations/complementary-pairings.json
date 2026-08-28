@@ -1,0 +1,96 @@
+{
+  "_source": "https://docs.google.com/document/d/1RgabhQH4apqq9w30e4OKRed-UPKWAmjoIo7VxDVWI_Y",
+  "_note": "Curated complementary pairings. Anchor product handle -> ordered list of complementary product handles. Pushed to Shopify's Search & Discovery complementary-products metafield (shopify--discovery--product_recommendation.complementary_products); the theme reads it through snippets/hp-recommendations.liquid with intent 'complementary'. Variant-specific links in the source doc are collapsed to the parent product, because complementary recommendations are product-level in Shopify.",
+  "_updated": "2026-08-28",
+
+  "tea_sets": {
+    "dune-tea-set-polka-joy": ["polka-joy-platter", "ova-serving-dish"],
+    "selin-tea-set-teal": ["ova-plates-set-of-2", "sushi-wasabi-platter"],
+    "dune-tea-set-ivory-white": ["ivory-white-platter", "the-slab"],
+    "aura-tea-set-reactive-santorini-blue": ["reactive-santorini-blue-platter", "deep-ova-plates-8-inch-set-of-2"],
+    "aura-tea-set-reactive-cloud-grey": ["reactive-cloud-grey-platter", "deep-ova-plates-8-inch-set-of-2"],
+    "selin-tea-set-coconut-terra": ["coconut-terra-platter", "orbelle-bowl-7-inch-aqua"],
+    "selin-tea-set-grey": ["cloud-grey-platter", "the-slab"],
+    "dune-tea-set-black": ["black-matte-ceramic-platter", "sushi-wasabi-platter"],
+    "dune-tea-set-burnt-maple": ["burnt-maple-platter", "ova-plates-set-of-2"],
+    "selin-tea-set-sage-green": ["sage-green-spiral-platter", "ova-plates-set-of-2"],
+    "selin-tea-set-whimsy-yellow": ["whimsy-yellow-platter", "polka-joy-platter"],
+    "selin-tea-set-aqua": ["aqua-spiral-ceramic-platter", "sushi-wasabi-platter"],
+    "aura-tea-set-riviera-blue": ["riviera-blue-platter", "ova-serving-dish"],
+    "watermelon-whim-mug": ["watermelon-whim-platter", "selin-tea-set-sage-green"],
+    "kiwi-splash-mug": ["kiwi-splash-platter", "the-slab"]
+  },
+
+  "dinner_sets": {
+    "reactive-santorini-blue-premium-dinner-set-43-pcs": ["jute-weave-placemats-set-of-2", "radiant-gold-luxury-cutlery-set", "jute-napkin-holders-set-of-6", "persian-metal-handi", "everyday-jute-bread-basket", "thp-jute-nest-tissue-box"],
+    "limone-gardenia-premium-dinner-set-36-pcs": ["coastal-cream-placemats-set-of-2", "radiant-gold-luxury-cutlery-set", "cream-napkin-holders-set-of-6", "thp-pearl-table-runner", "thp-cream-nest-tissue-box", "everyday-cream-bread-basket"],
+    "sage-green-premium-dinner-set-45-pcs": ["cream-ribbed-placemats-set-of-2", "cream-napkin-holders-set-of-6", "thp-pearl-table-runner", "golden-luxe-cutlery-set-24-pcs", "thp-cream-nest-tissue-box", "everyday-cream-bread-basket"],
+    "reactive-cloud-grey-premium-dinner-set-43-pcs": ["jute-weave-placemats-set-of-2", "radiant-gold-luxury-cutlery-set", "jute-napkin-holders-set-of-6", "persian-metal-handi", "heritage-copper-karahi", "arabic-mandi-platter", "everyday-jute-bread-basket", "thp-jute-nest-tissue-box"],
+    "whimsy-yellow-breakfast-set-25-pcs": ["cream-ribbed-placemats-set-of-2", "cream-napkin-holders-set-of-6", "thp-pearl-table-runner", "golden-luxe-cutlery-set-24-pcs", "thp-cream-nest-tissue-box", "everyday-cream-bread-basket"],
+    "aqua-premium-dinner-set-45-pcs": ["black-gold-premium-cutlery-set-24-pcs", "jute-macrame-placemats-set-of-2", "jute-weave-table-runner", "everyday-jute-bread-basket", "thp-jute-nest-tissue-box"],
+    "ivory-white-premium-dinner-set-45-pcs": ["jute-macrame-placemats-set-of-2", "jute-weave-table-runner", "black-gold-premium-cutlery-set-24-pcs"],
+    "burnt-maple-premium-dinner-set-38-pcs": ["jute-macrame-placemats-set-of-2", "jute-weave-table-runner", "golden-luxe-cutlery-set-24-pcs", "everyday-jute-bread-basket", "thp-jute-nest-tissue-box"],
+    "windsor-bloom-dinner-set-35-pcs": ["cream-ribbed-placemats-set-of-2", "cream-napkin-holders-set-of-6", "thp-pearl-table-runner", "radiant-gold-luxury-cutlery-set", "thp-cream-nest-tissue-box", "everyday-cream-bread-basket"],
+    "teal-premium-dinner-set-45-pcs": ["cream-ribbed-placemats-set-of-2", "cream-napkin-holders-set-of-6", "thp-pearl-table-runner", "radiant-gold-luxury-cutlery-set", "heritage-copper-karahi", "thp-cream-nest-tissue-box", "everyday-cream-bread-basket"],
+    "boho-garden-dinner-set-32-pcs": ["jute-weave-placemats-set-of-2", "radiant-gold-luxury-cutlery-set", "jute-napkin-holders-set-of-6", "arabic-mandi-platter", "jute-weave-table-runner", "everyday-jute-bread-basket", "thp-jute-nest-tissue-box"],
+    "coconut-terra-premium-dinner-set-36-pcs": ["coastal-cream-placemats-set-of-2", "black-gold-premium-cutlery-set-24-pcs", "thp-pearl-table-runner", "thp-cream-nest-tissue-box", "everyday-cream-bread-basket"],
+    "reactive-azure-handcrafted-dinner-set-32-pcs": ["jute-weave-placemats-set-of-2", "jute-napkin-holders-set-of-6", "jute-weave-table-runner", "black-gold-premium-cutlery-set-24-pcs", "everyday-jute-bread-basket", "thp-jute-nest-tissue-box"],
+    "watermelon-whim-duo-set-8-pcs": ["cream-ribbed-placemats-set-of-2", "thp-pearl-table-runner", "golden-luxe-cutlery-set-24-pcs", "thp-cream-nest-tissue-box", "everyday-cream-bread-basket"],
+    "kiwi-splash-duo-set-8-pcs": ["coastal-cream-placemats-set-of-2", "black-gold-premium-cutlery-set-24-pcs", "thp-pearl-table-runner", "thp-cream-nest-tissue-box", "everyday-cream-bread-basket"]
+  },
+
+  "weaved": {
+    "jute-weave-placemats-set-of-2": ["jute-weave-table-runner", "jute-napkin-holders-set-of-6"],
+    "coastal-cream-placemats-set-of-2": ["thp-pearl-table-runner", "cream-napkin-holders-set-of-6"],
+    "cream-ribbed-placemats-set-of-2": ["thp-pearl-table-runner", "cream-napkin-holders-set-of-6"],
+    "jute-macrame-placemats-set-of-2": ["jute-weave-table-runner", "cream-napkin-holders-set-of-6"],
+    "everyday-cream-bread-basket": ["thp-cream-nest-tissue-box", "cream-napkin-holders-set-of-6"],
+    "everyday-jute-bread-basket": ["thp-jute-nest-tissue-box", "jute-napkin-holders-set-of-6"],
+    "jute-napkin-holders-set-of-6": ["thp-jute-nest-tissue-box", "jute-weave-placemats-set-of-2"],
+    "cream-napkin-holders-set-of-6": ["coastal-cream-placemats-set-of-2", "thp-pearl-table-runner"],
+    "thp-pearl-table-runner": ["cream-ribbed-placemats-set-of-2", "cream-napkin-holders-set-of-6"],
+    "jute-weave-table-runner": ["thp-jute-nest-tissue-box", "jute-weave-placemats-set-of-2"],
+    "stone-grey-table-runner": ["coastal-cream-placemats-set-of-2", "cream-napkin-holders-set-of-6"]
+  },
+
+  "platters": {
+    "teal-spiral-platter": ["lira-serving-dish-1", "the-slab", "eggo-bowls-set-of-2", "orbelle-bowl-7-inch-aqua"],
+    "reactive-cloud-grey-platter": ["linear-sushi-platter", "ova-serving-dish", "deep-gravy-bowls"],
+    "burnt-maple-platter": ["speckled-hand-painted-handi-6-5-inch", "the-slab", "ova-plates-set-of-2"],
+    "reactive-santorini-blue-platter": ["linear-sushi-platter", "ova-serving-dish", "deep-gravy-bowls", "arc-bowls-set-of-2"],
+    "sage-green-spiral-platter": ["lira-serving-dish-1", "the-slab", "orbelle-bowl-7-inch-aqua", "eggo-bowls-set-of-2"],
+    "polka-joy-platter": ["dune-tea-set-polka-joy", "ova-serving-dish"],
+    "coconut-terra-platter": ["lira-serving-dish-1", "ova-serving-dish", "eggo-bowls-set-of-2"],
+    "cloud-grey-platter": ["the-slab", "ova-serving-dish"],
+    "ivory-white-platter": ["sushi-wasabi-platter", "ova-serving-dish", "orbelle-bowl-7-inch-aqua", "speckled-hand-painted-handi-6-5-inch"],
+    "riviera-blue-platter": ["gravy-bowl-riviera-blue", "arc-bowls-set-of-2-riviera-blue"],
+    "aqua-spiral-ceramic-platter": ["sushi-wasabi-platter", "ova-serving-dish", "orbelle-bowl-7-inch-aqua", "speckled-hand-painted-handi-6-5-inch"],
+    "whimsy-yellow-platter": ["selin-tea-set-whimsy-yellow"]
+  },
+
+  "metalware": {
+    "golden-luxe-cutlery-set-24-pcs": ["persian-metal-handi", "mughal-serving-platter"],
+    "arabic-mandi-platter": ["persian-metal-handi", "artisan-truck-art-handi"],
+    "radiant-gold-luxury-cutlery-set": ["persian-metal-handi", "royal-copper-glass-set-of-2"],
+    "royal-copper-glass-set-of-2": ["persian-metal-handi", "golden-luxe-cutlery-set-24-pcs"],
+    "persian-metal-handi": ["radiant-gold-luxury-cutlery-set", "artisan-truck-art-handi"],
+    "black-gold-premium-cutlery-set-24-pcs": ["persian-metal-handi", "mughal-serving-platter"],
+    "artisan-truck-art-handi": ["persian-metal-handi", "heritage-copper-karahi"],
+    "heritage-copper-karahi": ["royal-copper-glass-set-of-2", "mughal-surahi"],
+    "mughal-surahi": ["royal-copper-glass-set-of-2", "heritage-copper-karahi"],
+    "royal-mandi-feast-platter": ["royal-copper-glass-set-of-2", "heritage-copper-karahi"],
+    "mughal-serving-platter": ["royal-copper-glass-set-of-2", "heritage-copper-karahi"],
+    "luxe-warming-candle-stand": ["royal-copper-glass-set-of-2", "heritage-copper-karahi"]
+  },
+
+  "serveware": {
+    "ova-serving-dish": ["lira-serving-dish-1", "the-slab"],
+    "speckled-hand-painted-handi-6-5-inch": ["orbelle-bowl-7-inch-aqua", "ova-serving-dish"],
+    "lira-serving-dish-1": ["the-slab", "linear-sushi-platter"],
+    "sushi-wasabi-platter": ["the-slab", "linear-sushi-platter"],
+    "the-slab": ["lira-serving-dish-1", "orbelle-bowl-7-inch-aqua"],
+    "linear-sushi-platter": ["lira-serving-dish-1", "the-slab"],
+    "deep-gravy-bowls": ["ova-serving-dish", "orbelle-bowl-7-inch-aqua"],
+    "palermo-pasta-dish-large": ["ova-serving-dish", "orbelle-bowl-7-inch-aqua"]
+  }
+}
