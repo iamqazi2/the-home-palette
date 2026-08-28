@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hosp_hero": {
@@ -45,10 +54,12 @@
       "settings": {
         "image": "shopify://shop_images/IMG_0776.jpg",
         "video_url": "",
+        "video_url_mobile": "",
         "focal": "center",
         "scrim": 80,
         "scrim_color": "#1a4b46",
         "show_cue": true,
+        "text_shade": true,
         "eyebrow": "For Restaurants, Cafés, Hotels & Resorts",
         "heading": "Tableware Designed Around Your Brand",
         "lede": "<p>Your restaurant deserves tableware that feels as distinctive as the experience you create. We turn your brand identity into crockery your guests remember — and your kitchen can actually work with.</p>",
@@ -66,7 +77,8 @@
           "settings": {
             "icon": "gem",
             "title": "Premium Craftsmanship",
-            "text": "A-quality, hand-finished pieces"
+            "text": "A-quality, hand-finished pieces",
+            "link": ""
           }
         },
         "t2": {
@@ -74,7 +86,8 @@
           "settings": {
             "icon": "sparkles",
             "title": "Bespoke Designs",
-            "text": "Your shapes, colours and marks"
+            "text": "Your shapes, colours and marks",
+            "link": ""
           }
         },
         "t3": {
@@ -82,7 +95,8 @@
           "settings": {
             "icon": "truck",
             "title": "Timely Delivery",
-            "text": "Planned around your opening date"
+            "text": "Planned around your opening date",
+            "link": ""
           }
         },
         "t4": {
@@ -90,7 +104,8 @@
           "settings": {
             "icon": "heart",
             "title": "Free Consultation",
-            "text": "Theme and table design included"
+            "text": "Theme and table design included",
+            "link": ""
           }
         }
       },
@@ -115,6 +130,7 @@
           "settings": {
             "name": "Mövenpick Hotel Centaurus Islamabad",
             "asset": "hp-brand-movenpick-centaurus.webp",
+            "url": "",
             "fit": "contain"
           }
         },
@@ -123,6 +139,7 @@
           "settings": {
             "name": "Golf Club Bhurban",
             "asset": "hp-brand-golf-club-bhurban.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -131,6 +148,7 @@
           "settings": {
             "name": "Escape Hotels & Resorts",
             "asset": "hp-brand-escape-hotels.webp",
+            "url": "",
             "fit": "contain"
           }
         },
@@ -139,6 +157,7 @@
           "settings": {
             "name": "Loafology Bakery & Cafe",
             "asset": "hp-brand-loafology.webp",
+            "url": "",
             "fit": "contain"
           }
         },
@@ -147,6 +166,7 @@
           "settings": {
             "name": "June",
             "asset": "hp-brand-june.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -155,6 +175,7 @@
           "settings": {
             "name": "Basha — Turkish & Lebanese Cuisine",
             "asset": "hp-brand-basha.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -163,6 +184,7 @@
           "settings": {
             "name": "Milki by Lush Crush",
             "asset": "hp-brand-milki.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -171,6 +193,7 @@
           "settings": {
             "name": "The Nook Café",
             "asset": "hp-brand-the-nook-cafe.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -179,6 +202,7 @@
           "settings": {
             "name": "Bakhshe's Tea House",
             "asset": "hp-brand-bakhshes-tea-house.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -187,6 +211,7 @@
           "settings": {
             "name": "Infusio",
             "asset": "hp-brand-infusio.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -195,6 +220,7 @@
           "settings": {
             "name": "Café Soleil",
             "asset": "hp-brand-cafe-soleil.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -203,6 +229,7 @@
           "settings": {
             "name": "Alchemy",
             "asset": "hp-brand-alchemy.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -211,6 +238,7 @@
           "settings": {
             "name": "Reeve's",
             "asset": "hp-brand-reeves.webp",
+            "url": "",
             "fit": "contain"
           }
         },
@@ -219,6 +247,7 @@
           "settings": {
             "name": "Steak & Spaghetti Co.",
             "asset": "hp-brand-steak-and-spaghetti.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -227,6 +256,7 @@
           "settings": {
             "name": "The Urban Elan",
             "asset": "hp-brand-the-urban-elan.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -235,6 +265,7 @@
           "settings": {
             "name": "Voila",
             "asset": "hp-brand-voila.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -243,6 +274,7 @@
           "settings": {
             "name": "Eggcellent",
             "asset": "hp-brand-eggcellent.webp",
+            "url": "",
             "fit": "contain"
           }
         },
@@ -251,6 +283,7 @@
           "settings": {
             "name": "Miam'ory",
             "asset": "hp-brand-miamory.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -259,6 +292,7 @@
           "settings": {
             "name": "CAP",
             "asset": "hp-brand-cap.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -267,6 +301,7 @@
           "settings": {
             "name": "Lollywood Tea House",
             "asset": "hp-brand-lollywood-tea-house.webp",
+            "url": "",
             "fit": "contain"
           }
         },
@@ -275,6 +310,7 @@
           "settings": {
             "name": "The Tea Lounge",
             "asset": "hp-brand-the-tea-lounge.webp",
+            "url": "",
             "fit": ""
           }
         },
@@ -283,6 +319,7 @@
           "settings": {
             "name": "Tiny Troves Play Café",
             "asset": "hp-brand-tiny-troves.webp",
+            "url": "",
             "fit": "contain"
           }
         },
@@ -291,6 +328,7 @@
           "settings": {
             "name": "",
             "asset": "hp-brand-calligraphy-mark.webp",
+            "url": "",
             "fit": "contain"
           }
         },
@@ -299,6 +337,7 @@
           "settings": {
             "name": "",
             "asset": "hp-brand-z-mark.webp",
+            "url": "",
             "fit": "contain"
           }
         }
@@ -335,7 +374,7 @@
         "speed": 46,
         "fit": "cover",
         "mute": false,
-        "bg_color": "#fffdf4",
+        "bg_color": "#FFF9DF",
         "center_head": true,
         "eyebrow": "Trusted Across Hospitality",
         "heading": "The Tables We Already Set",
@@ -381,7 +420,7 @@
         "image": "shopify://shop_images/IMG_8879.heic",
         "image_2": "shopify://shop_images/IMG_8878.heic",
         "flip": true,
-        "bg_color": "#fffdf4",
+        "bg_color": "#FFF9DF",
         "badge_value": "24+",
         "badge_label": "Hospitality brands served",
         "badge_color": "#1a4b46",
@@ -403,7 +442,9 @@
           "settings": {
             "icon": "utensils",
             "title": "Restaurants",
-            "text": "Dinner plates, bowls, platters and serving pieces that survive a full service and still look handmade."
+            "text": "Dinner plates, bowls, platters and serving pieces that survive a full service and still look handmade.",
+            "link_label": "",
+            "link": ""
           }
         },
         "v2": {
@@ -411,7 +452,9 @@
           "settings": {
             "icon": "coffee",
             "title": "Cafés & Tea Houses",
-            "text": "Cups, saucers, mugs and dessert plates in colours that photograph as well as they pour."
+            "text": "Cups, saucers, mugs and dessert plates in colours that photograph as well as they pour.",
+            "link_label": "",
+            "link": ""
           }
         },
         "v3": {
@@ -419,7 +462,9 @@
           "settings": {
             "icon": "star",
             "title": "Hotels & Resorts",
-            "text": "Breakfast buffets, in-room dining and banquet service, supplied at volume with consistent reorders."
+            "text": "Breakfast buffets, in-room dining and banquet service, supplied at volume with consistent reorders.",
+            "link_label": "",
+            "link": ""
           }
         },
         "v4": {
@@ -427,7 +472,9 @@
           "settings": {
             "icon": "sparkles",
             "title": "Bakeries & Patisseries",
-            "text": "Display trays, cake stands and counter pieces that make the counter do the selling."
+            "text": "Display trays, cake stands and counter pieces that make the counter do the selling.",
+            "link_label": "",
+            "link": ""
           }
         },
         "v5": {
@@ -435,7 +482,9 @@
           "settings": {
             "icon": "users",
             "title": "Banquets & Events",
-            "text": "Chafing dishes, handis, copper and steel service for weddings, iftars and large functions."
+            "text": "Chafing dishes, handis, copper and steel service for weddings, iftars and large functions.",
+            "link_label": "",
+            "link": ""
           }
         },
         "v6": {
@@ -443,7 +492,9 @@
           "settings": {
             "icon": "package",
             "title": "Cloud Kitchens & Studios",
-            "text": "Photography-ready sets for menus, shoots and delivery brands building a look from scratch."
+            "text": "Photography-ready sets for menus, shoots and delivery brands building a look from scratch.",
+            "link_label": "",
+            "link": ""
           }
         }
       },
@@ -457,14 +508,14 @@
       ],
       "settings": {
         "bg_color": "#fff9df",
+        "card_style": "gradient",
+        "card_color": "#1a4b46",
         "center_head": true,
         "show_numbers": false,
         "columns": 3,
         "eyebrow": "Who We Supply",
         "heading": "Crockery for Every Kind of Service",
-        "text": "If food leaves your kitchen on a plate, we can make that plate — in the quantity your room needs and the colours your brand uses.",
-        "card_style": "gradient",
-        "card_color": "#1a4b46"
+        "text": "If food leaves your kitchen on a plate, we can make that plate — in the quantity your room needs and the colours your brand uses."
       }
     },
     "hosp_gallery": {
@@ -708,7 +759,7 @@
         "pk3"
       ],
       "settings": {
-        "bg_color": "#fffdf4",
+        "bg_color": "#FFF9DF",
         "featured_color": "#1a4b46",
         "center_head": true,
         "eyebrow": "Packages",
@@ -723,9 +774,9 @@
         "rev_01": {
           "type": "video",
           "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/vp/ffbf98149d8545db94b0a7966be33a7a/ffbf98149d8545db94b0a7966be33a7a.HD-720p-4.5Mbps-86196737.mp4",
             "name": "Ayesha K.",
-            "role": "Home Chef · Lahore",
-            "video_url": "https://cdn.shopify.com/videos/c/vp/ffbf98149d8545db94b0a7966be33a7a/ffbf98149d8545db94b0a7966be33a7a.HD-720p-4.5Mbps-86196737.mp4"
+            "role": "Home Chef · Lahore"
           }
         },
         "rev_02": {
@@ -749,9 +800,9 @@
         "rev_04": {
           "type": "video",
           "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/vp/ad9b028f2eb74b9aa7dbc13ea9a5f34e/ad9b028f2eb74b9aa7dbc13ea9a5f34e.HD-720p-4.5Mbps-86196738.mp4",
             "name": "Sana M.",
-            "role": "Host · Islamabad",
-            "video_url": "https://cdn.shopify.com/videos/c/vp/ad9b028f2eb74b9aa7dbc13ea9a5f34e/ad9b028f2eb74b9aa7dbc13ea9a5f34e.HD-720p-4.5Mbps-86196738.mp4"
+            "role": "Host · Islamabad"
           }
         },
         "rev_05": {
@@ -775,9 +826,9 @@
         "rev_07": {
           "type": "video",
           "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/vp/4c92cb98194b4e82bf4ff42bb63a64ba/4c92cb98194b4e82bf4ff42bb63a64ba.HD-720p-4.5Mbps-86196736.mp4",
             "name": "Usman T.",
-            "role": "Cafe Owner · Multan",
-            "video_url": "https://cdn.shopify.com/videos/c/vp/4c92cb98194b4e82bf4ff42bb63a64ba/4c92cb98194b4e82bf4ff42bb63a64ba.HD-720p-4.5Mbps-86196736.mp4"
+            "role": "Cafe Owner · Multan"
           }
         },
         "rev_08": {

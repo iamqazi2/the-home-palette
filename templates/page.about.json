@@ -159,7 +159,7 @@
         "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
         "image_2": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
         "flip": false,
-        "bg_color": "#fffdf4",
+        "bg_color": "#FFF9DF",
         "badge_value": "Est. 2024",
         "badge_label": "Islamabad, Pakistan",
         "badge_color": "#1a4b46",
@@ -176,7 +176,7 @@
     "hp_about_manifesto": {
       "type": "hp-about-manifesto",
       "settings": {
-        "bg_color": "#fff9df",
+        "bg_color": "#FFF9DF",
         "center_head": true,
         "drop_cap": true,
         "eyebrow": "Chapter Two — What We Believe",

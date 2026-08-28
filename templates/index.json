@@ -76,24 +76,26 @@
         "slide_5"
       ],
       "settings": {
-        "auto_rotate": true,
-        "change_slides_speed": 6,
-        "accessibility_info": "Slideshow about our brand",
+        "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4",
+        "video_url": "https://cdn.shopify.com/videos/c/o/v/f2058e22370f489c8d4c2a6a7eaf5f77.mp4",
         "height": "standard",
         "text_position": "left",
         "overlay_strength": 80,
         "text_shade": true,
+        "overlay_color": "#1a4b46",
+        "grain": true,
+        "typewriter": true,
+        "show_cue": true,
+        "focal": "center",
+        "text_color": "#fff9df",
+        "auto_rotate": true,
+        "change_slides_speed": 6,
+        "watch_label": "Watch Story",
+        "watch_video_url": "",
         "show_rating": true,
         "rating_score": "4.9",
         "rating_text": "1,000+ happy tables across Pakistan",
-        "watch_label": "Watch Story",
-        "watch_video_url": "",
-        "video_url": "https://cdn.shopify.com/videos/c/o/v/f2058e22370f489c8d4c2a6a7eaf5f77.mp4",
-        "grain": true,
-        "show_cue": true,
-        "focal": "center",
-        "typewriter": true,
-        "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4"
+        "accessibility_info": "Slideshow about our brand"
       }
     },
     "hp_trust": {
@@ -104,7 +106,8 @@
           "settings": {
             "icon": "truck",
             "title": "Nationwide Delivery",
-            "text": "Flat Rs. 299 — free above Rs. 8,000"
+            "text": "Flat Rs. 299 — free above Rs. 8,000",
+            "link": ""
           }
         },
         "trust_2": {
@@ -112,7 +115,8 @@
           "settings": {
             "icon": "award",
             "title": "Handcrafted",
-            "text": "Made by Pakistani artisans"
+            "text": "Made by Pakistani artisans",
+            "link": ""
           }
         },
         "trust_3": {
@@ -120,7 +124,8 @@
           "settings": {
             "icon": "shield-check",
             "title": "Quality Checked",
-            "text": "Every piece inspected by hand"
+            "text": "Every piece inspected by hand",
+            "link": ""
           }
         },
         "trust_4": {
@@ -128,7 +133,8 @@
           "settings": {
             "icon": "sparkles",
             "title": "5% Off Online Payment",
-            "text": "Website orders only"
+            "text": "Website orders only",
+            "link": ""
           }
         }
       },
@@ -138,7 +144,12 @@
         "trust_3",
         "trust_4"
       ],
-      "settings": {}
+      "settings": {
+        "bg_color": "#fff9df",
+        "text_color": "#252525",
+        "chip_color": "#1a4b46",
+        "chip_icon_color": "#fff9df"
+      }
     },
     "hp_category_tiles": {
       "type": "hp-category-tiles",
@@ -231,547 +242,11 @@
         "heading": "Every Table Tells a Story",
         "text": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
         "center_head": true,
-        "show_count": true,
         "columns": 5,
-        "count_label": "varieties"
-      }
-    },
-    "hp_story": {
-      "type": "hp-story",
-      "settings": {
-        "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
-        "sepia": false,
-        "flip": false,
-        "eyebrow": "Chapter Two — The Craft",
-        "heading": "Crafted in Pakistan, Made for Fine Dining",
-        "text": "<p>Home starts here. Every piece in our palette is shaped, glazed and finished by local artisans — supporting Pakistani craft while setting tables for homes, hotels and restaurants across the country. These aren't just dishes; they're heirlooms in the making.</p>",
-        "stat_1_value": "100%",
-        "stat_1_label": "Handcrafted",
-        "stat_2_value": "10+",
-        "stat_2_label": "Collections",
-        "stat_3_value": "3–5 days",
-        "stat_3_label": "Delivery",
-        "button_label": "Explore the Craft",
-        "link": "shopify://collections",
-        "background": "teal"
-      }
-    },
-    "hp_occasion": {
-      "type": "hp-occasion",
-      "blocks": {
-        "occ_1": {
-          "type": "occasion",
-          "settings": {
-            "icon": "utensils",
-            "title": "Everyday Dining",
-            "caption": "Sturdy, beautiful staples",
-            "link": "shopify://collections/dinner-breakfast-sets",
-            "collection": "plates"
-          }
-        },
-        "occ_2": {
-          "type": "occasion",
-          "settings": {
-            "icon": "users",
-            "title": "Hosting Guests",
-            "caption": "Sets that impress",
-            "link": "shopify://collections/serveware",
-            "collection": "serveware"
-          }
-        },
-        "occ_3": {
-          "type": "occasion",
-          "settings": {
-            "icon": "coffee",
-            "title": "Tea Time",
-            "caption": "Slow afternoon rituals",
-            "link": "shopify://collections/tea-coffee-essentials",
-            "collection": "tea-coffee-essentials"
-          }
-        },
-        "occ_4": {
-          "type": "occasion",
-          "settings": {
-            "icon": "moon-star",
-            "title": "Ramadan",
-            "caption": "Iftar & suhoor tables",
-            "link": "shopify://collections",
-            "collection": "platters"
-          }
-        },
-        "occ_5": {
-          "type": "occasion",
-          "settings": {
-            "icon": "sparkles",
-            "title": "Eid",
-            "caption": "Festive gatherings",
-            "link": "shopify://collections/new-arrivals",
-            "collection": "new-arrivals"
-          }
-        },
-        "occ_6": {
-          "type": "occasion",
-          "settings": {
-            "icon": "heart",
-            "title": "Wedding Gifts",
-            "caption": "Heirlooms to give",
-            "link": "shopify://collections",
-            "collection": "dinner-breakfast-sets"
-          }
-        }
-      },
-      "block_order": [
-        "occ_1",
-        "occ_2",
-        "occ_3",
-        "occ_4",
-        "occ_5",
-        "occ_6"
-      ],
-      "settings": {
-        "eyebrow": "Chapter Three — The Table",
-        "heading": "Shop by Occasion",
-        "text": "From quiet weekday meals to grand celebrations — set the table for the moment.",
-        "show_count": true,
-        "count_label": "varieties",
-        "cta_label": "Shop now",
-        "card_color": "#1a4b46",
-        "card_color_hover": "#123532"
-      }
-    },
-    "hp_style_rail": {
-      "type": "hp-style-rail",
-      "blocks": {
-        "style_1": {
-          "type": "style",
-          "settings": {
-            "title": "Minimalist",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
-            "collection": "plates"
-          }
-        },
-        "style_2": {
-          "type": "style",
-          "settings": {
-            "title": "Earthy",
-            "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
-            "collection": "thp-weave-collection"
-          }
-        },
-        "style_3": {
-          "type": "style",
-          "settings": {
-            "title": "Reactive",
-            "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
-            "collection": "aesthetic-bowls"
-          }
-        },
-        "style_4": {
-          "type": "style",
-          "settings": {
-            "title": "Contemporary",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
-            "collection": "dinner-breakfast-sets"
-          }
-        },
-        "style_5": {
-          "type": "style",
-          "settings": {
-            "title": "Hotel Collection",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
-            "collection": "serveware"
-          }
-        }
-      },
-      "block_order": [
-        "style_1",
-        "style_2",
-        "style_3",
-        "style_4",
-        "style_5"
-      ],
-      "settings": {
-        "eyebrow": "Textures & Glazes",
-        "heading": "Shop by Style",
-        "show_count": false,
-        "count_label": "varieties"
-      }
-    },
-    "hp_cta": {
-      "type": "hp-cta-band",
-      "settings": {
-        "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
-        "duotone": true,
-        "eyebrow": "The Weave Collection",
-        "heading": "Woven for the Everyday Feast",
-        "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
-        "button_label": "Explore THP Weaves",
-        "link": "shopify://collections/thp-weave-collection",
         "scrim": 90,
-        "scrim_color": "#1a4b46",
-        "layout": "split",
-        "flip": false,
-        "panel_color": "#1a4b46",
-        "text_color": "#fff9df"
-      }
-    },
-    "173573001120319a38": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "hp_shop_by_color": {
-      "type": "hp-shop-by-color",
-      "blocks": {
-        "colour_1": {
-          "type": "colour",
-          "settings": {
-            "title": "Sage Green",
-            "swatch": "#6e7c4f",
-            "tag": "sage-green"
-          }
-        },
-        "colour_2": {
-          "type": "colour",
-          "settings": {
-            "title": "Ivory White",
-            "swatch": "#f0ead9",
-            "tag": "ivory-white",
-            "aliases": "Cream"
-          }
-        },
-        "colour_3": {
-          "type": "colour",
-          "settings": {
-            "title": "Aqua",
-            "swatch": "#93c9c2",
-            "tag": "aqua"
-          }
-        },
-        "colour_4": {
-          "type": "colour",
-          "settings": {
-            "title": "Burnt Maple",
-            "swatch": "#c4703a",
-            "tag": "burnt-maple"
-          }
-        },
-        "colour_5": {
-          "type": "colour",
-          "settings": {
-            "title": "Whimsy Yellow",
-            "swatch": "#e3c10c",
-            "tag": "whimsy-yellow"
-          }
-        },
-        "colour_6": {
-          "type": "colour",
-          "settings": {
-            "title": "Riviera Blue",
-            "swatch": "#33506f",
-            "tag": "riviera-blue"
-          }
-        },
-        "colour_7": {
-          "type": "colour",
-          "settings": {
-            "title": "Coconut Terra",
-            "swatch": "#8a6660",
-            "tag": "coconut-terra",
-            "aliases": "Coconut"
-          }
-        },
-        "colour_8": {
-          "type": "colour",
-          "settings": {
-            "title": "Teal",
-            "swatch": "#1e5560",
-            "tag": "teal"
-          }
-        },
-        "colour_9": {
-          "type": "colour",
-          "settings": {
-            "title": "Reactive Santorini Blue",
-            "swatch": "#1e3468",
-            "tag": "reactive-santorini-blue",
-            "aliases": "Santorini Blue"
-          }
-        },
-        "colour_10": {
-          "type": "colour",
-          "settings": {
-            "title": "Reactive Cloud Grey",
-            "swatch": "#bbb0a2",
-            "tag": "reactive-cloud-grey",
-            "aliases": "Cloud Grey"
-          }
-        },
-        "colour_11": {
-          "type": "colour",
-          "settings": {
-            "title": "Limone Yellow",
-            "swatch": "#f0b71c",
-            "tag": "limone-yellow",
-            "aliases": "Limone Gardenia"
-          }
-        },
-        "colour_12": {
-          "type": "colour",
-          "settings": {
-            "title": "Windsor Red",
-            "swatch": "#be4a55",
-            "tag": "windsor-red",
-            "aliases": "Windsor Bloom"
-          }
-        },
-        "colour_13": {
-          "type": "colour",
-          "settings": {
-            "title": "Boho Floral",
-            "swatch": "#efe7d7",
-            "tag": "boho-floral",
-            "aliases": "Boho Garden"
-          }
-        },
-        "colour_14": {
-          "type": "colour",
-          "settings": {
-            "title": "Aqua-grey",
-            "swatch": "#afc7c0",
-            "tag": "aqua-grey"
-          }
-        },
-        "colour_15": {
-          "type": "colour",
-          "settings": {
-            "title": "Jute Natural",
-            "swatch": "#c2a878",
-            "tag": "jute-natural",
-            "aliases": "Jute, Rattan, Rustic, Rope, Handwoven"
-          }
-        },
-        "colour_16": {
-          "type": "colour",
-          "settings": {
-            "title": "Stone Grey",
-            "swatch": "#8c9091",
-            "tag": "stone-grey",
-            "aliases": "Stone"
-          }
-        },
-        "colour_17": {
-          "type": "colour",
-          "settings": {
-            "title": "Gold",
-            "swatch": "#c9a227",
-            "tag": "gold",
-            "aliases": "Golden"
-          }
-        },
-        "colour_18": {
-          "type": "colour",
-          "settings": {
-            "title": "Copper",
-            "swatch": "#b87333",
-            "tag": "copper"
-          }
-        },
-        "colour_19": {
-          "type": "colour",
-          "settings": {
-            "title": "Silver",
-            "swatch": "#b9bcc0",
-            "tag": "silver"
-          }
-        },
-        "colour_20": {
-          "type": "colour",
-          "settings": {
-            "title": "Black",
-            "swatch": "#1f1f1f",
-            "tag": "black",
-            "aliases": "Matte black, Black Matte"
-          }
-        },
-        "colour_21": {
-          "type": "colour",
-          "settings": {
-            "title": "Turquoise",
-            "swatch": "#3fb8ad",
-            "tag": "turquoise"
-          }
-        }
-      },
-      "block_order": [
-        "colour_1",
-        "colour_2",
-        "colour_3",
-        "colour_4",
-        "colour_5",
-        "colour_6",
-        "colour_7",
-        "colour_8",
-        "colour_9",
-        "colour_10",
-        "colour_11",
-        "colour_12",
-        "colour_13",
-        "colour_14",
-        "colour_15",
-        "colour_16",
-        "colour_17",
-        "colour_18",
-        "colour_19",
-        "colour_20",
-        "colour_21"
-      ],
-      "settings": {
-        "eyebrow": "The Palette",
-        "heading": "Shop by Colour",
-        "text": "Pick a glaze — every piece in that colour appears below.",
-        "show_count": false,
-        "count_label": "varieties",
-        "products_to_show": 12,
-        "default_index": 1,
-        "view_all_label": "View all",
-        "quick_add": "standard",
-        "columns": 4
-      }
-    },
-    "hp_video_reviews": {
-      "type": "hp-video-reviews",
-      "blocks": {
-        "rev_1": {
-          "type": "video",
-          "settings": {
-            "name": "Ayesha K.",
-            "role": "Home Chef · Lahore",
-            "video_url": "https://cdn.shopify.com/videos/c/vp/340ca6de791b4cada29eabb68842708a/340ca6de791b4cada29eabb68842708a.HD-720p-4.5Mbps-56941057.mp4"
-          }
-        },
-        "rev_2": {
-          "type": "text",
-          "settings": {
-            "quote": "Packaging was immaculate and the pieces feel like heirlooms. Our whole restaurant switched over. Worth every rupee.",
-            "name": "Bilal R.",
-            "role": "Restaurateur · Karachi",
-            "stars": 5
-          }
-        },
-        "rev_3": {
-          "type": "video",
-          "settings": {
-            "name": "Sana M.",
-            "role": "Host · Islamabad",
-            "video_url": "https://cdn.shopify.com/videos/c/vp/8fb1353a013e4ebc9d38aa30166a5a08/8fb1353a013e4ebc9d38aa30166a5a08.HD-720p-4.5Mbps-57024876.mp4"
-          }
-        },
-        "rev_4": {
-          "type": "text",
-          "settings": {
-            "quote": "The reactive glaze is even more beautiful in person. Every guest asks where the set is from.",
-            "name": "Hina F.",
-            "role": "Event Stylist",
-            "stars": 5
-          }
-        },
-        "rev_5": {
-          "type": "video",
-          "settings": {
-            "name": "Usman T.",
-            "role": "Cafe Owner · Multan",
-            "video_url": "https://cdn.shopify.com/videos/c/vp/e58909218dab456496dae7065f2a72ec/e58909218dab456496dae7065f2a72ec.HD-720p-4.5Mbps-57381773.mp4"
-          }
-        },
-        "rev_6": {
-          "type": "text",
-          "settings": {
-            "quote": "Bought the dinner set for our new home — it made the whole table feel special. Ordering the tea set next.",
-            "name": "Zara A.",
-            "role": "Newlywed · Rawalpindi",
-            "stars": 5
-          }
-        },
-        "rev_7": {
-          "type": "video",
-          "settings": {
-            "name": "Fatima R.",
-            "role": "Food Blogger",
-            "video_url": "https://cdn.shopify.com/videos/c/vp/31620027b47546deba157dc51f231ce5/31620027b47546deba157dc51f231ce5.HD-720p-4.5Mbps-86189754.mp4"
-          }
-        },
-        "rev_8": {
-          "type": "text",
-          "settings": {
-            "quote": "Consistent quality across every reorder. Hand-inspected really shows. Our go-to for banquet serveware now.",
-            "name": "Omar S.",
-            "role": "Hotel F&B Manager",
-            "stars": 5
-          }
-        },
-        "rev_9": {
-          "type": "text",
-          "settings": {
-            "quote": "Ordered twice for our restaurant. The glaze survives a full service and still looks handmade.",
-            "name": "Imran S.",
-            "role": "Chef · Islamabad",
-            "stars": 5
-          }
-        },
-        "rev_10": {
-          "type": "text",
-          "settings": {
-            "quote": "Gifted a dinner set for my sister’s wedding — she called it the best gift of the day.",
-            "name": "Mahnoor A.",
-            "role": "Lahore",
-            "stars": 5
-          }
-        },
-        "rev_11": {
-          "type": "video",
-          "settings": {
-            "name": "Rabia N.",
-            "role": "Home Stylist · Faisalabad",
-            "video_url": "https://cdn.shopify.com/videos/c/vp/c59e73c4577147e19fac75d1dcb86e65/c59e73c4577147e19fac75d1dcb86e65.HD-720p-4.5Mbps-86189755.mp4"
-          }
-        },
-        "rev_12": {
-          "type": "text",
-          "settings": {
-            "quote": "Delivery was quick and every piece arrived perfectly wrapped. Zero breakage.",
-            "name": "Danish K.",
-            "role": "Karachi",
-            "stars": 5
-          }
-        }
-      },
-      "block_order": [
-        "rev_1",
-        "rev_2",
-        "rev_3",
-        "rev_4",
-        "rev_5",
-        "rev_6",
-        "rev_7",
-        "rev_8",
-        "rev_9",
-        "rev_10",
-        "rev_11",
-        "rev_12"
-      ],
-      "settings": {
-        "eyebrow": "Real Tables · Real Reviews",
-        "heading": "Loved Across Pakistan",
-        "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
-        "speed": 5,
-        "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
-        "loop_previews": false,
-        "bg_color": "#1a4b46",
-        "text_color": "#fff9df",
-        "eyebrow_color": "#fff9df",
-        "card_color": "#1a4b46"
+        "bg_color": "#FFF9DF",
+        "show_count": true,
+        "count_label": "varieties"
       }
     },
     "hp_collection_rails": {
@@ -811,7 +286,7 @@
         "eyebrow": "The Shelf",
         "heading": "Shop the Range",
         "text": "Three collections that cover the whole table — from the everyday plate to the set you bring out for guests.",
-        "bg_color": "#fffdf4",
+        "bg_color": "#FFF9DF",
         "columns_desktop": 4,
         "peek_mobile": 2.2,
         "image_ratio": "portrait",
@@ -820,6 +295,446 @@
         "quick_add": "standard",
         "show_view_all": true,
         "view_all_label": "View all"
+      }
+    },
+    "hp_story": {
+      "type": "hp-story",
+      "settings": {
+        "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+        "background": "teal",
+        "custom_bg": "#1a4b46",
+        "sepia": false,
+        "flip": false,
+        "eyebrow": "Chapter Two — The Craft",
+        "heading": "Crafted in Pakistan, Made for Fine Dining",
+        "text": "<p>Home starts here. Every piece in our palette is shaped, glazed and finished by local artisans — supporting Pakistani craft while setting tables for homes, hotels and restaurants across the country. These aren't just dishes; they're heirlooms in the making.</p>",
+        "stat_1_value": "100%",
+        "stat_1_label": "Handcrafted",
+        "stat_2_value": "10+",
+        "stat_2_label": "Collections",
+        "stat_3_value": "3–5 days",
+        "stat_3_label": "Delivery",
+        "button_label": "Explore the Craft",
+        "link": "shopify://collections"
+      }
+    },
+    "hp_occasion": {
+      "type": "hp-occasion",
+      "blocks": {
+        "occ_1": {
+          "type": "occasion",
+          "settings": {
+            "icon": "utensils",
+            "title": "Everyday Dining",
+            "caption": "Sturdy, beautiful staples",
+            "collection": "plates",
+            "link": "shopify://collections/dinner-breakfast-sets"
+          }
+        },
+        "occ_2": {
+          "type": "occasion",
+          "settings": {
+            "icon": "users",
+            "title": "Hosting Guests",
+            "caption": "Sets that impress",
+            "collection": "serveware",
+            "link": "shopify://collections/serveware"
+          }
+        },
+        "occ_3": {
+          "type": "occasion",
+          "settings": {
+            "icon": "coffee",
+            "title": "Tea Time",
+            "caption": "Slow afternoon rituals",
+            "collection": "tea-coffee-essentials",
+            "link": "shopify://collections/tea-coffee-essentials"
+          }
+        },
+        "occ_4": {
+          "type": "occasion",
+          "settings": {
+            "icon": "moon-star",
+            "title": "Ramadan",
+            "caption": "Iftar & suhoor tables",
+            "collection": "platters",
+            "link": "shopify://collections"
+          }
+        },
+        "occ_5": {
+          "type": "occasion",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Eid",
+            "caption": "Festive gatherings",
+            "collection": "new-arrivals",
+            "link": "shopify://collections/new-arrivals"
+          }
+        },
+        "occ_6": {
+          "type": "occasion",
+          "settings": {
+            "icon": "heart",
+            "title": "Wedding Gifts",
+            "caption": "Heirlooms to give",
+            "collection": "dinner-breakfast-sets",
+            "link": "shopify://collections"
+          }
+        }
+      },
+      "block_order": [
+        "occ_1",
+        "occ_2",
+        "occ_3",
+        "occ_4",
+        "occ_5",
+        "occ_6"
+      ],
+      "settings": {
+        "eyebrow": "Chapter Three — The Table",
+        "heading": "Shop by Occasion",
+        "text": "From quiet weekday meals to grand celebrations — set the table for the moment.",
+        "bg_color": "#fff9df",
+        "card_color": "#1a4b46",
+        "card_color_hover": "#123532",
+        "show_count": true,
+        "count_label": "varieties",
+        "cta_label": "Shop now"
+      }
+    },
+    "hp_shop_by_color": {
+      "type": "hp-shop-by-color",
+      "blocks": {
+        "colour_1": {
+          "type": "colour",
+          "settings": {
+            "title": "Sage Green",
+            "swatch": "#6e7c4f",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "sage-green"
+          }
+        },
+        "colour_2": {
+          "type": "colour",
+          "settings": {
+            "title": "Ivory White",
+            "swatch": "#f0ead9",
+            "view_all_url": "",
+            "aliases": "Cream",
+            "tag": "ivory-white"
+          }
+        },
+        "colour_3": {
+          "type": "colour",
+          "settings": {
+            "title": "Aqua",
+            "swatch": "#93c9c2",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "aqua"
+          }
+        },
+        "colour_4": {
+          "type": "colour",
+          "settings": {
+            "title": "Burnt Maple",
+            "swatch": "#c4703a",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "burnt-maple"
+          }
+        },
+        "colour_5": {
+          "type": "colour",
+          "settings": {
+            "title": "Whimsy Yellow",
+            "swatch": "#e3c10c",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "whimsy-yellow"
+          }
+        },
+        "colour_6": {
+          "type": "colour",
+          "settings": {
+            "title": "Riviera Blue",
+            "swatch": "#33506f",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "riviera-blue"
+          }
+        },
+        "colour_7": {
+          "type": "colour",
+          "settings": {
+            "title": "Coconut Terra",
+            "swatch": "#8a6660",
+            "view_all_url": "",
+            "aliases": "Coconut",
+            "tag": "coconut-terra"
+          }
+        },
+        "colour_8": {
+          "type": "colour",
+          "settings": {
+            "title": "Teal",
+            "swatch": "#1e5560",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "teal"
+          }
+        },
+        "colour_9": {
+          "type": "colour",
+          "settings": {
+            "title": "Reactive Santorini Blue",
+            "swatch": "#1e3468",
+            "view_all_url": "",
+            "aliases": "Santorini Blue",
+            "tag": "reactive-santorini-blue"
+          }
+        },
+        "colour_10": {
+          "type": "colour",
+          "settings": {
+            "title": "Reactive Cloud Grey",
+            "swatch": "#bbb0a2",
+            "view_all_url": "",
+            "aliases": "Cloud Grey",
+            "tag": "reactive-cloud-grey"
+          }
+        },
+        "colour_11": {
+          "type": "colour",
+          "settings": {
+            "title": "Limone Yellow",
+            "swatch": "#f0b71c",
+            "view_all_url": "",
+            "aliases": "Limone Gardenia",
+            "tag": "limone-yellow"
+          }
+        },
+        "colour_12": {
+          "type": "colour",
+          "settings": {
+            "title": "Windsor Red",
+            "swatch": "#be4a55",
+            "view_all_url": "",
+            "aliases": "Windsor Bloom",
+            "tag": "windsor-red"
+          }
+        },
+        "colour_13": {
+          "type": "colour",
+          "settings": {
+            "title": "Boho Floral",
+            "swatch": "#efe7d7",
+            "view_all_url": "",
+            "aliases": "Boho Garden",
+            "tag": "boho-floral"
+          }
+        },
+        "colour_14": {
+          "type": "colour",
+          "settings": {
+            "title": "Aqua-grey",
+            "swatch": "#afc7c0",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "aqua-grey"
+          }
+        },
+        "colour_15": {
+          "type": "colour",
+          "settings": {
+            "title": "Jute Natural",
+            "swatch": "#c2a878",
+            "view_all_url": "",
+            "aliases": "Jute, Rattan, Rustic, Rope, Handwoven",
+            "tag": "jute-natural"
+          }
+        },
+        "colour_16": {
+          "type": "colour",
+          "settings": {
+            "title": "Stone Grey",
+            "swatch": "#8c9091",
+            "view_all_url": "",
+            "aliases": "Stone",
+            "tag": "stone-grey"
+          }
+        },
+        "colour_17": {
+          "type": "colour",
+          "settings": {
+            "title": "Gold",
+            "swatch": "#c9a227",
+            "view_all_url": "",
+            "aliases": "Golden",
+            "tag": "gold"
+          }
+        },
+        "colour_18": {
+          "type": "colour",
+          "settings": {
+            "title": "Copper",
+            "swatch": "#b87333",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "copper"
+          }
+        },
+        "colour_19": {
+          "type": "colour",
+          "settings": {
+            "title": "Silver",
+            "swatch": "#b9bcc0",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "silver"
+          }
+        },
+        "colour_20": {
+          "type": "colour",
+          "settings": {
+            "title": "Black",
+            "swatch": "#1f1f1f",
+            "view_all_url": "",
+            "aliases": "Matte black, Black Matte",
+            "tag": "black"
+          }
+        },
+        "colour_21": {
+          "type": "colour",
+          "settings": {
+            "title": "Turquoise",
+            "swatch": "#3fb8ad",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "turquoise"
+          }
+        }
+      },
+      "block_order": [
+        "colour_1",
+        "colour_2",
+        "colour_3",
+        "colour_4",
+        "colour_5",
+        "colour_6",
+        "colour_7",
+        "colour_8",
+        "colour_9",
+        "colour_10",
+        "colour_11",
+        "colour_12",
+        "colour_13",
+        "colour_14",
+        "colour_15",
+        "colour_16",
+        "colour_17",
+        "colour_18",
+        "colour_19",
+        "colour_20",
+        "colour_21"
+      ],
+      "settings": {
+        "eyebrow": "The Palette",
+        "heading": "Shop by Colour",
+        "text": "Pick a glaze — every piece in that colour appears below.",
+        "products_to_show": 12,
+        "columns": 4,
+        "default_index": 1,
+        "view_all_label": "View all",
+        "bg_color": "#FFF9DF",
+        "quick_add": "standard",
+        "show_count": false,
+        "count_label": "varieties"
+      }
+    },
+    "hp_style_rail": {
+      "type": "hp-style-rail",
+      "blocks": {
+        "style_1": {
+          "type": "style",
+          "settings": {
+            "title": "Minimalist",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
+            "collection": "plates",
+            "link": ""
+          }
+        },
+        "style_2": {
+          "type": "style",
+          "settings": {
+            "title": "Earthy",
+            "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
+            "collection": "thp-weave-collection",
+            "link": ""
+          }
+        },
+        "style_3": {
+          "type": "style",
+          "settings": {
+            "title": "Reactive",
+            "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
+            "collection": "aesthetic-bowls",
+            "link": ""
+          }
+        },
+        "style_4": {
+          "type": "style",
+          "settings": {
+            "title": "Contemporary",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
+            "collection": "dinner-breakfast-sets",
+            "link": ""
+          }
+        },
+        "style_5": {
+          "type": "style",
+          "settings": {
+            "title": "Hotel Collection",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+            "collection": "serveware",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "style_1",
+        "style_2",
+        "style_3",
+        "style_4",
+        "style_5"
+      ],
+      "settings": {
+        "eyebrow": "Textures & Glazes",
+        "heading": "Shop by Style",
+        "scrim": 65,
+        "bg_color": "#FFF9DF",
+        "show_count": false,
+        "count_label": "varieties"
+      }
+    },
+    "hp_cta": {
+      "type": "hp-cta-band",
+      "settings": {
+        "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
+        "layout": "split",
+        "flip": false,
+        "duotone": true,
+        "scrim": 90,
+        "eyebrow": "The Weave Collection",
+        "heading": "Woven for the Everyday Feast",
+        "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
+        "bg_color": "#FFF9DF",
+        "panel_color": "#1a4b46",
+        "scrim_color": "#1a4b46",
+        "text_color": "#fff9df",
+        "button_label": "Explore THP Weaves",
+        "link": "shopify://collections/thp-weave-collection"
       }
     },
     "hp_wooden_line_rail": {
@@ -841,7 +756,7 @@
         "eyebrow": "",
         "heading": "",
         "text": "",
-        "bg_color": "#fffdf4",
+        "bg_color": "#FFF9DF",
         "columns_desktop": 4,
         "peek_mobile": 2.2,
         "image_ratio": "portrait",
@@ -850,6 +765,146 @@
         "quick_add": "standard",
         "show_view_all": true,
         "view_all_label": "View all"
+      }
+    },
+    "173573001120319a38": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "hp_video_reviews": {
+      "type": "hp-video-reviews",
+      "blocks": {
+        "rev_1": {
+          "type": "video",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/vp/340ca6de791b4cada29eabb68842708a/340ca6de791b4cada29eabb68842708a.HD-720p-4.5Mbps-56941057.mp4",
+            "name": "Ayesha K.",
+            "role": "Home Chef · Lahore"
+          }
+        },
+        "rev_2": {
+          "type": "text",
+          "settings": {
+            "quote": "Packaging was immaculate and the pieces feel like heirlooms. Our whole restaurant switched over. Worth every rupee.",
+            "name": "Bilal R.",
+            "role": "Restaurateur · Karachi",
+            "stars": 5
+          }
+        },
+        "rev_3": {
+          "type": "video",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/vp/8fb1353a013e4ebc9d38aa30166a5a08/8fb1353a013e4ebc9d38aa30166a5a08.HD-720p-4.5Mbps-57024876.mp4",
+            "name": "Sana M.",
+            "role": "Host · Islamabad"
+          }
+        },
+        "rev_4": {
+          "type": "text",
+          "settings": {
+            "quote": "The reactive glaze is even more beautiful in person. Every guest asks where the set is from.",
+            "name": "Hina F.",
+            "role": "Event Stylist",
+            "stars": 5
+          }
+        },
+        "rev_5": {
+          "type": "video",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/vp/e58909218dab456496dae7065f2a72ec/e58909218dab456496dae7065f2a72ec.HD-720p-4.5Mbps-57381773.mp4",
+            "name": "Usman T.",
+            "role": "Cafe Owner · Multan"
+          }
+        },
+        "rev_6": {
+          "type": "text",
+          "settings": {
+            "quote": "Bought the dinner set for our new home — it made the whole table feel special. Ordering the tea set next.",
+            "name": "Zara A.",
+            "role": "Newlywed · Rawalpindi",
+            "stars": 5
+          }
+        },
+        "rev_7": {
+          "type": "video",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/vp/31620027b47546deba157dc51f231ce5/31620027b47546deba157dc51f231ce5.HD-720p-4.5Mbps-86189754.mp4",
+            "name": "Fatima R.",
+            "role": "Food Blogger"
+          }
+        },
+        "rev_8": {
+          "type": "text",
+          "settings": {
+            "quote": "Consistent quality across every reorder. Hand-inspected really shows. Our go-to for banquet serveware now.",
+            "name": "Omar S.",
+            "role": "Hotel F&B Manager",
+            "stars": 5
+          }
+        },
+        "rev_9": {
+          "type": "text",
+          "settings": {
+            "quote": "Ordered twice for our restaurant. The glaze survives a full service and still looks handmade.",
+            "name": "Imran S.",
+            "role": "Chef · Islamabad",
+            "stars": 5
+          }
+        },
+        "rev_10": {
+          "type": "text",
+          "settings": {
+            "quote": "Gifted a dinner set for my sister’s wedding — she called it the best gift of the day.",
+            "name": "Mahnoor A.",
+            "role": "Lahore",
+            "stars": 5
+          }
+        },
+        "rev_11": {
+          "type": "video",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/vp/c59e73c4577147e19fac75d1dcb86e65/c59e73c4577147e19fac75d1dcb86e65.HD-720p-4.5Mbps-86189755.mp4",
+            "name": "Rabia N.",
+            "role": "Home Stylist · Faisalabad"
+          }
+        },
+        "rev_12": {
+          "type": "text",
+          "settings": {
+            "quote": "Delivery was quick and every piece arrived perfectly wrapped. Zero breakage.",
+            "name": "Danish K.",
+            "role": "Karachi",
+            "stars": 5
+          }
+        }
+      },
+      "block_order": [
+        "rev_1",
+        "rev_2",
+        "rev_3",
+        "rev_4",
+        "rev_5",
+        "rev_6",
+        "rev_7",
+        "rev_8",
+        "rev_9",
+        "rev_10",
+        "rev_11",
+        "rev_12"
+      ],
+      "settings": {
+        "eyebrow": "Real Tables · Real Reviews",
+        "heading": "Loved Across Pakistan",
+        "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
+        "speed": 5,
+        "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
+        "loop_previews": false,
+        "bg_color": "#1a4b46",
+        "text_color": "#fff9df",
+        "eyebrow_color": "#fff9df",
+        "card_color": "#1a4b46"
       }
     }
   },
