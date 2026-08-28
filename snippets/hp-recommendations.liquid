@@ -3,7 +3,9 @@
 
   Uses Shopify's native Product Recommendations, generated from this shop's own
   order and browsing data — and, for `complementary`, the manual pairings set in
-  the Search & Discovery app. That makes suggestions genuinely relevant to the
+  the Search & Discovery app. Note that `complementary` does NOT fall back to
+  related products: a product with no pairing set returns nothing and the band
+  hides itself. Use `related` at any call site that must always render. That makes suggestions genuinely relevant to the
   product in context, server-side, with no third-party API and no key in the
   theme (a theme is public source, so any key placed here would be readable).
 
