@@ -15,7 +15,7 @@
         "stat_1": {
           "type": "stat",
           "settings": {
-            "value": "24+",
+            "value": "50+",
             "label": "Hospitality brands",
             "count": true
           }
@@ -31,7 +31,7 @@
         "stat_3": {
           "type": "stat",
           "settings": {
-            "value": "14",
+            "value": "25+",
             "label": "Glaze colours",
             "count": true
           }
@@ -374,7 +374,7 @@
         "speed": 46,
         "fit": "cover",
         "mute": false,
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "center_head": true,
         "eyebrow": "Trusted Across Hospitality",
         "heading": "The Tables We Already Set",
@@ -420,7 +420,7 @@
         "image": "shopify://shop_images/IMG_8879.heic",
         "image_2": "shopify://shop_images/IMG_8878.heic",
         "flip": true,
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "badge_value": "24+",
         "badge_label": "Hospitality brands served",
         "badge_color": "#1a4b46",
@@ -759,7 +759,7 @@
         "pk3"
       ],
       "settings": {
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "featured_color": "#1a4b46",
         "center_head": true,
         "eyebrow": "Packages",
