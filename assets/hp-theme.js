@@ -1050,7 +1050,12 @@
       // JS, and reloading the same file would restart it for no reason.
       if (src && v.getAttribute('src') !== src) {
         v.setAttribute('src', src);
-        v.preload = 'metadata';
+        // 'auto', not 'metadata': the markup for a screen that has a clip to
+        // swap now ships with no autoplay/preload of its own (see
+        // hp-hero.liquid) specifically so nothing downloads until this point
+        // decides which file the screen actually needs — this is the one
+        // fetch that should happen, so it should ask for the whole thing.
+        v.preload = 'auto';
         v.load();
       }
 
@@ -1060,6 +1065,45 @@
       var p = v.play();
       if (p && p.catch) p.catch(function () { v.classList.remove('is-playing'); });
     });
+  }
+
+  /* ---- Lazy "poster" videos (review cards with no real poster image) ----
+     [data-hp-lazy-video] ships with no src and preload="none" — see the
+     comment in hp-video-reviews.liquid for why: these clips are not
+     faststart-encoded, so preload="metadata" downloads the entire file
+     instead of a small header. Fetching the real src only once a card is
+     about to scroll into view keeps that cost off every page load and pays
+     it only for cards someone actually reaches. */
+  function initLazyPreviewVideos(root) {
+    var nodes = (root || document).querySelectorAll('[data-hp-lazy-video]');
+    if (!nodes.length) return;
+
+    var start = function (v) {
+      if (v.dataset.hpLazyDone) return;
+      v.dataset.hpLazyDone = '1';
+      v.src = v.dataset.src;
+      if (v.hasAttribute('data-hp-lazy-autoplay')) {
+        v.loop = true;
+        v.addEventListener('loadeddata', function () {
+          var p = v.play();
+          if (p && p.catch) p.catch(function () {});
+        }, { once: true });
+      }
+      v.load();
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      nodes.forEach(start);
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        start(entry.target);
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '600px 0px' });
+    nodes.forEach(function (v) { io.observe(v); });
   }
 
   /* ---- Count-up numbers --------------------------------------------------
@@ -1525,6 +1569,7 @@
     initVideoTriggers(document);
     initReviewPager(document);
     initBgVideo(document);
+    initLazyPreviewVideos(document);
     initCounters(document);
     initTimeline(document);
     initJumpLinks(document);
@@ -1542,6 +1587,7 @@
     initVideoTriggers(e.target);
     initReviewPager(e.target);
     initBgVideo(e.target);
+    initLazyPreviewVideos(e.target);
     initCounters(e.target);
     initTimeline(e.target);
     initJumpLinks(e.target);

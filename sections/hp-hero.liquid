@@ -363,19 +363,52 @@
       {%- endif -%}
     >
       {%- if section.settings.video != null -%}
-        {{
-          section.settings.video
-          | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', image_size: '1920x'
-        }}
+        {%- if section.settings.video_url_mobile != blank -%}
+          {%- comment -%}
+            No autoplay/preload here on purpose. video_tag's native <source>
+            starts fetching the moment the browser parses it — autoplay makes
+            that immediate, before initBgVideo's JS has even run — so on a
+            phone this clip (the desktop cut) was downloading in full at the
+            same time as the phone clip it was about to be swapped out for.
+            Measured: both fully downloaded on a single load, ~6MB combined.
+            initBgVideo calls .play() itself once it has decided which file
+            this screen actually needs.
+          {%- endcomment -%}
+          {{
+            section.settings.video
+            | video_tag: loop: true, muted: true, controls: false, playsinline: true, preload: 'none', image_size: '1920x'
+          }}
+        {%- else -%}
+          {{
+            section.settings.video
+            | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', image_size: '1920x'
+          }}
+        {%- endif -%}
       {%- else -%}
         {%- comment -%}
           The desktop clip stays on the src attribute so the stage is never
           empty without JavaScript — the slide images are suppressed while a
           video is set, so an empty <video> would leave nothing at all.
           <hp-bg-video> in hp-theme.js swaps in the phone cut on small screens.
+
+          autoplay + preload="auto" only when there is nothing to swap. With a
+          phone clip set, `autoplay` starts fetching THIS (desktop) src the
+          instant the browser parses the tag — before initBgVideo's JS has
+          run — so a phone was downloading the desktop cut in full while
+          also downloading the phone cut it was about to switch to.
+          preload="metadata" without autoplay still shows a first frame with
+          JavaScript disabled (this video's own file, unlike the review clips
+          elsewhere in this theme, is expected to be front-loaded/faststart,
+          so "metadata" actually fetches just a header) — initBgVideo calls
+          .play() itself once it has picked the right file for this screen.
         {%- endcomment -%}
         <video
-          autoplay loop muted playsinline preload="auto"
+          loop muted playsinline
+          {% if section.settings.video_url_mobile != blank %}
+            preload="metadata"
+          {% else %}
+            autoplay preload="auto"
+          {% endif %}
           {% if section.settings.video_poster %}poster="{{ section.settings.video_poster | image_url: width: 2400 }}"{% endif %}
           src="{{ section.settings.video_url }}"
           data-src-desktop="{{ section.settings.video_url }}"

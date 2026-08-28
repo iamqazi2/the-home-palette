@@ -206,20 +206,33 @@
                       {{ section.settings.fallback_poster | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.name }}
                     {%- elsif video_src != blank -%}
                       {%- comment -%}
-                        No thumbnail supplied: show the clip itself. Muted +
-                        playsinline + metadata-only, seeked to the first frame,
-                        so it reads as a poster without downloading the video.
+                        No thumbnail supplied: show the clip itself, seeked to
+                        the first frame, so it reads as a poster without a
+                        real poster image. preload starts at "none" — these
+                        review clips are Shopify-hosted files without their
+                        metadata (moov atom) at the front, so preload="metadata"
+                        does not fetch a small header the way it would for a
+                        properly-optimized file: it downloads the ENTIRE clip
+                        (confirmed — the transferred bytes matched the full
+                        file size exactly). With five cards on the homepage
+                        that was several MB fetched on every load whether
+                        anyone scrolled to this section or not.
+                        data-hp-lazy-video hands the actual fetch to
+                        initLazyPreviewVideos() in hp-theme.js, which starts it
+                        only once the card is about to enter the viewport —
+                        same visual result, paid for only when it is seen.
                         Turn on "Loop previews" to let them play silently.
                       {%- endcomment -%}
                       <video
                         class="hp-vrev__preview"
-                        src="{{ video_src }}#t=0.1"
+                        data-src="{{ video_src }}#t=0.1"
+                        data-hp-lazy-video
                         muted
                         playsinline
-                        preload="metadata"
+                        preload="none"
                         tabindex="-1"
                         aria-hidden="true"
-                        {% if section.settings.loop_previews %}autoplay loop{% endif %}
+                        {% if section.settings.loop_previews %}data-hp-lazy-autoplay{% endif %}
                       ></video>
                     {%- endif -%}
                   </span>
