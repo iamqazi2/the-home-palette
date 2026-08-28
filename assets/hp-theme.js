@@ -1096,6 +1096,23 @@
       nodes.forEach(start);
       return;
     }
+
+    /* Safety net: if the observer never reports an intersection for some
+       reason — an edge case in a specific browser, a section whose layout
+       genuinely never overlaps the expanded root margin, anything — these
+       cards must not stay permanently unloaded. Load whatever the observer
+       has not already handled once the page has been open a while and the
+       visitor has actually scrolled, which is a reasonable proxy for "likely
+       to reach this section eventually" without paying the cost on every
+       load regardless of engagement. */
+    var fallbackArmed = false;
+    var armFallback = function () {
+      if (fallbackArmed) return;
+      fallbackArmed = true;
+      window.setTimeout(function () { nodes.forEach(start); }, 8000);
+    };
+    window.addEventListener('scroll', armFallback, { once: true, passive: true });
+
     /* Observe the SECTION each card lives in, not the card itself. These
        cards sit inside a horizontally-scrolling marquee (transform:
        translateX, animated), so a card's own bounding box routinely sits
