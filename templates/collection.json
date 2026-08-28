@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main-collection-banner": {
@@ -9,6 +18,7 @@
         "hp_height": "medium",
         "hp_eyebrow": "The Collection",
         "hp_show_tagline": true,
+        "hp_tagline": "Handcrafted pieces, made for the way you actually set the table.",
         "hp_cta_label": "Shop the collection",
         "hp_fallback_image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp"
       }
@@ -18,7 +28,7 @@
       "settings": {
         "products_per_page": 36,
         "columns_desktop": 4,
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "image_ratio": "portrait",
         "image_shape": "default",
         "show_secondary_image": true,
