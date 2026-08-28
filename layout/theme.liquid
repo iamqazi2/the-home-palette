@@ -297,16 +297,17 @@
       {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
     {%- endif -%}
 
-    {%- unless settings.type_body_font.system? -%}
-      {% comment %}theme-check-disable AssetPreload{% endcomment %}
-      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
-      {% comment %}theme-check-enable AssetPreload{% endcomment %}
-    {%- endunless -%}
-    {%- unless settings.type_header_font.system? -%}
-      {% comment %}theme-check-disable AssetPreload{% endcomment %}
-      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
-      {% comment %}theme-check-enable AssetPreload{% endcomment %}
-    {%- endunless -%}
+    {%- comment -%}
+      Dawn preloads the two theme-settings fonts here. THP does not render them:
+      hp-theme.css repoints --font-body-family / --font-heading-family at DM Sans
+      and DM Serif Display, loaded from Google Fonts below. The @font-face blocks
+      above cost nothing (a face is only fetched when something actually uses it),
+      but a preload fetches unconditionally — so these two links were pulling two
+      Archivo Narrow woff2 files on every page load, at high priority, competing
+      with the fonts the page really needs. Removed rather than repointed: the
+      Google stylesheet is what resolves the real font URLs, and preloading a
+      guessed URL for it would go stale on the next Google Fonts revision.
+    {%- endcomment -%}
 
     {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
       {{ 'component-localization-form.css' | asset_url | stylesheet_tag: preload: true }}
@@ -410,6 +411,12 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
-    <script src="//cdn.shopify.com/s/files/1/0749/9713/7660/t/1/assets/gem.js" type="text/javascript"></script>
+    {%- comment -%}
+      defer, not sync: this is the last thing in <body>, but a bare external
+      <script> still blocks the parser and delays DOMContentLoaded on a
+      third-party round trip. defer keeps the execution order and gets it off
+      the critical path.
+    {%- endcomment -%}
+    <script src="//cdn.shopify.com/s/files/1/0749/9713/7660/t/1/assets/gem.js" type="text/javascript" defer="defer"></script>
   </body>
 </html>

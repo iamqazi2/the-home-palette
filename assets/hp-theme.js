@@ -40,6 +40,56 @@
   }
   window.hpLenis = function () { return lenis; };
 
+  /* ---- First paint is never animated -----------------------------------
+     The reveal CSS hides [data-hp-reveal] & friends the moment `hp-gsap`
+     lands on <html>. That class is added by this file, which sits behind
+     ~180KB of deferred GSAP/ScrollTrigger/Lenis — so on a slow connection the
+     visitor sees the page paint, then watches it blank out and fade back in.
+     That reads as a slow site, not a polished one.
+
+     So: anything already inside the opening viewport when the engine boots is
+     revealed instantly and never animated. Only content below the fold earns a
+     scroll reveal, which is the only place the motion was ever visible anyway.
+     `firstPass` is cleared after the initial run so sections re-rendered by the
+     theme editor still animate normally. */
+  var firstPass = true;
+
+  function inFirstView(el) {
+    if (!firstPass) return false;
+    // innerHeight is genuinely 0 in some contexts at DOMContentLoaded — a
+    // not-yet-sized iframe, a prerender, some in-app webviews. Measured that
+    // happening here, where it silently made every element "below the fold"
+    // and animated the whole page anyway. Fall back rather than trust a zero.
+    var vh = window.innerHeight ||
+             document.documentElement.clientHeight ||
+             (window.screen && window.screen.height) ||
+             800;
+    return el.getBoundingClientRect().top < vh * 0.95;
+  }
+
+  function revealNow(el) {
+    el.dataset.hpDone = '1';
+    // Set opacity directly instead of going through gsap.set + clearProps:
+    // these elements are never animated, so there is nothing to clear, and a
+    // clearProps list that also wipes the opacity it just set would leave the
+    // element hidden by the stylesheet's opacity:0 gate.
+    el.style.opacity = '1';
+  }
+
+  /* Failsafe: if this file throws after `hp-gsap` is on <html>, every gated
+     element would stay at opacity 0 forever — a blank page. Anything still
+     unprocessed after 3s gets shown. Elements handled normally carry hpDone,
+     so a working page never trips this. */
+  if (hasGsap) {
+    window.setTimeout(function () {
+      document
+        .querySelectorAll('[data-hp-reveal], [data-hp-fluid], [data-hp-section], [data-hp-split], [data-hp-clip]')
+        .forEach(function (el) {
+          if (!el.dataset.hpDone) { el.style.opacity = '1'; el.style.clipPath = 'none'; }
+        });
+    }, 3000);
+  }
+
   /* ---- Overlay scroll lock ---------------------------------------------
      Lenis drives the page with its own virtual scroll, so `overflow: hidden`
      on <body> does not stop it — a wheel over an open drawer or modal would
@@ -242,6 +292,7 @@
       // 1. word-split headings — CASCADE DROP + BLUR EMERGE
       root.querySelectorAll('[data-hp-split]').forEach(function (el) {
         if (el.dataset.hpDone) return;
+        if (inFirstView(el)) { revealNow(el); return; }
         el.dataset.hpDone = '1';
         var words = splitWords(el);
         if (!words.length) {
@@ -277,6 +328,7 @@
       // 3. fluid copy/media — BLUR EMERGE, direction-aware
       root.querySelectorAll('[data-hp-fluid]').forEach(function (el) {
         if (el.dataset.hpDone) return;
+        if (inFirstView(el)) { revealNow(el); return; }
         el.dataset.hpDone = '1';
         var f = fromVars(autoDirection(el), 34);
         gsap.fromTo(el,
@@ -291,6 +343,11 @@
       // 4. clip-path image wipes
       root.querySelectorAll('[data-hp-clip]').forEach(function (el) {
         if (el.dataset.hpDone) return;
+        if (inFirstView(el)) {
+          revealNow(el);
+          el.style.clipPath = 'none';
+          return;
+        }
         el.dataset.hpDone = '1';
         var img = el.querySelector('img') || el;
         var tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
@@ -306,6 +363,7 @@
       root.querySelectorAll('[data-hp-stagger]').forEach(function (parent) {
         Array.prototype.forEach.call(parent.children, function (child) {
           if (child.hasAttribute('data-hp-reveal') && !child.dataset.hpDone) {
+            if (inFirstView(child)) { revealNow(child); return; }
             child.dataset.hpDone = '1';
             staggerChildren.push(child);
           }
@@ -327,6 +385,7 @@
       // 6. generic reveals — direction-aware
       root.querySelectorAll('[data-hp-reveal]').forEach(function (el) {
         if (el.dataset.hpDone) return;
+        if (inFirstView(el)) { revealNow(el); return; }
         el.dataset.hpDone = '1';
         var f = fromVars(autoDirection(el));
         gsap.fromTo(el,
@@ -339,6 +398,7 @@
       // 7. whole-section reveal for anything not otherwise animated
       root.querySelectorAll('[data-hp-section]').forEach(function (el) {
         if (el.dataset.hpDone) return;
+        if (inFirstView(el)) { revealNow(el); return; }
         el.dataset.hpDone = '1';
         var f = fromVars(autoDirection(el), 48);
         gsap.fromTo(el,
@@ -359,6 +419,7 @@
       });
 
       ST.refresh();
+      firstPass = false;
       return;
     }
 
