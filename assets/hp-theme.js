@@ -1018,19 +1018,33 @@
      photograph in place instead of a black rectangle.
   ---------------------------------------------------------------------- */
   function initBgVideo(root) {
-    (root || document).querySelectorAll('[data-hp-bg-video]').forEach(function (v) {
-      if (v.dataset.hpVidDone) return;
-      v.dataset.hpVidDone = '1';
+    (root || document).querySelectorAll('[data-hp-bg-video]').forEach(function (host) {
+      if (host.dataset.hpVidDone) return;
+      host.dataset.hpVidDone = '1';
       if (reducedMotion) return;   // leave the still image
+
+      /* The marker sits on the <video> when the markup builds the tag itself,
+         and on the wrapper when Shopify's video_tag built it (that filter takes
+         no data attributes). Reach through either way. */
+      var v = host.tagName === 'VIDEO' ? host : host.querySelector('video');
+      if (!v) return;
 
       /* Pick the clip for this screen before touching the network, so a phone
          never downloads the desktop cut (or the other way round). Either
          attribute may be empty, in which case the other one covers both. */
       var phone = window.matchMedia('(max-width: 749px)').matches;
-      var desktopSrc = v.getAttribute('data-src-desktop') || '';
-      var mobileSrc = v.getAttribute('data-src-mobile') || '';
-      var src = phone ? (mobileSrc || desktopSrc) : (desktopSrc || mobileSrc);
-      if (!src && !v.getAttribute('src')) return;
+      var desktopSrc = host.getAttribute('data-src-desktop') || '';
+      var mobileSrc = host.getAttribute('data-src-mobile') || '';
+
+      /* A video_tag-built element carries <source> children instead of a src,
+         and those ARE the desktop cut. Falling back to the phone URL on desktop
+         just because data-src-desktop is empty would put the portrait clip on
+         wide screens — the same bug in reverse. */
+      var hasNativeSources = !!v.querySelector('source');
+      var src = phone
+        ? (mobileSrc || desktopSrc)
+        : (desktopSrc || (hasNativeSources ? '' : mobileSrc));
+      if (!src && !v.getAttribute('src') && !hasNativeSources) return;
       // Only touch the element when the file actually differs — the homepage
       // hero ships its desktop clip on the src attribute so it plays without
       // JS, and reloading the same file would restart it for no reason.

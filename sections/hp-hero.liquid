@@ -14,7 +14,7 @@
 
 {%- liquid
   assign has_video = false
-  if section.settings.video != null or section.settings.video_url != blank
+  if section.settings.video != null or section.settings.video_url != blank or section.settings.video_url_mobile != blank
     assign has_video = true
   endif
 
@@ -344,7 +344,24 @@
   aria-label="{{ section.settings.accessibility_info | escape }}"
 >
   {%- if has_video -%}
-    <div class="hp-hero__video" data-hp-parallax>
+    {%- comment -%}
+      When the video is *picked* rather than typed in as a URL, `video_tag`
+      builds the <video> for us and gives us nowhere to hang the phone clip —
+      it takes no data attributes. Without them initBgVideo never saw the
+      element, so a picked video played on phones and desktop alike and the
+      "Hero video URL (phones)" setting did nothing at all. The swap attributes
+      therefore go on the wrapper in that case, and initBgVideo reaches through
+      to the <video> inside. Only emitted when there is actually a phone clip to
+      swap in, so a picked video with no phone URL behaves exactly as before.
+    {%- endcomment -%}
+    <div
+      class="hp-hero__video"
+      data-hp-parallax
+      {%- if section.settings.video != null and section.settings.video_url_mobile != blank %}
+        data-hp-bg-video
+        data-src-mobile="{{ section.settings.video_url_mobile }}"
+      {%- endif -%}
+    >
       {%- if section.settings.video != null -%}
         {{
           section.settings.video
