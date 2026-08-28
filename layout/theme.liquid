@@ -20,6 +20,20 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
+    {%- comment -%}
+      Homepage title/description override. Neither field traces to anything
+      in this theme or to Online Store > Preferences for the market actually
+      served to an anonymous visitor — confirmed by fetching the live HTML
+      directly (no JS involved) and finding "Elevate Your Space..." already
+      baked into the server response. Overriding here, ahead of both tags
+      below, is what makes it win regardless of where that value is actually
+      coming from admin-side.
+    {%- endcomment -%}
+    {%- if template == 'index' -%}
+      {%- assign page_title = "Timeless Tableware for Tables Worth Gathering Around" -%}
+      {%- assign page_description = "Timeless tableware for tables worth gathering around. Premium Pakistani crockery, hand-painted with care, curated for elegant everyday living." -%}
+    {%- endif -%}
+
     <title>
       {{ page_title }}
       {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
