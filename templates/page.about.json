@@ -490,6 +490,14 @@
             "stars": 5
           }
         },
+        "rev_11": {
+          "type": "video",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/vp/31620027b47546deba157dc51f231ce5/31620027b47546deba157dc51f231ce5.HD-720p-4.5Mbps-86189754.mp4",
+            "name": "Fatima R.",
+            "role": "Food Blogger"
+          }
+        },
         "rev_06": {
           "type": "text",
           "settings": {
@@ -514,6 +522,14 @@
             "name": "Imran S.",
             "role": "Chef · Islamabad",
             "stars": 5
+          }
+        },
+        "rev_12": {
+          "type": "video",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/vp/c59e73c4577147e19fac75d1dcb86e65/c59e73c4577147e19fac75d1dcb86e65.HD-720p-4.5Mbps-86189755.mp4",
+            "name": "Rabia N.",
+            "role": "Home Stylist · Faisalabad"
           }
         },
         "rev_09": {
@@ -541,9 +557,11 @@
         "rev_03",
         "rev_04",
         "rev_05",
+        "rev_11",
         "rev_06",
         "rev_07",
         "rev_08",
+        "rev_12",
         "rev_09",
         "rev_10"
       ],
