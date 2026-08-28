@@ -65,7 +65,18 @@
       ],
       "settings": {
         "enable_sticky_info": false,
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
+        "hp_layout": "sidebar",
+        "hp_description_title": "Product Description",
+        "hp_show_excerpt": false,
+        "hp_excerpt_words": 45,
+        "hp_show_meta": true,
+        "hp_reviews_title": "",
+        "hp_reviews_per_page": 2,
+        "hp_star_color": "#e0a422",
+        "hp_sidebar_recs": true,
+        "hp_side_recs_title": "You might also like",
+        "hp_loader_section": "hp_recs",
         "media_size": "large",
         "constrain_to_viewport": true,
         "media_fit": "contain",
@@ -76,18 +87,7 @@
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 28,
-        "padding_bottom": 20,
-        "hp_layout": "sidebar",
-        "hp_description_title": "Product Description",
-        "hp_show_excerpt": false,
-        "hp_excerpt_words": 45,
-        "hp_show_meta": true,
-        "hp_sidebar_recs": true,
-        "hp_side_recs_title": "You might also like",
-        "hp_loader_section": "hp_recs",
-        "hp_reviews_per_page": 2,
-        "hp_reviews_title": "",
-        "hp_star_color": "#e0a422"
+        "padding_bottom": 20
       }
     },
     "related-products": {
@@ -97,33 +97,19 @@
         "heading_size": "h2",
         "products_to_show": 4,
         "columns_desktop": 4,
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "image_ratio": "portrait",
         "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": true,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "quick_add": "standard",
         "columns_mobile": "2",
         "padding_top": 24,
-        "padding_bottom": 36,
-        "quick_add": "standard"
+        "padding_bottom": 36
       }
-    },
-    "1735728895025f6c98": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "1735729851cc5a66a8": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "hp_recs": {
-      "type": "hp-recommendations",
-      "settings": {}
     },
     "hp_reviews_slider": {
       "type": "hp-video-reviews",
@@ -131,6 +117,7 @@
         "rev_1": {
           "type": "video",
           "settings": {
+            "video_url": "",
             "name": "Ayesha K.",
             "role": "Home Chef · Lahore"
           }
@@ -147,6 +134,7 @@
         "rev_3": {
           "type": "video",
           "settings": {
+            "video_url": "",
             "name": "Sana M.",
             "role": "Host · Islamabad"
           }
@@ -163,6 +151,7 @@
         "rev_5": {
           "type": "video",
           "settings": {
+            "video_url": "",
             "name": "Usman T.",
             "role": "Cafe Owner · Multan"
           }
@@ -179,6 +168,7 @@
         "rev_7": {
           "type": "video",
           "settings": {
+            "video_url": "",
             "name": "Fatima R.",
             "role": "Food Blogger"
           }
@@ -213,6 +203,7 @@
         "rev_11": {
           "type": "video",
           "settings": {
+            "video_url": "",
             "name": "Rabia N.",
             "role": "Home Stylist · Faisalabad"
           }
@@ -253,6 +244,22 @@
         "eyebrow_color": "#fff9df",
         "card_color": "#1a4b46"
       }
+    },
+    "1735728895025f6c98": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "1735729851cc5a66a8": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "hp_recs": {
+      "type": "hp-recommendations",
+      "settings": {}
     }
   },
   "order": [
