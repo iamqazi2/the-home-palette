@@ -1096,14 +1096,29 @@
       nodes.forEach(start);
       return;
     }
+    /* Observe the SECTION each card lives in, not the card itself. These
+       cards sit inside a horizontally-scrolling marquee (transform:
+       translateX, animated), so a card's own bounding box routinely sits
+       outside the viewport off to the side mid-animation even while the
+       section around it is fully in view vertically — an observer watching
+       the card directly can go the whole page load without ever reporting
+       an intersection. The section's own box is stationary, so watching
+       that instead and starting every lazy video inside it at once, the
+       moment it comes into view, is what actually corresponds to "the
+       marquee is visible enough to be worth paying for." */
+    var sections = new Set();
+    nodes.forEach(function (v) {
+      var section = v.closest('.shopify-section') || v.closest('section') || v.parentElement;
+      sections.add(section);
+    });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
-        start(entry.target);
+        entry.target.querySelectorAll('[data-hp-lazy-video]').forEach(start);
         io.unobserve(entry.target);
       });
     }, { rootMargin: '600px 0px' });
-    nodes.forEach(function (v) { io.observe(v); });
+    sections.forEach(function (s) { io.observe(s); });
   }
 
   /* ---- Count-up numbers --------------------------------------------------
