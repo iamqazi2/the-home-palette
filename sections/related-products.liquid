@@ -82,58 +82,13 @@
 {%- endstyle -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
-  {%- liquid
-    # Merchant-curated picks render first (in the order they were set), then
-    # Shopify's recommendation engine fills whatever grid slots are left.
-    # `custom.related_products` is a list-of-products metafield: Shopify
-    # resolves it to real product objects and silently drops anything
-    # unpublished or deleted, so no availability check is needed here beyond
-    # a defensive skip of the product referencing itself.
-    #
-    # Captured into a string here — rather than looped separately below —
-    # because the header block above the grid needs to know whether ANYTHING
-    # will render before the grid itself is reached, and a single pass is the
-    # only way to get that count without walking the list twice and risking
-    # the two walks drifting out of sync.
-    assign product_limit = section.settings.products_to_show
-    assign manual_picks = product.metafields.custom.related_products.value
-    assign manual_count = 0
-    assign shown_ids = ''
-    assign skip_card_product_styles = false
-  -%}
-  {%- capture manual_cards -%}
-    {%- if manual_picks != blank -%}
-      {%- for pick in manual_picks -%}
-        {%- if manual_count >= product_limit -%}{%- break -%}{%- endif -%}
-        {%- if pick.id == product.id -%}{%- continue -%}{%- endif -%}
-        {%- assign id_token = '|' | append: pick.id | append: '|' -%}
-        {%- if shown_ids contains id_token -%}{%- continue -%}{%- endif -%}
-        {%- assign shown_ids = shown_ids | append: id_token -%}
-        {%- assign manual_count = manual_count | plus: 1 -%}
-        <li class="grid__item">
-          {% render 'card-product',
-            card_product: pick,
-            media_aspect_ratio: section.settings.image_ratio,
-            image_shape: section.settings.image_shape,
-            show_secondary_image: section.settings.show_secondary_image,
-            show_vendor: section.settings.show_vendor,
-            show_rating: section.settings.show_rating,
-            skip_styles: skip_card_product_styles,
-            quick_add: section.settings.quick_add,
-            section_id: section.id
-          %}
-        </li>
-        {%- assign skip_card_product_styles = true -%}
-      {%- endfor -%}
-    {%- endif -%}
-  {%- endcapture -%}
   <product-recommendations
     class="related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
     data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
     data-section-id="{{ section.id }}"
     data-product-id="{{ product.id }}"
   >
-    {% if manual_count > 0 or recommendations.performed and recommendations.products_count > 0 %}
+    {% if recommendations.performed and recommendations.products_count > 0 %}
       {%- liquid
         # "View all" needs somewhere real to go. Recommendations come from the
         # recommendations API, not a collection, so there is no "collection of
@@ -157,12 +112,8 @@
         class="grid product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
         role="list"
       >
-        {{ manual_cards }}
-        {%- assign rendered = manual_count -%}
+        {% assign skip_card_product_styles = false %}
         {% for recommendation in recommendations.products %}
-          {%- if rendered >= product_limit -%}{%- break -%}{%- endif -%}
-          {%- assign id_token = '|' | append: recommendation.id | append: '|' -%}
-          {%- if shown_ids contains id_token -%}{%- continue -%}{%- endif -%}
           <li class="grid__item">
             {% render 'card-product',
               card_product: recommendation,
@@ -177,7 +128,6 @@
             %}
           </li>
           {%- assign skip_card_product_styles = true -%}
-          {%- assign rendered = rendered | plus: 1 -%}
         {% endfor %}
       </ul>
     {% endif %}
@@ -196,10 +146,6 @@
     {
       "type": "paragraph",
       "content": "t:sections.related-products.settings.paragraph__1.content"
-    },
-    {
-      "type": "paragraph",
-      "content": "Manual picks: set a product's \"custom.related_products\" metafield (Settings \u2192 Custom data \u2192 Products, type \"Product list\") to control which related products show first, in order. Shopify's own recommendations fill any slots left over."
     },
     {
       "type": "inline_richtext",
