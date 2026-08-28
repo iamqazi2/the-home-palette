@@ -77,7 +77,7 @@
       ],
       "settings": {
         "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4",
-        "video_url": "https://cdn.shopify.com/videos/c/o/v/f2058e22370f489c8d4c2a6a7eaf5f77.mp4",
+        "video_url": "https://cdn.shopify.com/videos/c/o/v/9db3a7bd9a20491cb9b8984238847066.mp4",
         "height": "standard",
         "text_position": "left",
         "overlay_strength": 80,
@@ -244,7 +244,7 @@
         "center_head": true,
         "columns": 5,
         "scrim": 90,
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "show_count": true,
         "count_label": "varieties"
       }
@@ -286,7 +286,7 @@
         "eyebrow": "The Shelf",
         "heading": "Shop the Range",
         "text": "Three collections that cover the whole table — from the everyday plate to the set you bring out for guests.",
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "columns_desktop": 4,
         "peek_mobile": 2.2,
         "image_ratio": "portrait",
@@ -318,93 +318,29 @@
         "link": "shopify://collections"
       }
     },
-    "hp_occasion": {
-      "type": "hp-occasion",
-      "blocks": {
-        "occ_1": {
-          "type": "occasion",
-          "settings": {
-            "icon": "utensils",
-            "title": "Everyday Dining",
-            "caption": "Sturdy, beautiful staples",
-            "collection": "plates",
-            "link": "shopify://collections/dinner-breakfast-sets"
-          }
-        },
-        "occ_2": {
-          "type": "occasion",
-          "settings": {
-            "icon": "users",
-            "title": "Hosting Guests",
-            "caption": "Sets that impress",
-            "collection": "serveware",
-            "link": "shopify://collections/serveware"
-          }
-        },
-        "occ_3": {
-          "type": "occasion",
-          "settings": {
-            "icon": "coffee",
-            "title": "Tea Time",
-            "caption": "Slow afternoon rituals",
-            "collection": "tea-coffee-essentials",
-            "link": "shopify://collections/tea-coffee-essentials"
-          }
-        },
-        "occ_4": {
-          "type": "occasion",
-          "settings": {
-            "icon": "moon-star",
-            "title": "Ramadan",
-            "caption": "Iftar & suhoor tables",
-            "collection": "platters",
-            "link": "shopify://collections"
-          }
-        },
-        "occ_5": {
-          "type": "occasion",
-          "settings": {
-            "icon": "sparkles",
-            "title": "Eid",
-            "caption": "Festive gatherings",
-            "collection": "new-arrivals",
-            "link": "shopify://collections/new-arrivals"
-          }
-        },
-        "occ_6": {
-          "type": "occasion",
-          "settings": {
-            "icon": "heart",
-            "title": "Wedding Gifts",
-            "caption": "Heirlooms to give",
-            "collection": "dinner-breakfast-sets",
-            "link": "shopify://collections"
-          }
-        }
-      },
-      "block_order": [
-        "occ_1",
-        "occ_2",
-        "occ_3",
-        "occ_4",
-        "occ_5",
-        "occ_6"
-      ],
-      "settings": {
-        "eyebrow": "Chapter Three — The Table",
-        "heading": "Shop by Occasion",
-        "text": "From quiet weekday meals to grand celebrations — set the table for the moment.",
-        "bg_color": "#fff9df",
-        "card_color": "#1a4b46",
-        "card_color_hover": "#123532",
-        "show_count": true,
-        "count_label": "varieties",
-        "cta_label": "Shop now"
-      }
-    },
     "hp_shop_by_color": {
       "type": "hp-shop-by-color",
       "blocks": {
+        "colour_5": {
+          "type": "colour",
+          "settings": {
+            "title": "Whimsy Yellow",
+            "swatch": "#e3c10c",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "whimsy-yellow"
+          }
+        },
+        "colour_3": {
+          "type": "colour",
+          "settings": {
+            "title": "Aqua",
+            "swatch": "#93c9c2",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "aqua"
+          }
+        },
         "colour_1": {
           "type": "colour",
           "settings": {
@@ -425,16 +361,6 @@
             "tag": "ivory-white"
           }
         },
-        "colour_3": {
-          "type": "colour",
-          "settings": {
-            "title": "Aqua",
-            "swatch": "#93c9c2",
-            "view_all_url": "",
-            "aliases": "",
-            "tag": "aqua"
-          }
-        },
         "colour_4": {
           "type": "colour",
           "settings": {
@@ -443,16 +369,6 @@
             "view_all_url": "",
             "aliases": "",
             "tag": "burnt-maple"
-          }
-        },
-        "colour_5": {
-          "type": "colour",
-          "settings": {
-            "title": "Whimsy Yellow",
-            "swatch": "#e3c10c",
-            "view_all_url": "",
-            "aliases": "",
-            "tag": "whimsy-yellow"
           }
         },
         "colour_6": {
@@ -617,11 +533,11 @@
         }
       },
       "block_order": [
+        "colour_5",
+        "colour_3",
         "colour_1",
         "colour_2",
-        "colour_3",
         "colour_4",
-        "colour_5",
         "colour_6",
         "colour_7",
         "colour_8",
@@ -647,10 +563,94 @@
         "columns": 4,
         "default_index": 1,
         "view_all_label": "View all",
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "quick_add": "standard",
         "show_count": false,
         "count_label": "varieties"
+      }
+    },
+    "hp_occasion": {
+      "type": "hp-occasion",
+      "blocks": {
+        "occ_1": {
+          "type": "occasion",
+          "settings": {
+            "icon": "utensils",
+            "title": "Everyday Dining",
+            "caption": "Sturdy, beautiful staples",
+            "collection": "plates",
+            "link": "shopify://collections/dinner-breakfast-sets"
+          }
+        },
+        "occ_2": {
+          "type": "occasion",
+          "settings": {
+            "icon": "users",
+            "title": "Hosting Guests",
+            "caption": "Sets that impress",
+            "collection": "serveware",
+            "link": "shopify://collections/serveware"
+          }
+        },
+        "occ_3": {
+          "type": "occasion",
+          "settings": {
+            "icon": "coffee",
+            "title": "Tea Time",
+            "caption": "Slow afternoon rituals",
+            "collection": "tea-coffee-essentials",
+            "link": "shopify://collections/tea-coffee-essentials"
+          }
+        },
+        "occ_4": {
+          "type": "occasion",
+          "settings": {
+            "icon": "moon-star",
+            "title": "Ramadan",
+            "caption": "Iftar & suhoor tables",
+            "collection": "platters",
+            "link": "shopify://collections"
+          }
+        },
+        "occ_5": {
+          "type": "occasion",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Eid",
+            "caption": "Festive gatherings",
+            "collection": "new-arrivals",
+            "link": "shopify://collections/new-arrivals"
+          }
+        },
+        "occ_6": {
+          "type": "occasion",
+          "settings": {
+            "icon": "heart",
+            "title": "Wedding Gifts",
+            "caption": "Heirlooms to give",
+            "collection": "dinner-breakfast-sets",
+            "link": "shopify://collections"
+          }
+        }
+      },
+      "block_order": [
+        "occ_1",
+        "occ_2",
+        "occ_3",
+        "occ_4",
+        "occ_5",
+        "occ_6"
+      ],
+      "settings": {
+        "eyebrow": "Chapter Three — The Table",
+        "heading": "Shop by Occasion",
+        "text": "From quiet weekday meals to grand celebrations — set the table for the moment.",
+        "bg_color": "#fff9df",
+        "card_color": "#1a4b46",
+        "card_color_hover": "#123532",
+        "show_count": true,
+        "count_label": "varieties",
+        "cta_label": "Shop now"
       }
     },
     "hp_style_rail": {
@@ -713,7 +713,7 @@
         "eyebrow": "Textures & Glazes",
         "heading": "Shop by Style",
         "scrim": 65,
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "show_count": false,
         "count_label": "varieties"
       }
@@ -729,7 +729,7 @@
         "eyebrow": "The Weave Collection",
         "heading": "Woven for the Everyday Feast",
         "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "panel_color": "#1a4b46",
         "scrim_color": "#1a4b46",
         "text_color": "#fff9df",
@@ -756,7 +756,7 @@
         "eyebrow": "",
         "heading": "",
         "text": "",
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "columns_desktop": 4,
         "peek_mobile": 2.2,
         "image_ratio": "portrait",
@@ -914,8 +914,8 @@
     "hp_category_tiles",
     "hp_collection_rails",
     "hp_story",
-    "hp_occasion",
     "hp_shop_by_color",
+    "hp_occasion",
     "hp_style_rail",
     "hp_cta",
     "hp_wooden_line_rail",
