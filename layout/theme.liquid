@@ -291,10 +291,24 @@
     {%- endcomment -%}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    {%- comment -%}
+      display=swap is already in this URL, meaning even a slow-to-arrive
+      stylesheet never blocks text from painting — the fallback font shows
+      immediately and swaps once the real one is ready. That guarantee is
+      what makes it safe to also stop the STYLESHEET REQUEST ITSELF from
+      blocking the page: media="print" makes the browser fetch it at low
+      priority without waiting on it to paint anything, and the onload swap
+      to "all" applies the real rules the instant it does arrive — same fonts,
+      same swap behavior, just not on the critical rendering path.
+    {%- endcomment -%}
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display:ital@0;1&display=swap"
+      media="print" onload="this.media='all'"
     >
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display:ital@0;1&display=swap">
+    </noscript>
     <script src="{{ 'hp-gsap.min.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'hp-scrolltrigger.min.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'hp-lenis.min.js' | asset_url }}" defer="defer"></script>
@@ -302,12 +316,26 @@
 
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
+    {%- comment -%}
+      Same treatment, and for the same reason as component-cart-items.css
+      just above: none of these five style anything visible until the cart
+      drawer is actually opened, so there is nothing on the initial page for
+      them to block. They were still loading render-blocking via the plain
+      stylesheet_tag form.
+    {%- endcomment -%}
     {%- if settings.cart_type == 'drawer' -%}
-      {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
-      {{ 'component-cart.css' | asset_url | stylesheet_tag }}
-      {{ 'component-totals.css' | asset_url | stylesheet_tag }}
-      {{ 'component-price.css' | asset_url | stylesheet_tag }}
-      {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+      <link rel="stylesheet" href="{{ 'component-cart-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link rel="stylesheet" href="{{ 'component-cart.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link rel="stylesheet" href="{{ 'component-totals.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link rel="stylesheet" href="{{ 'component-discounts.css' | asset_url }}" media="print" onload="this.media='all'">
+      <noscript>
+        {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
+        {{ 'component-cart.css' | asset_url | stylesheet_tag }}
+        {{ 'component-totals.css' | asset_url | stylesheet_tag }}
+        {{ 'component-price.css' | asset_url | stylesheet_tag }}
+        {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+      </noscript>
     {%- endif -%}
 
     {%- comment -%}
