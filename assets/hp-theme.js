@@ -949,18 +949,51 @@
       /* Rails are a showcase-only device. On the default card style the list
          must stay exactly as Judge.me built it, or the app's own paging and
          expand controls end up inside a horizontally scrolling row. */
-      if (list.closest('.hp-revs--showcase')) dealReviewRows(list);
+      if (list.closest('.hp-revs--showcase')) {
+        linkStoreCards(list);
+        dealReviewRows(list);
+      }
     });
   }
 
-  /* Deal a review list's cards into two rails that drift in opposite
-     directions. Shared by the store-wide metafield markup (.jdgm-rev cards)
-     and the live product widget (.jm-review-item cards) — both use
-     .jdgm-review-list as their outer wrapper — so a product page's own
-     reviews get the same rowed design as the store-wide sections instead of
-     staying one long single rail. Alternating rather than halving keeps
-     photo cards, which are scattered through the list, spread across both
-     rows instead of bunched in one. */
+  /* ---- the whole card is the link ---------------------------------------
+     Judge.me makes only the product name clickable, which is a small target
+     in the corner of a card that otherwise looks like one. A stretched anchor
+     over the card sends the whole thing to that product's reviews.
+
+     A real <a> rather than a click handler, so it keeps what a link gives
+     you: middle-click, open in a new tab, the status bar preview and keyboard
+     focus. The destination is the app's own product URL — the theme never
+     invents one — plus the anchor the product template's review section
+     carries, so the page opens at the reviews rather than at the top.
+  ---------------------------------------------------------------------- */
+  function linkStoreCards(list) {
+    list.querySelectorAll('.jdgm-rev').forEach(function (rev) {
+      if (rev.dataset.hpLinked) return;
+      var prod = rev.querySelector('.jdgm-rev__prod-link');
+      var href = prod && prod.getAttribute('href');
+      if (!href) return;                       // nothing to point at
+      rev.dataset.hpLinked = '1';
+
+      var overlay = document.createElement('a');
+      overlay.className = 'hp-rev__hit';
+      overlay.href = href.split('#')[0] + '#product-reviews';
+      var name = prod.textContent.trim();
+      overlay.setAttribute('aria-label', name ? 'Read reviews of ' + name : 'Read the reviews');
+      rev.appendChild(overlay);
+    });
+  }
+
+  /* Lay a review list's cards out as one drifting rail. Shared by the
+     store-wide metafield markup (.jdgm-rev cards) and the live product widget
+     (.jm-review-item cards) — both use .jdgm-review-list as their outer
+     wrapper — so a product page's reviews get the same treatment as the
+     store-wide sections.
+
+     One row rather than two: with the cards a uniform width and tall enough
+     to hold a whole review, a second row doubles the section's height for no
+     more information, and the two counter-drifting rows made the page harder
+     to read rather than livelier. */
   function dealReviewRows(list) {
     if (!list) return;
     /* Loose cards sitting directly on the list are the signal that there is
@@ -988,20 +1021,8 @@
       return row;
     }
 
-    /* Two rails only pay off with enough cards to fill both. The product
-       widget renders one page at a time — five cards split 3/2 read as a
-       broken grid with dead space beside them, not as rails. Below the
-       threshold everything goes into a single row, which is still a real
-       .hp-revs__row and so picks up the same card sizing, gap and centring
-       as the two-rail layout rather than needing a parallel set of rules. */
-    if (cards.length < 8) {
-      var only = makeRow('forward');
-      cards.forEach(function (c) { only.appendChild(c); });
-    } else {
-      var rowA = makeRow('forward');
-      var rowB = makeRow('reverse');
-      cards.forEach(function (c, i) { (i % 2 ? rowB : rowA).appendChild(c); });
-    }
+    var row = makeRow('forward');
+    cards.forEach(function (c) { row.appendChild(c); });
     /* hp-revs__store--rows carries the card-sizing rules (assumes the
        store-only .hp-revs__store class alongside it); hp-revs__railed is the
        list-level layout switch (block instead of the single-rail flex row)

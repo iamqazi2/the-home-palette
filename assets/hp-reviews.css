@@ -1952,7 +1952,9 @@
 
 .hp-revs__row {
   display: flex;
-  align-items: flex-start;
+  /* stretch, not flex-start: card heights now vary with their review, and
+     matching them to the tallest in the row keeps the rail from looking ragged */
+  align-items: stretch;
   gap: 1.4rem;
   overflow-x: auto;
   overflow-y: hidden;
@@ -1983,12 +1985,18 @@
 
 /* medium card — same box whether it holds a photo or a quote */
 .hp-revs--showcase .hp-revs__row .jm-review-item,
+/* One uniform width for every card. Height is a floor rather than a fixed
+   size and the row stretches its cards to match the tallest, so the rail is
+   as tall as its longest review needs and every card in it agrees — which is
+   what lets a long review be shown whole instead of cut to fit. */
 .hp-revs--showcase .hp-revs__store--rows .jdgm-rev {
-  flex: 0 0 26rem !important;
-  width: 26rem !important;
-  height: 24rem !important;
-  min-height: 24rem !important;
-  max-height: 24rem !important;
+  flex: 0 0 30rem !important;
+  width: 30rem !important;
+  height: auto !important;
+  /* a floor only: the row stretches every card to its tallest, so the longest
+     review sets the height and a short one need not reserve it up front */
+  min-height: 22rem !important;
+  max-height: 44rem !important;
   padding: 1.8rem 1.8rem !important;
   border-radius: 16px !important;
 }
@@ -2001,7 +2009,11 @@
   font-size: 1.6rem !important;
   line-height: 1.5 !important;
 }
-.hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body { -webkit-line-clamp: 4; }
+/* The taller card is what makes room for a long review, so the clamp is no
+   longer the thing that shortens one — it is a backstop against a single
+   pathological review stretching the whole rail, working with max-height on
+   the card above. */
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body { -webkit-line-clamp: 14; }
 .hp-revs--showcase .hp-revs__store--rows .jdgm-rev:not(:has(.jdgm-rev__pic-link))::before {
   font-size: 4.6rem;
   top: 0.6rem;
@@ -2019,11 +2031,10 @@
 @media screen and (min-width: 1200px) {
   .hp-revs--showcase .hp-revs__row .jm-review-item,
   .hp-revs--showcase .hp-revs__store--rows .jdgm-rev {
-    flex-basis: 28rem !important;
-    width: 28rem !important;
-    height: 25rem !important;
-    min-height: 25rem !important;
-    max-height: 25rem !important;
+    flex-basis: 32rem !important;
+    width: 32rem !important;
+    min-height: 23rem !important;
+    max-height: 46rem !important;
   }
   .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body,
   .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body p { font-size: 1.7rem !important; }
@@ -2032,18 +2043,18 @@
 @media screen and (max-width: 749px) {
   .hp-revs--showcase .hp-revs__row .jm-review-item,
   .hp-revs--showcase .hp-revs__store--rows .jdgm-rev {
-    flex-basis: 68vw !important;
-    width: 68vw !important;
-    max-width: 26rem !important;
-    height: 22rem !important;
-    min-height: 22rem !important;
-    max-height: 22rem !important;
+    flex-basis: 80vw !important;
+    width: 80vw !important;
+    max-width: 32rem !important;
+    height: auto !important;
+    min-height: 21rem !important;
+    max-height: 42rem !important;
     padding: 1.5rem !important;
   }
   .hp-revs--showcase .hp-revs__store--rows .jdgm-rev:has(.jdgm-rev__pic-link) { padding: 0 !important; }
   .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body,
   .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body p { font-size: 1.5rem !important; }
-  .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body { -webkit-line-clamp: 4; }
+  .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body { -webkit-line-clamp: 12; }
   .hp-revs__row { gap: 1rem; }
   .hp-revs__row + .hp-revs__row { margin-top: 1rem; }
 }
@@ -2159,3 +2170,26 @@
     max-height: 4.5em !important;   /* 3 lines x 1.5 line-height */
   }
 }
+
+
+/* ---- the stretched card link ------------------------------------------
+   Added by hp-theme.js over each store-review card. Covers the card so the
+   whole thing is the target, sits above the quote mark and the photo caption
+   panel, and carries no visual of its own — the card is already the affordance. */
+.hp-revs--showcase .hp-revs__store .jdgm-rev { cursor: pointer; }
+.hp-rev__hit {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  text-indent: -9999px;
+  overflow: hidden;
+  background: transparent;
+}
+.hp-rev__hit:focus-visible {
+  outline: 2px solid var(--hp-cream);
+  outline-offset: -3px;
+}
+/* the product name keeps its own link, so it must stay above the overlay to
+   remain separately clickable rather than being swallowed by it */
+.hp-revs--showcase .hp-revs__store .jdgm-rev__prod-info-wrapper { position: relative; z-index: 4; }

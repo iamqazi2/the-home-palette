@@ -23,7 +23,14 @@
   endif
 -%}
 
+{%- comment -%}
+  id: only on the product-scoped section, which is the one a review card
+  elsewhere on the site links into. Store-wide sections do not carry it —
+  two elements with the same id on one page is what would break the jump.
+  Kept distinct from main-product's own #hp-reviews block for the same reason.
+{%- endcomment -%}
 <div
+  {% if section.settings.source != 'store' %}id="product-reviews"{% endif %}
   class="hp-revs hp-revs--{{ section.settings.bg }} hp-revs--{{ section.settings.card_style }}{% if has_title %} hp-revs--has-title{% endif %}"
   style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
 >
