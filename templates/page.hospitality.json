@@ -62,7 +62,7 @@
         "text_shade": true,
         "eyebrow": "For Restaurants, Cafés, Hotels & Resorts",
         "heading": "Tableware Designed Around Your Brand",
-        "lede": "<p>Your restaurant deserves tableware that feels as distinctive as the experience you create. We turn your brand identity into crockery your guests remember — and your kitchen can actually work with.</p>",
+        "lede": "<p><strong>Your restaurant deserves tableware that feels as distinctive as the experience you create. We turn your brand identity into crockery your guests remember — and your kitchen can actually work with.</strong></p>",
         "button_label": "Start Your Order",
         "button_link": "https://wa.me/923376111399",
         "button_2_label": "Email the Hospitality Desk",
@@ -379,8 +379,8 @@
         "eyebrow": "Trusted Across Hospitality",
         "heading": "The Tables We Already Set",
         "text": "From hotel banquets in Islamabad to neighbourhood cafés and tea houses — these brands serve on crockery we made with them.",
-        "show_count": true,
-        "count_label": "hospitality brands and counting"
+        "show_count": false,
+        "count_label": "50 hospitality brands and counting"
       }
     },
     "hosp_story": {
@@ -421,7 +421,7 @@
         "image_2": "shopify://shop_images/IMG_8878.heic",
         "flip": true,
         "bg_color": "#fff9df",
-        "badge_value": "24+",
+        "badge_value": "50+",
         "badge_label": "Hospitality brands served",
         "badge_color": "#1a4b46",
         "eyebrow": "Custom Crockery",
@@ -775,11 +775,11 @@
         "heading": "Loved Across Pakistan",
         "text": "Verified Judge.me reviews from restaurants, hotels and event teams.",
         "align": "center",
-        "bg": "cream",
+        "source": "store",
         "card_style": "showcase",
+        "bg": "cream",
         "padding_top": 64,
-        "padding_bottom": 64,
-        "source": "store"
+        "padding_bottom": 64
       }
     }
   },
@@ -787,9 +787,9 @@
     "hosp_hero",
     "hosp_trust",
     "hosp_brands",
+    "hosp_gallery",
     "hosp_story",
     "hosp_venues",
-    "hosp_gallery",
     "hosp_process",
     "hosp_packages",
     "hp_reviews_all"
