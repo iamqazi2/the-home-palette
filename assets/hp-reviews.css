@@ -1466,9 +1466,15 @@
 
 .hp-revs--showcase .hp-revs__store .jdgm-rev {
   position: relative;
+  /* Judge.me's stylesheet leaves these on content-box, so the padding was
+     landing outside the stated height and the card measured taller than it
+     asked for. */
+  box-sizing: border-box !important;
   flex: 0 0 30rem;
   width: 30rem;
   height: 38rem;
+  min-height: 38rem;
+  max-height: 38rem;
   margin: 0 !important;
   padding: 2.6rem 2.4rem !important;
   border-radius: 20px !important;
@@ -1488,23 +1494,41 @@
     0 30px 50px -30px rgba(8, 26, 27, 0.75);
 }
 
-/* header: stars first, everything else pushed to the card footer */
-.hp-revs--showcase .hp-revs__store .jdgm-rev__header {
-  display: flex !important;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-  order: 1;
+/* Layout note: the app nests the stars, the reviewer, the product link and the
+   date together inside .jdgm-rev__header, and puts the review text in a
+   separate .jdgm-rev__content sibling. Ordering the header's children only
+   sorts them within the header, so the whole block — reviewer and date
+   included — still landed above the quote.
+
+   display:contents dissolves the header so its children become flex items of
+   the card itself and can be ordered against the review text. Media cards keep
+   a real header box, because they position it over the photo. */
+.hp-revs--showcase .hp-revs__store .jdgm-rev:not(:has(.jdgm-rev__pic-link)) .jdgm-rev__header {
+  display: contents !important;
 }
-.hp-revs--showcase .hp-revs__store .jdgm-rev__content { order: 2; flex: 1 1 auto; min-height: 0; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev { gap: 0.5rem; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev__rating { order: 1; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev__buyer-badge-wrapper { order: 2; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev__content {
+  order: 3;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0.4rem 0 0.8rem;
+  /* Reviews run from two words to a paragraph. Centring the quote in whatever
+     space is left stops a short one from stranding the card with a column of
+     empty teal between it and the reviewer. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev__location:empty { display: none !important; }
 .hp-revs--showcase .hp-revs__store .jdgm-rev__icon,
 .hp-revs--showcase .hp-revs__store .jdgm-rev__actions,
 .hp-revs--showcase .hp-revs__store .jdgm-rev__reply,
 .hp-revs--showcase .hp-revs__store .jdgm-rev__br,
 .hp-revs--showcase .hp-revs__store .jdgm-rev__custom-form,
 .hp-revs--showcase .hp-revs__store .jdgm-rev__transparency-badge-wrapper,
-.hp-revs--showcase .hp-revs__store .jdgm-rev__vids:empty,
-.hp-revs--showcase .hp-revs__store .jdgm-rev__pics:empty { display: none !important; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev__vids { display: none !important; }
 
 .hp-revs--showcase .hp-revs__store .jdgm-rev__rating { font-size: 1.5rem; }
 .hp-revs--showcase .hp-revs__store .jdgm-star { color: var(--hp-gold) !important; }
@@ -1547,8 +1571,7 @@
 /* footer: reviewer, then the product they reviewed as the supporting line —
    on a store-wide rail that product name is the useful piece of context */
 .hp-revs--showcase .hp-revs__store .jdgm-rev__author-wrapper {
-  order: 3;
-  margin-top: auto;
+  order: 4;
   z-index: 2;
 }
 .hp-revs--showcase .hp-revs__store .jdgm-rev__author {
@@ -1558,7 +1581,7 @@
   color: var(--hp-cream) !important;
 }
 .hp-revs--showcase .hp-revs__store .jdgm-rev__prod-info-wrapper {
-  order: 4;
+  order: 5;
   z-index: 2;
   background: none !important;
   border: 0 !important;
@@ -1566,22 +1589,38 @@
   margin: 0 !important;
   font-size: 1.15rem !important;
 }
-.hp-revs--showcase .hp-revs__store .jdgm-rev__prod-link {
+/* The base rules above dress this link as a pale pill for the cream surfaces.
+   On teal that pill stayed cream while the text was recoloured cream too — the
+   white box with invisible text. Strip it back to a plain line here. */
+.hp-revs--showcase .hp-revs__store .jdgm-rev__prod-link,
+.hp-revs--showcase .hp-revs__store .jdgm-rev__prod-info-wrapper .jdgm-rev__prod-link {
+  display: inline !important;
+  background: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
   color: var(--hp-cream) !important;
   opacity: 0.72;
   font-size: 1.15rem !important;
   letter-spacing: 0.04em;
   text-decoration: none;
 }
+.hp-revs--showcase .hp-revs__store .jdgm-rev__prod-link-prefix {
+  color: var(--hp-cream) !important;
+  opacity: 0.55;
+  font-size: 1.15rem !important;
+}
 .hp-revs--showcase .hp-revs__store .jdgm-rev__prod-link:hover { opacity: 1; }
 .hp-revs--showcase .hp-revs__store .jdgm-rev__timestamp {
-  order: 5;
+  order: 6;
   z-index: 2;
   color: var(--hp-cream) !important;
   opacity: 0.55;
   font-size: 1.1rem !important;
 }
-.hp-revs--showcase .hp-revs__store .jdgm-rev__buyer-badge-wrapper { order: 3; z-index: 2; }
+
 .hp-revs--showcase .hp-revs__store .jdgm-rev__buyer-badge {
   background: rgba(255, 249, 223, 0.16) !important;
   border: 1px solid rgba(255, 249, 223, 0.45) !important;
@@ -1594,30 +1633,67 @@
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__body,
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__rating { display: none !important; }
 
+/* Judge.me's own stylesheet is injected by its script, so it lands AFTER this
+   file and wins every tie. It sizes a review photo as a 120px inline thumbnail
+   (.jdgm-rev__pic-link{height:120px;width:auto}), centres the image with a
+   translateY(-50%), and — while .jdgm--loading is still on the link — hides the
+   image outright and draws a spinner. Each of those has to be answered
+   explicitly for the photo to fill the card. */
 .hp-revs--showcase .hp-revs__store .jdgm-rev__pics {
-  position: absolute;
-  inset: 0;
+  position: absolute !important;
+  inset: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
+  overflow: hidden !important;
+  white-space: normal !important;
 }
-.hp-revs--showcase .hp-revs__store .jdgm-rev__pic-link {
-  position: absolute;
-  inset: 0;
-  display: block;
+/* the wrapper is emitted even when a review has no photo, and it is emitted
+   containing whitespace — so :empty never matches it and it would otherwise
+   sit over every text card */
+.hp-revs--showcase .hp-revs__store .jdgm-rev__pics:not(:has(.jdgm-rev__pic-link)) {
+  display: none !important;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev__pic-link,
+.hp-revs--showcase .hp-revs__store .jdgm-rev__pic-link.jdgm--loading {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
   margin: 0 !important;
+  padding: 0 !important;
   border-radius: 0 !important;
+  overflow: hidden !important;
+  opacity: 1 !important;
 }
-/* extra photos stay in the review, not on the card face */
+/* their loading spinner would sit in the middle of the finished card */
+.hp-revs--showcase .hp-revs__store .jdgm-rev__pic-link.jdgm--loading::after {
+  display: none !important;
+}
+/* extra photos stay in the review's lightbox, not on the card face */
 .hp-revs--showcase .hp-revs__store .jdgm-rev__pic-link ~ .jdgm-rev__pic-link { display: none !important; }
-.hp-revs--showcase .hp-revs__store .jdgm-rev__pic-img {
+
+.hp-revs--showcase .hp-revs__store .jdgm-rev__pic-img,
+.hp-revs--showcase .hp-revs__store .jdgm--loading .jdgm-rev__pic-img {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
   width: 100% !important;
   height: 100% !important;
   max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
   object-fit: cover !important;
   border-radius: 0 !important;
-  transition: transform 0.7s var(--hp-ease);
+  visibility: visible !important;
+  /* their rule vertically centres the thumbnail with a transform; clearing it
+     frees the property for the hover push-in below */
+  transform: none !important;
+  transition: transform 0.7s var(--hp-ease) !important;
 }
-.hp-revs--showcase .hp-revs__store .jdgm-rev:hover .jdgm-rev__pic-img { transform: scale(1.05); }
+.hp-revs--showcase .hp-revs__store .jdgm-rev:hover .jdgm-rev__pic-img {
+  transform: scale(1.05) !important;
+}
 
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link)::after {
   content: '';
@@ -1625,13 +1701,33 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(8, 26, 27, 0) 40%, rgba(8, 26, 27, 0.88) 100%);
+  /* reviewer photos are unpredictable — a pale tablecloth under the caption is
+     common — so the scrim starts earlier and finishes darker than the video
+     cards needed */
+  background: linear-gradient(
+    180deg,
+    rgba(8, 26, 27, 0) 30%,
+    rgba(8, 26, 27, 0.45) 62%,
+    rgba(8, 26, 27, 0.92) 100%
+  );
 }
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__header {
   position: absolute;
   inset: auto 0 0 0;
-  padding: 1.8rem;
   z-index: 2;
+  padding: 1.8rem;
+  /* order: only has meaning on a flex/grid child. Left as a block, the date,
+     product link, badge and name all ran together on one line over the photo. */
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__prod-info-wrapper,
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__author-wrapper,
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__timestamp {
+  display: block !important;
+  width: 100%;
 }
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__author,
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__prod-link,

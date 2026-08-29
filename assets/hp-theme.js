@@ -908,12 +908,22 @@
       list.dataset.hpStoreWired = '1';
 
       list.querySelectorAll('.jdgm-rev__pic-img[data-src]').forEach(function (img) {
-        img.src = img.getAttribute('data-src');
+        var link = img.closest('.jdgm-rev__pic-link');
+        /* data-src is the 160px thumbnail the stock widget shows inline. These
+           cards render the photo full-bleed, so prefer the link's own href,
+           which is the same image at w=1024. */
+        var full = link && link.getAttribute('href');
+        img.src = (full && full.indexOf('judgeme') !== -1) ? full : img.getAttribute('data-src');
         img.removeAttribute('data-src');
         img.loading = 'lazy';
-        img.addEventListener('load', function () {
-          var link = img.closest('.jdgm-rev__pic-link');
-          if (link) link.classList.remove('jdgm--loading');
+        function done() { if (link) link.classList.remove('jdgm--loading'); }
+        if (img.complete) done();
+        img.addEventListener('load', done);
+        // a dead image URL must not leave the card stuck behind a spinner
+        img.addEventListener('error', function () {
+          done();
+          var pics = img.closest('.jdgm-rev__pics');
+          if (pics) pics.remove();
         });
       });
 
