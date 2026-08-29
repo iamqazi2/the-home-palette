@@ -115,34 +115,6 @@
         "padding_bottom": 36
       }
     },
-    "hp_reviews": {
-      "type": "hp-reviews",
-      "blocks": {
-        "judge_me_reviews_review_widget_nE74rW": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "real_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_review_widget_nE74rW"
-      ],
-      "settings": {
-        "eyebrow": "Real Tables · Real Reviews",
-        "heading": "Loved Across Pakistan",
-        "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
-        "align": "center",
-        "source": "app",
-        "card_style": "showcase",
-        "bg": "cream",
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
     "1735728895025f6c98": {
       "type": "apps",
       "settings": {
@@ -158,14 +130,60 @@
     "hp_recs": {
       "type": "hp-recommendations",
       "settings": {}
+    },
+    "17880457121649ed48": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_cards_carousel_4UPJ7y": {
+          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": true,
+            "reviews_selection": "current_product",
+            "products": [],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "star_rating": "all",
+            "show_review_media": true,
+            "display_order": "media_first",
+            "no_image_fallback": "review_text_only",
+            "max_reviews": 20,
+            "review_length": "medium",
+            "text_size": "medium",
+            "image_ratio": "1",
+            "reviews_shown": 4,
+            "show_reviewer_name": true,
+            "show_product_name": true,
+            "hide_arrows_mobile": true,
+            "arrows_position": "sides",
+            "max_width": 1100,
+            "corner_styling": "soft",
+            "header_text_color": "#000000",
+            "text_color": "#000000",
+            "card_color": "#F9F9F9",
+            "stars_color": "",
+            "arrows_color": "#000000",
+            "transition_speed": 5,
+            "header_text": "Customers are saying",
+            "show_average_rating": true,
+            "rating_display": "default"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_cards_carousel_4UPJ7y"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
     "main",
     "related-products",
-    "hp_reviews",
     "1735728895025f6c98",
     "1735729851cc5a66a8",
-    "hp_recs"
+    "hp_recs",
+    "17880457121649ed48"
   ]
 }
