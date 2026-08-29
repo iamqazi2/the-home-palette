@@ -82,6 +82,26 @@
   {%- endif -%}
   .hp-hero__media { position: absolute; inset: 0; }
 
+  {%- if section.settings.video_poster and has_video -%}
+  /* The still is painted as a background on the stage rather than as the
+     video's poster attribute. A poster is one URL for every screen, so a phone
+     was downloading the 2400px desktop still — on mobile that outweighed the
+     clip it sits in front of. As a background it can be served at a size that
+     suits the screen, it still shows with JavaScript off, and it is what the
+     video fades in over once it is ready. */
+  .hp-hero__video {
+    background-image: url({{ section.settings.video_poster | image_url: width: 1800 }});
+    background-size: cover;
+    background-position: {{ section.settings.focal | default: 'center' }};
+    background-repeat: no-repeat;
+  }
+  @media screen and (max-width: 749px) {
+    .hp-hero__video {
+      background-image: url({{ section.settings.video_poster | image_url: width: 900 }});
+    }
+  }
+  {%- endif -%}
+
   /* Directional wash + a flat full-frame floor underneath it. The floor
      guarantees a minimum contrast level no matter which part of the video is
      showing (busy/bright footage can wash out a pure gradient on its own),
@@ -345,22 +365,32 @@
 >
   {%- if has_video -%}
     {%- comment -%}
-      When the video is *picked* rather than typed in as a URL, `video_tag`
-      builds the <video> for us and gives us nowhere to hang the phone clip —
-      it takes no data attributes. Without them initBgVideo never saw the
-      element, so a picked video played on phones and desktop alike and the
-      "Hero video URL (phones)" setting did nothing at all. The swap attributes
-      therefore go on the wrapper in that case, and initBgVideo reaches through
-      to the <video> inside. Only emitted when there is actually a phone clip to
-      swap in, so a picked video with no phone URL behaves exactly as before.
+      Every attribute the video logic reads lives on this wrapper, whichever
+      way the <video> underneath was built. `video_tag` takes no data
+      attributes of its own, so a picked video had nowhere to hang the phone
+      clip and initBgVideo never saw it. Keeping them all here means one place
+      to read, and initBgVideo reaches through to the <video> inside.
     {%- endcomment -%}
     <div
       class="hp-hero__video"
       data-hp-parallax
-      {%- if section.settings.video != null and section.settings.video_url_mobile != blank %}
-        data-hp-bg-video
-        data-src-mobile="{{ section.settings.video_url_mobile }}"
-      {%- endif -%}
+      {%- comment -%}
+        Emitted only when the setting is off. `| default: true` cannot say
+        this: Liquid's default filter treats false as "no value" and returns
+        the default, so an unchecked box rendered as "true" and the video
+        played on phones anyway. Absence of the attribute means allowed.
+      {%- endcomment %}
+      {% if section.settings.video_on_mobile == false %}data-hp-video-mobile="false"{% endif %}
+      {%- comment -%}
+        data-hp-bg-video marks the stage for initBgVideo. It is set whenever
+        there is a video at all, not only when there is a phone cut to swap:
+        the markup no longer autoplays anything, so this marker is what starts
+        playback — without it a picked video with no phone cut would never
+        begin.
+      {%- endcomment %}
+      {% if has_video %}data-hp-bg-video{% endif %}
+      {% if section.settings.video_url != blank %}data-src-desktop="{{ section.settings.video_url }}"{% endif %}
+      {% if section.settings.video_url_mobile != blank %}data-src-mobile="{{ section.settings.video_url_mobile }}"{% endif %}
     >
       {%- if section.settings.video != null -%}
         {%- if section.settings.video_url_mobile != blank -%}
@@ -381,39 +411,33 @@
         {%- else -%}
           {{
             section.settings.video
-            | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', image_size: '1920x'
+            | video_tag: loop: true, muted: true, controls: false, playsinline: true, preload: 'none', image_size: '1920x'
           }}
         {%- endif -%}
       {%- else -%}
         {%- comment -%}
-          The desktop clip stays on the src attribute so the stage is never
-          empty without JavaScript — the slide images are suppressed while a
-          video is set, so an empty <video> would leave nothing at all.
-          <hp-bg-video> in hp-theme.js swaps in the phone cut on small screens.
+          The desktop clip stays on the src attribute so the element still has
+          a file to play, but nothing here starts fetching it: no autoplay, and
+          preload="none".
 
-          autoplay + preload="auto" only when there is nothing to swap. With a
-          phone clip set, `autoplay` starts fetching THIS (desktop) src the
-          instant the browser parses the tag — before initBgVideo's JS has
-          run — so a phone was downloading the desktop cut in full while
-          also downloading the phone cut it was about to switch to.
-          preload="metadata" without autoplay still shows a first frame with
-          JavaScript disabled (this video's own file, unlike the review clips
-          elsewhere in this theme, is expected to be front-loaded/faststart,
-          so "metadata" actually fetches just a header) — initBgVideo calls
-          .play() itself once it has picked the right file for this screen.
+          HTML cannot ask a question about the screen, so any attribute that
+          begins a download begins it everywhere — autoplay had a phone pulling
+          the desktop cut in full the instant the tag was parsed, before any of
+          the code that decides what this screen should get had run. That
+          decision (which cut, whether at all on a slow connection, and not
+          until the page has finished loading) belongs to initBgVideo, and it
+          can only make it if the markup has not already committed.
+
+          Nothing is lost without JavaScript: the still is painted as the
+          stage's background, so the hero is a photograph rather than an empty
+          frame.
         {%- endcomment -%}
         <video
           loop muted playsinline
-          {% if section.settings.video_url_mobile != blank %}
-            preload="metadata"
-          {% else %}
-            autoplay preload="auto"
-          {% endif %}
-          {% if section.settings.video_poster %}poster="{{ section.settings.video_poster | image_url: width: 2400 }}"{% endif %}
+          preload="none"
           src="{{ section.settings.video_url }}"
           data-src-desktop="{{ section.settings.video_url }}"
           data-src-mobile="{{ section.settings.video_url_mobile }}"
-          data-hp-bg-video
         ></video>
       {%- endif -%}
     </div>
@@ -558,6 +582,13 @@
       "id": "video_url",
       "label": "…or external MP4 URL",
       "info": "Used only when no video is picked above."
+    },
+    {
+      "type": "checkbox",
+      "id": "video_on_mobile",
+      "label": "Play the hero video on phones",
+      "default": true,
+      "info": "Off shows the still image instead. The clip is the single heaviest thing a phone downloads on this page, so turning it off is the biggest saving available here."
     },
     { "type": "image_picker", "id": "video_poster", "label": "Poster frame (for external URL)" },
     { "type": "header", "content": "Layout & legibility" },

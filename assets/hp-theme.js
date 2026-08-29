@@ -1249,11 +1249,50 @@
      actually play, so a blocked autoplay or a slow connection leaves the still
      photograph in place instead of a black rectangle.
   ---------------------------------------------------------------------- */
+  /* Should this screen fetch a background clip at all?
+
+     On a phone the hero clip is by far the heaviest thing on the page, and it
+     buys nothing on a connection that cannot deliver it before the visitor has
+     scrolled past. The still is real content, not a placeholder, so declining
+     the video costs the design very little and saves megabytes. Three reasons
+     to decline: the merchant turned it off for phones, the visitor asked for
+     less data, or the connection reports itself as slow. */
+  function shouldLoadBgVideo(host) {
+    if (!window.matchMedia('(max-width: 749px)').matches) return true;
+
+    var allowed = host.getAttribute('data-hp-video-mobile');
+    if (allowed === 'false') return false;
+
+    var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (c) {
+      if (c.saveData) return false;
+      var t = c.effectiveType || '';
+      if (t === 'slow-2g' || t === '2g' || t === '3g') return false;
+    }
+    return true;
+  }
+
+  /* Start the fetch, but not while the page is still painting. A phone that
+     begins downloading the clip during load is competing with the images and
+     fonts the first screen actually needs; waiting for load and then for an
+     idle moment moves it out of that contention entirely. Desktop starts
+     immediately, where the bandwidth is not the constraint. */
+  function whenIdleForVideo(fn) {
+    if (!window.matchMedia('(max-width: 749px)').matches) return fn();
+    var go = function () {
+      if (window.requestIdleCallback) window.requestIdleCallback(fn, { timeout: 2500 });
+      else window.setTimeout(fn, 600);
+    };
+    if (document.readyState === 'complete') go();
+    else window.addEventListener('load', go, { once: true });
+  }
+
   function initBgVideo(root) {
     (root || document).querySelectorAll('[data-hp-bg-video]').forEach(function (host) {
       if (host.dataset.hpVidDone) return;
       host.dataset.hpVidDone = '1';
       if (reducedMotion) return;   // leave the still image
+      if (!shouldLoadBgVideo(host)) return;   // leave the still image
 
       /* The marker sits on the <video> when the markup builds the tag itself,
          and on the wrapper when Shopify's video_tag built it (that filter takes
@@ -1280,6 +1319,7 @@
       // Only touch the element when the file actually differs — the homepage
       // hero ships its desktop clip on the src attribute so it plays without
       // JS, and reloading the same file would restart it for no reason.
+      whenIdleForVideo(function () {
       if (src && v.getAttribute('src') !== src) {
         v.setAttribute('src', src);
         // 'auto', not 'metadata': the markup for a screen that has a clip to
@@ -1296,6 +1336,7 @@
       v.addEventListener('canplay', show, { once: true });
       var p = v.play();
       if (p && p.catch) p.catch(function () { v.classList.remove('is-playing'); });
+      });
     });
   }
 
