@@ -271,8 +271,8 @@
         "rail_3": {
           "type": "rail",
           "settings": {
-            "collection": "serveware",
-            "title": "Serving in Style",
+            "collection": "thp-weave-collection",
+            "title": "THP Weave",
             "products_to_show": 8
           }
         }
@@ -900,6 +900,7 @@
         "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
         "speed": 5,
         "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
+        "show_video_cards": true,
         "loop_previews": false,
         "bg_color": "#1a4b46",
         "text_color": "#fff9df",
