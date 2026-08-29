@@ -122,7 +122,7 @@
 .jdgm-rev-widg__summary-text,
 .jdgm-histogram,
 .jdgm-chip,
-.jdgm-carousel-item {
+.jdgm-carousel-item:not(.jdgm-media-card) {
   font-family: var(--hp-font-ui) !important;
   color: var(--hp-ink);
 }
@@ -467,24 +467,29 @@
   font-size: 1.05rem !important;
 }
 
-/* ---- featured carousel (home / about / hospitality) -------------------- */
+/* ---- featured carousel (home / about / hospitality) --------------------
+   .jdgm-carousel-item belongs to TWO widgets: the featured carousel these
+   rules were written for, and the newer Cards Carousel, whose cards carry
+   .jdgm-media-card as well. Only the older one should be dressed here — left
+   unqualified, the padding below was pushing the Cards Carousel's photo in
+   from the edges of its own card. */
 
 .jdgm-carousel-wrapper { padding: 0 !important; }
 .jdgm-carousel {
   border: 0 !important;
   background: transparent !important;
 }
-.jdgm-carousel-item {
+.jdgm-carousel-item:not(.jdgm-media-card) {
   border: 1px solid var(--hp-hairline) !important;
   border-radius: var(--hp-r-card) !important;
   background: var(--hp-paper);
   padding: 2.2rem !important;
 }
-.hp-revs--teal .jdgm-carousel-item {
+.hp-revs--teal .jdgm-carousel-item:not(.jdgm-media-card) {
   background: rgba(255, 249, 223, 0.05);
   border-color: var(--hp-hairline-light) !important;
 }
-.hp-revs--teal .jdgm-carousel-item,
+.hp-revs--teal .jdgm-carousel-item:not(.jdgm-media-card),
 .hp-revs--teal .jdgm-carousel-item__review-body,
 .hp-revs--teal .jdgm-carousel-item__review-title,
 .hp-revs--teal .jdgm-carousel-item__reviewer-name { color: var(--hp-cream) !important; }
@@ -2349,139 +2354,189 @@
 
 
 /* ==========================================================================
-   Cards Carousel
+   Judge.me Cards Carousel
    ==========================================================================
-   Judge.me's Cards Carousel is the widget that leads with the photo a customer
-   attached — the reason to pick it over the plain list. It is added as an app
-   block like any other, so the section already renders it; this is what dresses
-   it in the theme's design.
+   The photo-led carousel. Judge.me builds the cards in the browser
+   (media_carousel.js), so none of this markup is in the page source; the
+   selectors below are the classes that script actually emits, and the
+   overrides are written against the app's own carousels.css, which loads
+   after this file and therefore wins every tie it is allowed to enter.
 
-   Written against the app's own custom properties first and its class names
-   second. The properties are the stable surface: they are what the app reads to
-   colour itself, they are declared for the whole section above, and they keep
-   working when Judge.me renames a class. The class rules below only add the
-   things a property cannot express — the card surface, the crop on the media,
-   and the arrows.
+     .jdgm-widget.jdgm-cards-carousel     root, theming properties set INLINE
+       .jdgm-header > h2.jdgm-title
+                    > .jdgm-header-info > .jdgm-average-rating
+                        .jdgm-stars, .jdgm-rating-text, .jdgm-reviews-count
+       .jdgm-content > button.jdgm-arrow  (one either side)
+                     > .jdgm-cards-wrapper > .jdgm-videos-container
+            .jdgm-card.jdgm-media-card.jdgm-carousel-item
+              (+ .jdgm-photo-card | .jdgm-video-card | .jdgm-text-card)
+               <img>/<video>   sized by the app from --card-width x --image-ratio
+               .jdgm-text      the review body
+               .jdgm-rating-section
+                  .jdgm-stars > .jdgm-star
+                  .jdgm-reviewer-info > .jdgm-reviewer-name
+                  .jdgm-product-name
 
-   Nothing here hides a control. The last pass that did that cost the section
-   its Write a Review button and its pager, and a carousel's arrows are the only
-   way through it.
+   Colour and shape go through the properties the app already reads. It sets
+   them inline on the root, and a stylesheet declaration with !important
+   outranks an inline one without it — so this is the supported lever, and it
+   keeps working if Judge.me reworks the internals. Only the things a property
+   cannot express are done by class: the type, and the alignment.
+
+   The app centres everything inside a card. This theme's review cards are set
+   ragged-right — quote, then name, then product, all from the left edge — so
+   the alignment rules below are what make the widget match the cards it sits
+   among, and they are the ones that need !important to land.
+
+   Left unscoped, like the rest of this file: the widget can sit in the theme's
+   review section or in an Apps section, and should look the same either way.
    ---------------------------------------------------------------------- */
 
-.hp-revs--carousel .hp-revs__widget { position: relative; }
-
-/* the card */
-.hp-revs--carousel .jdgm-carousel-item,
-.hp-revs--carousel .jm-cards-carousel__card,
-.hp-revs--carousel .jm-review-card {
-  box-sizing: border-box;
-  border-radius: 16px !important;
-  overflow: hidden;
-  background: var(--hp-teal-card) !important;
-  border: 1px solid rgba(255, 249, 223, 0.28) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 249, 223, 0.12);
-  padding: 0 !important;
+.jdgm-widget.jdgm-cards-carousel {
+  --card-color: var(--hp-teal-card) !important;   /* the card */
+  --text-color: var(--hp-cream) !important;       /* copy on the card */
+  --header-color: var(--hp-heading) !important;   /* heading, on the section */
+  --stars-color: var(--hp-gold) !important;
+  --arrows-color: var(--hp-teal) !important;
+  --border-radius: 16px !important;
+  --border: 1px solid rgba(255, 249, 223, 0.28) !important;
+  --box-shadow: inset 0 1px 0 rgba(255, 249, 223, 0.12) !important;
+  --image-ratio: 1 !important;                    /* one crop for every photo */
+  --max-width: 144rem !important;                 /* the site's own measure */
 }
-.hp-revs--carousel .jdgm-carousel-item,
-.hp-revs--carousel .jdgm-carousel-item *,
-.hp-revs--carousel .jm-cards-carousel__card,
-.hp-revs--carousel .jm-cards-carousel__card * {
+
+/* ---- heading: the one every other section uses ------------------------- */
+
+.jdgm-cards-carousel .jdgm-title {
+  font-family: var(--hp-font-display) !important;
+  font-weight: 400 !important;
+  font-size: var(--hp-h-section) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.01em;
+  color: var(--hp-heading) !important;
+  text-transform: none !important;
+  margin: 0 0 1.2rem !important;
+  /* the app clamps its title to one line; these headings are short, and a
+     clamp on a display face crops the descenders */
+  -webkit-line-clamp: none !important;
+  display: block !important;
+}
+.jdgm-cards-carousel .jdgm-rating-text,
+.jdgm-cards-carousel .jdgm-reviews-count,
+.jdgm-cards-carousel .jdgm-verified-text {
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.4rem !important;
+  color: var(--hp-taupe) !important;
+}
+.jdgm-cards-carousel .jdgm-rating-star,
+.jdgm-cards-carousel .jdgm-header .jdgm-stars { color: var(--hp-gold) !important; }
+.jdgm-cards-carousel .jdgm-verified-checkmark { fill: var(--hp-teal) !important; }
+
+/* ---- the card ---------------------------------------------------------- */
+
+/* the review, set as the quote it is — and ranged left, as on our own cards */
+.jdgm-cards-carousel .jdgm-media-card .jdgm-text,
+.jdgm-cards-carousel .jdgm-media-card .jdgm-text p {
+  font-family: var(--hp-font-display) !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  font-size: 1.7rem !important;
+  line-height: 1.5 !important;
+  color: var(--hp-cream) !important;
+  text-align: left !important;
+}
+/* the app lays the body out as a centred grid; start-align it instead */
+.jdgm-cards-carousel .jdgm-media-card .jdgm-text {
+  place-items: start !important;
+  min-height: 0 !important;
+}
+
+.jdgm-cards-carousel .jdgm-media-card .jdgm-rating-section {
+  align-items: flex-start !important;
+  gap: 0.6rem !important;
+}
+.jdgm-cards-carousel .jdgm-media-card .jdgm-rating-section .jdgm-reviewer-info {
+  justify-content: flex-start !important;
+  flex-wrap: wrap;
+}
+.jdgm-cards-carousel .jdgm-media-card .jdgm-rating-section .jdgm-star {
+  font-size: 1.6rem !important;
+  color: var(--hp-gold) !important;
+}
+.jdgm-cards-carousel .jdgm-media-card .jdgm-rating-section .jdgm-stars { gap: 0.2rem !important; }
+
+.jdgm-cards-carousel .jdgm-media-card .jdgm-reviewer-name {
+  font-family: var(--hp-font-ui) !important;
+  font-weight: 600 !important;
+  font-size: 1.3rem !important;
   color: var(--hp-cream) !important;
 }
+.jdgm-cards-carousel .jdgm-product-name,
+.jdgm-cards-carousel .jdgm-product-name a {
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.15rem !important;
+  letter-spacing: 0.04em;
+  color: var(--hp-cream) !important;
+  opacity: 0.72;
+  text-align: left !important;
+  text-decoration: none !important;
+}
+.jdgm-cards-carousel .jdgm-product-name a:hover { opacity: 1; }
+/* the verified tick the app masks in beside the name */
+.jdgm-cards-carousel .jdgm-media-card .jdgm-reviewer-verified-icon {
+  color: var(--hp-cream) !important;
+  opacity: 0.7;
+  width: 1.4rem;
+  height: 1.4rem;
+}
 
-/* The photo is the point of this widget, so it is cropped to a consistent
-   frame rather than left at whatever aspect the customer's camera produced —
-   a column of different-height images is what makes a carousel look unmade.
-   Matched loosely on the class substring because the card's inner wrappers are
-   the part of Judge.me's markup most likely to be renamed, and the rule is
-   already scoped to this section. */
-.hp-revs--carousel [class*='carousel'] img,
-.hp-revs--carousel [class*='carousel'] video,
-.hp-revs--carousel [class*='card'] img,
-.hp-revs--carousel [class*='card'] video {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
+/* a photo that fills the top of the card, squared off against its corners */
+.jdgm-cards-carousel .jdgm-media-card img,
+.jdgm-cards-carousel .jdgm-media-card video {
   border-radius: 0 !important;
   display: block;
 }
 
-/* the review copy under the photo */
-.hp-revs--carousel .jdgm-carousel-item__review-body,
-.hp-revs--carousel .jm-cards-carousel__card-body {
-  font-family: var(--hp-font-display) !important;
-  font-style: italic;
-  font-size: 1.7rem !important;
-  line-height: 1.5 !important;
-  padding: 1.6rem 1.6rem 0;
+.jdgm-cards-carousel .jdgm-media-card {
+  /* the card owns no inset of its own: the photo runs to its edges and the
+     text below supplies its own padding */
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.3s var(--hp-ease);
 }
-.hp-revs--carousel .jdgm-carousel-item__reviewer-name,
-.hp-revs--carousel .jm-cards-carousel__card-author {
-  font-family: var(--hp-font-ui) !important;
-  font-weight: 600 !important;
-  font-size: 1.3rem !important;
-  padding: 0 1.6rem;
-}
-.hp-revs--carousel .jdgm-carousel-item__product-title,
-.hp-revs--carousel .jm-cards-carousel__card-product {
-  font-family: var(--hp-font-ui) !important;
-  font-size: 1.15rem !important;
-  opacity: 0.72;
-  padding: 0 1.6rem 1.6rem;
+.jdgm-cards-carousel .jdgm-media-card:hover {
+  border-color: rgba(255, 249, 223, 0.55) !important;
 }
 
-/* the arrows: the theme's circular control, not the app's bare chevron */
-.hp-revs--carousel .jdgm-carousel__left-arrow,
-.hp-revs--carousel .jdgm-carousel__right-arrow,
-.hp-revs--carousel [class*='carousel'] [class*='arrow'],
-.hp-revs--carousel [class*='carousel'] button[class*='prev'],
-.hp-revs--carousel [class*='carousel'] button[class*='next'] {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  width: 4rem;
-  height: 4rem;
+/* ---- the arrows -------------------------------------------------------- */
+
+/* the app draws a bare chevron; this is the theme's circular control */
+.jdgm-cards-carousel .jdgm-arrow {
+  width: 4.4rem !important;
+  height: 4.4rem !important;
   border-radius: 50% !important;
   border: 1px solid rgba(26, 75, 70, 0.35) !important;
   background: var(--hp-cream) !important;
   color: var(--hp-teal) !important;
-  box-shadow: 0 6px 18px -10px rgba(16, 48, 44, 0.5);
-  transition: background 0.3s var(--hp-ease), color 0.3s var(--hp-ease);
+  box-shadow: 0 8px 20px -12px rgba(16, 48, 44, 0.55);
+  transition: background 0.3s var(--hp-ease), color 0.3s var(--hp-ease),
+    border-color 0.3s var(--hp-ease);
 }
-.hp-revs--carousel .jdgm-carousel__left-arrow:hover,
-.hp-revs--carousel .jdgm-carousel__right-arrow:hover,
-.hp-revs--carousel [class*='carousel'] [class*='arrow']:hover {
+.jdgm-cards-carousel .jdgm-arrow:hover {
   background: var(--hp-teal) !important;
+  border-color: var(--hp-teal) !important;
   color: var(--hp-cream) !important;
+  opacity: 1 !important;   /* the app fades it to 0.7 instead */
 }
+.jdgm-cards-carousel .jdgm-arrow svg { width: 1.3rem !important; height: 2rem !important; }
 
-/* the app draws its own frame around the strip; the section supplies one */
-.hp-revs--carousel .jdgm-carousel-wrapper,
-.hp-revs--carousel .jdgm-carousel {
-  border: 0 !important;
-  background: transparent !important;
-  padding: 0 !important;
-}
+/* Judge.me's trust medals are pale blue seals that read as artefacts against
+   this palette, and the rating and count above already say what they say. */
+.jdgm-cards-carousel .jdgm-medals-wrapper,
+.jdgm-cards-carousel .jdgm-medals { display: none !important; }
 
 @media screen and (max-width: 749px) {
-  .hp-revs--carousel .jdgm-carousel-item__review-body,
-  .hp-revs--carousel .jm-cards-carousel__card-body { font-size: 1.55rem !important; }
+  .jdgm-cards-carousel .jdgm-media-card .jdgm-text,
+  .jdgm-cards-carousel .jdgm-media-card .jdgm-text p { font-size: 1.55rem !important; }
+  .jdgm-cards-carousel .jdgm-arrow { width: 3.8rem !important; height: 3.8rem !important; }
 }
-
-/* Equal-height cards. Reviews vary in length, so left alone the strip is a row
-   of different-height boxes with their photos at different heights — the thing
-   that reads as unmade. Only alignment is touched: the app keeps ownership of
-   the track and its scrolling. */
-.hp-revs--carousel .jdgm-carousel,
-.hp-revs--carousel [class*='carousel'][class*='track'],
-.hp-revs--carousel [class*='carousel__list'] {
-  align-items: stretch;
-}
-.hp-revs--carousel .jdgm-carousel-item,
-.hp-revs--carousel .jm-cards-carousel__card {
-  display: flex;
-  flex-direction: column;
-}
-/* the product line settles at the foot of the card whatever the review's length */
-.hp-revs--carousel .jdgm-carousel-item__product-title,
-.hp-revs--carousel .jm-cards-carousel__card-product { margin-top: auto; }
