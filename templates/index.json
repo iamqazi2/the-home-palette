@@ -314,8 +314,8 @@
         "stat_2_label": "Collections",
         "stat_3_value": "3–5 days",
         "stat_3_label": "Delivery",
-        "button_label": "Explore the Craft",
-        "link": "shopify://collections"
+        "button_label": "Explore the Metals",
+        "link": "shopify://collections/thp-cutlery-glassware"
       }
     },
     "hp_shop_by_color": {
@@ -737,36 +737,6 @@
         "link": "shopify://collections/thp-weave-collection"
       }
     },
-    "hp_wooden_line_rail": {
-      "type": "hp-collection-rails",
-      "blocks": {
-        "rail_1": {
-          "type": "rail",
-          "settings": {
-            "collection": "thp-woodworks",
-            "title": "The Wooden Line",
-            "products_to_show": 8
-          }
-        }
-      },
-      "block_order": [
-        "rail_1"
-      ],
-      "settings": {
-        "eyebrow": "",
-        "heading": "",
-        "text": "",
-        "bg_color": "#fff9df",
-        "columns_desktop": 4,
-        "peek_mobile": 2.2,
-        "image_ratio": "portrait",
-        "show_secondary_image": true,
-        "show_rating": true,
-        "quick_add": "standard",
-        "show_view_all": true,
-        "view_all_label": "View all"
-      }
-    },
     "173573001120319a38": {
       "type": "apps",
       "settings": {
@@ -798,7 +768,6 @@
     "hp_occasion",
     "hp_style_rail",
     "hp_cta",
-    "hp_wooden_line_rail",
     "173573001120319a38",
     "hp_reviews_all"
   ]
