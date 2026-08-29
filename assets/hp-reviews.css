@@ -1374,6 +1374,24 @@
   flex: 0 0 auto;
   margin: 0 !important;
 }
+
+/* Nothing in this header may be taken out of the flow. The app positions the
+   action group itself — with the medal removed from beside it, that landed
+   the Write a Review button on top of the "N reviews" text, covering it.
+   Forcing every child back into normal flow is what makes the flex row above
+   actually govern the layout, rather than the app's own offsets. */
+.hp-revs--showcase .jm-review-widget-minimal-header > * {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  float: none !important;
+  max-width: 100%;
+}
+/* the rating is the one part that must never be compressed or overrun */
+.hp-revs--showcase .jm-average-rating-display {
+  flex: 0 0 auto !important;
+  white-space: nowrap;
+}
 .hp-revs--showcase .jm-average-rating-display {
   display: flex;
   align-items: baseline;
@@ -1385,14 +1403,37 @@
    both unreadable. Capping its height did not help — it is not sitting in the
    flow. It is Judge.me's own decorative badge, carries no information the
    rating and review count do not already give, and washes out to a smudge
-   against teal, so the showcase header drops it entirely. */
-.hp-revs--showcase .jm-medals,
-.hp-revs--showcase .jm-medals-wrapper,
-.hp-revs--showcase .jdgm-medals-wrapper { display: none !important; }
+   against teal, so the showcase header drops it entirely.
+
+   Matched on the class substring because the app ships several names for it
+   (jm-medals, jm-medals-wrapper, jdgm-medals-wrapper, and a rebranding
+   variant), and hiding only some of them leaves the others still holding
+   their space in the header — the empty gap above the button on mobile. */
+.hp-revs--showcase [class*='medal'] { display: none !important; }
+
+/* The filter and sort controls come through as two unlabelled icon discs
+   beside the button. With the rails drifting a reader is not working through
+   an ordered list to begin with, so they are noise rather than navigation —
+   dropped, leaving the summary as rating, count and Write a Review. The
+   search input goes with them; on its own it has nothing left to narrow. */
+.hp-revs--showcase .jm-review-widget-minimal-header__filter-container,
+.hp-revs--showcase .jm-filters,
+.hp-revs--showcase .jm-filters__buttons,
+.hp-revs--showcase .jm-sort-filter,
+.hp-revs--showcase .jm-custom-answer-filter,
+.hp-revs--showcase .jm-review-search,
+.hp-revs--showcase .jdgm-sort-dropdown,
+.hp-revs--showcase .jdgm-sort-dropdown-wrapper,
+.hp-revs--showcase .jdgm-rev-widg__sort-wrapper,
+.hp-revs--showcase .jdgm-review-search { display: none !important; }
 
 /* the header's customer-photo strip: even thumbnails, not one stray square */
 .hp-revs--showcase .jm-media-grid {
   width: 100%;
+  /* a flex item with no basis sits on the same line as the rating and the
+     button and reads as a stray thumbnail floating beside them; 100% forces
+     the strip onto its own row under the summary */
+  flex: 0 0 100%;
   order: 3;
 }
 .hp-revs--showcase .jm-media-grid__container {
@@ -2005,6 +2046,29 @@
   top: 0.6rem;
   right: 1.2rem;
 }
+
+/* ---- card interior: one source of padding ------------------------------
+   The tall showcase card puts its padding on .jm-review-item__content, and
+   the medium rowed card puts its own on .jm-review-item. Both applied at
+   once, so a rowed card carried ~4.4rem of inset on every edge: the stars
+   sat far down from the top and the quote was pushed straight out of the
+   bottom of a fixed-height card, which is the clipped text on mobile.
+   In a row the item owns the padding and the content owns none. */
+.hp-revs--showcase .hp-revs__row .jm-review-item:not(:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid)) .jm-review-item__content {
+  padding: 0 !important;
+  gap: 0.6rem;
+  /* space-between strands the parts at the card's edges when a review is
+     short; a centred column keeps stars, quote and name as one group */
+  justify-content: center;
+}
+.hp-revs--showcase .hp-revs__row .jm-star-rating {
+  margin-bottom: 0.2rem;
+  font-size: 1.3rem;
+}
+/* the quote is the card's subject — let it take the slack, and keep the
+   reviewer pinned under it rather than floated away by the gap */
+.hp-revs--showcase .hp-revs__row .jm-review-content { flex: 0 1 auto; min-height: 0; }
+.hp-revs--showcase .hp-revs__row .jm-reviewer-info { margin-top: 0.8rem; }
 
 @media screen and (min-width: 1200px) {
   .hp-revs--showcase .hp-revs__row .jm-review-item {
