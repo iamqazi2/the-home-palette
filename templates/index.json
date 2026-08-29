@@ -708,6 +708,7 @@
       "settings": {
         "eyebrow": "Textures & Glazes",
         "heading": "Shop by Style",
+        "mobile_layout": "rail",
         "scrim": 65,
         "bg_color": "#fff9df",
         "show_count": false,
@@ -744,7 +745,7 @@
           "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
             "show_sample_reviews": true,
-            "reviews_selection": "all",
+            "reviews_selection": "featured_reviews",
             "products": [],
             "filter_pinned": false,
             "filter_featured": false,
