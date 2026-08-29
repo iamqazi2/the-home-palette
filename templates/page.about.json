@@ -60,7 +60,7 @@
         "scrim_color": "#1a4b46",
         "show_cue": true,
         "text_shade": true,
-        "eyebrow": "Our Story · Islamabad, Pakistan",
+        "eyebrow": "Our Story · Pakistan",
         "heading": "Colour, Clay and the Craft of a Well-Set Table",
         "lede": "<p>The Home Palette began with a simple frustration: beautiful tableware in Pakistan was either imported and priced out of reach, or made here and impossible to find. So we went looking for the makers ourselves — and built a palette worth setting a table around.</p>",
         "button_label": "Shop the Collections",
@@ -76,7 +76,7 @@
           "type": "item",
           "settings": {
             "icon": "gem",
-            "title": "Direct From the Workshop",
+            "title": "Direct From the Workshops",
             "text": "No importers, no middle layer",
             "link": ""
           }
@@ -90,6 +90,15 @@
             "link": ""
           }
         },
+        "trust_4": {
+          "type": "item",
+          "settings": {
+            "icon": "heart",
+            "title": "Made in Pakistan",
+            "text": "By artisans and weavers",
+            "link": ""
+          }
+        },
         "trust_3": {
           "type": "item",
           "settings": {
@@ -98,22 +107,13 @@
             "text": "Flat Rs. 299 — free above Rs. 8,000",
             "link": "/policies/shipping-policy"
           }
-        },
-        "trust_4": {
-          "type": "item",
-          "settings": {
-            "icon": "heart",
-            "title": "Made in Pakistan",
-            "text": "By family-run potteries and weavers",
-            "link": ""
-          }
         }
       },
       "block_order": [
         "trust_1",
         "trust_2",
-        "trust_3",
-        "trust_4"
+        "trust_4",
+        "trust_3"
       ],
       "settings": {
         "bg_color": "#fff9df",
@@ -159,7 +159,7 @@
         "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
         "image_2": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
         "flip": false,
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "badge_value": "Est. 2024",
         "badge_label": "Islamabad, Pakistan",
         "badge_color": "#1a4b46",
@@ -176,7 +176,7 @@
     "hp_about_manifesto": {
       "type": "hp-about-manifesto",
       "settings": {
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "center_head": true,
         "drop_cap": true,
         "eyebrow": "Chapter Two — What We Believe",
@@ -451,11 +451,11 @@
         "heading": "What Our Customers Say",
         "text": "Verified Judge.me reviews from the people who set their tables with us.",
         "align": "center",
-        "bg": "cream",
+        "source": "store",
         "card_style": "showcase",
+        "bg": "cream",
         "padding_top": 64,
-        "padding_bottom": 64,
-        "source": "store"
+        "padding_bottom": 64
       }
     }
   },
