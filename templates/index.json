@@ -15,7 +15,6 @@
         "slide_2": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
             "kicker": "The Home Palette",
             "heading": "Serving Redefined",
             "subheading": "The evolution of craft into quiet luxury, one table at a time.",
@@ -26,7 +25,6 @@
         "slide_1": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
             "kicker": "Handcrafted Heritage · Pakistan",
             "heading": "Exquisite Dining",
             "subheading": "Our happy colors uplift the mood — premium serveware for homes and hospitality.",
@@ -37,7 +35,6 @@
         "slide_3": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
             "kicker": "Old Ways, New Tables",
             "heading": "Traditional Kitchenware",
             "subheading": "Quiet luxury for your table, shaped by local artisans.",
