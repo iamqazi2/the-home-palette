@@ -1312,13 +1312,23 @@
   background: rgba(255, 249, 223, 0.14) !important;
 }
 
-/* the current page is the one filled disc in the row */
+/* the current page is the one filled disc in the row.
+   The numeral is wrapped in the app's own .jm-text span, and the showcase
+   rules above paint every .jm-text cream so the header reads on teal — which
+   left the active page cream on cream, an empty white disc. The descendant
+   selector is what actually recolours the number. */
 .hp-revs--showcase .jm-pagination-controls__button--active,
+.hp-revs--showcase .jm-pagination-controls__button--active *,
 .hp-revs--showcase .jdgm-paginate__page.jdgm-curt,
 .hp-revs--showcase .jdgm-paginate__page.jdgm--active {
   background: var(--hp-cream) !important;
   border-color: var(--hp-cream) !important;
   color: var(--hp-teal) !important;
+}
+/* the nested span must not repaint the disc it sits inside */
+.hp-revs--showcase .jm-pagination-controls__button--active * {
+  background: transparent !important;
+  border: 0 !important;
 }
 
 /* arrow glyphs are drawn as SVG in the revamp and as text in the classic */
@@ -1370,8 +1380,15 @@
   gap: 0.8rem;
   font-size: 2.6rem !important;
 }
-/* the app's medal badges are tiny blue seals that read as artefacts on teal */
-.hp-revs--showcase .jm-medals { max-height: 4.4rem; }
+/* The app's "Diamond Transparency" medal is a pale blue seal it places on top
+   of the summary row, where it landed over the Write a Review button and made
+   both unreadable. Capping its height did not help — it is not sitting in the
+   flow. It is Judge.me's own decorative badge, carries no information the
+   rating and review count do not already give, and washes out to a smudge
+   against teal, so the showcase header drops it entirely. */
+.hp-revs--showcase .jm-medals,
+.hp-revs--showcase .jm-medals-wrapper,
+.hp-revs--showcase .jdgm-medals-wrapper { display: none !important; }
 
 /* the header's customer-photo strip: even thumbnails, not one stray square */
 .hp-revs--showcase .jm-media-grid {
