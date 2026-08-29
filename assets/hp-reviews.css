@@ -2237,3 +2237,103 @@
   z-index: 4;
 }
 .hp-revs--showcase .jm-review-content__expand-button:hover { opacity: 1; }
+
+
+/* ==========================================================================
+   Showcase on a LIGHT section
+   ==========================================================================
+   The showcase treatment was written when the section itself was teal, so the
+   summary bar, its button and the pager are all drawn in cream. Those sections
+   now sit on cream, where cream on cream is simply invisible — which is what
+   made Write a Review read as bare text and the pager disappear.
+
+   The review cards stay teal, so the summary bar is given the same teal card
+   surface: it belongs to the same set, and it puts a dark ground back under
+   the cream text the rules above already set. The button and the pager are the
+   two things that sit against the section's own background, so they are the
+   ones that have to flip. Everything here is skipped on .hp-revs--teal, where
+   the original cream treatment is still correct.
+   ---------------------------------------------------------------------- */
+
+/* the summary bar becomes a teal card, like the reviews beneath it */
+.hp-revs--showcase:not(.hp-revs--teal) .jm-review-widget-minimal-header {
+  background: var(--hp-teal-card) !important;
+  border: 1px solid rgba(255, 249, 223, 0.28) !important;
+  border-radius: var(--hp-r-card);
+}
+
+/* Write a Review sits ON the teal summary card, so it takes its contrast from
+   that card and not from the section: a cream button with teal text. Making it
+   teal — which the section's own light ground would suggest — puts teal on teal
+   and leaves only floating text where the button should be. */
+.hp-revs--showcase .jm-button--primary,
+.hp-revs--showcase .jm-action-buttons__button.jm-button--primary,
+.hp-revs--showcase .jdgm-write-rev-link {
+  background: var(--hp-cream) !important;
+  color: var(--hp-teal) !important;
+  border-color: var(--hp-cream) !important;
+}
+.hp-revs--showcase .jm-button--primary *,
+.hp-revs--showcase .jdgm-write-rev-link * {
+  color: var(--hp-teal) !important;
+}
+.hp-revs--showcase .jm-button--primary:hover,
+.hp-revs--showcase .jdgm-write-rev-link:hover {
+  background: var(--hp-paper) !important;
+  border-color: var(--hp-paper) !important;
+}
+
+/* the pager sits on the section's own background, not on a card */
+.hp-revs--showcase:not(.hp-revs--teal) .jm-pagination-controls__button,
+.hp-revs--showcase:not(.hp-revs--teal) .jdgm-paginate__page,
+.hp-revs--showcase:not(.hp-revs--teal) .jdgm-paginate__prev,
+.hp-revs--showcase:not(.hp-revs--teal) .jdgm-paginate__next {
+  border-color: rgba(26, 75, 70, 0.35) !important;
+  color: var(--hp-teal) !important;
+}
+.hp-revs--showcase:not(.hp-revs--teal) .jm-pagination-controls__button *,
+.hp-revs--showcase:not(.hp-revs--teal) .jdgm-paginate__page * {
+  color: var(--hp-teal) !important;
+}
+.hp-revs--showcase:not(.hp-revs--teal) .jm-pagination-controls__button:hover,
+.hp-revs--showcase:not(.hp-revs--teal) .jdgm-paginate__page:hover {
+  background: rgba(26, 75, 70, 0.08) !important;
+  border-color: var(--hp-teal) !important;
+}
+.hp-revs--showcase:not(.hp-revs--teal) .jm-pagination-controls__button--active,
+.hp-revs--showcase:not(.hp-revs--teal) .jm-pagination-controls__button--active *,
+.hp-revs--showcase:not(.hp-revs--teal) .jdgm-paginate__page.jdgm-curt,
+.hp-revs--showcase:not(.hp-revs--teal) .jdgm-paginate__page.jdgm--active {
+  background: var(--hp-teal) !important;
+  border-color: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+}
+.hp-revs--showcase:not(.hp-revs--teal) .jm-pagination-controls__button--active * {
+  background: transparent !important;
+}
+.hp-revs--showcase:not(.hp-revs--teal) .jm-pagination-controls svg,
+.hp-revs--showcase:not(.hp-revs--teal) .jdgm-paginate svg {
+  color: var(--hp-teal) !important;
+  fill: currentColor !important;
+}
+.hp-revs--showcase:not(.hp-revs--teal) .jm-pagination-controls__button--active svg {
+  color: var(--hp-cream) !important;
+}
+
+/* the section's own heading and intro are ink on a light ground */
+.hp-revs--showcase:not(.hp-revs--teal) .jm-review-widget-minimal-header .jm-text,
+.hp-revs--showcase:not(.hp-revs--teal) .jm-average-rating-display,
+.hp-revs--showcase:not(.hp-revs--teal) .jm-average-rating-display * {
+  color: var(--hp-cream) !important;
+}
+
+/* The header rule above paints every .jm-text in the summary bar cream, which
+   is right for the rating but caught the button's own label — cream on the
+   cream button, so it read as an empty pill. Named through the header so it
+   outranks that rule rather than relying on source order. */
+.hp-revs--showcase .jm-review-widget-minimal-header .jm-button--primary,
+.hp-revs--showcase .jm-review-widget-minimal-header .jm-button--primary .jm-text,
+.hp-revs--showcase .jm-review-widget-minimal-header .jdgm-write-rev-link,
+.hp-revs--showcase .jm-review-widget-minimal-header .jdgm-write-rev-link .jm-text {
+  color: var(--hp-teal) !important;
+}
