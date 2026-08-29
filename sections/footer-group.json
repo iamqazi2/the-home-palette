@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.footer.name",
   "type": "footer",
@@ -9,7 +18,7 @@
           "type": "text",
           "settings": {
             "heading": "Visit & Contact",
-            "subtext": "<p>The Home Palette, Plot 63, St 10, Phase 6, Bahria Town, Islamabad</p><p>Phone: +92 337 6111399<br/>Email: thehomepalettepk@gmail.com</p><p>Shipping Nationwide · 3–5 days</p>"
+            "subtext": "<p><strong>Contact Information:</strong></p><p><strong>Phone</strong>: +92 337 6111399</p><p><strong>Email:</strong> thehomepalettepk@gmail.com</p><p><strong>Location</strong>: The Home Palette, Hall 2, Plaza 67, Opp Best Western Hotel, Paradise Commercial, Bahria Town Phase-4 Islamabad</p>"
           }
         },
         "link_list_RWcm7t": {
@@ -18,19 +27,11 @@
             "heading": "Quick links",
             "menu": "footer"
           }
-        },
-        "text_heritage": {
-          "type": "text",
-          "settings": {
-            "heading": "The Home Palette",
-            "subtext": "<p>Crafted in Pakistan, made for fine dining — supporting local artisans with premium serveware for homes and hospitality.</p><p><a href=\"https://instagram.com/thehomepalette.pk\">@thehomepalette.pk</a></p>"
-          }
         }
       },
       "block_order": [
         "text_contact",
-        "link_list_RWcm7t",
-        "text_heritage"
+        "link_list_RWcm7t"
       ],
       "settings": {
         "color_scheme": "scheme-4",
