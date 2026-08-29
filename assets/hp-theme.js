@@ -945,6 +945,28 @@
         var hasPic = rev.querySelector('.jdgm-rev__pic-link');
         if (!hasPic && body && !body.textContent.trim()) rev.remove();
       });
+
+      /* Deal the cards into two rails that drift in opposite directions. The
+         metafield is one flat list, so the split happens here rather than in
+         Liquid — and alternating rather than halving keeps photo cards, which
+         are scattered through the list, spread across both rows instead of
+         bunched in one. */
+      var cards = [];
+      list.querySelectorAll('.jdgm-rev').forEach(function (c) {
+        if (c.parentNode === list) cards.push(c);
+      });
+      if (cards.length > 3) {
+        var rowA = document.createElement('div');
+        rowA.className = 'hp-revs__row';
+        rowA.setAttribute('data-hp-rail', 'forward');
+        var rowB = document.createElement('div');
+        rowB.className = 'hp-revs__row';
+        rowB.setAttribute('data-hp-rail', 'reverse');
+        cards.forEach(function (c, i) { (i % 2 ? rowB : rowA).appendChild(c); });
+        list.appendChild(rowA);
+        list.appendChild(rowB);
+        list.classList.add('hp-revs__store--rows');
+      }
     });
   }
 
@@ -952,66 +974,80 @@
     (root || document).querySelectorAll('.hp-revs--showcase').forEach(function (section) {
       var tries = 0;
       (function wait() {
-        var rail = section.querySelector('.jdgm-review-list');
+        /* Store-wide sections deal their cards into two rails; the product
+           widget stays a single one. Drive whichever exists. */
+        var rails = section.querySelectorAll('[data-hp-rail]');
+        if (!rails.length) {
+          var single = section.querySelector('.jdgm-review-list');
+          rails = single ? [single] : [];
+        }
+        var ready = rails.length && Array.prototype.every.call(rails, function (r) {
+          return r.scrollWidth > r.clientWidth + 4;
+        });
         // the app renders asynchronously; give it a while before giving up
-        if (!rail || rail.scrollWidth <= rail.clientWidth + 4) {
+        if (!ready) {
           if (tries++ < 60) return window.setTimeout(wait, 250);
           return;
         }
-        if (rail.dataset.hpMarquee) return;
-        rail.dataset.hpMarquee = '1';
-
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-        var SPEED = 0.35;          // px per frame — a slow drift, not a slide
-        var dir = 1;
-        var paused = false;
-        var raf = null;
-
-        function step() {
-          if (!paused && document.visibilityState === 'visible') {
-            var max = rail.scrollWidth - rail.clientWidth;
-            if (max <= 0) { raf = window.requestAnimationFrame(step); return; }
-            var next = rail.scrollLeft + SPEED * dir;
-            if (next >= max) { next = max; dir = -1; }
-            else if (next <= 0) { next = 0; dir = 1; }
-            rail.scrollLeft = next;
-          }
-          raf = window.requestAnimationFrame(step);
-        }
-
-        function pause() { paused = true; }
-        function resume() { paused = false; }
-
-        ['mouseenter', 'focusin', 'touchstart', 'pointerdown'].forEach(function (ev) {
-          rail.addEventListener(ev, pause, { passive: true });
-        });
-        ['mouseleave', 'focusout'].forEach(function (ev) {
-          rail.addEventListener(ev, resume, { passive: true });
-        });
-        // a manual scroll should hand control back only once the reader stops
-        var settle;
-        rail.addEventListener('wheel', function () {
-          pause();
-          window.clearTimeout(settle);
-          settle = window.setTimeout(resume, 2000);
-        }, { passive: true });
-
-        raf = window.requestAnimationFrame(step);
-
-        // Judge.me re-renders the list on sort, filter and page change, which
-        // replaces these nodes. Re-arm against the new ones.
-        var host = rail.parentNode;
-        if (host && window.MutationObserver) {
-          new window.MutationObserver(function () {
-            if (!document.contains(rail)) {
-              if (raf) window.cancelAnimationFrame(raf);
-              window.setTimeout(function () { initReviewMarquee(section); }, 300);
-            }
-          }).observe(host, { childList: true, subtree: true });
-        }
+        Array.prototype.forEach.call(rails, function (rail) { armRail(rail); });
       })();
     });
+  }
+
+  function armRail(rail) {
+    if (rail.dataset.hpMarquee) return;
+    rail.dataset.hpMarquee = '1';
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var SPEED = 0.3;             // px per frame — a slow drift, not a slide
+    var reverse = rail.getAttribute('data-hp-rail') === 'reverse';
+    var dir = reverse ? -1 : 1;
+    // the reverse rail starts at the far end so the two rows are never in step
+    if (reverse) rail.scrollLeft = rail.scrollWidth - rail.clientWidth;
+
+    var paused = false;
+    var raf = null;
+
+    function step() {
+      if (!paused && document.visibilityState === 'visible') {
+        var max = rail.scrollWidth - rail.clientWidth;
+        if (max <= 0) { raf = window.requestAnimationFrame(step); return; }
+        var next = rail.scrollLeft + SPEED * dir;
+        if (next >= max) { next = max; dir = -1; }
+        else if (next <= 0) { next = 0; dir = 1; }
+        rail.scrollLeft = next;
+      }
+      raf = window.requestAnimationFrame(step);
+    }
+
+    function pause() { paused = true; }
+    function resume() { paused = false; }
+
+    ['mouseenter', 'focusin', 'touchstart', 'pointerdown'].forEach(function (ev) {
+      rail.addEventListener(ev, pause, { passive: true });
+    });
+    ['mouseleave', 'focusout'].forEach(function (ev) {
+      rail.addEventListener(ev, resume, { passive: true });
+    });
+    // a manual scroll should hand control back only once the reader stops
+    var settle;
+    rail.addEventListener('wheel', function () {
+      pause();
+      window.clearTimeout(settle);
+      settle = window.setTimeout(resume, 2000);
+    }, { passive: true });
+
+    raf = window.requestAnimationFrame(step);
+
+    // Judge.me re-renders its list on sort, filter and page change, which
+    // replaces these nodes. Stop animating one that has left the document.
+    var host = rail.parentNode;
+    if (host && window.MutationObserver) {
+      new window.MutationObserver(function () {
+        if (!document.contains(rail) && raf) window.cancelAnimationFrame(raf);
+      }).observe(host, { childList: true, subtree: true });
+    }
   }
 
   function initReviewPager(root) {

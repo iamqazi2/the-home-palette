@@ -1759,3 +1759,102 @@
   .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) { padding: 0 !important; }
   .hp-revs--showcase .hp-revs__store { gap: 1.2rem !important; }
 }
+
+/* ==========================================================================
+   Two rails, medium cards
+   ==========================================================================
+   hp-theme.js deals the store-wide cards into two rows that drift in opposite
+   directions. The container stops being the scroller and each row becomes one
+   instead. Cards are sized down from the 30x38rem showcase box: with reviews
+   that are often a single line ("Love it", "Best"), the tall card was mostly
+   empty teal, and two shorter rows carry far more reviews in less height.
+   ---------------------------------------------------------------------- */
+
+/* Specificity, not source order: .hp-revs__store sets display:flex !important
+   for the single-rail case, and matching that with another single-class
+   !important rule leaves the winner depending on where each lands in the file.
+   Doubling the class settles it. */
+.hp-revs__store.hp-revs__store--rows {
+  display: block !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  scroll-snap-type: none !important;
+}
+.hp-revs__store.hp-revs__store--rows > .hp-revs__row { width: 100%; }
+
+.hp-revs__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.4rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.4rem 0;
+  scrollbar-width: none;            /* the rails drive themselves */
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+.hp-revs__row::-webkit-scrollbar { display: none; }
+.hp-revs__row + .hp-revs__row { margin-top: 1.4rem; }
+
+/* medium card — same box whether it holds a photo or a quote */
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev {
+  flex: 0 0 26rem !important;
+  width: 26rem !important;
+  height: 24rem !important;
+  min-height: 24rem !important;
+  max-height: 24rem !important;
+  padding: 1.8rem 1.8rem !important;
+  border-radius: 16px !important;
+}
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev:has(.jdgm-rev__pic-link) {
+  padding: 0 !important;
+}
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body,
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body p {
+  font-size: 1.6rem !important;
+  line-height: 1.5 !important;
+}
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body { -webkit-line-clamp: 4; }
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev:not(:has(.jdgm-rev__pic-link))::before {
+  font-size: 4.6rem;
+  top: 0.6rem;
+  right: 1.2rem;
+}
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev__author { font-size: 1.25rem !important; }
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev__prod-link,
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev__prod-link-prefix { font-size: 1.05rem !important; }
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev__timestamp { font-size: 1rem !important; }
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev__rating { font-size: 1.3rem; }
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__header {
+  padding: 1.3rem;
+}
+
+@media screen and (min-width: 1200px) {
+  .hp-revs--showcase .hp-revs__store--rows .jdgm-rev {
+    flex-basis: 28rem !important;
+    width: 28rem !important;
+    height: 25rem !important;
+    min-height: 25rem !important;
+    max-height: 25rem !important;
+  }
+  .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body,
+  .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body p { font-size: 1.7rem !important; }
+}
+
+@media screen and (max-width: 749px) {
+  .hp-revs--showcase .hp-revs__store--rows .jdgm-rev {
+    flex-basis: 68vw !important;
+    width: 68vw !important;
+    max-width: 26rem !important;
+    height: 22rem !important;
+    min-height: 22rem !important;
+    max-height: 22rem !important;
+    padding: 1.5rem !important;
+  }
+  .hp-revs--showcase .hp-revs__store--rows .jdgm-rev:has(.jdgm-rev__pic-link) { padding: 0 !important; }
+  .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body,
+  .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body p { font-size: 1.5rem !important; }
+  .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body { -webkit-line-clamp: 4; }
+  .hp-revs__row { gap: 1rem; }
+  .hp-revs__row + .hp-revs__row { margin-top: 1rem; }
+}
