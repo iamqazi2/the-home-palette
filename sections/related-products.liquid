@@ -81,10 +81,25 @@
   }
 {%- endstyle -%}
 
+{%- comment -%}
+  THP: ask for the *curated* pairings first. `complementary` serves the client's
+  pairing sheet (docs/recommendations), so a dinner set suggests the matching
+  placemats and cutlery rather than another dinner set. Shopify returns nothing
+  for a product with no pairing set, so data-url-fallback re-asks with `related`
+  and the band still fills on the rest of the catalogue — see
+  ProductRecommendations in assets/global.js.
+{%- endcomment -%}
+{%- liquid
+  assign recs_base = routes.product_recommendations_url | append: '?limit=' | append: section.settings.products_to_show
+  assign recs_intent = section.settings.intent | default: 'complementary'
+-%}
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <product-recommendations
     class="related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-    data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
+    data-url="{{ recs_base }}&intent={{ recs_intent }}"
+    {% if recs_intent == 'complementary' and section.settings.fallback_to_related %}
+      data-url-fallback="{{ recs_base }}&intent=related"
+    {% endif %}
     data-section-id="{{ section.id }}"
     data-product-id="{{ product.id }}"
   >
@@ -152,6 +167,24 @@
       "id": "heading",
       "default": "t:sections.related-products.settings.paragraph__1.default",
       "label": "t:sections.related-products.settings.heading.label"
+    },
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "Recommendation type",
+      "info": "Curated uses the pairings set in Search & Discovery (see docs/recommendations). Automatic uses Shopify's own related-products data.",
+      "options": [
+        { "value": "complementary", "label": "Curated pairings (goes well with)" },
+        { "value": "related", "label": "Automatic (similar products)" }
+      ],
+      "default": "complementary"
+    },
+    {
+      "type": "checkbox",
+      "id": "fallback_to_related",
+      "label": "Fall back to automatic when no pairing is set",
+      "info": "Keeps the band from disappearing on products that have no curated pairings yet.",
+      "default": true
     },
     {
       "type": "select",

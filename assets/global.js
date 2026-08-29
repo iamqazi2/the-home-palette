@@ -1141,13 +1141,23 @@ class ProductRecommendations extends HTMLElement {
     this.observer.observe(this);
   }
 
-  loadRecommendations(productId) {
-    fetch(`${this.dataset.url}&product_id=${productId}&section_id=${this.dataset.sectionId}`)
+  loadRecommendations(productId, url = this.dataset.url) {
+    fetch(`${url}&product_id=${productId}&section_id=${this.dataset.sectionId}`)
       .then((response) => response.text())
       .then((text) => {
         const html = document.createElement('div');
         html.innerHTML = text;
         const recommendations = html.querySelector('product-recommendations');
+
+        // `intent=complementary` has no fallback of its own: a product with no
+        // curated pairing returns an empty band. When the section offers a
+        // fallback url, ask again with `intent=related` so the band still fills
+        // rather than vanishing. Only ever retried once — the fallback url is
+        // not passed down, so an empty second response just ends here.
+        if (!html.querySelector('.grid__item') && url === this.dataset.url && this.dataset.urlFallback) {
+          this.loadRecommendations(productId, this.dataset.urlFallback);
+          return;
+        }
 
         if (recommendations?.innerHTML.trim().length) {
           this.innerHTML = recommendations.innerHTML;

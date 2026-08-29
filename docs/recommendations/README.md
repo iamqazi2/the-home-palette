@@ -15,10 +15,12 @@ Writing this dataset into that metafield is the whole integration — the
 pairings then show up in "Completes the set" on the PDP and in the cart and
 cart-drawer bands, server-side, with no API key in the theme.
 
+Pushed to the live store on 2026-08-29: all 73 anchors resolved and written.
+
 Note that `complementary` has no fallback: a product with no pairing set
-returns zero recommendations and the band hides itself. That is why the PDP
-"Completes the set" and cart-page bands are empty today. The cart drawer asks
-for `related` instead, so it fills regardless.
+returns zero recommendations and the band hides itself, so "Completes the set"
+stays empty on any product outside this sheet. The cart drawer asks for
+`related` instead, so it fills regardless.
 
 ## Pushing it
 

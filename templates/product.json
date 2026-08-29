@@ -94,8 +94,10 @@
     "related-products": {
       "type": "related-products",
       "settings": {
-        "heading": "Related Products",
+        "heading": "Completes the Set",
         "heading_size": "h2",
+        "intent": "complementary",
+        "fallback_to_related": true,
         "products_to_show": 4,
         "columns_desktop": 4,
         "color_scheme": "scheme-1",
