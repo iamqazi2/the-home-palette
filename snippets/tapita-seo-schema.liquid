@@ -88,8 +88,8 @@
         {%-  assign page_description = new_page_description | strip_html | url_decode -%}
         {%-  assign page_description = new_page_description | replace: '"', "'" -%}
         <script>
-        var tapita_meta_page_title =  `{{  page_title | replace: '&quot;', '"' }}`;
-        var tapita_meta_page_description = `{{  page_description }}`;
+        var tapita_meta_page_title =  `{{  page_title | replace: '&quot;', '"' | replace: '&nbsp;', ' ' | replace: '&amp;', '&'  }}`;
+        var tapita_meta_page_description = `{{  page_description | replace: '&quot;', '"' | replace: '&nbsp;', ' ' | replace: '&amp;', '&'  }}`;
         </script>
         {%- break -%}
       {%- endfor -%}
@@ -150,8 +150,8 @@
         {%- endif %}
         <script>
           //custom Meta Title
-          var tapita_meta_page_title =  `{{  page_title }}`;
-          var tapita_meta_page_description = `{{ page_description }}`;
+          var tapita_meta_page_title =  `{{  page_title | replace: '&quot;', '"' | replace: '&nbsp;', ' ' | replace: '&amp;', '&'  }}`;
+          var tapita_meta_page_description = `{{ page_description | replace: '&quot;', '"' | replace: '&nbsp;', ' ' | replace: '&amp;', '&'  }}`;
         </script>
         {%- break -%}
       {%- endif -%}
@@ -159,58 +159,7 @@
 {%- endif -%}
 {%- comment -%} End of Tapita Meta Data {%- endcomment -%}
 {%- comment -%} Start of assets preloading {%- endcomment -%}
-{%- liquid
-    assign template_assets = ''
-    assign current_template = template.name
-    assign preload_assets = ''
-  assign all_assets = 'constants.js,pubsub.js,global.js,details-disclosure.js,details-modal.js,search-form.js,animations.js,base.css,component-cart-items.css,component-cart-drawer.css,component-cart.css,component-totals.css,component-price.css,component-discounts.css,component-localization-form.css,localization-form.js,component-predictive-search.css,predictive-search.js,cart-drawer.js'
-  if current_template == 'article'
-                assign template_assets = 'section-blog-post.css'
-            endif
-                  if current_template == 'collection'
-                assign template_assets = 'component-collection-hero.css,template-collection.css,component-card.css,component-price.css,mask-blobs.css,quick-add.css,quick-add.js,product-form.js,quick-add-bulk.js,quantity-popover.js,price-per-item.js,quick-order-list.js,component-facets.css,facets.js'
-            endif
-                  if current_template == 'index'
-                assign template_assets = 'collage.css,component-card.css,component-price.css,component-modal-video.css,component-deferred-media.css,component-slider.css,template-collection.css,mask-blobs.css,quick-add.css,product-form.js,quick-add.js,quick-add-bulk.js,quantity-popover.js,price-per-item.js,quick-order-list.js,section-rich-text.css,section-image-banner.css,component-slideshow.css,theme-editor.js'
-            endif
-                  if current_template == 'page'
-                assign template_assets = 'section-image-banner.css,component-image-with-text.css,section-main-page.css'
-            endif
-                  if current_template == 'product'
-                assign template_assets = 'section-main-product.css,component-accordion.css,component-price.css,component-slider.css,component-rating.css,component-deferred-media.css,component-product-variant-picker.css,component-swatch-input.css,component-swatch.css,component-volume-pricing.css,product-info.js,product-form.js,show-more.js,price-per-item.js,magnify.js,theme-editor.js,component-product-model.css,component-model-viewer-ui.css,component-card.css,component-complementary-products.css,quick-add.css,quick-add.js,product-modal.js,media-gallery.js,product-model.js,section-related-products.css,mask-blobs.css'
-            endif
-                  assign preload_assets = ''
-  if all_assets != blank
-    assign preload_assets = all_assets
-  endif
-  
-  if template_assets != blank
-    if preload_assets != blank
-      assign preload_assets = preload_assets | append: ',' | append: template_assets
-    else
-      assign preload_assets = template_assets
-    endif
-  endif
--%}
-{%- if preload_assets != blank -%}
-  {%- assign assets_array = preload_assets | split: ',' -%}
-  {%- for asset in assets_array -%}
-    {%- liquid
-      assign asset_trimmed = asset | strip
-      assign asset_ext = asset_trimmed | split: '.' | last | downcase
-      assign asset_url = asset_trimmed | asset_url
-      
-      case asset_ext
-        when 'css', 'scss', 'sass', 'less'
-          echo '<link rel="preload" href="' | append: asset_url | append: '" as="style" crossorigin="anonymous" >'
-        when 'js'
-          echo '<link rel="preload" href="' | append: asset_url | append: '" as="script" crossorigin="anonymous" >'
-        when 'woff', 'woff2', 'ttf', 'eot'
-          echo '<link rel="preload" href="' | append: asset_url | append: '" as="font" type="font/' | append: asset_ext | append: '" crossorigin="anonymous">'
-      endcase
-    -%}
-  {%- endfor -%}
-{%- endif -%}
+
 {%- comment -%} End of of assets preloading {%- endcomment -%}
 
             <meta name="google-site-verification" content="ZdclpMRvzxPHHjNW7obx23N8AqlfVCLhLiDLqF3Up00" />
