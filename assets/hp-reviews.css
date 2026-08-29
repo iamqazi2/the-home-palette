@@ -1246,6 +1246,17 @@
   background: rgba(255, 249, 223, 0.16) !important;
   border-color: rgba(255, 249, 223, 0.45) !important;
 }
+/* The app nests the badge inside its own wrapper, and the pill styling above
+   matches both — so the badge drew a border and the wrapper drew a second one
+   just outside it, reading as a doubled outline. Only the innermost element
+   keeps the pill; the wrapper carries nothing. */
+.hp-revs--showcase .jm-verified-buyer-badge-wrapper,
+.hp-revs--showcase .jm-verified-buyer-badge .jm-verified-buyer-badge,
+.hp-revs--showcase .jm-verified-buyer-badge > * {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
 .hp-revs--showcase .jm-verified-buyer-badge__text {
   color: var(--hp-cream) !important;
   opacity: 1;
@@ -1415,9 +1426,12 @@
    beside the button. With the rails drifting a reader is not working through
    an ordered list to begin with, so they are noise rather than navigation —
    dropped, leaving the summary as rating, count and Write a Review. The
-   search input goes with them; on its own it has nothing left to narrow. */
-.hp-revs--showcase .jm-review-widget-minimal-header__filter-container,
-.hp-revs--showcase .jm-filters,
+   search input goes with them; on its own it has nothing left to narrow.
+
+   __filter-container is deliberately NOT in this list. The app puts the Write
+   a Review button inside it alongside the filters, so hiding the container
+   took the button with it and left the summary as a rating and nothing to act
+   on. Only the controls themselves are hidden. */
 .hp-revs--showcase .jm-filters__buttons,
 .hp-revs--showcase .jm-sort-filter,
 .hp-revs--showcase .jm-custom-answer-filter,
@@ -1426,6 +1440,19 @@
 .hp-revs--showcase .jdgm-sort-dropdown-wrapper,
 .hp-revs--showcase .jdgm-rev-widg__sort-wrapper,
 .hp-revs--showcase .jdgm-review-search { display: none !important; }
+
+/* Write a Review is the one thing in this header a reader can act on, so it is
+   asserted visible rather than left to depend on which of the app's wrappers
+   the hides above happen to land on. Only guards against sibling rules — an
+   ancestor set to display:none would still take it, which is why no container
+   that might hold it is hidden. */
+.hp-revs--showcase .jm-button--primary,
+.hp-revs--showcase .jm-action-buttons__button.jm-button--primary,
+.hp-revs--showcase .jdgm-write-rev-link {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
 
 /* the header's customer-photo strip: even thumbnails, not one stray square */
 .hp-revs--showcase .jm-media-grid {
