@@ -1129,7 +1129,7 @@
       "type": "text",
       "id": "hp_extra_link_label",
       "label": "Extra nav link",
-      "default": "Journal",
+      "default": "",
       "info": "Shown in the desktop nav and the mobile menu. Shopify menus are store data, so the theme cannot add to the Main menu — this renders alongside it. Clear this once the link exists in Online Store > Navigation, or it will show twice."
     },
     {
@@ -1148,6 +1148,17 @@
       "content": "A dropdown shown in both the desktop nav and the phone menu. Point each item at its page — Shop by Colour, Shop by Style, Shop by Occasion. Clear the group name to hide the whole dropdown, or clear an item's label or link to drop just that one."
     },
     { "type": "text", "id": "hp_group_label", "label": "Dropdown name", "default": "Shop Options" },
+    {
+      "type": "range",
+      "id": "hp_group_position",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "label": "Where it sits in the nav",
+      "default": 3,
+      "info": "The item number it appears BEFORE. 3 puts it third. 0 puts it last. The other items come from your Shopify menu and are ordered in Content > Menus.",
+      "unit": "th"
+    },
     { "type": "text", "id": "hp_group_1_label", "label": "Item 1", "default": "Shop by Style" },
     {
       "type": "url",

@@ -5,6 +5,40 @@
   {% render 'header-drawer' %}
 {% endcomment %}
 
+            {%- comment -%}
+              The fallbacks are assigned here rather than written as filters on the
+              render arguments below. Shopify parses {% render %} attributes with a
+              regex that accepts a variable or a literal and nothing more, so a
+              "| default: ..." inside the tag is never applied — it is read as another
+              attribute and dropped. The url settings carry no default of their own
+              (Shopify's url type cannot have one), so that left every link empty,
+              has_items false, and the whole dropdown rendering nothing.
+            {%- endcomment -%}
+            {%- liquid
+              assign ts_url_1 = section.settings.hp_group_1_url | default: '/pages/shop-by-style'
+              assign ts_url_2 = section.settings.hp_group_2_url | default: '/pages/shop-by-colour'
+              assign ts_url_3 = section.settings.hp_group_3_url | default: '/pages/shop-by-occasion'
+            -%}
+            {%- comment -%}
+              Captured rather than rendered in place, so the group can be echoed
+              wherever the merchant wants it to sit in the nav. The Shopify menu's
+              own items are store data and can only be ordered in the admin; this
+              one belongs to the theme, so its position is a setting.
+            {%- endcomment -%}
+            {%- capture hp_group_html -%}
+            {% render 'hp-nav-group',
+              variant: 'drawer',
+              label: section.settings.hp_group_label,
+              scheme: section.settings.menu_color_scheme,
+              i1_label: section.settings.hp_group_1_label,
+              i1_url: ts_url_1,
+              i2_label: section.settings.hp_group_2_label,
+              i2_url: ts_url_2,
+              i3_label: section.settings.hp_group_3_label,
+              i3_url: ts_url_3
+            %}
+            {%- endcapture -%}
+
 <header-drawer data-breakpoint="{% if section.settings.menu_type_desktop == 'drawer' %}desktop{% else %}tablet{% endif %}">
   <details id="Details-menu-drawer-container" class="menu-drawer-container">
     <summary
@@ -22,6 +56,7 @@
           <nav class="menu-drawer__navigation">
             <ul class="menu-drawer__menu has-submenu list-menu" role="list">
               {%- for link in section.settings.menu.links -%}
+                {%- if forloop.index == section.settings.hp_group_position -%}{{ hp_group_html }}{%- endif -%}
                 <li>
                   {%- if link.links != blank -%}
                     <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
@@ -140,31 +175,14 @@
                 to sit here: those were phone-only and covered two of these
                 three, so keeping both would have listed the same links twice.
               {%- endcomment -%}
+
+
               {%- comment -%}
-                The fallbacks are assigned here rather than written as filters on the
-                render arguments below. Shopify parses {% render %} attributes with a
-                regex that accepts a variable or a literal and nothing more, so a
-                "| default: ..." inside the tag is never applied — it is read as another
-                attribute and dropped. The url settings carry no default of their own
-                (Shopify's url type cannot have one), so that left every link empty,
-                has_items false, and the whole dropdown rendering nothing.
+                0, or a number past the end of the menu, puts it last.
               {%- endcomment -%}
-              {%- liquid
-                assign ts_url_1 = section.settings.hp_group_1_url | default: '/pages/shop-by-style'
-                assign ts_url_2 = section.settings.hp_group_2_url | default: '/pages/shop-by-colour'
-                assign ts_url_3 = section.settings.hp_group_3_url | default: '/pages/shop-by-occasion'
-              -%}
-              {% render 'hp-nav-group',
-                variant: 'drawer',
-                label: section.settings.hp_group_label,
-                scheme: section.settings.menu_color_scheme,
-                i1_label: section.settings.hp_group_1_label,
-                i1_url: ts_url_1,
-                i2_label: section.settings.hp_group_2_label,
-                i2_url: ts_url_2,
-                i3_label: section.settings.hp_group_3_label,
-                i3_url: ts_url_3
-              %}
+              {%- if section.settings.hp_group_position == 0 or section.settings.hp_group_position > section.settings.menu.links.size -%}
+                {{ hp_group_html }}
+              {%- endif -%}
 
               {% render 'hp-nav-extra',
                 label: section.settings.hp_extra_link_label,
