@@ -106,16 +106,30 @@
       items keep their labels and order without being rebuilt in the menu
       editor — see snippets/hp-nav-group.liquid.
     {%- endcomment -%}
+    {%- comment -%}
+      The fallbacks are assigned here rather than written as filters on the
+      render arguments below. Shopify parses {% render %} attributes with a
+      regex that accepts a variable or a literal and nothing more, so a
+      "| default: ..." inside the tag is never applied — it is read as another
+      attribute and dropped. The url settings carry no default of their own
+      (Shopify's url type cannot have one), so that left every link empty,
+      has_items false, and the whole dropdown rendering nothing.
+    {%- endcomment -%}
+    {%- liquid
+      assign ts_url_1 = section.settings.hp_group_1_url | default: '/pages/shop-by-style'
+      assign ts_url_2 = section.settings.hp_group_2_url | default: '/pages/shop-by-colour'
+      assign ts_url_3 = section.settings.hp_group_3_url | default: '/pages/shop-by-occasion'
+    -%}
     {% render 'hp-nav-group',
       variant: 'desktop',
       label: section.settings.hp_group_label,
       scheme: section.settings.menu_color_scheme,
       i1_label: section.settings.hp_group_1_label,
-      i1_url: section.settings.hp_group_1_url | default: '/pages/shop-by-style',
+      i1_url: ts_url_1,
       i2_label: section.settings.hp_group_2_label,
-      i2_url: section.settings.hp_group_2_url | default: '/pages/shop-by-colour',
+      i2_url: ts_url_2,
       i3_label: section.settings.hp_group_3_label,
-      i3_url: section.settings.hp_group_3_url | default: '/pages/shop-by-occasion'
+      i3_url: ts_url_3
     %}
 
     {% render 'hp-nav-extra',
