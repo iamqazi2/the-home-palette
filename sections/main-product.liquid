@@ -1294,23 +1294,46 @@
                 <h2 class="hp-pdp-block__title">{{ section.settings.hp_reviews_title }}</h2>
               {%- endif -%}
               {%- comment -%}
-                Judge.me's documented manual embed, rather than an app block: the
-                app-block handle is not knowable from the theme, and this form is
-                what pins the widget to a specific product. `data-id` is the id of
-                the product currently open, so a product page can only ever show
-                its own reviews. The metafield carries that product's
-                server-rendered widget, so the reviews are in the HTML on first
-                paint instead of waiting on the app's script; when it is empty
-                Judge.me's own JS fills the container from the same data-id.
+                Render Judge.me's own review-widget app block here. The buy-column
+                block loop above deliberately skips it in this layout (see the
+                hp_skip assign) so it lands in this container instead of the
+                narrow sidebar — this is the "further down the product template"
+                it defers to.
+
+                An app block is required rather than the documented manual embed:
+                Judge.me no longer fills the `judgeme.widget` metafield (it now
+                returns a bare `<div></div>` for every product), and its current
+                loader only hydrates a container carrying the app-block data
+                attributes — data-entry-point, data-entry-key, data-block-id —
+                which the theme cannot fabricate. The manual embed therefore
+                renders an empty, invisible container. The app block still scopes
+                itself to the open product, so a page only ever shows its own
+                reviews (plus any Judge.me product group it belongs to).
+
+                The manual embed is kept as a fallback for the case where the
+                block has not been added to the template, so the container is
+                never silently missing.
               {%- endcomment -%}
-              <div
-                id="judgeme_product_reviews"
-                class="jdgm-widget jdgm-review-widget"
-                data-product-title="{{ product.title | escape }}"
-                data-id="{{ product.id }}"
-              >
-                {{ product.metafields.judgeme.widget }}
-              </div>
+              {%- liquid
+                assign hp_rev_block_rendered = false
+              -%}
+              {%- for block in section.blocks -%}
+                {%- assign hp_rev_bid = block.id | downcase -%}
+                {%- if block.type == '@app' and hp_rev_bid contains 'review_widget' -%}
+                  {% render block %}
+                  {%- assign hp_rev_block_rendered = true -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- unless hp_rev_block_rendered -%}
+                <div
+                  id="judgeme_product_reviews"
+                  class="jdgm-widget jdgm-review-widget"
+                  data-product-title="{{ product.title | escape }}"
+                  data-id="{{ product.id }}"
+                >
+                  {{ product.metafields.judgeme.widget }}
+                </div>
+              {%- endunless -%}
             </div>
           {%- endif -%}
         </div>
