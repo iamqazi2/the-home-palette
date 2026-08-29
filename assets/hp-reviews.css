@@ -984,8 +984,12 @@
 /* neither card type shows the avatar disc or the grouped-product link — the
    reference design is the quote and the person, nothing else */
 .hp-revs--showcase .jm-reviewer-avatar,
-.hp-revs--showcase .jm-product-variant-card,
-.hp-revs--showcase .jm-review-content__expand-button { display: none !important; }
+.hp-revs--showcase .jm-product-variant-card { display: none !important; }
+
+/* The expand control stays. It was hidden when every card was a fixed 24rem
+   and the clamp cut most reviews — a button that opened nothing useful. Now
+   the card grows to its review, it only appears for the rare one that still
+   overflows, and hiding it there would be hiding the review. */
 
 /* ---- quote card (no media) --------------------------------------------- */
 
@@ -1224,7 +1228,10 @@
   height: 38rem !important;
   min-height: 38rem !important;
   max-height: 38rem !important;
-  align-self: flex-start !important;
+  /* stretch, not flex-start: cards in a rail now take their height from the
+     longest review in the row, and pinning them to the top left short ones
+     shorter than their neighbours */
+  align-self: stretch !important;
   border-color: rgba(255, 249, 223, 0.3) !important;
 }
 .hp-revs--showcase .jm-review-item:hover {
@@ -2072,9 +2079,14 @@
      for — taller than the store cards beside it, and with a text budget that
      never matched the box. The store cards carry the same fix. */
   box-sizing: border-box !important;
-  height: 24rem !important;
-  min-height: 24rem !important;
-  max-height: 24rem !important;
+  /* Same box as the store-wide cards: one uniform width, height a floor
+     rather than a fixed size, and the row stretching every card to its
+     tallest — so a long review is shown whole instead of cut to fit. */
+  flex: 0 0 30rem !important;
+  width: 30rem !important;
+  height: auto !important;
+  min-height: 22rem !important;
+  max-height: 44rem !important;
   padding: 1.8rem !important;
   border-radius: 16px !important;
   scroll-snap-align: none;
@@ -2136,25 +2148,31 @@
 .hp-revs--showcase .hp-revs__row .jdgm-review-content__body-content {
   display: -webkit-box !important;
   -webkit-box-orient: vertical !important;
-  -webkit-line-clamp: 4 !important;
+  /* a backstop against one very long review stretching the whole rail, not
+     the thing that shortens an ordinary one — the card's own height is what
+     gives the review its room now */
+  -webkit-line-clamp: 14 !important;
   overflow: hidden !important;
-  max-height: 6em !important;   /* 4 lines x 1.5 line-height */
+  max-height: 21em !important;   /* 14 lines x 1.5 line-height */
 }
 
 @media screen and (min-width: 1200px) {
   .hp-revs--showcase .hp-revs__row .jm-review-item {
-    height: 25rem !important;
-    min-height: 25rem !important;
-    max-height: 25rem !important;
+    flex-basis: 32rem !important;
+    width: 32rem !important;
+    min-height: 23rem !important;
+    max-height: 46rem !important;
   }
   .hp-revs--showcase .hp-revs__row .jm-review-content__body,
   .hp-revs--showcase .hp-revs__row .jdgm-review-content__body-content { font-size: 1.7rem !important; }
 }
 @media screen and (max-width: 749px) {
   .hp-revs--showcase .hp-revs__row .jm-review-item {
-    height: 22rem !important;
-    min-height: 22rem !important;
-    max-height: 22rem !important;
+    flex-basis: 80vw !important;
+    width: 80vw !important;
+    max-width: 32rem !important;
+    min-height: 21rem !important;
+    max-height: 42rem !important;
     padding: 1.5rem !important;
   }
   .hp-revs--showcase .hp-revs__row .jm-review-item:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid) { padding: 0 !important; }
@@ -2166,8 +2184,8 @@
   .hp-revs--showcase .hp-revs__row .jm-review-body-wrapper,
   .hp-revs--showcase .hp-revs__row .jm-review-content__body,
   .hp-revs--showcase .hp-revs__row .jdgm-review-content__body-content {
-    -webkit-line-clamp: 3 !important;
-    max-height: 4.5em !important;   /* 3 lines x 1.5 line-height */
+    -webkit-line-clamp: 12 !important;
+    max-height: 18em !important;   /* 12 lines x 1.5 line-height */
   }
 }
 
@@ -2193,3 +2211,29 @@
 /* the product name keeps its own link, so it must stay above the overlay to
    remain separately clickable rather than being swallowed by it */
 .hp-revs--showcase .hp-revs__store .jdgm-rev__prod-info-wrapper { position: relative; z-index: 4; }
+
+
+/* ---- the app's "Read more", dressed for the card -----------------------
+   Visible again now the card grows to its review, so it has to look like it
+   belongs on teal rather than like a default browser button. */
+.hp-revs--showcase .jm-review-content__expand-button {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hp-cream) !important;
+  opacity: 0.72;
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+  cursor: pointer;
+  /* above the stretched card link on the store rail, so it stays clickable */
+  position: relative;
+  z-index: 4;
+}
+.hp-revs--showcase .jm-review-content__expand-button:hover { opacity: 1; }

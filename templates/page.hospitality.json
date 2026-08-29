@@ -775,8 +775,8 @@
         "heading": "Loved Across Pakistan",
         "text": "Verified Judge.me reviews from restaurants, hotels and event teams.",
         "align": "center",
-        "bg": "cream-soft",
-        "card_style": "default",
+        "bg": "cream",
+        "card_style": "showcase",
         "padding_top": 64,
         "padding_bottom": 64,
         "source": "store"

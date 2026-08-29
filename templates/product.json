@@ -137,7 +137,7 @@
         "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
         "align": "center",
         "source": "app",
-        "card_style": "list",
+        "card_style": "showcase",
         "bg": "cream",
         "padding_top": 64,
         "padding_bottom": 64
