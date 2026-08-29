@@ -156,7 +156,12 @@
   }
 {%- endstyle -%}
 
-<div class="hp-occasion hp-section">
+{%- comment -%}
+  id: the anchor the header's "Table Stories" menu scrolls to. The other two
+  targets (hp-colours, hp-styles) already carried one; this section did not,
+  so a link to it had nothing to find.
+{%- endcomment -%}
+<div class="hp-occasion hp-section" id="hp-occasions">
   <div class="hp-container">
     <div class="hp-section-head hp-section-head--center">
       {%- if section.settings.eyebrow != blank -%}

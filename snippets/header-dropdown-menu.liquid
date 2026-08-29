@@ -100,6 +100,23 @@
       </li>
     {%- endfor -%}
 
+    {%- comment -%}
+      The "Table Stories" group: a dropdown of links into home-page sections.
+      Rendered here rather than added to the Shopify menu because its items are
+      anchors, not pages — see snippets/hp-nav-group.liquid.
+    {%- endcomment -%}
+    {% render 'hp-nav-group',
+      variant: 'desktop',
+      label: section.settings.hp_group_label,
+      scheme: section.settings.menu_color_scheme,
+      i1_label: section.settings.hp_group_1_label,
+      i1_anchor: section.settings.hp_group_1_anchor,
+      i2_label: section.settings.hp_group_2_label,
+      i2_anchor: section.settings.hp_group_2_anchor,
+      i3_label: section.settings.hp_group_3_label,
+      i3_anchor: section.settings.hp_group_3_anchor
+    %}
+
     {% render 'hp-nav-extra',
       label: section.settings.hp_extra_link_label,
       url: section.settings.hp_extra_link_url,

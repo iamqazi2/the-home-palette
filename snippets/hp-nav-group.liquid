@@ -1,0 +1,151 @@
+{%- comment -%}
+  A nav dropdown whose children scroll to sections of the home page.
+
+  This group is NOT part of the Shopify navigation menu. Its items are anchors
+  into home-page sections rather than pages, so there is nothing in Content >
+  Menus for them to point at — a menu link needs a URL that resolves, and
+  "the Shop by Colour section" is not one. It is therefore built from theme
+  settings and rendered alongside the real menu in both surfaces.
+
+  Each href is a real URL — the home page plus the anchor — so it works with
+  no JavaScript and from any other page in the store. When the target is on
+  the page already, hp-theme.js intercepts the click (data-hp-jump), closes
+  the drawer and scrolls with the sticky header's height taken off. Arriving
+  from another page, honourHashOffset does the same after the page settles.
+
+  Every value is passed in explicitly rather than read off `section` here.
+  This snippet is rendered from header-dropdown-menu and header-drawer, which
+  are themselves snippets — a nested {% render %} — and a scope that failed to
+  carry `section` that far would render nothing at all, silently. Passing the
+  settings in removes the question.
+
+  Accepts:
+    variant     {string} 'desktop' renders the header dropdown markup,
+                         'drawer' renders the mobile drawer's accordion markup
+    label       {string} the group's own title; nothing renders when blank
+    scheme      {string} the header's menu colour scheme, for the panel classes
+    i1_label / i1_anchor  {string} first item's text and target section id
+    i2_label / i2_anchor  {string} second item
+    i3_label / i3_anchor  {string} third item
+{%- endcomment -%}
+
+{%- liquid
+  assign group_label = label
+
+  assign has_items = false
+  if i1_label != blank and i1_anchor != blank
+    assign has_items = true
+  endif
+  if i2_label != blank and i2_anchor != blank
+    assign has_items = true
+  endif
+  if i3_label != blank and i3_anchor != blank
+    assign has_items = true
+  endif
+-%}
+
+{%- if group_label != blank and has_items -%}
+  {%- assign gid = group_label | handle -%}
+
+  {%- if variant == 'drawer' -%}
+    <li>
+      <details id="Details-menu-drawer-group-{{ gid }}">
+        <summary
+          id="HeaderDrawer-group-{{ gid }}"
+          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+        >
+          {{ group_label | escape }}
+          <span class="svg-wrapper">
+            {{- 'icon-arrow.svg' | inline_asset_content -}}
+          </span>
+          <span class="svg-wrapper">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </summary>
+        <div
+          id="link-group-{{ gid }}"
+          class="menu-drawer__submenu has-submenu motion-reduce"
+          tabindex="-1"
+        >
+          <div class="menu-drawer__inner-submenu">
+            <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+              {%- for n in (1..3) -%}
+                {%- liquid
+                  case n
+                    when 1
+                      assign it_label = i1_label
+                      assign it_anchor = i1_anchor
+                    when 2
+                      assign it_label = i2_label
+                      assign it_anchor = i2_anchor
+                    when 3
+                      assign it_label = i3_label
+                      assign it_anchor = i3_anchor
+                  endcase
+                -%}
+                {%- if it_label != blank and it_anchor != blank -%}
+                  <li>
+                    <a
+                      href="{{ routes.root_url }}#{{ it_anchor }}"
+                      class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
+                      data-hp-jump="{{ it_anchor }}"
+                    >
+                      {{ it_label | escape }}
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        </div>
+      </details>
+    </li>
+  {%- else -%}
+    <li>
+      <header-menu>
+        <details id="Details-HeaderMenu-group-{{ gid }}">
+          <summary
+            id="HeaderMenu-group-{{ gid }}"
+            class="header__menu-item list-menu__item link focus-inset"
+          >
+            <span>{{ group_label | escape }}</span>
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </summary>
+          <ul
+            id="HeaderMenu-MenuList-group-{{ gid }}"
+            class="header__submenu list-menu list-menu--disclosure color-{{ scheme }} gradient caption-large motion-reduce global-settings-popup"
+            role="list"
+            tabindex="-1"
+          >
+            {%- for n in (1..3) -%}
+              {%- liquid
+                case n
+                  when 1
+                    assign it_label = i1_label
+                    assign it_anchor = i1_anchor
+                  when 2
+                    assign it_label = i2_label
+                    assign it_anchor = i2_anchor
+                  when 3
+                    assign it_label = i3_label
+                    assign it_anchor = i3_anchor
+                endcase
+              -%}
+              {%- if it_label != blank and it_anchor != blank -%}
+                <li>
+                  <a
+                    href="{{ routes.root_url }}#{{ it_anchor }}"
+                    class="header__menu-item list-menu__item link link--text focus-inset caption-large"
+                    data-hp-jump="{{ it_anchor }}"
+                  >
+                    {{ it_label | escape }}
+                  </a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </details>
+      </header-menu>
+    </li>
+  {%- endif -%}
+{%- endif -%}

@@ -306,7 +306,7 @@
   }
 
   .menu-drawer {
-    background-color: var(--hp-cream-soft) !important;
+    background-color: var(--hp-cream) !important;   /* #FFF9DF */
     border: 0 !important;
     filter: drop-shadow(0 18px 40px rgba(16, 48, 44, 0.28)) !important;
   }
@@ -456,27 +456,11 @@
   }
   .menu-drawer__account:hover { color: var(--hp-teal); }
 
-  /* The phone-only section shortcuts are a different kind of thing from the
-     nav proper — they jump within a page — so they sit apart as quiet pills
-     rather than pretending to be more top-level nav. */
-  .menu-drawer .hp-nav-jump > .menu-drawer__menu-item {
-    margin: 0.4rem 2.4rem;
-    padding: 1rem 1.6rem !important;
-    min-height: 0;
-    border: 1px solid var(--hp-hairline-strong) !important;
-    border-radius: var(--hp-r-pill);
-    font-size: 1.35rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--hp-taupe);
-    justify-content: center;
-  }
-  .menu-drawer .hp-nav-jump > .menu-drawer__menu-item:hover {
-    border-color: var(--hp-teal) !important;
-    color: var(--hp-teal) !important;
-    background: transparent !important;
-  }
-  .menu-drawer .hp-nav-jump + .hp-nav-jump > .menu-drawer__menu-item { margin-top: 0; }
+  /* the trimmed utility strip holds one icon, so it should not reserve the
+     height Dawn's full row of them needed */
+  .menu-drawer__utility-links .list-social { justify-content: flex-start; margin: 0; }
+  .menu-drawer__utility-links .list-social__link { color: var(--hp-ink); }
+  .menu-drawer__utility-links .list-social__link:hover { color: var(--hp-teal); }
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
@@ -1157,22 +1141,25 @@
     },
     {
       "type": "header",
-      "content": "Phone menu shortcuts"
+      "content": "Table Stories menu"
     },
     {
       "type": "paragraph",
-      "content": "Two extra items in the phone menu that scroll to a section of the home page. They are not shown on tablets or desktop. Clear a label to remove that one."
+      "content": "A dropdown shown in both the desktop nav and the phone menu, whose items scroll to a section of the home page. These cannot live in Content > Menus, because a menu link needs a real URL and these point at sections. Clear the group name to hide the whole dropdown, or clear an item's label to drop just that one."
     },
-    { "type": "text", "id": "hp_jump_1_label", "label": "Shortcut 1", "default": "Shop by Colour" },
+    { "type": "text", "id": "hp_group_label", "label": "Dropdown name", "default": "Table Stories" },
+    { "type": "text", "id": "hp_group_1_label", "label": "Item 1", "default": "Shop by Style" },
     {
       "type": "text",
-      "id": "hp_jump_1_anchor",
-      "label": "Shortcut 1 target",
-      "default": "hp-colours",
-      "info": "The id of the section to scroll to: hp-colours for Shop by Colour, hp-styles for Shop by Style."
+      "id": "hp_group_1_anchor",
+      "label": "Item 1 target",
+      "default": "hp-styles",
+      "info": "The id of the home-page section to scroll to. The three that exist are hp-styles, hp-colours and hp-occasions."
     },
-    { "type": "text", "id": "hp_jump_2_label", "label": "Shortcut 2", "default": "Shop by Style" },
-    { "type": "text", "id": "hp_jump_2_anchor", "label": "Shortcut 2 target", "default": "hp-styles" }
+    { "type": "text", "id": "hp_group_2_label", "label": "Item 2", "default": "Shop by Colour" },
+    { "type": "text", "id": "hp_group_2_anchor", "label": "Item 2 target", "default": "hp-colours" },
+    { "type": "text", "id": "hp_group_3_label", "label": "Item 3", "default": "Shop by Occasion" },
+    { "type": "text", "id": "hp_group_3_anchor", "label": "Item 3 target", "default": "hp-occasions" }
   ],
   "blocks": [
     {
