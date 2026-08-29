@@ -946,7 +946,10 @@
         if (!hasPic && body && !body.textContent.trim()) rev.remove();
       });
 
-      dealReviewRows(list);
+      /* Rails are a showcase-only device. On the default card style the list
+         must stay exactly as Judge.me built it, or the app's own paging and
+         expand controls end up inside a horizontally scrolling row. */
+      if (list.closest('.hp-revs--showcase')) dealReviewRows(list);
     });
   }
 

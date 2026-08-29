@@ -147,10 +147,10 @@
         "heading": "Loved Across Pakistan",
         "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
         "align": "center",
-        "bg": "teal",
+        "bg": "cream-soft",
         "padding_top": 64,
         "padding_bottom": 64,
-        "card_style": "showcase"
+        "card_style": "default"
       }
     }
   },

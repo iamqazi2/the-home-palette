@@ -43,16 +43,36 @@
     {%- endif -%}
 
     <div class="hp-revs__widget">
-      {%- if section.settings.source == 'store' -%}
+      {%- comment -%}
+        Judge.me's own app block is the only thing here that is a live widget.
+        It loads the app's script, so reviews expand, photos open, sorting and
+        paging work and every review is reachable. Whichever block the merchant
+        adds decides the scope: "Review widget" on a product page shows that
+        product's reviews, "All reviews" anywhere else shows the whole shop's.
+
+        This is rendered for BOTH sources now. The metafield path below is a
+        static server-rendered dump with no script behind it — it can show
+        reviews but none of them do anything — so it is only a fallback for a
+        section that has no block yet, never the preferred path.
+      {%- endcomment -%}
+      {%- assign hp_app_block_count = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == '@app' -%}
+          {% render block %}
+          {%- assign hp_app_block_count = hp_app_block_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if hp_app_block_count == 0 and section.settings.source == 'store' -%}
         {%- comment -%}
-          Store-wide reviews, straight from Judge.me's own shop metafield.
+          FALLBACK ONLY — reached when this section has no Judge.me block.
 
           The app writes every published review to shop.metafields.judgeme as
-          server-rendered HTML, so a page that wants the whole shop's reviews
-          does not need an app block at all — the reviews are in the document on
-          first paint, with no widget script to wait for and nothing to hydrate.
-          That also sidesteps the app-block handle, which Judge.me does not
-          publish anywhere the theme could verify.
+          server-rendered HTML. It needs no app block and it paints on the first
+          request, but it is inert: the widget script never mounts on it, so a
+          review cannot be expanded, a photo cannot be opened, and there is no
+          sorting or paging. Add Judge.me's "All reviews" block to the section
+          and that block is used instead, with all of it working.
 
           It is the classic .jdgm-rev markup rather than the revamped widget's,
           which is why hp-reviews.css carries styling for both.
@@ -81,36 +101,35 @@
           {%- assign store_reviews = store_reviews | append: chunk -%}
         {%- endfor -%}
         {%- if store_reviews != blank -%}
+          {%- if request.design_mode -%}
+            <p class="hp-revs__text">
+              These reviews come from Judge.me’s stored copy, so they are shown
+              but not interactive — they cannot be expanded, photos will not
+              open, and there is no sorting or paging. Add Judge.me’s “All
+              reviews” block to this section to get the real widget.
+            </p>
+          {%- endif -%}
           <div class="jdgm-review-list hp-revs__store" data-hp-store-reviews>
             {{ store_reviews }}
           </div>
         {%- elsif request.design_mode -%}
           <p class="hp-revs__text">
-            Judge.me has not published its store-review metafield yet. It fills
-            in shortly after the app syncs; until then this section stays empty.
+            Add Judge.me’s “All reviews” block to this section to show the whole
+            shop’s reviews.
           </p>
         {%- endif -%}
-      {%- else -%}
-        {%- for block in section.blocks -%}
-          {%- case block.type -%}
-            {%- when '@app' -%}
-              {% render block %}
-          {%- endcase -%}
-        {%- endfor -%}
       {%- endif -%}
 
-      {%- if section.settings.source != 'store' and section.blocks.size == 0 -%}
+      {%- if hp_app_block_count == 0 and section.settings.source != 'store' and request.design_mode -%}
         {%- comment -%}
           Editor-only hint. Never shown to a shopper: without a block there is
           nothing to render, and a silent empty section is the failure mode that
           made the product page look broken.
         {%- endcomment -%}
-        {%- if request.design_mode -%}
-          <p class="hp-revs__text">
-            Add a Judge.me block to this section — “Review widget” on a product
-            page, “Featured carousel” or “All reviews” anywhere else.
-          </p>
-        {%- endif -%}
+        <p class="hp-revs__text">
+          Add Judge.me’s “Review widget” block to this section to show this
+          product’s reviews.
+        </p>
       {%- endif -%}
     </div>
   </div>
@@ -149,10 +168,10 @@
       "type": "select",
       "id": "source",
       "label": "Reviews to show",
-      "info": "This product only: needs a Judge.me \"Review widget\" block below, and works on product pages. All store reviews: every published review, straight from Judge.me — no block needed.",
+      "info": "Both need a Judge.me block added below — that block is the live widget. This product only: add \"Review widget\", on a product page. All store reviews: add \"All reviews\". With no block, store reviews fall back to Judge.me's stored copy, which displays but is not interactive.",
       "options": [
-        { "value": "app", "label": "This product only (Judge.me block)" },
-        { "value": "store", "label": "All store reviews" }
+        { "value": "app", "label": "This product only (Judge.me \"Review widget\" block)" },
+        { "value": "store", "label": "All store reviews (Judge.me \"All reviews\" block)" }
       ],
       "default": "app"
     },
@@ -160,12 +179,13 @@
       "type": "select",
       "id": "card_style",
       "label": "Card style",
-      "info": "Showcase turns each review into a card: a review with a photo or video fills the card with it, one without becomes a quote card.",
+      "info": "Default keeps Judge.me's own widget exactly as the app renders it — every review reachable, expandable and sortable. Showcase restyles reviews into a drifting rail of fixed-size cards: it looks the part, but it trims each review to a few lines and replaces the app's own controls, so use it as a taster and keep Default wherever people are meant to actually read the reviews.",
       "options": [
+        { "value": "default", "label": "Default (Judge.me widget)" },
         { "value": "showcase", "label": "Showcase cards" },
         { "value": "list", "label": "Plain list" }
       ],
-      "default": "showcase"
+      "default": "default"
     },
     {
       "type": "select",

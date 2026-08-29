@@ -544,10 +544,12 @@
   .jdgm-ugc-media__thumbnail { border-radius: 10px !important; }
 }
 
+/* Two columns belong to the "Plain list" card style only. Left applying to
+   every .hp-revs it also caught the stock widget, and a CSS column breaks the
+   app's own paging and expand controls across the gutter. */
 @media screen and (min-width: 1200px) {
-  .hp-revs .jdgm-rev-widg__body,
-  .hp-revs .jdgm-all-reviews__body,
-  #hp-reviews .jdgm-rev-widg__body {
+  .hp-revs--list .jdgm-rev-widg__body,
+  .hp-revs--list .jdgm-all-reviews__body {
     column-count: 2;
     column-gap: 1.6rem;
   }
@@ -709,7 +711,7 @@
    height whatever the review count, and matches the "Completes the Set" rail
    directly above it. */
 
-.jdgm-review-list {
+.hp-revs--showcase .jdgm-review-list {
   display: grid !important;
   grid-auto-flow: column;
   grid-auto-columns: minmax(30rem, 34rem);
@@ -725,19 +727,19 @@
   scrollbar-color: var(--hp-taupe-soft) transparent;
   -webkit-overflow-scrolling: touch;
 }
-.jdgm-review-list::-webkit-scrollbar { height: 6px; }
-.jdgm-review-list::-webkit-scrollbar-track {
+.hp-revs--showcase .jdgm-review-list::-webkit-scrollbar { height: 6px; }
+.hp-revs--showcase .jdgm-review-list::-webkit-scrollbar-track {
   background: rgba(37, 37, 37, 0.06);
   border-radius: var(--hp-r-pill);
 }
-.jdgm-review-list::-webkit-scrollbar-thumb {
+.hp-revs--showcase .jdgm-review-list::-webkit-scrollbar-thumb {
   background: var(--hp-taupe-soft);
   border-radius: var(--hp-r-pill);
 }
-.jdgm-review-list::-webkit-scrollbar-thumb:hover { background: var(--hp-taupe); }
+.hp-revs--showcase .jdgm-review-list::-webkit-scrollbar-thumb:hover { background: var(--hp-taupe); }
 
 /* the card itself */
-.jm-review-item {
+.hp-revs--showcase .jm-review-item {
   scroll-snap-align: start;
   display: flex !important;
   flex-direction: column;
@@ -750,13 +752,13 @@
   transition: border-color 0.3s var(--hp-ease), box-shadow 0.4s var(--hp-ease),
     transform 0.4s var(--hp-ease);
 }
-.jm-review-item:hover {
+.hp-revs--showcase .jm-review-item:hover {
   border-color: rgba(26, 75, 70, 0.25) !important;
 }
-.jm-review-item__content,
-.jm-review-item__body { min-width: 0; }
+.hp-revs--showcase .jm-review-item__content,
+.hp-revs--showcase .jm-review-item__body { min-width: 0; }
 /* the body should take the slack so every card's footer lines up */
-.jm-review-item__content { flex: 1 1 auto; }
+.hp-revs--showcase .jm-review-item__content { flex: 1 1 auto; }
 
 .hp-revs--teal .jm-review-item {
   background: rgba(255, 249, 223, 0.05) !important;

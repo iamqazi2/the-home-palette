@@ -451,8 +451,8 @@
         "heading": "What Our Customers Say",
         "text": "Verified Judge.me reviews from the people who set their tables with us.",
         "align": "center",
-        "bg": "teal",
-        "card_style": "showcase",
+        "bg": "cream-soft",
+        "card_style": "default",
         "padding_top": 64,
         "padding_bottom": 64,
         "source": "store"
