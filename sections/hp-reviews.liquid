@@ -24,7 +24,7 @@
 -%}
 
 <div
-  class="hp-revs hp-revs--{{ section.settings.bg }}{% if has_title %} hp-revs--has-title{% endif %}"
+  class="hp-revs hp-revs--{{ section.settings.bg }} hp-revs--{{ section.settings.card_style }}{% if has_title %} hp-revs--has-title{% endif %}"
   style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
 >
   <div class="hp-revs__inner">
@@ -95,6 +95,17 @@
         { "value": "center", "label": "Centred" }
       ],
       "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card style",
+      "info": "Showcase turns each review into a card: a review with a photo or video fills the card with it, one without becomes a quote card.",
+      "options": [
+        { "value": "showcase", "label": "Showcase cards" },
+        { "value": "list", "label": "Plain list" }
+      ],
+      "default": "showcase"
     },
     {
       "type": "select",

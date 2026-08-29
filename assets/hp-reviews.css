@@ -899,3 +899,259 @@
   visibility: hidden !important;
   pointer-events: none !important;
 }
+
+/* ==========================================================================
+   Showcase layout — the "Loved Across Pakistan" card design, driven by Judge.me
+   ==========================================================================
+
+   Matches sections/hp-video-reviews.liquid, but every card is a real Judge.me
+   review instead of copy typed into the theme. Two card types, chosen by what
+   the review itself actually has:
+
+     · review has a photo or video  -> media fills the card, reviewer name and
+                                       role sit over a scrim at the bottom
+     · review has none              -> quote card: gold stars, the review text
+                                       set in the display italic, name + role
+
+   The split is done with :has() against Judge.me's own media node, so it
+   follows the data — no per-review configuration, and a review that gains a
+   photo later becomes a media card on its own.
+
+   Judge.me's markup is a nest of generic .jm-stack / .jm-cluster layout
+   primitives, so the selectors below hang off the few semantic classes it does
+   emit (.jm-review-item, .jm-reviewer-info, .jm-review-content) rather than
+   structural position, which would break the moment the app reflows a wrapper.
+   ---------------------------------------------------------------------- */
+
+.hp-revs--showcase { overflow: hidden; }
+
+/* centred header with the flanking rules */
+.hp-revs--showcase .hp-revs__head--center .hp-revs__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+.hp-revs--showcase .hp-revs__head--center .hp-revs__eyebrow::before,
+.hp-revs--showcase .hp-revs__head--center .hp-revs__eyebrow::after {
+  content: '';
+  width: 3.2rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+/* ---- the rail ---------------------------------------------------------- */
+
+.hp-revs--showcase .jdgm-review-list {
+  display: flex !important;
+  grid-auto-flow: unset;
+  grid-auto-columns: unset;
+  align-items: stretch;
+  gap: 1.8rem !important;
+  padding: 0.6rem 0 2rem;
+}
+
+/* ---- the card ---------------------------------------------------------- */
+
+.hp-revs--showcase .jm-review-item {
+  position: relative;
+  flex: 0 0 auto;
+  width: 30rem;
+  height: 38rem;
+  padding: 0 !important;
+  border-radius: 20px !important;
+  overflow: hidden;
+  background: var(--hp-teal-card) !important;
+  border: 1px solid rgba(255, 249, 223, 0.18) !important;
+  scroll-snap-align: start;
+  transition: transform 0.5s var(--hp-ease), box-shadow 0.5s var(--hp-ease);
+}
+.hp-revs--showcase .jm-review-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 50px -30px rgba(8, 26, 27, 0.7);
+}
+
+/* the app's own inner stacks must fill the card so the footer can sit at the
+   bottom of it rather than at the bottom of its content */
+.hp-revs--showcase .jm-review-item > .jm-stack,
+.hp-revs--showcase .jm-review-item__body,
+.hp-revs--showcase .jm-review-item__content {
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+  display: flex !important;
+  flex-direction: column;
+}
+
+/* neither card type shows the avatar disc or the grouped-product link — the
+   reference design is the quote and the person, nothing else */
+.hp-revs--showcase .jm-reviewer-avatar,
+.hp-revs--showcase .jm-product-variant-card,
+.hp-revs--showcase .jm-review-content__expand-button { display: none !important; }
+
+/* ---- quote card (no media) --------------------------------------------- */
+
+.hp-revs--showcase .jm-review-item:not(:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid)) .jm-review-item__content {
+  padding: 2.6rem 2.4rem;
+  justify-content: space-between;
+  gap: 1.6rem;
+}
+/* the oversized decorative quote mark */
+.hp-revs--showcase .jm-review-item:not(:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid))::before {
+  content: '\201C';
+  position: absolute;
+  top: 1.2rem;
+  right: 2rem;
+  font-family: var(--hp-font-display);
+  font-size: 7rem;
+  line-height: 1;
+  color: var(--hp-cream);
+  opacity: 0.14;
+  pointer-events: none;
+  z-index: 1;
+}
+.hp-revs--showcase .jm-review-content {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.hp-revs--showcase .jm-review-content__title,
+.hp-revs--showcase .jm-review-content__body,
+.hp-revs--showcase .jdgm-review-content__body-content {
+  font-family: var(--hp-font-display) !important;
+  font-style: italic;
+  font-weight: 500 !important;
+  font-size: 1.85rem !important;
+  line-height: 1.55 !important;
+  color: var(--hp-cream) !important;
+}
+/* the title is the reviewer's own headline; the body repeats it often enough
+   that showing both reads as a stutter, so the body carries the quote */
+.hp-revs--showcase .jm-review-content__title-wrapper { display: none !important; }
+.hp-revs--showcase .jm-review-body-wrapper {
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.hp-revs--showcase .jm-star-rating { margin-bottom: 0.6rem; }
+
+/* reviewer, pinned to the bottom of the card */
+.hp-revs--showcase .jm-reviewer-info {
+  margin-top: auto;
+  padding: 0;
+  z-index: 2;
+}
+.hp-revs--showcase .jm-reviewer-info__name {
+  font-family: var(--hp-font-ui) !important;
+  font-weight: 600 !important;
+  font-size: 1.35rem !important;
+  color: var(--hp-cream) !important;
+}
+.hp-revs--showcase .jm-reviewer-info__details,
+.hp-revs--showcase .jm-reviewer-info__details * {
+  font-size: 1.15rem !important;
+  letter-spacing: 0.06em;
+  color: var(--hp-cream) !important;
+  opacity: 0.72;
+}
+.hp-revs--showcase .jm-verified-buyer-badge {
+  background: rgba(255, 249, 223, 0.12) !important;
+  border-color: rgba(255, 249, 223, 0.22) !important;
+}
+.hp-revs--showcase .jm-verified-buyer-badge__text { color: var(--hp-cream) !important; }
+
+/* ---- media card (review has a photo or video) -------------------------- */
+
+.hp-revs--showcase .jm-review-item:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid) .jm-review-content,
+.hp-revs--showcase .jm-review-item:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid) .jm-star-rating {
+  display: none !important;
+}
+
+/* the first piece of media fills the card; any others stay in the lightbox */
+.hp-revs--showcase .jm-media-thumbnail-list__thumbnail,
+.hp-revs--showcase .jm-media-grid__item:first-child .jm-media-grid__image-container {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  cursor: pointer;
+}
+.hp-revs--showcase .jm-media-thumbnail-list__thumbnail ~ .jm-media-thumbnail-list__thumbnail,
+.hp-revs--showcase .jm-media-grid__item:not(:first-child) { display: none !important; }
+
+.hp-revs--showcase .jm-media-thumbnail-list__thumbnail img,
+.hp-revs--showcase .jm-media-thumbnail-list__thumbnail video,
+.hp-revs--showcase .jm-media-grid__image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+}
+
+/* scrim so the name stays legible over any photo */
+.hp-revs--showcase .jm-review-item:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(8, 26, 27, 0) 40%, rgba(8, 26, 27, 0.88) 100%);
+}
+.hp-revs--showcase .jm-review-item:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid) .jm-reviewer-info {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  padding: 1.8rem;
+}
+
+/* play affordance, only where the media really is a video */
+.hp-revs--showcase .jm-review-item:has(video)::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  width: 6.4rem;
+  height: 6.4rem;
+  margin: -3.2rem 0 0 -3.2rem;
+  border-radius: 50%;
+  background: rgba(255, 249, 223, 0.95)
+    /* a cream disc with a teal triangle, drawn rather than shipped as an asset */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='24' viewBox='0 0 22 24'%3E%3Cpath d='M21 12 0 24V0z' fill='%231a4b46'/%3E%3C/svg%3E")
+    no-repeat center / 1.9rem;
+  pointer-events: none;
+}
+
+/* ---- showcase: header + controls on teal ------------------------------- */
+
+.hp-revs--showcase .jm-review-widget-minimal-header {
+  background: rgba(255, 249, 223, 0.06);
+  border-color: rgba(255, 249, 223, 0.18);
+}
+.hp-revs--showcase .jm-button--primary {
+  background: var(--hp-cream) !important;
+  color: var(--hp-teal) !important;
+  border-color: var(--hp-cream) !important;
+}
+.hp-revs--showcase .jm-button--secondary,
+.hp-revs--showcase .jm-sort-filter__select {
+  color: var(--hp-cream) !important;
+  border-color: rgba(255, 249, 223, 0.3) !important;
+}
+.hp-revs--showcase .jdgm-review-list::-webkit-scrollbar-track { background: rgba(255, 249, 223, 0.12); }
+.hp-revs--showcase .jdgm-review-list::-webkit-scrollbar-thumb { background: rgba(255, 249, 223, 0.4); }
+.hp-revs--showcase .jdgm-review-list {
+  scrollbar-color: rgba(255, 249, 223, 0.4) transparent;
+}
+
+@media screen and (max-width: 560px) {
+  .hp-revs--showcase .jm-review-item { width: 25rem; height: 33rem; }
+  .hp-revs--showcase .jm-review-content__body,
+  .hp-revs--showcase .jdgm-review-content__body-content { font-size: 1.6rem !important; }
+  .hp-revs--showcase .jm-review-body-wrapper { -webkit-line-clamp: 6; }
+  .hp-revs--showcase .jdgm-review-list { gap: 1.2rem !important; }
+}

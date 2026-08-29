@@ -144,12 +144,13 @@
       ],
       "settings": {
         "eyebrow": "Real Tables · Real Reviews",
-        "heading": "Customer Reviews",
-        "text": "Verified reviews from Judge.me — written by people who bought this piece.",
-        "align": "left",
-        "bg": "cream-soft",
-        "padding_top": 16,
-        "padding_bottom": 64
+        "heading": "Loved Across Pakistan",
+        "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
+        "align": "center",
+        "bg": "teal",
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "card_style": "showcase"
       }
     }
   },
