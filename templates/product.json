@@ -95,10 +95,10 @@
       "type": "related-products",
       "settings": {
         "heading": "Completes the Set",
-        "heading_size": "h2",
         "intent": "complementary",
         "fallback_to_related": true,
         "enable_scroll": true,
+        "heading_size": "h2",
         "products_to_show": 10,
         "columns_desktop": 4,
         "color_scheme": "scheme-1",
@@ -113,6 +113,34 @@
         "columns_mobile": "2",
         "padding_top": 24,
         "padding_bottom": 36
+      }
+    },
+    "hp_reviews": {
+      "type": "hp-reviews",
+      "blocks": {
+        "judge_me_reviews_review_widget_nE74rW": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_nE74rW"
+      ],
+      "settings": {
+        "eyebrow": "Real Tables · Real Reviews",
+        "heading": "Loved Across Pakistan",
+        "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
+        "align": "center",
+        "source": "app",
+        "card_style": "list",
+        "bg": "cream",
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     },
     "1735728895025f6c98": {
@@ -130,28 +158,6 @@
     "hp_recs": {
       "type": "hp-recommendations",
       "settings": {}
-    },
-    "hp_reviews": {
-      "type": "hp-reviews",
-      "blocks": {
-        "judge_me_reviews_review_widget_nE74rW": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_review_widget_nE74rW"
-      ],
-      "settings": {
-        "eyebrow": "Real Tables · Real Reviews",
-        "heading": "Loved Across Pakistan",
-        "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
-        "align": "center",
-        "bg": "cream-soft",
-        "padding_top": 64,
-        "padding_bottom": 64,
-        "card_style": "default"
-      }
     }
   },
   "order": [
