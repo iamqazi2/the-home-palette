@@ -1170,10 +1170,38 @@ class ProductRecommendations extends HTMLElement {
         if (html.querySelector('.grid__item')) {
           this.classList.add('product-recommendations--loaded');
         }
+
+        this.syncOverflow();
       })
       .catch((e) => {
         console.error(e);
       });
+  }
+
+  // The scrolling row only needs to behave as a scroller when it actually
+  // overflows. At desktop widths a short curated list fits, and the stylesheet
+  // uses this class to drop the snapping and the scrollbar gutter so those
+  // sections keep looking like the plain grid they used to be.
+  syncOverflow() {
+    const grid = this.querySelector('.product-grid');
+    if (!grid || !this.classList.contains('related-products--scroll')) return;
+
+    const update = () => {
+      grid.classList.toggle('product-grid--overflowing', grid.scrollWidth > grid.clientWidth + 1);
+    };
+
+    update();
+
+    this.resizeObserver?.disconnect();
+    if ('ResizeObserver' in window) {
+      this.resizeObserver = new ResizeObserver(update);
+      this.resizeObserver.observe(grid);
+    }
+  }
+
+  disconnectedCallback() {
+    this.observer?.unobserve(this);
+    this.resizeObserver?.disconnect();
   }
 }
 

@@ -50,15 +50,84 @@
   .related-products__all:hover .hp-icon { transform: translateX(4px); }
 
   @media screen and (max-width: 749px) {
-    #shopify-section-{{ section.id }} .product-grid {
+    #shopify-section-{{ section.id }} .related-products:not(.related-products--scroll) .product-grid {
       display: grid !important;
       grid-template-columns: 1fr 1fr !important;
       gap: 1.2rem !important;
     }
-    #shopify-section-{{ section.id }} .product-grid .grid__item {
+    #shopify-section-{{ section.id }} .related-products:not(.related-products--scroll) .product-grid .grid__item {
       width: auto !important;
       max-width: none !important;
       margin: 0 !important;
+    }
+  }
+
+  {%- comment -%}
+    THP: curated pairings can run to 8 products, more than the 4-up grid shows.
+    Turn the grid into a scroll-snapped row so every pairing is reachable, with
+    the last card peeking to signal there is more to the right. Overrides the
+    grid rules above, hence the matching !important.
+  {%- endcomment -%}
+  #shopify-section-{{ section.id }} .related-products--scroll .product-grid {
+    --rp-gap: 1.2rem;
+    --rp-per-view: 2.15;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    grid-template-columns: none !important;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    gap: var(--rp-gap) !important;
+    margin: 0;
+    padding-bottom: 1.4rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--hp-teal, #1c4d45) rgba(0, 0, 0, 0.08);
+  }
+  #shopify-section-{{ section.id }} .related-products--scroll .product-grid .grid__item {
+    flex: 0 0 calc((100% - (var(--rp-per-view) - 1) * var(--rp-gap)) / var(--rp-per-view));
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    scroll-snap-align: start;
+  }
+  #shopify-section-{{ section.id }} .related-products--scroll .product-grid::-webkit-scrollbar {
+    height: 6px;
+  }
+  #shopify-section-{{ section.id }} .related-products--scroll .product-grid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 99px;
+  }
+  #shopify-section-{{ section.id }} .related-products--scroll .product-grid::-webkit-scrollbar-thumb {
+    background: var(--hp-teal, #1c4d45);
+    border-radius: 99px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} .related-products--scroll .product-grid {
+      --rp-gap: 1.6rem;
+      --rp-per-view: 3.25;
+    }
+  }
+  @media screen and (min-width: 990px) {
+    #shopify-section-{{ section.id }} .related-products--scroll .product-grid {
+      --rp-per-view: {{ section.settings.columns_desktop }};
+    }
+    {%- comment -%}
+      Once the row can no longer fill a full screen width it should sit still
+      rather than snap, so a short curated list keeps the old grid look.
+    {%- endcomment -%}
+    #shopify-section-{{ section.id }} .related-products--scroll .product-grid:not(.product-grid--overflowing) {
+      overflow-x: visible;
+      scroll-snap-type: none;
+      padding-bottom: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }} .related-products--scroll .product-grid {
+      scroll-behavior: auto;
     }
   }
 {%- endstyle -%}
@@ -95,7 +164,7 @@
 -%}
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <product-recommendations
-    class="related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    class="related-products page-width section-{{ section.id }}-padding isolate{% if section.settings.enable_scroll %} related-products--scroll{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
     data-url="{{ recs_base }}&intent={{ recs_intent }}"
     {% if recs_intent == 'complementary' and section.settings.fallback_to_related %}
       data-url-fallback="{{ recs_base }}&intent=related"
@@ -184,6 +253,13 @@
       "id": "fallback_to_related",
       "label": "Fall back to automatic when no pairing is set",
       "info": "Keeps the band from disappearing on products that have no curated pairings yet.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_scroll",
+      "label": "Scroll horizontally",
+      "info": "Shows every recommendation in a swipeable row instead of cutting the list off at the column count.",
       "default": true
     },
     {
