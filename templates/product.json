@@ -94,7 +94,7 @@
     "related-products": {
       "type": "related-products",
       "settings": {
-        "heading": "Completes the Set",
+        "heading": "Match it with..",
         "intent": "complementary",
         "fallback_to_related": true,
         "enable_scroll": true,
