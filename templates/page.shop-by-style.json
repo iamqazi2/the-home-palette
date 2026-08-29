@@ -78,7 +78,7 @@
         "heading": "Shop by Style",
         "scrim": 65,
         "bg_color": "#fff9df",
-        "show_count": false,
+        "show_count": true,
         "count_label": "varieties"
       }
     },
@@ -134,31 +134,11 @@
         "chip_color": "#1a4b46",
         "chip_icon_color": "#fff9df"
       }
-    },
-    "hp_cta": {
-      "type": "hp-cta-band",
-      "settings": {
-        "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
-        "layout": "split",
-        "flip": false,
-        "duotone": true,
-        "scrim": 90,
-        "eyebrow": "The Weave Collection",
-        "heading": "Woven for the Everyday Feast",
-        "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
-        "bg_color": "#fff9df",
-        "panel_color": "#1a4b46",
-        "scrim_color": "#1a4b46",
-        "text_color": "#fff9df",
-        "button_label": "Explore THP Weaves",
-        "link": "shopify://collections/thp-weave-collection"
-      }
     }
   },
   "order": [
     "main",
     "hp_style_rail",
-    "hp_trust",
-    "hp_cta"
+    "hp_trust"
   ]
 }
