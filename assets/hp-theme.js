@@ -1697,6 +1697,47 @@
     });
   }
 
+  /* ---- Desktop dropdown: close on any link ------------------------------
+     Dawn's <header-menu> only closes its panel on focusout. That is enough
+     for an ordinary menu link, where the click navigates and the page goes
+     away — but a "Table Stories" item calls preventDefault to scroll instead,
+     so focus never leaves the panel and it stayed open over the section the
+     reader had just asked to see.
+
+     Close the panel through the custom element's own close(), which also
+     resets aria-expanded and lets Dawn's toggle bookkeeping run; the manual
+     path is only a fallback for markup outside a header-menu.
+  ---------------------------------------------------------------------- */
+  function closeHeaderDropdown(el) {
+    if (!el || !el.closest) return;
+    var host = el.closest('header-menu, details-disclosure');
+    if (host && typeof host.close === 'function') {
+      try { host.close(); return; } catch (e) {}
+    }
+    var details = el.closest('details[open]');
+    if (!details) return;
+    details.removeAttribute('open');
+    var summary = details.querySelector('summary');
+    if (summary) summary.setAttribute('aria-expanded', 'false');
+  }
+
+  function initDropdownAutoClose(root) {
+    (root || document).querySelectorAll('.header__inline-menu').forEach(function (nav) {
+      if (nav.dataset.hpDropCloseDone) return;
+      nav.dataset.hpDropCloseDone = '1';
+      /* Delegated, so items rendered later are covered. Only <a href> closes
+         it: the group rows are <summary>, and closing on those would undo the
+         click that just opened the panel. */
+      nav.addEventListener('click', function (e) {
+        var el = e.target;
+        if (!el || !el.closest) return;
+        var link = el.closest('a[href]');
+        if (!link || el.closest('summary')) return;
+        closeHeaderDropdown(link);
+      });
+    });
+  }
+
   function initJumpLinks(root) {
     (root || document).querySelectorAll('[data-hp-jump]').forEach(function (a) {
       if (a.dataset.hpJumpDone) return;
@@ -1706,6 +1747,10 @@
         if (!target) return;          // another page — let the href do the work
         e.preventDefault();
         closeMenuDrawer();
+        /* asserted here as well as in the delegated handler above: a jump link
+           can sit outside .header__inline-menu, and this is the case that
+           actually needs it — nothing else will close the panel. */
+        closeHeaderDropdown(a);
         // let the drawer's own closing transition start before scrolling
         window.setTimeout(function () { scrollToEl(target); }, 60);
       });
@@ -1816,6 +1861,7 @@
     initTimeline(document);
     initJumpLinks(document);
     initDrawerAutoClose(document);
+    initDropdownAutoClose(document);
     initJournalReader(document);
     honourHashOffset();
   }
@@ -1836,6 +1882,7 @@
     initTimeline(e.target);
     initJumpLinks(e.target);
     initDrawerAutoClose(e.target);
+    initDropdownAutoClose(e.target);
     initJournalReader(e.target);
     markScrollContainers(e.target);
     initStickyChrome();
