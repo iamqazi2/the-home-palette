@@ -1155,3 +1155,117 @@
   .hp-revs--showcase .jm-review-body-wrapper { -webkit-line-clamp: 6; }
   .hp-revs--showcase .jdgm-review-list { gap: 1.2rem !important; }
 }
+
+/* ==========================================================================
+   Showcase on teal: contrast, uniform cards, marquee
+   ==========================================================================
+   The custom properties set earlier resolve to ink/taupe, which is correct on
+   the cream surfaces but leaves the summary header and its controls dark text
+   on a dark ground. Re-point them at cream inside the teal showcase — the same
+   mechanism, just the other palette. */
+
+.hp-revs--teal .jm-review-widget,
+.hp-revs--teal .jm-review-widget *,
+.hp-revs--showcase .jm-review-widget,
+.hp-revs--showcase .jm-review-widget *,
+.hp-revs--showcase .jdgm-widget-revamp,
+.hp-revs--showcase .jdgm-widget-revamp * {
+  --jm-review-widget-text-color: var(--hp-cream) !important;
+  --jm-review-widget-lighter-text-color: rgba(255, 249, 223, 0.72) !important;
+  --jm-review-widget-button-color: var(--hp-cream) !important;
+  --jm-review-widget-button-text-color: var(--hp-teal) !important;
+  --jm-widget-primary-color: var(--hp-cream) !important;
+  --jm-tag-bg: rgba(255, 249, 223, 0.12) !important;
+  --jm-tag-color: var(--hp-cream) !important;
+  --jm-tag-selected-bg: var(--hp-cream) !important;
+  --jm-tag-selected-color: var(--hp-teal) !important;
+}
+
+/* the summary block: brighter frame, cream figures */
+.hp-revs--showcase .jm-review-widget-minimal-header {
+  background: rgba(255, 249, 223, 0.07);
+  border: 1px solid rgba(255, 249, 223, 0.28);
+  border-radius: var(--hp-r-card);
+}
+.hp-revs--showcase .jm-average-rating-display,
+.hp-revs--showcase .jm-average-rating-display * {
+  color: var(--hp-cream) !important;
+}
+.hp-revs--showcase .jm-text,
+.hp-revs--showcase .jm-review-widget-minimal-header .jm-text {
+  color: var(--hp-cream) !important;
+}
+/* the icon-only filter and sort buttons read as empty circles otherwise */
+.hp-revs--showcase .jm-button--secondary,
+.hp-revs--showcase .jm-sort-filter,
+.hp-revs--showcase .jm-sort-filter__select,
+.hp-revs--showcase .jm-custom-answer-filter,
+.hp-revs--showcase .jm-filters__buttons > * {
+  color: var(--hp-cream) !important;
+  border-color: rgba(255, 249, 223, 0.4) !important;
+}
+.hp-revs--showcase .jm-sort-filter__icon,
+.hp-revs--showcase .jm-custom-answer-filter__icon,
+.hp-revs--showcase .jm-with-icon svg {
+  color: var(--hp-cream) !important;
+  fill: currentColor !important;
+  stroke: currentColor;
+  opacity: 1;
+}
+.hp-revs--showcase .jm-medals { filter: brightness(1.9) saturate(0.25); }
+
+/* ---- every card the same size ------------------------------------------
+   .jdgm-review-list is one of the app's .jm-stack primitives, which puts a
+   block margin on each child; in a flex row that margin knocks the cards out
+   of alignment and reads as different heights. Flatten it and pin the box. */
+
+.hp-revs--showcase .jdgm-review-list > * { margin: 0 !important; }
+.hp-revs--showcase .jm-review-item {
+  flex: 0 0 30rem !important;
+  width: 30rem !important;
+  height: 38rem !important;
+  min-height: 38rem !important;
+  max-height: 38rem !important;
+  align-self: flex-start !important;
+  border-color: rgba(255, 249, 223, 0.3) !important;
+}
+.hp-revs--showcase .jm-review-item:hover {
+  border-color: rgba(255, 249, 223, 0.55) !important;
+}
+
+/* brighter card copy */
+.hp-revs--showcase .jm-review-content__body,
+.hp-revs--showcase .jdgm-review-content__body-content,
+.hp-revs--showcase .jm-review-content__title,
+.hp-revs--showcase .jm-reviewer-info__name {
+  color: var(--hp-cream) !important;
+  opacity: 1 !important;
+}
+.hp-revs--showcase .jm-reviewer-info__details,
+.hp-revs--showcase .jm-reviewer-info__details * {
+  color: var(--hp-cream) !important;
+  opacity: 0.85;
+}
+.hp-revs--showcase .jm-verified-buyer-badge {
+  background: rgba(255, 249, 223, 0.16) !important;
+  border-color: rgba(255, 249, 223, 0.45) !important;
+}
+.hp-revs--showcase .jm-verified-buyer-badge__text {
+  color: var(--hp-cream) !important;
+  opacity: 1;
+}
+/* names sitting on a photo need their own weight, not the scrim alone */
+.hp-revs--showcase .jm-review-item:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid) .jm-reviewer-info__name,
+.hp-revs--showcase .jm-review-item:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid) .jm-reviewer-info__details {
+  text-shadow: 0 1px 6px rgba(8, 26, 27, 0.65);
+}
+
+/* ---- the rail drifts, so the pager is redundant ------------------------ */
+
+.hp-revs--showcase .jm-pagination-controls,
+.hp-revs--showcase .jdgm-paginate { display: none !important; }
+
+.hp-revs--showcase .jdgm-review-list {
+  scroll-snap-type: none;   /* snapping fights a continuous drift */
+  scroll-behavior: auto;
+}

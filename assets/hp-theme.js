@@ -881,6 +881,83 @@
     return out;
   }
 
+  /* ---- Reviews: auto-scrolling showcase rail ------------------------------
+     The showcase rail drifts on its own so the section reads as a marquee, the
+     way the hand-built video-review carousel does.
+
+     It animates scrollLeft rather than cloning the cards into a seamless loop.
+     Clones of app-rendered markup are inert — a cloned photo card would not
+     open Judge.me's lightbox — so the rail ping-pongs between its two ends
+     instead. Every card stays the real one the app rendered, and the rail is
+     still an ordinary scroller: drag, wheel, keyboard and touch all work, and
+     any of them stops the drift so it never fights the reader.
+  ---------------------------------------------------------------------- */
+  function initReviewMarquee(root) {
+    (root || document).querySelectorAll('.hp-revs--showcase').forEach(function (section) {
+      var tries = 0;
+      (function wait() {
+        var rail = section.querySelector('.jdgm-review-list');
+        // the app renders asynchronously; give it a while before giving up
+        if (!rail || rail.scrollWidth <= rail.clientWidth + 4) {
+          if (tries++ < 60) return window.setTimeout(wait, 250);
+          return;
+        }
+        if (rail.dataset.hpMarquee) return;
+        rail.dataset.hpMarquee = '1';
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        var SPEED = 0.35;          // px per frame — a slow drift, not a slide
+        var dir = 1;
+        var paused = false;
+        var raf = null;
+
+        function step() {
+          if (!paused && document.visibilityState === 'visible') {
+            var max = rail.scrollWidth - rail.clientWidth;
+            if (max <= 0) { raf = window.requestAnimationFrame(step); return; }
+            var next = rail.scrollLeft + SPEED * dir;
+            if (next >= max) { next = max; dir = -1; }
+            else if (next <= 0) { next = 0; dir = 1; }
+            rail.scrollLeft = next;
+          }
+          raf = window.requestAnimationFrame(step);
+        }
+
+        function pause() { paused = true; }
+        function resume() { paused = false; }
+
+        ['mouseenter', 'focusin', 'touchstart', 'pointerdown'].forEach(function (ev) {
+          rail.addEventListener(ev, pause, { passive: true });
+        });
+        ['mouseleave', 'focusout'].forEach(function (ev) {
+          rail.addEventListener(ev, resume, { passive: true });
+        });
+        // a manual scroll should hand control back only once the reader stops
+        var settle;
+        rail.addEventListener('wheel', function () {
+          pause();
+          window.clearTimeout(settle);
+          settle = window.setTimeout(resume, 2000);
+        }, { passive: true });
+
+        raf = window.requestAnimationFrame(step);
+
+        // Judge.me re-renders the list on sort, filter and page change, which
+        // replaces these nodes. Re-arm against the new ones.
+        var host = rail.parentNode;
+        if (host && window.MutationObserver) {
+          new window.MutationObserver(function () {
+            if (!document.contains(rail)) {
+              if (raf) window.cancelAnimationFrame(raf);
+              window.setTimeout(function () { initReviewMarquee(section); }, 300);
+            }
+          }).observe(host, { childList: true, subtree: true });
+        }
+      })();
+    });
+  }
+
   function initReviewPager(root) {
     (root || document).querySelectorAll('[data-hp-reviews-pager]').forEach(function (box) {
       if (box.dataset.hpPagerWired) return;
@@ -1552,6 +1629,7 @@
     initMotion(document);
     initVideoTriggers(document);
     initReviewPager(document);
+    initReviewMarquee(document);
     initBgVideo(document);
     initLazyPreviewVideos(document);
     initCounters(document);
@@ -1570,6 +1648,7 @@
     initMotion(e.target);
     initVideoTriggers(e.target);
     initReviewPager(e.target);
+    initReviewMarquee(e.target);
     initBgVideo(e.target);
     initLazyPreviewVideos(e.target);
     initCounters(e.target);
