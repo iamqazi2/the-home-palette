@@ -554,6 +554,299 @@
 }
 
 
+
+/* ==========================================================================
+   Judge.me "revamp" widget (jm-* design system)
+   ==========================================================================
+
+   Everything above targets Judge.me's classic widget (`jdgm-rev`, `jdgm-rev__*`).
+   Shops on the revamped widget — ours is one; the container carries
+   `jdgm-widget-revamp` and `.jdgm-rev` does not exist at all — get a completely
+   different Vue component library whose classes are prefixed `jm-`. Both blocks
+   are kept so the styling survives Judge.me switching a shop between them.
+
+   The revamp is themed through CSS custom properties which Judge.me writes as
+   INLINE styles on each component, seeded from the app's own colour settings.
+   A stylesheet declaration with !important outranks an inline declaration
+   without one, so re-declaring those properties is the supported, non-brittle
+   way to rebrand it — far better than fighting each component's own rules.
+   The universal selector is scoped to the widget subtree: custom properties do
+   not trigger layout, and the inline copies live on descendants, so setting
+   them on an ancestor alone would lose.
+   ---------------------------------------------------------------------- */
+
+.jdgm-widget-revamp,
+.jdgm-widget-revamp *,
+.hp-revs .jm-review-widget,
+.hp-revs .jm-review-widget * {
+  --jm-review-widget-star-and-histogram-color: var(--hp-gold) !important;
+  --jm-review-widget-button-color: var(--hp-teal) !important;
+  --jm-review-widget-button-text-color: var(--hp-cream) !important;
+  --jm-review-widget-text-color: var(--hp-ink) !important;
+  --jm-review-widget-lighter-text-color: var(--hp-taupe) !important;
+  --jm-widget-primary-color: var(--hp-teal) !important;
+  --jm-widget-border-radius: var(--hp-r-card) !important;
+  --jm-widget-border-radius-simplified: var(--hp-r-card) !important;
+  --jm-tag-bg: rgba(26, 75, 70, 0.08) !important;
+  --jm-tag-color: var(--hp-teal) !important;
+  --jm-tag-selected-bg: var(--hp-teal) !important;
+  --jm-tag-selected-color: var(--hp-cream) !important;
+  --jm-reviewer-avatar-size: 4rem !important;
+}
+
+/* the app's global settings vars, in case a surface reads them directly */
+.jdgm-widget-revamp,
+.hp-revs .jm-review-widget {
+  --jdgm-primary-color: var(--hp-teal) !important;
+  --jdgm-star-color: var(--hp-gold) !important;
+  --jdgm-write-review-bg-color: var(--hp-teal) !important;
+  --jdgm-write-review-text-color: var(--hp-cream) !important;
+  --jdgm-paginate-color: var(--hp-teal) !important;
+  --jdgm-reviewer-name-color: var(--hp-ink) !important;
+  --jdgm-border-radius: var(--hp-r-card) !important;
+}
+
+/* ---- revamp: type ------------------------------------------------------ */
+
+.jm-review-widget,
+.jm-review-widget .jm-text,
+.jm-reviewer-info__name,
+.jm-review-content__body,
+.jdgm-review-content__body-content,
+.jm-verified-buyer-badge__text {
+  font-family: var(--hp-font-ui) !important;
+}
+.jm-review-content__body,
+.jdgm-review-content__body-content {
+  font-size: 1.45rem !important;
+  line-height: 1.8 !important;
+  color: var(--hp-ink) !important;
+}
+.jm-review-content__title {
+  font-family: var(--hp-font-display) !important;
+  font-weight: 400 !important;
+  font-size: 1.85rem !important;
+  line-height: 1.25 !important;
+  color: var(--hp-ink) !important;
+}
+.jm-reviewer-info__name {
+  font-weight: 600 !important;
+  font-size: 1.35rem !important;
+  color: var(--hp-ink) !important;
+}
+.jm-reviewer-info__details { color: var(--hp-taupe) !important; font-size: 1.15rem !important; }
+
+/* ---- revamp: header ---------------------------------------------------- */
+
+.jm-review-widget-minimal-header {
+  border: 1px solid var(--hp-hairline);
+  border-radius: var(--hp-r-card);
+  background: var(--hp-cream);
+  padding: 2rem 2.2rem;
+  margin-bottom: 2.4rem;
+}
+.hp-revs--teal .jm-review-widget-minimal-header {
+  background: rgba(255, 249, 223, 0.06);
+  border-color: var(--hp-hairline-light);
+}
+/* the section supplies the heading */
+.hp-revs--has-title .jm-review-widget-minimal-header__title { display: none !important; }
+
+.jm-average-rating-display {
+  font-family: var(--hp-font-display) !important;
+  color: var(--hp-teal) !important;
+}
+.jm-medals { opacity: 0.9; }
+
+/* ---- revamp: buttons, filters, sort ------------------------------------ */
+
+.jm-button--primary,
+.jm-action-buttons__button.jm-button--primary {
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+  border: 1.5px solid var(--hp-teal) !important;
+  border-radius: var(--hp-r-pill) !important;
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 1.1rem 2.2rem !important;
+  transition: background 0.3s var(--hp-ease), border-color 0.3s var(--hp-ease);
+}
+.jm-button--primary:hover {
+  background: var(--hp-teal-deep) !important;
+  border-color: var(--hp-teal-deep) !important;
+}
+.jm-button--secondary,
+.jm-sort-filter__select,
+.jm-custom-answer-filter,
+.jdgm-sort-dropdown {
+  border: 1px solid var(--hp-hairline-strong) !important;
+  border-radius: var(--hp-r-pill) !important;
+  background: transparent !important;
+  color: var(--hp-ink) !important;
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.25rem !important;
+}
+.jm-filters__buttons { gap: 0.8rem; }
+
+/* ---- revamp: customer photo strip -------------------------------------- */
+
+.jm-media-grid__image-container,
+.jm-media-thumbnail-list__thumbnail {
+  border-radius: 14px !important;
+  overflow: hidden;
+}
+.jm-media-grid__image { transition: transform 0.4s var(--hp-ease); }
+.jm-media-grid__item:hover .jm-media-grid__image { transform: scale(1.05); }
+
+/* ==========================================================================
+   The review rail: cards in a horizontally scrollable grid
+   ==========================================================================
+   Judge.me stacks reviews vertically (.jdgm-review-list is a .jm-stack), which
+   makes a long list push everything below it far down the page. Laying them out
+   as a scroll-snapping row of equal-height cards keeps the section a fixed
+   height whatever the review count, and matches the "Completes the Set" rail
+   directly above it. */
+
+.jdgm-review-list {
+  display: grid !important;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(30rem, 34rem);
+  gap: 1.6rem !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0;
+  padding: 0.4rem 0 1.6rem;
+  margin: 0 !important;
+  /* a rail that can scroll should say so on trackpad-less machines */
+  scrollbar-width: thin;
+  scrollbar-color: var(--hp-taupe-soft) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.jdgm-review-list::-webkit-scrollbar { height: 6px; }
+.jdgm-review-list::-webkit-scrollbar-track {
+  background: rgba(37, 37, 37, 0.06);
+  border-radius: var(--hp-r-pill);
+}
+.jdgm-review-list::-webkit-scrollbar-thumb {
+  background: var(--hp-taupe-soft);
+  border-radius: var(--hp-r-pill);
+}
+.jdgm-review-list::-webkit-scrollbar-thumb:hover { background: var(--hp-taupe); }
+
+/* the card itself */
+.jm-review-item {
+  scroll-snap-align: start;
+  display: flex !important;
+  flex-direction: column;
+  border: 1px solid var(--hp-hairline) !important;
+  border-radius: var(--hp-r-card) !important;
+  background: var(--hp-paper) !important;
+  padding: 2.2rem !important;
+  height: 100%;
+  overflow: hidden;
+  transition: border-color 0.3s var(--hp-ease), box-shadow 0.4s var(--hp-ease),
+    transform 0.4s var(--hp-ease);
+}
+.jm-review-item:hover {
+  border-color: rgba(26, 75, 70, 0.25) !important;
+  box-shadow: var(--hp-shadow-card);
+  transform: translateY(-2px);
+}
+.jm-review-item__content,
+.jm-review-item__body { min-width: 0; }
+/* the body should take the slack so every card's footer lines up */
+.jm-review-item__content { flex: 1 1 auto; }
+
+.hp-revs--teal .jm-review-item {
+  background: rgba(255, 249, 223, 0.05) !important;
+  border-color: var(--hp-hairline-light) !important;
+}
+.hp-revs--teal .jm-review-content__body,
+.hp-revs--teal .jm-review-content__title,
+.hp-revs--teal .jm-reviewer-info__name { color: var(--hp-cream) !important; }
+
+/* avatar disc */
+.jm-reviewer-avatar {
+  border-radius: 50% !important;
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+  flex: 0 0 auto;
+}
+.jm-reviewer-avatar__initial {
+  font-family: var(--hp-font-display) !important;
+  color: var(--hp-cream) !important;
+}
+.hp-revs--teal .jm-reviewer-avatar { background: var(--hp-cream) !important; }
+.hp-revs--teal .jm-reviewer-avatar__initial { color: var(--hp-teal) !important; }
+
+/* verified-buyer pill */
+.jm-verified-buyer-badge {
+  background: rgba(26, 75, 70, 0.1) !important;
+  border: 1px solid rgba(26, 75, 70, 0.28) !important;
+  border-radius: var(--hp-r-pill) !important;
+  padding: 0.2rem 0.9rem !important;
+}
+.jm-verified-buyer-badge__text {
+  color: var(--hp-teal) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* "Review for <product>" card inside a review */
+.jm-product-variant-card {
+  background: var(--hp-cream-soft) !important;
+  border: 1px solid var(--hp-hairline) !important;
+  border-radius: 12px !important;
+  padding: 0.9rem 1.1rem !important;
+  margin-top: auto;
+}
+.jm-product-variant-card__product-link {
+  color: var(--hp-teal) !important;
+  font-size: 1.15rem !important;
+}
+.jm-product-variant-card__thumbnail { border-radius: 8px !important; }
+.hp-revs--teal .jm-product-variant-card {
+  background: rgba(255, 249, 223, 0.06) !important;
+  border-color: var(--hp-hairline-light) !important;
+}
+.hp-revs--teal .jm-product-variant-card__product-link { color: var(--hp-cream) !important; }
+
+/* pagination sits under the rail */
+.jm-pagination-controls { margin-top: 2rem !important; justify-content: center; }
+.jm-pagination-controls__button {
+  border-radius: 50% !important;
+  color: var(--hp-taupe) !important;
+  font-family: var(--hp-font-ui) !important;
+}
+.jm-pagination-controls__button--active {
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+}
+
+@media screen and (max-width: 749px) {
+  .jdgm-review-list {
+    grid-auto-columns: minmax(26rem, 82vw);
+    gap: 1.2rem !important;
+  }
+  .jm-review-item { padding: 1.8rem !important; }
+  .jm-review-widget-minimal-header { padding: 1.6rem; margin-bottom: 1.8rem; }
+  .jm-review-content__body,
+  .jdgm-review-content__body-content { font-size: 1.4rem !important; }
+  .jm-review-content__title { font-size: 1.7rem !important; }
+}
+
+/* A rail scrolls itself; the two-column masonry above must not also apply. */
+@media screen and (min-width: 1200px) {
+  .hp-revs .jdgm-review-list,
+  #hp-reviews .jdgm-review-list { column-count: auto; }
+}
+
 /* ---- theme-side review pager ------------------------------------------
    assets/hp-theme.js can page long review lists locally (the "Reviews per
    page" setting). Its markup is injected next to the app's list, which may be

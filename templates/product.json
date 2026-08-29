@@ -51,10 +51,6 @@
           "settings": {
             "share_label": "Share"
           }
-        },
-        "judge_me_reviews_review_widget_nE74rW": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
         }
       },
       "block_order": [
@@ -65,8 +61,7 @@
         "quantity_selector",
         "buy_buttons",
         "description",
-        "share",
-        "judge_me_reviews_review_widget_nE74rW"
+        "share"
       ],
       "settings": {
         "enable_sticky_info": false,
@@ -76,9 +71,9 @@
         "hp_show_excerpt": false,
         "hp_excerpt_words": 45,
         "hp_show_meta": true,
-        "hp_show_reviews": true,
+        "hp_show_reviews": false,
         "hp_reviews_title": "Customer Reviews",
-        "hp_reviews_per_page": 2,
+        "hp_reviews_per_page": 0,
         "hp_star_color": "#e0a422",
         "hp_sidebar_recs": true,
         "hp_side_recs_title": "You might also like",
@@ -135,11 +130,33 @@
     "hp_recs": {
       "type": "hp-recommendations",
       "settings": {}
+    },
+    "hp_reviews": {
+      "type": "hp-reviews",
+      "blocks": {
+        "judge_me_reviews_review_widget_nE74rW": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_nE74rW"
+      ],
+      "settings": {
+        "eyebrow": "Real Tables · Real Reviews",
+        "heading": "Customer Reviews",
+        "text": "Verified reviews from Judge.me — written by people who bought this piece.",
+        "align": "left",
+        "bg": "cream-soft",
+        "padding_top": 16,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
     "main",
     "related-products",
+    "hp_reviews",
     "1735728895025f6c98",
     "1735729851cc5a66a8",
     "hp_recs"
