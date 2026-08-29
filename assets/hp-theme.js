@@ -946,40 +946,58 @@
         if (!hasPic && body && !body.textContent.trim()) rev.remove();
       });
 
-      /* Deal the cards into two rails that drift in opposite directions. The
-         metafield is one flat list, so the split happens here rather than in
-         Liquid — and alternating rather than halving keeps photo cards, which
-         are scattered through the list, spread across both rows instead of
-         bunched in one. */
-      var cards = [];
-      list.querySelectorAll('.jdgm-rev').forEach(function (c) {
-        if (c.parentNode === list) cards.push(c);
-      });
-      if (cards.length > 3) {
-        var rowA = document.createElement('div');
-        rowA.className = 'hp-revs__row';
-        rowA.setAttribute('data-hp-rail', 'forward');
-        var rowB = document.createElement('div');
-        rowB.className = 'hp-revs__row';
-        rowB.setAttribute('data-hp-rail', 'reverse');
-        cards.forEach(function (c, i) { (i % 2 ? rowB : rowA).appendChild(c); });
-        list.appendChild(rowA);
-        list.appendChild(rowB);
-        list.classList.add('hp-revs__store--rows');
-      }
+      dealReviewRows(list);
     });
+  }
+
+  /* Deal a review list's cards into two rails that drift in opposite
+     directions. Shared by the store-wide metafield markup (.jdgm-rev cards)
+     and the live product widget (.jm-review-item cards) — both use
+     .jdgm-review-list as their outer wrapper — so a product page's own
+     reviews get the same rowed design as the store-wide sections instead of
+     staying one long single rail. Alternating rather than halving keeps
+     photo cards, which are scattered through the list, spread across both
+     rows instead of bunched in one. */
+  function dealReviewRows(list) {
+    if (!list || list.dataset.hpRowsDealt) return;
+    var cards = [];
+    Array.prototype.forEach.call(list.children, function (c) {
+      if (c.matches('.jdgm-rev, .jm-review-item')) cards.push(c);
+    });
+    if (cards.length <= 3) return;
+    list.dataset.hpRowsDealt = '1';
+    var rowA = document.createElement('div');
+    rowA.className = 'hp-revs__row';
+    rowA.setAttribute('data-hp-rail', 'forward');
+    var rowB = document.createElement('div');
+    rowB.className = 'hp-revs__row';
+    rowB.setAttribute('data-hp-rail', 'reverse');
+    cards.forEach(function (c, i) { (i % 2 ? rowB : rowA).appendChild(c); });
+    list.appendChild(rowA);
+    list.appendChild(rowB);
+    /* hp-revs__store--rows carries the card-sizing rules (assumes the
+       store-only .hp-revs__store class alongside it); hp-revs__railed is the
+       list-level layout switch (block instead of the single-rail flex row)
+       and is the one selector in hp-reviews.css that matches on its own, so
+       it is what makes this apply to the product widget's list too, which
+       never carries .hp-revs__store. */
+    list.classList.add('hp-revs__store--rows', 'hp-revs__railed');
   }
 
   function initReviewMarquee(root) {
     (root || document).querySelectorAll('.hp-revs--showcase').forEach(function (section) {
       var tries = 0;
       (function wait() {
-        /* Store-wide sections deal their cards into two rails; the product
-           widget stays a single one. Drive whichever exists. */
+        /* The store-wide markup is already dealt into rows by initStoreReviews.
+           The product widget hydrates asynchronously, so deal it here instead,
+           once its cards exist — dealReviewRows no-ops while there is nothing
+           to deal yet, and again once it has already run. */
+        var list = section.querySelector('.jdgm-review-list');
+        if (list) dealReviewRows(list);
+
         var rails = section.querySelectorAll('[data-hp-rail]');
         if (!rails.length) {
-          var single = section.querySelector('.jdgm-review-list');
-          rails = single ? [single] : [];
+          rails = list ? [list] : [];
         }
         var ready = rails.length && Array.prototype.every.call(rails, function (r) {
           return r.scrollWidth > r.clientWidth + 4;

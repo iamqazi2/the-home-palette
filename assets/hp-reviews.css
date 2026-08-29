@@ -32,15 +32,16 @@
 .hp-revs--paper { background: var(--hp-paper); }
 .hp-revs--teal { background: var(--hp-teal); color: var(--hp-cream); }
 
+/* Width/max-width/padding come from .hp-container (hp-theme.css), applied
+   directly on this element in the markup — one source of truth for the
+   site's measure instead of a second, easily-drifting copy of it here. */
 .hp-revs__inner {
   width: 100%;
-  max-width: 128rem;
-  margin: 0 auto;
-  padding: 0 var(--hp-gap-x);
 }
 
 .hp-revs__head {
-  max-width: 62rem;
+  /* matches .hp-section-head */
+  max-width: 68rem;
   margin: 0 0 3.2rem;
 }
 .hp-revs__head--center {
@@ -1255,10 +1256,33 @@
   text-shadow: 0 1px 6px rgba(8, 26, 27, 0.65);
 }
 
-/* ---- the rail drifts, so the pager is redundant ------------------------ */
+/* ---- pager ---------------------------------------------------------------
+   Store-wide sections render the metafield's full review list directly (see
+   hp-reviews.liquid), so there is no pager in that markup to hide. The
+   product widget is different: Judge.me fetches its reviews live and only
+   ever returns one page at a time, so hiding this control — as an earlier
+   version did, on the theory that "the rail drifts, so the pager is
+   redundant" — left every review past the widget's own page size invisible
+   with no way to reach it. Keep it visible and styled instead. */
 
 .hp-revs--showcase .jm-pagination-controls,
-.hp-revs--showcase .jdgm-paginate { display: none !important; }
+.hp-revs--showcase .jdgm-paginate {
+  margin-top: 1.6rem !important;
+  display: flex !important;
+  justify-content: center;
+}
+/* readable against the teal card background rather than the taupe meant for
+   paper/cream surfaces */
+.hp-revs--showcase .jm-pagination-controls__button,
+.hp-revs--showcase .jdgm-paginate__page {
+  color: rgba(255, 249, 223, 0.7) !important;
+}
+.hp-revs--showcase .jm-pagination-controls__button--active,
+.hp-revs--showcase .jdgm-paginate__page.jdgm-curt,
+.hp-revs--showcase .jdgm-paginate__page.jdgm--active {
+  background: var(--hp-cream) !important;
+  color: var(--hp-teal) !important;
+}
 
 .hp-revs--showcase .jdgm-review-list {
   scroll-snap-type: none;   /* snapping fights a continuous drift */
@@ -1775,13 +1799,17 @@
    for the single-rail case, and matching that with another single-class
    !important rule leaves the winner depending on where each lands in the file.
    Doubling the class settles it. */
-.hp-revs__store.hp-revs__store--rows {
+.hp-revs__store.hp-revs__store--rows,
+.jdgm-review-list.hp-revs__railed,
+.hp-revs__railed {
   display: block !important;
   overflow: visible !important;
   padding: 0 !important;
   scroll-snap-type: none !important;
+  column-count: auto !important;
 }
-.hp-revs__store.hp-revs__store--rows > .hp-revs__row { width: 100%; }
+.hp-revs__store.hp-revs__store--rows > .hp-revs__row,
+.hp-revs__railed > .hp-revs__row { width: 100%; }
 
 .hp-revs__row {
   display: flex;
@@ -1798,6 +1826,7 @@
 .hp-revs__row + .hp-revs__row { margin-top: 1.4rem; }
 
 /* medium card — same box whether it holds a photo or a quote */
+.hp-revs--showcase .hp-revs__row .jm-review-item,
 .hp-revs--showcase .hp-revs__store--rows .jdgm-rev {
   flex: 0 0 26rem !important;
   width: 26rem !important;
@@ -1807,7 +1836,8 @@
   padding: 1.8rem 1.8rem !important;
   border-radius: 16px !important;
 }
-.hp-revs--showcase .hp-revs__store--rows .jdgm-rev:has(.jdgm-rev__pic-link) {
+.hp-revs--showcase .hp-revs__store--rows .jdgm-rev:has(.jdgm-rev__pic-link),
+.hp-revs--showcase .hp-revs__row .jm-review-item:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid) {
   padding: 0 !important;
 }
 .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body,
@@ -1831,6 +1861,7 @@
 }
 
 @media screen and (min-width: 1200px) {
+  .hp-revs--showcase .hp-revs__row .jm-review-item,
   .hp-revs--showcase .hp-revs__store--rows .jdgm-rev {
     flex-basis: 28rem !important;
     width: 28rem !important;
@@ -1843,6 +1874,7 @@
 }
 
 @media screen and (max-width: 749px) {
+  .hp-revs--showcase .hp-revs__row .jm-review-item,
   .hp-revs--showcase .hp-revs__store--rows .jdgm-rev {
     flex-basis: 68vw !important;
     width: 68vw !important;
@@ -1858,4 +1890,53 @@
   .hp-revs--showcase .hp-revs__store--rows .jdgm-rev__body { -webkit-line-clamp: 4; }
   .hp-revs__row { gap: 1rem; }
   .hp-revs__row + .hp-revs__row { margin-top: 1rem; }
+}
+
+
+/* ---- the product widget in rails --------------------------------------
+   The product page renders the revamped widget rather than the metafield, so
+   its cards carry jm-* classes. Give them the same box the store cards get so
+   the two surfaces are one design; the widget keeps its own summary bar, which
+   is the part that lets a customer actually write a review. */
+
+.hp-revs--showcase .hp-revs__row .jm-review-item {
+  height: 24rem !important;
+  min-height: 24rem !important;
+  max-height: 24rem !important;
+  padding: 1.8rem !important;
+  border-radius: 16px !important;
+  scroll-snap-align: none;
+}
+.hp-revs--showcase .hp-revs__row .jm-review-content__body,
+.hp-revs--showcase .hp-revs__row .jdgm-review-content__body-content {
+  font-size: 1.6rem !important;
+  line-height: 1.5 !important;
+}
+.hp-revs--showcase .hp-revs__row .jm-review-body-wrapper { -webkit-line-clamp: 4; }
+.hp-revs--showcase .hp-revs__row .jm-reviewer-info__name { font-size: 1.25rem !important; }
+.hp-revs--showcase .hp-revs__row .jm-review-item:not(:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid))::before {
+  font-size: 4.6rem;
+  top: 0.6rem;
+  right: 1.2rem;
+}
+
+@media screen and (min-width: 1200px) {
+  .hp-revs--showcase .hp-revs__row .jm-review-item {
+    height: 25rem !important;
+    min-height: 25rem !important;
+    max-height: 25rem !important;
+  }
+  .hp-revs--showcase .hp-revs__row .jm-review-content__body,
+  .hp-revs--showcase .hp-revs__row .jdgm-review-content__body-content { font-size: 1.7rem !important; }
+}
+@media screen and (max-width: 749px) {
+  .hp-revs--showcase .hp-revs__row .jm-review-item {
+    height: 22rem !important;
+    min-height: 22rem !important;
+    max-height: 22rem !important;
+    padding: 1.5rem !important;
+  }
+  .hp-revs--showcase .hp-revs__row .jm-review-item:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid) { padding: 0 !important; }
+  .hp-revs--showcase .hp-revs__row .jm-review-content__body,
+  .hp-revs--showcase .hp-revs__row .jdgm-review-content__body-content { font-size: 1.5rem !important; }
 }
