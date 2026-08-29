@@ -2243,20 +2243,9 @@ body.overflow-hidden { overflow: hidden; }
    files. Keeping the override next to the section it belongs to also means it
    automatically travels with the section if it's ever duplicated or moved. */
 
-/* Judge.me, wherever it renders */
-.jdgm-star { color: var(--hp-gold) !important; }
-.jdgm-rev-widg__title, .jdgm-rev-widg__summary-average { font-family: var(--hp-font-display) !important; }
-.jdgm-widget .jdgm-rev-widg__header { border: none; }
-.jdgm-write-rev-link, .jdgm-rev-widg__sort-wrapper select {
-  border-radius: var(--hp-r-pill) !important;
-  font-family: var(--hp-font-ui) !important;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-size: 1.1rem !important;
-}
-.jdgm-write-rev-link {
-  background: var(--hp-teal) !important;
-  color: var(--hp-cream) !important;
-  border: none !important;
-}
-
+/* Judge.me, wherever it renders — see assets/hp-reviews.css.
+   The rules that used to sit here were an earlier, partial pass at the widget
+   (stars, the write-review button and the sort control only) and predate the
+   app's revamped widget. They are superseded by hp-reviews.css, which covers
+   both widget generations and every Judge.me surface from one place; keeping a
+   second partial copy here only created rules that fought each other. */

@@ -287,184 +287,30 @@
       .hp-pdp-block__body a { color: var(--hp-teal); }
       .hp-pdp-block__body img { border-radius: var(--hp-r-card); margin: 1.6rem 0; }
 
-      /* ---- reviews column ---- */
-      #hp-reviews .jdgm-widget, #hp-reviews #judgeme_product_reviews {
+      /* ---- reviews column ----
+         The Judge.me widget itself is styled globally in assets/hp-reviews.css,
+         shared with the reusable "Reviews (Judge.me)" section so the product
+         page and the rest of the site cannot drift apart. Only the handful of
+         rules that depend on THIS section's settings stay here. */
+      #hp-reviews .jdgm-widget,
+      #hp-reviews #judgeme_product_reviews {
         border-top: none;
         margin-top: 0;
         padding-top: 0;
       }
-      /* Hide the app's own heading ONLY when this block prints one, otherwise
-         the section ends up with no heading at all — which is what happened
-         with "Reviews heading" left empty, as the setting's own hint suggests. */
-      {%- if section.settings.hp_reviews_title != blank %}
-      #hp-reviews .jdgm-rev-widg__title { display: none !important; }
-      {%- endif %}
-
-      /* type: identical to the description column */
-      #hp-reviews,
-      #hp-reviews .jdgm-rev__body,
-      #hp-reviews .jdgm-rev__body p,
-      #hp-reviews .jdgm-rev__author,
-      #hp-reviews .jdgm-rev__timestamp,
-      #hp-reviews .jdgm-rev-widg__summary-text {
-        font-family: var(--hp-font-ui) !important;
-        color: var(--hp-ink);
-      }
-      #hp-reviews .jdgm-rev__body,
-      #hp-reviews .jdgm-rev__body p {
-        font-size: 1.45rem !important;
-        line-height: 1.85 !important;
-        color: var(--hp-ink);
-      }
-      #hp-reviews .jdgm-rev__title {
-        font-family: var(--hp-font-display) !important;
-        font-weight: 600 !important;
-        font-size: 1.9rem !important;
-        color: var(--hp-ink);
-        margin-bottom: 0.4rem;
-        display: block;
-      }
-
-      /* stars: brand gold */
+      /* Star colour is a section setting, so it cannot live in the static
+         stylesheet; everything else about the stars does. */
       #hp-reviews .jdgm-star,
       #hp-reviews .jdgm-star.jdgm--on,
-      #hp-reviews .jdgm-star.jdgm--half,
-      .jdgm-star.jdgm--on { color: {{ section.settings.hp_star_color | default: '#e0a422' }} !important; }
-      #hp-reviews .jdgm-star.jdgm--off { color: {{ section.settings.hp_star_color | default: '#e0a422' | color_modify: 'alpha', 0.3 }} !important; }
-
-      /* summary row */
-      #hp-reviews .jdgm-rev-widg__header {
-        border: 1px solid var(--hp-hairline);
-        border-radius: 16px;
-        background: var(--hp-cream);
-        padding: 1.6rem 1.8rem;
-        margin-bottom: 1.6rem;
+      #hp-reviews .jdgm-star.jdgm--half {
+        color: {{ section.settings.hp_star_color | default: '#e0a422' }} !important;
       }
-      #hp-reviews .jdgm-rev-widg__summary-average {
-        font-family: var(--hp-font-display) !important;
-        font-size: 2.6rem !important;
-        color: var(--hp-teal) !important;
+      #hp-reviews .jdgm-star.jdgm--off {
+        color: {{ section.settings.hp_star_color | default: '#e0a422' | color_modify: 'alpha', 0.3 }} !important;
       }
 
-      /* review card */
-      #hp-reviews .jdgm-rev {
-        position: relative;
-        border: 1px solid var(--hp-hairline) !important;
-        border-radius: 16px;
-        background: var(--hp-paper);
-        padding: 1.8rem !important;
-        margin-bottom: 1.2rem !important;
-      }
-      #hp-reviews .jdgm-rev.jdgm-divider-top { border-top: 1px solid var(--hp-hairline) !important; }
-
-      /* avatar: teal disc with the initial */
-      #hp-reviews .jdgm-rev__icon {
-        background: var(--hp-teal) !important;
-        color: var(--hp-cream) !important;
-        font-family: var(--hp-font-display) !important;
-        font-weight: 600;
-        font-size: 1.6rem !important;
-        width: 3.6rem !important;
-        height: 3.6rem !important;
-        line-height: 3.6rem !important;
-        border-radius: 50% !important;
-        text-align: center;
-      }
-
-      /* author + verified badge */
-      #hp-reviews .jdgm-rev__author {
-        font-weight: 600 !important;
-        font-size: 1.35rem !important;
-        color: var(--hp-ink) !important;
-        letter-spacing: 0.01em;
-      }
-      #hp-reviews .jdgm-rev__buyer-badge,
-      #hp-reviews .jdgm-rev__buyer-badge-wrapper .jdgm-rev__buyer-badge {
-        display: inline-flex !important;
-        align-items: center;
-        gap: 0.3rem;
-        background: rgba(26, 75, 70, 0.1) !important;
-        color: var(--hp-teal) !important;
-        border: 1px solid rgba(26, 75, 70, 0.3) !important;
-        border-radius: var(--hp-r-pill) !important;
-        padding: 0.2rem 0.8rem !important;
-        font-family: var(--hp-font-ui) !important;
-        font-size: 1rem !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        opacity: 1 !important;
-      }
-      #hp-reviews .jdgm-rev__timestamp {
-        color: var(--hp-taupe) !important;
-        font-size: 1.1rem !important;
-      }
-      #hp-reviews .jdgm-rev__prod-link, #hp-reviews .jdgm-rev__prod-info-wrapper {
-        background: var(--hp-cream-soft) !important;
-        border: 1px solid var(--hp-hairline);
-        border-radius: 12px;
-        padding: 0.8rem !important;
-        font-size: 1.1rem !important;
-      }
-      #hp-reviews .jdgm-rev__prod-link a, #hp-reviews .jdgm-rev__replier { color: var(--hp-teal) !important; }
-      #hp-reviews .jdgm-rev__pics img { border-radius: 10px !important; }
-
-      /* write-a-review + sort controls on brand */
-      #hp-reviews .jdgm-write-rev-link,
-      #hp-reviews .jdgm-widget .jdgm-write-rev-link {
-        background: var(--hp-teal) !important;
-        color: var(--hp-cream) !important;
-        border: 1.5px solid var(--hp-teal) !important;
-        border-radius: var(--hp-r-pill) !important;
-        font-family: var(--hp-font-ui) !important;
-        font-size: 1.1rem !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        padding: 1rem 1.8rem !important;
-      }
-      #hp-reviews .jdgm-write-rev-link:hover {
-        background: var(--hp-teal-deep) !important;
-        border-color: var(--hp-teal-deep) !important;
-      }
-      #hp-reviews .jdgm-rev-widg__sort-wrapper select,
-      #hp-reviews .jdgm-sort-dropdown {
-        border-radius: var(--hp-r-pill) !important;
-        border: 1px solid var(--hp-hairline-strong) !important;
-        font-family: var(--hp-font-ui) !important;
-        color: var(--hp-ink) !important;
-      }
-
-      /* our pager */
-      .hp-revpager {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1.2rem;
-        margin-top: 1.8rem;
-      }
-      .hp-revpager__btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 3.6rem;
-        height: 3.6rem;
-        border-radius: 50%;
-        border: 1.5px solid var(--hp-teal);
-        background: transparent;
-        color: var(--hp-teal);
-        cursor: pointer;
-        transition: background 0.3s ease, color 0.3s ease, opacity 0.3s ease;
-      }
-      .hp-revpager__btn:hover:not(:disabled) { background: var(--hp-teal); color: var(--hp-cream); }
-      .hp-revpager__btn:disabled { opacity: 0.3; cursor: default; }
-      .hp-revpager__label {
-        font-family: var(--hp-font-ui);
-        font-size: 1.15rem;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--hp-taupe);
-      }
+      /* The review pager's own styles live in assets/hp-reviews.css so they
+         travel with the widget into any root the app renders into. */
 
       /* ---- sidebar suggestions: vertical rows ---- */
       .hp-pdp-side-recs { margin-top: 1.8rem; }
@@ -1282,8 +1128,16 @@
             </div>
           {%- endif -%}
           {%- if show_reviews -%}
+            {%- comment -%}
+              hp-revs* are the shared review classes from assets/hp-reviews.css —
+              the same ones the reusable "Reviews (Judge.me)" section uses, so
+              this block and the rest of the site render one identical design.
+              hp-revs--has-title suppresses the app's own "Customer Reviews"
+              heading whenever this block already prints one, which is what was
+              showing the same words twice in a row.
+            {%- endcomment -%}
             <div
-              class="hp-pdp-block"
+              class="hp-pdp-block hp-revs__scope{% if section.settings.hp_reviews_title != blank %} hp-revs--has-title{% endif %}"
               id="hp-reviews"
               {%- if section.settings.hp_reviews_per_page > 0 %}
                 data-hp-reviews-pager="{{ section.settings.hp_reviews_per_page }}"

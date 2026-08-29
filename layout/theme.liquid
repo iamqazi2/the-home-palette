@@ -376,6 +376,14 @@
       layer overrides them without needing !important everywhere.
     {%- endcomment -%}
     {{ 'hp-theme.css' | asset_url | stylesheet_tag }}
+    {%- comment -%}
+      Judge.me's widget is mounted by the app's own script, so its markup is not
+      present at first paint and cannot be styled from a section's inline CSS
+      alone. Loading the review styles globally (after hp-theme.css, so they win
+      on equal specificity) keeps the product page, the carousel and the
+      all-reviews page on one design wherever the app renders.
+    {%- endcomment -%}
+    {{ 'hp-reviews.css' | asset_url | stylesheet_tag }}
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">

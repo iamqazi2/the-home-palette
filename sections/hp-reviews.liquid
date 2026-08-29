@@ -1,0 +1,116 @@
+{%- comment -%}
+  hp-reviews — the one review section for the whole site.
+
+  Deliberately a thin, branded shell around Judge.me's own app blocks rather
+  than markup that prints reviews itself. Two reasons:
+
+  1. Every review shown anywhere on the site then comes from Judge.me. There is
+     no second, hand-written source of testimonials to drift out of date or to
+     contradict the real ratings — which is what the old hardcoded slider did.
+  2. Which Judge.me widget belongs on a page differs (product review widget on
+     a product, featured carousel on the homepage, all-reviews elsewhere), and
+     an @app block lets the right one be dropped in from the theme editor
+     without the theme hardcoding an app block handle it cannot verify.
+
+  Styling lives in assets/hp-reviews.css, shared with the product page, so the
+  two surfaces cannot diverge.
+{%- endcomment -%}
+
+{%- liquid
+  assign has_title = false
+  if section.settings.heading != blank
+    assign has_title = true
+  endif
+-%}
+
+<div
+  class="hp-revs hp-revs--{{ section.settings.bg }}{% if has_title %} hp-revs--has-title{% endif %}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="hp-revs__inner">
+    {%- if section.settings.eyebrow != blank or has_title or section.settings.text != blank -%}
+      <div class="hp-revs__head{% if section.settings.align == 'center' %} hp-revs__head--center{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="hp-revs__eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if has_title -%}
+          <h2 class="hp-revs__title">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <p class="hp-revs__text">{{ section.settings.text }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="hp-revs__widget">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {% render block %}
+        {%- endcase -%}
+      {%- endfor -%}
+
+      {%- if section.blocks.size == 0 -%}
+        {%- comment -%}
+          Editor-only hint. Never shown to a shopper: without a block there is
+          nothing to render, and a silent empty section is the failure mode that
+          made the product page look broken.
+        {%- endcomment -%}
+        {%- if request.design_mode -%}
+          <p class="hp-revs__text">
+            Add a Judge.me block to this section — “Review widget” on a product
+            page, “Featured carousel” or “All reviews” anywhere else.
+          </p>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Reviews (Judge.me)",
+  "tag": "section",
+  "class": "hp-revs-section",
+  "blocks": [{ "type": "@app" }],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Add a Judge.me block below. Reviews always come from the Judge.me app — nothing here is typed in by hand."
+    },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Real Tables · Real Reviews" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Loved Across Pakistan" },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Intro text",
+      "default": "Verified reviews from homes, hosts and restaurants across the country."
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Centred" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Background",
+      "options": [
+        { "value": "cream-soft", "label": "Cream (soft)" },
+        { "value": "cream", "label": "Cream" },
+        { "value": "paper", "label": "White" },
+        { "value": "teal", "label": "Teal" }
+      ],
+      "default": "cream-soft"
+    },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top padding", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom padding", "default": 64 }
+  ],
+  "presets": [{ "name": "Reviews (Judge.me)" }]
+}
+{% endschema %}

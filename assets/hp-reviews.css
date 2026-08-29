@@ -1,0 +1,608 @@
+/* ==========================================================================
+   hp-reviews.css — one branded design for every Judge.me surface
+   ==========================================================================
+
+   Loaded globally (theme.liquid) and written UNSCOPED on purpose. Judge.me
+   renders the same `.jdgm-*` class names from several different entry points —
+   the product review widget, the featured carousel, the all-reviews widget and
+   the all-reviews page — and the widget is mounted by the app's own script into
+   a container the theme does not own. Scoping these rules to a wrapper would
+   style whichever surface happened to sit inside it and leave the rest looking
+   like stock Judge.me, which is exactly the split this file exists to remove.
+
+   Two widget generations are in the wild: the classic widget and the "revamp"
+   (data attribute `review_widget_revamp_enabled`). Both were diffed from
+   Judge.me's own shopify_v2.css and widget/main.css — the class names are
+   shared, the revamp simply adds the histogram, chips, search and the
+   actions row. Selectors below cover both, so a shop flipping between them
+   does not lose its styling.
+
+   Review CONTENT is never authored here. Everything visible comes from the
+   Judge.me app; this file only dresses it.
+   ---------------------------------------------------------------------- */
+
+/* ---- section shell ---------------------------------------------------- */
+
+.hp-revs {
+  padding: var(--hp-gap-y) 0;
+  background: var(--hp-cream-soft);
+  color: var(--hp-ink);
+}
+.hp-revs--cream { background: var(--hp-cream); }
+.hp-revs--paper { background: var(--hp-paper); }
+.hp-revs--teal { background: var(--hp-teal); color: var(--hp-cream); }
+
+.hp-revs__inner {
+  width: 100%;
+  max-width: 128rem;
+  margin: 0 auto;
+  padding: 0 var(--hp-gap-x);
+}
+
+.hp-revs__head {
+  max-width: 62rem;
+  margin: 0 0 3.2rem;
+}
+.hp-revs__head--center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.hp-revs__eyebrow {
+  display: block;
+  font-family: var(--hp-font-ui);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--hp-taupe);
+  margin: 0 0 1rem;
+}
+.hp-revs--teal .hp-revs__eyebrow { color: var(--hp-teal-soft); }
+
+.hp-revs__title {
+  font-family: var(--hp-font-display) !important;
+  font-weight: 400;
+  font-size: var(--hp-h-section);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--hp-heading);
+  margin: 0;
+}
+.hp-revs--teal .hp-revs__title { color: var(--hp-cream); }
+
+.hp-revs__text {
+  font-family: var(--hp-font-ui);
+  font-size: 1.5rem;
+  line-height: 1.75;
+  color: var(--hp-taupe);
+  margin: 1.2rem 0 0;
+}
+.hp-revs--teal .hp-revs__text { color: rgba(255, 249, 223, 0.75); }
+
+/* The app prints its own "Customer Reviews" heading. When the section supplies
+   one, that would read as the same words twice in a row — which is what the
+   product page was doing. */
+.hp-revs--has-title .jdgm-rev-widg__title,
+.hp-revs--has-title .jdgm-all-reviews__header > h2,
+.hp-revs--has-title .jdgm-carousel-title {
+  display: none !important;
+}
+
+/* Judge.me caps its own widget at a fixed max-width inline. The section
+   already constrains the measure, so let the widget fill it. */
+.hp-revs .jdgm-widget,
+.hp-revs .jdgm-rev-widg,
+.hp-revs .jdgm-all-reviews-widget,
+.hp-revs__scope .jdgm-widget,
+.hp-revs__scope .jdgm-rev-widg {
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+/* The product page keeps its own block wrapper (.hp-pdp-block) for the heading
+   and column layout, so it opts into the shared review design with
+   .hp-revs__scope instead of the full .hp-revs shell. */
+.hp-revs__scope { color: var(--hp-ink); }
+
+/* ---- typography reset over the app -------------------------------------
+   Judge.me ships its own font stack and grey palette; pull every text node
+   onto the site's type so a review reads like the rest of the page. */
+
+.jdgm-widget,
+.jdgm-rev-widg,
+.jdgm-rev,
+.jdgm-rev__body,
+.jdgm-rev__body p,
+.jdgm-rev__author,
+.jdgm-rev__timestamp,
+.jdgm-rev__location,
+.jdgm-rev-widg__summary-text,
+.jdgm-histogram,
+.jdgm-chip,
+.jdgm-carousel-item {
+  font-family: var(--hp-font-ui) !important;
+  color: var(--hp-ink);
+}
+
+.jdgm-rev__body,
+.jdgm-rev__body p {
+  font-size: 1.45rem !important;
+  line-height: 1.8 !important;
+  color: var(--hp-ink) !important;
+  margin: 0 0 1rem;
+}
+.jdgm-rev__body p:last-child { margin-bottom: 0; }
+
+.jdgm-rev__title,
+.jdgm-carousel-item__review-title {
+  font-family: var(--hp-font-display) !important;
+  font-weight: 400 !important;
+  font-size: 1.9rem !important;
+  line-height: 1.25 !important;
+  color: var(--hp-ink) !important;
+  display: block;
+  margin: 0 0 0.6rem;
+}
+
+/* ---- stars -------------------------------------------------------------
+   The classic widget draws stars as text glyphs (colour), the revamp draws
+   some as inline SVG (fill). Set both so the gold survives either build. */
+
+.jdgm-star { color: var(--hp-gold) !important; }
+.jdgm-star.jdgm--on,
+.jdgm-star.jdgm--half,
+.jdgm-histogram__star { color: var(--hp-gold) !important; }
+.jdgm-star.jdgm--off { color: rgba(224, 164, 34, 0.28) !important; }
+.jdgm-star svg,
+.jdgm-stars svg { fill: currentColor !important; }
+.jdgm-rev__rating,
+.jdgm-rating__stars { letter-spacing: 0.08em; }
+
+/* ---- summary header ---------------------------------------------------- */
+
+.jdgm-rev-widg__header,
+.jdgm-all-reviews__header {
+  border: 1px solid var(--hp-hairline) !important;
+  border-radius: var(--hp-r-card);
+  background: var(--hp-cream);
+  padding: 2.4rem !important;
+  margin: 0 0 2.4rem !important;
+}
+.hp-revs--teal .jdgm-rev-widg__header,
+.hp-revs--teal .jdgm-all-reviews__header {
+  background: rgba(255, 249, 223, 0.06);
+  border-color: var(--hp-hairline-light) !important;
+}
+
+.jdgm-rev-widg__summary-average,
+.jdgm-all-reviews__summary .jdgm-rev-widg__summary-average {
+  font-family: var(--hp-font-display) !important;
+  font-size: 4.2rem !important;
+  line-height: 1 !important;
+  color: var(--hp-teal) !important;
+}
+.hp-revs--teal .jdgm-rev-widg__summary-average { color: var(--hp-cream) !important; }
+
+.jdgm-rev-widg__summary-text {
+  font-size: 1.25rem !important;
+  letter-spacing: 0.04em;
+  color: var(--hp-taupe) !important;
+}
+.hp-revs--teal .jdgm-rev-widg__summary-text { color: rgba(255, 249, 223, 0.7) !important; }
+
+/* rating distribution bars (revamp) */
+.jdgm-histogram__row {
+  padding: 0.25rem 0 !important;
+  border-radius: var(--hp-r-pill);
+}
+.jdgm-histogram__row:hover { background: rgba(26, 75, 70, 0.05); }
+.jdgm-histogram__row--selected { background: rgba(26, 75, 70, 0.09); }
+.jdgm-histogram__bar {
+  background: rgba(37, 37, 37, 0.08) !important;
+  border-radius: var(--hp-r-pill) !important;
+  overflow: hidden;
+  height: 0.8rem !important;
+}
+.jdgm-histogram__bar-content {
+  background: var(--hp-gold) !important;
+  border-radius: var(--hp-r-pill) !important;
+}
+.jdgm-histogram__frequency,
+.jdgm-histogram__percentage {
+  font-size: 1.15rem !important;
+  color: var(--hp-taupe) !important;
+}
+.jdgm-histogram__clear-filter { color: var(--hp-teal) !important; }
+
+/* trust medals: let them breathe, drop the stock border */
+.jdgm-medals-wrapper,
+.jdgm-medals-wrapper--rebranding {
+  border: 0 !important;
+  padding: 0 !important;
+  gap: 1.2rem;
+}
+.jdgm-medal__value { font-family: var(--hp-font-ui) !important; }
+
+/* ---- action row: write a review, sort, filter, search ------------------ */
+
+.jdgm-widget-actions-wrapper {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 2rem !important;
+}
+
+.jdgm-write-rev-link,
+.jdgm-widget .jdgm-write-rev-link,
+.jdgm-ask-question-btn,
+.jdgm-paginate__load-more,
+.jdgm-all-reviews-page__load-more {
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+  border: 1.5px solid var(--hp-teal) !important;
+  border-radius: var(--hp-r-pill) !important;
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 1.1rem 2.2rem !important;
+  box-shadow: none !important;
+  transition: background 0.3s var(--hp-ease), border-color 0.3s var(--hp-ease);
+}
+.jdgm-write-rev-link:hover,
+.jdgm-ask-question-btn:hover,
+.jdgm-paginate__load-more:hover,
+.jdgm-all-reviews-page__load-more:hover {
+  background: var(--hp-teal-deep) !important;
+  border-color: var(--hp-teal-deep) !important;
+  color: var(--hp-cream) !important;
+}
+.hp-revs--teal .jdgm-write-rev-link,
+.hp-revs--teal .jdgm-paginate__load-more {
+  background: var(--hp-cream) !important;
+  color: var(--hp-teal) !important;
+  border-color: var(--hp-cream) !important;
+}
+
+/* sort / filter controls and the revamp's icon buttons */
+.jdgm-rev-widg__sort-wrapper select,
+.jdgm-sort-dropdown,
+.jdgm-sort-dropdown-wrapper,
+.jdgm-review-search input,
+.jdgm-review-search {
+  border-radius: var(--hp-r-pill) !important;
+  border: 1px solid var(--hp-hairline-strong) !important;
+  background: transparent !important;
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.25rem !important;
+  color: var(--hp-ink) !important;
+}
+.jdgm-review-search input { border: 0 !important; }
+
+/* filter chips */
+.jdgm-chip {
+  border-radius: var(--hp-r-pill) !important;
+  border: 1px solid var(--hp-hairline-strong) !important;
+  background: transparent !important;
+  color: var(--hp-ink) !important;
+  font-size: 1.2rem !important;
+  padding: 0.5rem 1.4rem !important;
+}
+.jdgm-chip.jdgm--active,
+.jdgm-chip.jdgm--filled {
+  background: var(--hp-teal) !important;
+  border-color: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+}
+
+/* ---- customer photo strip --------------------------------------------- */
+
+.jdgm-gallery__thumbnail-wrapper,
+.jdgm-gallery__thumbail-wrapper { gap: 1rem; }
+.jdgm-gallery__thumbnail,
+.jdgm-ugc-media__thumbnail {
+  border-radius: 14px !important;
+  overflow: hidden;
+  transition: transform 0.4s var(--hp-ease);
+}
+.jdgm-gallery__thumbnail-link:hover .jdgm-gallery__thumbnail { transform: scale(1.04); }
+
+/* ---- the review card --------------------------------------------------- */
+
+.jdgm-rev {
+  position: relative;
+  border: 1px solid var(--hp-hairline) !important;
+  border-radius: var(--hp-r-card) !important;
+  background: var(--hp-paper);
+  padding: 2.2rem !important;
+  margin: 0 0 1.6rem !important;
+  /* keeps a card whole when the list is laid out in columns below */
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+}
+.jdgm-rev.jdgm-divider-top { border-top: 1px solid var(--hp-hairline) !important; }
+.hp-revs--teal .jdgm-rev {
+  background: rgba(255, 249, 223, 0.05);
+  border-color: var(--hp-hairline-light) !important;
+}
+.hp-revs--teal .jdgm-rev,
+.hp-revs--teal .jdgm-rev__body,
+.hp-revs--teal .jdgm-rev__body p,
+.hp-revs--teal .jdgm-rev__title,
+.hp-revs--teal .jdgm-rev__author { color: var(--hp-cream) !important; }
+
+.jdgm-rev__header { margin-bottom: 1rem; }
+
+/* avatar: teal disc with the initial, matching the site's chips */
+.jdgm-rev__icon {
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+  font-family: var(--hp-font-display) !important;
+  font-weight: 400;
+  font-size: 1.7rem !important;
+  width: 4rem !important;
+  height: 4rem !important;
+  line-height: 4rem !important;
+  border-radius: 50% !important;
+  text-align: center;
+  flex: 0 0 auto;
+}
+.jdgm-rev__avatar-image { border-radius: 50% !important; }
+.hp-revs--teal .jdgm-rev__icon {
+  background: var(--hp-cream) !important;
+  color: var(--hp-teal) !important;
+}
+
+.jdgm-rev__author {
+  font-weight: 600 !important;
+  font-size: 1.35rem !important;
+  color: var(--hp-ink) !important;
+  letter-spacing: 0.01em;
+}
+.jdgm-rev__timestamp,
+.jdgm-rev__location,
+.jdgm-rev__source {
+  color: var(--hp-taupe) !important;
+  font-size: 1.15rem !important;
+}
+.hp-revs--teal .jdgm-rev__timestamp,
+.hp-revs--teal .jdgm-rev__location { color: rgba(255, 249, 223, 0.6) !important; }
+
+/* verified-buyer pill */
+.jdgm-rev__buyer-badge,
+.jdgm-rev__buyer-badge-wrapper .jdgm-rev__buyer-badge {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(26, 75, 70, 0.1) !important;
+  color: var(--hp-teal) !important;
+  border: 1px solid rgba(26, 75, 70, 0.28) !important;
+  border-radius: var(--hp-r-pill) !important;
+  padding: 0.25rem 0.9rem !important;
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 1 !important;
+}
+.hp-revs--teal .jdgm-rev__buyer-badge {
+  background: rgba(255, 249, 223, 0.12) !important;
+  border-color: var(--hp-hairline-light) !important;
+  color: var(--hp-cream) !important;
+}
+
+/* photos attached to a review */
+.jdgm-rev__pics img,
+.jdgm-rev__pic-img,
+.jdgm-rev__vids img {
+  border-radius: 12px !important;
+  object-fit: cover;
+}
+
+/* "Review for <product>" — the group link Judge.me prints on borrowed reviews */
+.jdgm-rev__prod-info-wrapper,
+.jdgm-rev__prod-link {
+  background: var(--hp-cream-soft) !important;
+  border: 1px solid var(--hp-hairline);
+  border-radius: 12px;
+  padding: 1rem 1.2rem !important;
+  font-size: 1.15rem !important;
+  margin-top: 1.4rem;
+}
+.jdgm-rev__prod-info-wrapper a,
+.jdgm-rev__prod-link a,
+.jdgm-rev__replier { color: var(--hp-teal) !important; }
+.hp-revs--teal .jdgm-rev__prod-info-wrapper {
+  background: rgba(255, 249, 223, 0.06) !important;
+  border-color: var(--hp-hairline-light);
+}
+.hp-revs--teal .jdgm-rev__prod-info-wrapper a { color: var(--hp-cream) !important; }
+
+/* shop reply */
+.jdgm-rev__reply,
+.jdgm-rev__reply-content {
+  background: rgba(26, 75, 70, 0.05) !important;
+  border-left: 2px solid var(--hp-teal);
+  border-radius: 0 12px 12px 0;
+  padding: 1.2rem 1.4rem !important;
+  margin-top: 1.4rem;
+}
+
+/* helpful votes */
+.jdgm-rev__votes,
+.jdgm-rev__actions { margin-top: 1.2rem; }
+.jdgm-rev__thumb-btn {
+  border-radius: var(--hp-r-pill) !important;
+  color: var(--hp-taupe) !important;
+}
+.jdgm-rev__thumb-btn:hover { color: var(--hp-teal) !important; }
+
+/* ---- pagination -------------------------------------------------------- */
+
+.jdgm-paginate { margin-top: 2.4rem !important; }
+.jdgm-paginate__page {
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.25rem !important;
+  color: var(--hp-taupe) !important;
+  border-radius: 50% !important;
+  min-width: 3.2rem;
+  height: 3.2rem;
+  line-height: 3.2rem;
+}
+.jdgm-paginate__page.jdgm-curt,
+.jdgm-paginate__page.jdgm--active {
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+}
+
+/* Judge.me's own footer credit — kept (their terms) but toned down. */
+.jdgm-branding-footer,
+.jdgm-verified-by {
+  opacity: 0.45;
+  font-size: 1.05rem !important;
+}
+
+/* ---- featured carousel (home / about / hospitality) -------------------- */
+
+.jdgm-carousel-wrapper { padding: 0 !important; }
+.jdgm-carousel {
+  border: 0 !important;
+  background: transparent !important;
+}
+.jdgm-carousel-item {
+  border: 1px solid var(--hp-hairline) !important;
+  border-radius: var(--hp-r-card) !important;
+  background: var(--hp-paper);
+  padding: 2.2rem !important;
+}
+.hp-revs--teal .jdgm-carousel-item {
+  background: rgba(255, 249, 223, 0.05);
+  border-color: var(--hp-hairline-light) !important;
+}
+.hp-revs--teal .jdgm-carousel-item,
+.hp-revs--teal .jdgm-carousel-item__review-body,
+.hp-revs--teal .jdgm-carousel-item__review-title,
+.hp-revs--teal .jdgm-carousel-item__reviewer-name { color: var(--hp-cream) !important; }
+
+.jdgm-carousel-item__review-body {
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.4rem !important;
+  line-height: 1.75 !important;
+}
+.jdgm-carousel-item__reviewer-name {
+  font-weight: 600 !important;
+  font-size: 1.3rem !important;
+}
+.jdgm-carousel-item__timestamp,
+.jdgm-carousel-item__product-title {
+  color: var(--hp-taupe) !important;
+  font-size: 1.15rem !important;
+}
+.jdgm-carousel-item__product-image { border-radius: 10px !important; }
+.jdgm-carousel__left-arrow,
+.jdgm-carousel__right-arrow {
+  color: var(--hp-teal) !important;
+  border-radius: 50%;
+}
+.hp-revs--teal .jdgm-carousel__left-arrow,
+.hp-revs--teal .jdgm-carousel__right-arrow { color: var(--hp-cream) !important; }
+.jdgm-carousel__more-reviews-button { color: var(--hp-teal) !important; }
+
+/* ---- all-reviews widget / page ---------------------------------------- */
+
+.jdgm-all-reviews-widget,
+.jdgm-all-reviews-page__wrapper { border: 0 !important; }
+.jdgm-all-reviews__body .jdgm-rev { background: var(--hp-paper); }
+
+/* ---- responsive --------------------------------------------------------
+   Mobile keeps one column and trims the card padding so the copy is not
+   squeezed into a thin ribbon. Desktop lays the list out in two columns —
+   `break-inside: avoid` on .jdgm-rev above keeps each card intact. */
+
+@media screen and (max-width: 749px) {
+  .hp-revs { padding: 4rem 0; }
+  .hp-revs__head { margin-bottom: 2.4rem; }
+  .jdgm-rev { padding: 1.6rem !important; }
+  .jdgm-rev-widg__header,
+  .jdgm-all-reviews__header { padding: 1.8rem !important; }
+  .jdgm-rev-widg__summary-average { font-size: 3.4rem !important; }
+  .jdgm-widget-actions-wrapper { gap: 0.8rem; }
+  .jdgm-write-rev-link {
+    width: 100%;
+    text-align: center;
+    padding: 1.2rem 1.6rem !important;
+  }
+  .jdgm-rev__body,
+  .jdgm-rev__body p { font-size: 1.4rem !important; }
+  .jdgm-rev__title { font-size: 1.7rem !important; }
+  .jdgm-gallery__thumbnail,
+  .jdgm-ugc-media__thumbnail { border-radius: 10px !important; }
+}
+
+@media screen and (min-width: 1200px) {
+  .hp-revs .jdgm-rev-widg__body,
+  .hp-revs .jdgm-all-reviews__body,
+  #hp-reviews .jdgm-rev-widg__body {
+    column-count: 2;
+    column-gap: 1.6rem;
+  }
+}
+
+
+/* ---- theme-side review pager ------------------------------------------
+   assets/hp-theme.js can page long review lists locally (the "Reviews per
+   page" setting). Its markup is injected next to the app's list, which may be
+   inside a root the section stylesheet cannot reach, so the styles ride along
+   in this file — the same file the script imports. */
+
+.hp-revpager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 1.8rem;
+}
+.hp-revpager__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--hp-teal);
+  background: transparent;
+  color: var(--hp-teal);
+  cursor: pointer;
+  transition: background 0.3s var(--hp-ease), color 0.3s var(--hp-ease), opacity 0.3s var(--hp-ease);
+}
+.hp-revpager__btn:hover:not(:disabled) { background: var(--hp-teal); color: var(--hp-cream); }
+.hp-revpager__btn:disabled { opacity: 0.3; cursor: default; }
+.hp-revpager__label {
+  font-family: var(--hp-font-ui);
+  font-size: 1.15rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hp-taupe);
+}
+.hp-revs--teal .hp-revpager__btn { border-color: var(--hp-cream); color: var(--hp-cream); }
+.hp-revs--teal .hp-revpager__btn:hover:not(:disabled) { background: var(--hp-cream); color: var(--hp-teal); }
+
+/* The floating "Reviews" tab stays off site-wide. Repeated from hp-theme.css
+   because this file is also imported into roots a <head> stylesheet cannot
+   reach. */
+.jdgm-rev-tab,
+#jdgm-rev-tab,
+.jdgm-all-reviews-tab,
+#judgeme_all_reviews_tab,
+.jdgm-floating-tab,
+#judgeme_floating_tab,
+[class*='jdgm'][class*='-tab'] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
