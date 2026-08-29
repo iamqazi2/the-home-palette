@@ -1267,21 +1267,73 @@
 
 .hp-revs--showcase .jm-pagination-controls,
 .hp-revs--showcase .jdgm-paginate {
-  margin-top: 1.6rem !important;
   display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
+  gap: 0.6rem;
+  margin-top: 2.4rem !important;
 }
-/* readable against the teal card background rather than the taupe meant for
-   paper/cream surfaces */
+
+/* Every control is a fixed circle. Without flex:0 0 auto they are flex items
+   in a centred row with no intrinsic width to hold them, so they stretched
+   into the cream ellipses — and the number inside was cream on cream, which
+   is why they read as blank blobs rather than as page buttons. */
 .hp-revs--showcase .jm-pagination-controls__button,
-.hp-revs--showcase .jdgm-paginate__page {
-  color: rgba(255, 249, 223, 0.7) !important;
+.hp-revs--showcase .jdgm-paginate__page,
+.hp-revs--showcase .jdgm-paginate__prev,
+.hp-revs--showcase .jdgm-paginate__next {
+  flex: 0 0 auto !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem !important;
+  min-width: 3.6rem !important;
+  height: 3.6rem !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(255, 249, 223, 0.28) !important;
+  background: transparent !important;
+  color: var(--hp-cream) !important;
+  opacity: 1 !important;
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.3rem !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: background 0.3s var(--hp-ease), border-color 0.3s var(--hp-ease),
+    color 0.3s var(--hp-ease);
 }
+.hp-revs--showcase .jm-pagination-controls__button:hover,
+.hp-revs--showcase .jdgm-paginate__page:hover {
+  border-color: var(--hp-cream) !important;
+  background: rgba(255, 249, 223, 0.14) !important;
+}
+
+/* the current page is the one filled disc in the row */
 .hp-revs--showcase .jm-pagination-controls__button--active,
 .hp-revs--showcase .jdgm-paginate__page.jdgm-curt,
 .hp-revs--showcase .jdgm-paginate__page.jdgm--active {
   background: var(--hp-cream) !important;
+  border-color: var(--hp-cream) !important;
   color: var(--hp-teal) !important;
+}
+
+/* arrow glyphs are drawn as SVG in the revamp and as text in the classic */
+.hp-revs--showcase .jm-pagination-controls__button svg,
+.hp-revs--showcase .jdgm-paginate svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  fill: currentColor !important;
+  stroke: currentColor;
+}
+.hp-revs--showcase .jm-pagination-controls__button[disabled],
+.hp-revs--showcase .jm-pagination-controls__button--disabled {
+  opacity: 0.35 !important;
+  cursor: default;
+  pointer-events: none;
 }
 
 .hp-revs--showcase .jdgm-review-list {
@@ -1824,6 +1876,23 @@
 }
 .hp-revs__row::-webkit-scrollbar { display: none; }
 .hp-revs__row + .hp-revs__row { margin-top: 1.4rem; }
+
+/* A rail whose cards do not overrun it never drifts, so left alignment just
+   strands them against one edge with dead space beside — the product page's
+   broken-looking half-empty rows. hp-theme.js measures each rail and sets
+   this class when it fits; centring is only applied in that case, because a
+   centred overflowing scroller would start mid-list with its first cards
+   scrolled off to the left and unreachable. */
+.hp-revs__row--fits { justify-content: center; }
+
+/* The same measurement applies to a list left as one rail (fewer cards than
+   two rows can carry). It is .hp-revs__store / .jdgm-review-list rather than
+   .hp-revs__row, and both set display:flex with !important, so the centring
+   has to match that weight. */
+.hp-revs__store.hp-revs__row--fits,
+.jdgm-review-list.hp-revs__row--fits {
+  justify-content: center !important;
+}
 
 /* medium card — same box whether it holds a photo or a quote */
 .hp-revs--showcase .hp-revs__row .jm-review-item,

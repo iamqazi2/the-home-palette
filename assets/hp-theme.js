@@ -959,22 +959,46 @@
      photo cards, which are scattered through the list, spread across both
      rows instead of bunched in one. */
   function dealReviewRows(list) {
-    if (!list || list.dataset.hpRowsDealt) return;
+    if (!list) return;
+    /* Loose cards sitting directly on the list are the signal that there is
+       work to do. Judge.me replaces the list's contents when the reader
+       changes page, sort or filter, which wipes the rows and leaves the new
+       page's cards loose again — so this is driven off the live DOM rather
+       than a one-shot "already done" flag, which would have left every page
+       after the first stacked and unstyled. */
     var cards = [];
     Array.prototype.forEach.call(list.children, function (c) {
       if (c.matches('.jdgm-rev, .jm-review-item')) cards.push(c);
     });
-    if (cards.length <= 3) return;
-    list.dataset.hpRowsDealt = '1';
-    var rowA = document.createElement('div');
-    rowA.className = 'hp-revs__row';
-    rowA.setAttribute('data-hp-rail', 'forward');
-    var rowB = document.createElement('div');
-    rowB.className = 'hp-revs__row';
-    rowB.setAttribute('data-hp-rail', 'reverse');
-    cards.forEach(function (c, i) { (i % 2 ? rowB : rowA).appendChild(c); });
-    list.appendChild(rowA);
-    list.appendChild(rowB);
+    if (!cards.length) return;
+
+    // drop the previous page's now-empty rails before dealing the new cards
+    Array.prototype.forEach.call(list.querySelectorAll('.hp-revs__row'), function (r) {
+      if (!r.querySelector('.jdgm-rev, .jm-review-item')) r.remove();
+    });
+
+    function makeRow(dir) {
+      var row = document.createElement('div');
+      row.className = 'hp-revs__row';
+      row.setAttribute('data-hp-rail', dir);
+      list.appendChild(row);
+      return row;
+    }
+
+    /* Two rails only pay off with enough cards to fill both. The product
+       widget renders one page at a time — five cards split 3/2 read as a
+       broken grid with dead space beside them, not as rails. Below the
+       threshold everything goes into a single row, which is still a real
+       .hp-revs__row and so picks up the same card sizing, gap and centring
+       as the two-rail layout rather than needing a parallel set of rules. */
+    if (cards.length < 8) {
+      var only = makeRow('forward');
+      cards.forEach(function (c) { only.appendChild(c); });
+    } else {
+      var rowA = makeRow('forward');
+      var rowB = makeRow('reverse');
+      cards.forEach(function (c, i) { (i % 2 ? rowB : rowA).appendChild(c); });
+    }
     /* hp-revs__store--rows carries the card-sizing rules (assumes the
        store-only .hp-revs__store class alongside it); hp-revs__railed is the
        list-level layout switch (block instead of the single-rail flex row)
@@ -987,7 +1011,25 @@
   function initReviewMarquee(root) {
     (root || document).querySelectorAll('.hp-revs--showcase').forEach(function (section) {
       var tries = 0;
-      (function wait() {
+
+      /* Judge.me re-renders its list on page, sort and filter changes, long
+         after the initial poll has given up. Re-run the deal and the
+         fits/drift measurement whenever it does, so a reader who pages
+         through reviews keeps the rowed design instead of dropping back to
+         the app's raw stacked list. */
+      if (window.MutationObserver && !section.dataset.hpRevsObserved) {
+        section.dataset.hpRevsObserved = '1';
+        var rerun = null;
+        new window.MutationObserver(function () {
+          var l = section.querySelector('.jdgm-review-list');
+          // only react to the app dropping fresh, undealt cards on the list
+          if (!l || !l.querySelector(':scope > .jdgm-rev, :scope > .jm-review-item')) return;
+          window.clearTimeout(rerun);
+          rerun = window.setTimeout(function () { tries = 0; wait(); }, 120);
+        }).observe(section, { childList: true, subtree: true });
+      }
+
+      function wait() {
         /* The store-wide markup is already dealt into rows by initStoreReviews.
            The product widget hydrates asynchronously, so deal it here instead,
            once its cards exist — dealReviewRows no-ops while there is nothing
@@ -999,16 +1041,35 @@
         if (!rails.length) {
           rails = list ? [list] : [];
         }
-        var ready = rails.length && Array.prototype.every.call(rails, function (r) {
-          return r.scrollWidth > r.clientWidth + 4;
-        });
-        // the app renders asynchronously; give it a while before giving up
-        if (!ready) {
+        if (!rails.length) {
           if (tries++ < 60) return window.setTimeout(wait, 250);
           return;
         }
-        Array.prototype.forEach.call(rails, function (rail) { armRail(rail); });
-      })();
+
+        /* A rail only drifts when its cards overrun it. One that fits must be
+           centred instead — left-aligned, a short row strands its cards
+           against the left edge with the dead space that made the product
+           page look broken. Measured rather than counted, because the card
+           count that fills a rail depends on the viewport. */
+        var overflowing = [];
+        Array.prototype.forEach.call(rails, function (r) {
+          var fits = r.scrollWidth <= r.clientWidth + 4;
+          r.classList.toggle('hp-revs__row--fits', fits);
+          if (!fits) overflowing.push(r);
+        });
+
+        /* Cards arrive progressively and images settle after them, so an
+           early measurement can read as "fits" while more are still coming.
+           Keep polling until something overflows, then arm only those; if
+           nothing ever does, the centred layout above is the finished state. */
+        if (!overflowing.length) {
+          if (tries++ < 60) return window.setTimeout(wait, 250);
+          return;
+        }
+        overflowing.forEach(function (rail) { armRail(rail); });
+      }
+
+      wait();
     });
   }
 

@@ -59,18 +59,26 @@
 
           A single metafield has a size cap, so once a shop has enough reviews
           Judge.me splits the HTML across several: all_reviews_0, all_reviews_1,
-          and so on. Reading only _0 silently dropped every review past the
-          first chunk — the store's higher review counts, and the more recent
-          reviews with photos/videos that tend to land later in the list, were
-          simply never in the document. Looping the whole judgeme namespace and
-          concatenating every "all_reviews_*" key picks up all of them, however
-          many chunks Judge.me has created.
+          and so on. Reading only _0 drops every review past the first chunk —
+          which is where the newer reviews, including most of the ones with
+          photos and video, actually live.
+
+          The keys are looked up BY EXACT NAME, one index at a time. The
+          namespace also holds all_reviews_count, all_reviews_rating and a
+          JSON-LD Organization blob, all of which "contains all_reviews" would
+          match — concatenating those into the markup printed "406 {...} 4.89"
+          as visible text above the cards and broke the card markup itself.
+          Stop at the first missing index: the chunks are contiguous, so a gap
+          means there are no more.
         {%- endcomment -%}
         {%- assign store_reviews = '' -%}
-        {%- for mf in shop.metafields.judgeme -%}
-          {%- if mf[0] contains 'all_reviews' and mf[1] != blank -%}
-            {%- assign store_reviews = store_reviews | append: mf[1] -%}
+        {%- for i in (0..19) -%}
+          {%- assign chunk_key = 'all_reviews_' | append: i -%}
+          {%- assign chunk = shop.metafields.judgeme[chunk_key] -%}
+          {%- if chunk == blank -%}
+            {%- break -%}
           {%- endif -%}
+          {%- assign store_reviews = store_reviews | append: chunk -%}
         {%- endfor -%}
         {%- if store_reviews != blank -%}
           <div class="jdgm-review-list hp-revs__store" data-hp-store-reviews>
