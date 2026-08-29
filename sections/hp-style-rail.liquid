@@ -44,9 +44,39 @@
     text-transform: uppercase;
     color: rgba(255, 249, 223, 0.8);
   }
+
+  {%- comment -%}
+    Mobile layout, opt-in per placement.
+
+    hp-theme.css turns every card grid on the site into a sideways-scrolling
+    rail below 750px, this one included — which is right on the home page,
+    where the section is one chapter among many and a rail keeps it short. On
+    a page that exists to show these styles, a rail hides most of them behind
+    a swipe, so that page asks for the grid back.
+
+    This wins on document order rather than on weight: the rail rule is
+    `.hp-section .hp-styles__grid` in a stylesheet in <head>, and Shopify
+    renders a section's {% style %} inline in <body>. Two classes each, so the
+    later one — this one — takes it, with no !important needed.
+  {%- endcomment -%}
+  @media screen and (max-width: 749px) {
+    .hp-styles--mobile-grid .hp-styles__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      overflow-x: visible;
+      scroll-snap-type: none;
+    }
+    /* the rail sizes each tile to 2.2-per-view; in a grid the column does it */
+    .hp-styles--mobile-grid .hp-styles__grid > * {
+      flex: initial;
+      width: auto;
+      max-width: none;
+      scroll-snap-align: none;
+    }
+  }
 {%- endstyle -%}
 
-<div class="hp-styles hp-section" id="hp-styles">
+<div class="hp-styles hp-section{% if section.settings.mobile_layout == 'grid' %} hp-styles--mobile-grid{% endif %}" id="hp-styles">
   <div class="hp-container">
     <div class="hp-section-head hp-section-head--center">
       {%- if section.settings.eyebrow != blank -%}
@@ -98,6 +128,17 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Textures & Glazes" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Style" },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Layout on phones",
+      "options": [
+        { "value": "rail", "label": "Sideways rail" },
+        { "value": "grid", "label": "Grid (two per row)" }
+      ],
+      "default": "rail",
+      "info": "A rail keeps the section short where it is one part of a longer page. Use the grid on a page devoted to these styles, where a swipe would hide most of them."
+    },
     { "type": "range", "id": "scrim", "min": 30, "max": 95, "step": 5, "unit": "%", "label": "Label overlay strength", "default": 65 },
     { "type": "color", "id": "bg_color", "label": "Section background", "default": "#fffdf4" },
     { "type": "checkbox", "id": "show_count", "label": "Show live product counts", "default": false },

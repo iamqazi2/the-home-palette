@@ -79,7 +79,8 @@
         "scrim": 65,
         "bg_color": "#fff9df",
         "show_count": true,
-        "count_label": "varieties"
+        "count_label": "varieties",
+        "mobile_layout": "grid"
       }
     },
     "hp_trust": {
