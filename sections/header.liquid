@@ -109,26 +109,33 @@
 
   .header__submenu,
   .header__submenu.list-menu {
-    min-width: 24rem;
+    min-width: 27rem;
     /* !important: .header__submenu.list-menu in base.css is two classes and
        would otherwise keep its own 1rem 0, which pushes rows edge to edge. */
-    padding: 0.8rem !important;
+    padding: 0.6rem !important;
     border: 1px solid var(--hp-hairline);
-    border-radius: 18px;
-    background: var(--hp-cream-soft);
-    box-shadow: 0 30px 60px -32px rgba(16, 48, 44, 0.55), 0 2px 10px -6px rgba(16, 48, 44, 0.16);
+    border-radius: 16px;
+    background: var(--hp-paper);
+    box-shadow:
+      0 24px 48px -28px rgba(16, 48, 44, 0.42),
+      0 2px 8px -4px rgba(16, 48, 44, 0.12);
   }
 
   /* Rows: full-width rounded targets with a tinted hover. */
   .header__submenu .header__menu-item {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.95rem 1.2rem;
-    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
     color: var(--hp-ink);
-    transition: background-color 0.2s var(--hp-ease), color 0.2s var(--hp-ease);
+    /* !important: base.css underlines .link / .header__menu-item, which drew a
+       rule under every row in the panel and under the group heading. A menu
+       row is already a target by virtue of its hover fill. */
+    text-decoration: none !important;
+    transition: background-color 0.18s var(--hp-ease), color 0.18s var(--hp-ease);
   }
   /* The type is set on the inner <span>, so it has to be reset there — setting
      it on the row does nothing, which is why parent rows stayed uppercase while
@@ -136,9 +143,9 @@
   .header__submenu .header__menu-item > span,
   .header__submenu .header__menu-item {
     font-family: var(--hp-font-ui);
-    font-size: 1.35rem;
+    font-size: 1.4rem;
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.35;
     letter-spacing: 0;
     text-transform: none;
     padding-bottom: 0;
@@ -156,43 +163,107 @@
   .header__submenu .header__menu-item > span::after,
   .header__submenu .header__menu-item::after { content: none !important; }
 
+  /* A group heading is not a destination — it labels the links under it. Set
+     as a small caps eyebrow it stops competing with them for the same reading
+     weight, which is what made the panel one flat list of equal-looking rows
+     with no way to tell a heading from a link. */
+  .header__submenu > li > details > summary.header__menu-item,
+  .header__submenu > li > details > summary.header__menu-item > span {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-taupe);
+  }
+  .header__submenu > li > details > summary.header__menu-item {
+    padding: 1.1rem 1.2rem 0.7rem;
+    cursor: pointer;
+  }
+  /* the heading is a disclosure, so it still needs a hover state — a colour
+     shift rather than the links' fill, which would read as a selected row */
+  .header__submenu > li > details > summary.header__menu-item:hover,
+  .header__submenu > li > details[open] > summary.header__menu-item {
+    background: transparent;
+    color: var(--hp-teal);
+  }
+
   /* Nested lists expand INSIDE the panel as an indented group — no second card.
      They were always inline in the flow; they only looked like a floating panel
-     because they were wearing the same card surface as their parent. Everything
-     that made them look detached is stripped, and a hairline rail plus an indent
-     is what says "these belong to the row above". */
+     because they were wearing the same card surface as their parent. The rail
+     and indent that said "these belong to the row above" are no longer needed
+     now the heading above them reads as a heading, and dropping them buys the
+     links back the full width of the panel. */
   .header__submenu .header__submenu,
   .header__submenu .header__submenu.list-menu,
   .header-wrapper .header__submenu .header__submenu {
     position: static;
     min-width: 0;
     width: auto;
-    margin: 0.2rem 0 0.6rem 1.5rem !important;
-    padding: 0.2rem 0 0.2rem 1.2rem !important;
+    margin: 0 0 0.4rem !important;
+    padding: 0 !important;
     border: 0 !important;
-    border-left: 2px solid var(--hp-teal-chip) !important;
     border-radius: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
   }
   .header__submenu .header__submenu .header__menu-item {
-    padding: 0.65rem 1rem;
-    border-radius: 9px;
+    padding: 0.85rem 1.2rem;
+    border-radius: 10px;
   }
   .header__submenu .header__submenu .header__menu-item > span,
-  .header__submenu .header__submenu .header__menu-item { font-size: 1.25rem; }
+  .header__submenu .header__submenu .header__menu-item { font-size: 1.35rem; }
 
-  /* An open group keeps a quiet highlight, so it is obvious which row the
-     indented list underneath belongs to. */
-  .header__submenu details[open] > summary.header__menu-item {
-    background: var(--hp-teal-chip);
+  /* A hairline between the panel's top-level groups, so it reads as sections
+     rather than one long column. On the <li> rather than on the row inside it,
+     so it never draws across a hovered row's rounded fill — and scoped by
+     .list-menu--disclosure, which only the outer panel carries: without it the
+     nested list matched too and ruled off every single link. */
+  .header__submenu.list-menu--disclosure > li + li {
+    margin-top: 0.3rem;
+    padding-top: 0.3rem;
+    border-top: 1px solid var(--hp-hairline);
+  }
+
+  /* A chevron that slides in on hover marks a row as somewhere to go, and
+     gives the eye a consistent right edge to track down the list. Only on
+     links: a summary already carries a caret, and two arrows on one row would
+     say the heading both expands and navigates. */
+  .header__submenu a.header__menu-item::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: 0 0 auto;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(-45deg) translateX(-0.3rem);
+    opacity: 0;
+    transition: opacity 0.18s var(--hp-ease), transform 0.18s var(--hp-ease);
+    order: 2;
+  }
+  .header__submenu a.header__menu-item:hover::before,
+  .header__submenu a.header__menu-item:focus-visible::before {
+    opacity: 0.55;
+    transform: rotate(-45deg) translateX(0);
+  }
+
+  /* The page you are on, marked in the menu rather than left to be guessed. */
+  .header__submenu .list-menu__item--active,
+  .header__submenu .header__menu-item[aria-current='page'] {
     color: var(--hp-teal);
+    font-weight: 600;
+  }
+
+  .header__submenu .header__menu-item:focus-visible {
+    outline: 2px solid var(--hp-teal);
+    outline-offset: -2px;
   }
 
   /* Caret turns to point down when its group is open. */
   .header__submenu .icon-caret {
     flex-shrink: 0;
+    width: 1rem;
     margin-left: 0.8rem;
+    opacity: 0.6;
     transition: transform 0.25s var(--hp-ease);
   }
   .header__submenu details[open] > summary .icon-caret { transform: rotate(180deg); }
