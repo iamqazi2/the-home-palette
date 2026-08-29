@@ -43,14 +43,41 @@
     {%- endif -%}
 
     <div class="hp-revs__widget">
-      {%- for block in section.blocks -%}
-        {%- case block.type -%}
-          {%- when '@app' -%}
-            {% render block %}
-        {%- endcase -%}
-      {%- endfor -%}
+      {%- if section.settings.source == 'store' -%}
+        {%- comment -%}
+          Store-wide reviews, straight from Judge.me's own shop metafield.
 
-      {%- if section.blocks.size == 0 -%}
+          The app writes every published review to shop.metafields.judgeme as
+          server-rendered HTML, so a page that wants the whole shop's reviews
+          does not need an app block at all — the reviews are in the document on
+          first paint, with no widget script to wait for and nothing to hydrate.
+          That also sidesteps the app-block handle, which Judge.me does not
+          publish anywhere the theme could verify.
+
+          It is the classic .jdgm-rev markup rather than the revamped widget's,
+          which is why hp-reviews.css carries styling for both.
+        {%- endcomment -%}
+        {%- assign store_reviews = shop.metafields.judgeme.all_reviews_0 -%}
+        {%- if store_reviews != blank -%}
+          <div class="jdgm-review-list hp-revs__store" data-hp-store-reviews>
+            {{ store_reviews }}
+          </div>
+        {%- elsif request.design_mode -%}
+          <p class="hp-revs__text">
+            Judge.me has not published its store-review metafield yet. It fills
+            in shortly after the app syncs; until then this section stays empty.
+          </p>
+        {%- endif -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+          {%- endcase -%}
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- if section.settings.source != 'store' and section.blocks.size == 0 -%}
         {%- comment -%}
           Editor-only hint. Never shown to a shopper: without a block there is
           nothing to render, and a silent empty section is the failure mode that
@@ -95,6 +122,17 @@
         { "value": "center", "label": "Centred" }
       ],
       "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "source",
+      "label": "Reviews to show",
+      "info": "This product only: needs a Judge.me \"Review widget\" block below, and works on product pages. All store reviews: every published review, straight from Judge.me — no block needed.",
+      "options": [
+        { "value": "app", "label": "This product only (Judge.me block)" },
+        { "value": "store", "label": "All store reviews" }
+      ],
+      "default": "app"
     },
     {
       "type": "select",

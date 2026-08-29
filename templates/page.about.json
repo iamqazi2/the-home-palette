@@ -444,141 +444,6 @@
         "text": "A short history of the palette — and where it is headed next."
       }
     },
-    "hp_about_reviews": {
-      "type": "hp-video-reviews",
-      "blocks": {
-        "rev_01": {
-          "type": "video",
-          "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/vp/a31d3e87af5f4e1382d5d8d796452f64/a31d3e87af5f4e1382d5d8d796452f64.HD-720p-4.5Mbps-86196205.mp4",
-            "name": "Ayesha K.",
-            "role": "Home Chef · Lahore"
-          }
-        },
-        "rev_02": {
-          "type": "text",
-          "settings": {
-            "quote": "Packaging was immaculate and the pieces feel like heirlooms. Our whole restaurant switched over. Worth every rupee.",
-            "name": "Bilal R.",
-            "role": "Restaurateur · Karachi",
-            "stars": 5
-          }
-        },
-        "rev_03": {
-          "type": "text",
-          "settings": {
-            "quote": "The reactive glaze is even more beautiful in person. Every guest asks where the set is from.",
-            "name": "Hina F.",
-            "role": "Event Stylist",
-            "stars": 5
-          }
-        },
-        "rev_04": {
-          "type": "video",
-          "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/vp/912ee1c9abfe40ccaebd553d9d5efa13/912ee1c9abfe40ccaebd553d9d5efa13.HD-720p-4.5Mbps-86196203.mp4",
-            "name": "Sana M.",
-            "role": "Host · Islamabad"
-          }
-        },
-        "rev_05": {
-          "type": "text",
-          "settings": {
-            "quote": "Bought the dinner set for our new home — it made the whole table feel special. Ordering the tea set next.",
-            "name": "Zara A.",
-            "role": "Newlywed · Rawalpindi",
-            "stars": 5
-          }
-        },
-        "rev_11": {
-          "type": "video",
-          "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/vp/31620027b47546deba157dc51f231ce5/31620027b47546deba157dc51f231ce5.HD-720p-4.5Mbps-86189754.mp4",
-            "name": "Fatima R.",
-            "role": "Food Blogger"
-          }
-        },
-        "rev_06": {
-          "type": "text",
-          "settings": {
-            "quote": "Consistent quality across every reorder. Hand-inspected really shows. Our go-to for banquet serveware now.",
-            "name": "Omar S.",
-            "role": "Hotel F&B Manager",
-            "stars": 5
-          }
-        },
-        "rev_07": {
-          "type": "video",
-          "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/vp/a699d89d216448b08b9934f7dd1b27e8/a699d89d216448b08b9934f7dd1b27e8.HD-720p-4.5Mbps-86196204.mp4",
-            "name": "Usman T.",
-            "role": "Cafe Owner · Multan"
-          }
-        },
-        "rev_08": {
-          "type": "text",
-          "settings": {
-            "quote": "Ordered twice for our restaurant. The glaze survives a full service and still looks handmade.",
-            "name": "Imran S.",
-            "role": "Chef · Islamabad",
-            "stars": 5
-          }
-        },
-        "rev_12": {
-          "type": "video",
-          "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/vp/c59e73c4577147e19fac75d1dcb86e65/c59e73c4577147e19fac75d1dcb86e65.HD-720p-4.5Mbps-86189755.mp4",
-            "name": "Rabia N.",
-            "role": "Home Stylist · Faisalabad"
-          }
-        },
-        "rev_09": {
-          "type": "text",
-          "settings": {
-            "quote": "Gifted a dinner set for my sister’s wedding — she called it the best gift of the day.",
-            "name": "Mahnoor A.",
-            "role": "Lahore",
-            "stars": 5
-          }
-        },
-        "rev_10": {
-          "type": "text",
-          "settings": {
-            "quote": "Delivery was quick and every piece arrived perfectly wrapped. Zero breakage.",
-            "name": "Danish K.",
-            "role": "Karachi",
-            "stars": 5
-          }
-        }
-      },
-      "block_order": [
-        "rev_01",
-        "rev_02",
-        "rev_03",
-        "rev_04",
-        "rev_05",
-        "rev_11",
-        "rev_06",
-        "rev_07",
-        "rev_08",
-        "rev_12",
-        "rev_09",
-        "rev_10"
-      ],
-      "settings": {
-        "eyebrow": "Real Tables · Real Reviews",
-        "heading": "What People Say About Their Palette",
-        "text": "Homes, hosts and restaurants across Pakistan, on the pieces they set their tables with.",
-        "speed": 5,
-        "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
-        "loop_previews": false,
-        "bg_color": "#1a4b46",
-        "text_color": "#fff9df",
-        "eyebrow_color": "#fff9df",
-        "card_color": "#1a4b46",
-        "show_video_cards": false
-      }
-    },
     "hp_reviews_all": {
       "type": "hp-reviews",
       "settings": {
@@ -589,7 +454,8 @@
         "bg": "teal",
         "card_style": "showcase",
         "padding_top": 64,
-        "padding_bottom": 64
+        "padding_bottom": 64,
+        "source": "store"
       }
     }
   },
@@ -601,7 +467,6 @@
     "hp_about_process",
     "hp_about_values",
     "hp_about_timeline",
-    "hp_about_reviews",
     "hp_reviews_all"
   ]
 }

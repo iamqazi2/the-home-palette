@@ -892,6 +892,52 @@
      still an ordinary scroller: drag, wheel, keyboard and touch all work, and
      any of them stops the drift so it never fights the reader.
   ---------------------------------------------------------------------- */
+  /* ---- Store-wide reviews from Judge.me's shop metafield ------------------
+     The metafield is server-rendered HTML meant to be finished off by the
+     widget script. Our sections print it directly — no widget mounts on it —
+     so two things the script would normally do have to happen here:
+
+       · photos ship as data-src placeholders, so nothing loads without help
+       · timestamps ship as a data-content string behind a spinner class
+
+     Both are done from the markup the app already gave us; nothing is invented.
+  ---------------------------------------------------------------------- */
+  function initStoreReviews(root) {
+    (root || document).querySelectorAll('[data-hp-store-reviews]').forEach(function (list) {
+      if (list.dataset.hpStoreWired) return;
+      list.dataset.hpStoreWired = '1';
+
+      list.querySelectorAll('.jdgm-rev__pic-img[data-src]').forEach(function (img) {
+        img.src = img.getAttribute('data-src');
+        img.removeAttribute('data-src');
+        img.loading = 'lazy';
+        img.addEventListener('load', function () {
+          var link = img.closest('.jdgm-rev__pic-link');
+          if (link) link.classList.remove('jdgm--loading');
+        });
+      });
+
+      list.querySelectorAll('.jdgm-rev__timestamp[data-content]').forEach(function (el) {
+        var raw = el.getAttribute('data-content');
+        // "2026-05-19 11:35:35 UTC" is not a format Safari will parse as-is
+        var iso = raw.replace(' UTC', 'Z').replace(' ', 'T');
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return;
+        el.textContent = d.toLocaleDateString(undefined, {
+          year: 'numeric', month: 'short', day: 'numeric'
+        });
+        el.classList.remove('jdgm-spinner');
+      });
+
+      // a review whose body is empty would otherwise render as a blank card
+      list.querySelectorAll('.jdgm-rev').forEach(function (rev) {
+        var body = rev.querySelector('.jdgm-rev__body');
+        var hasPic = rev.querySelector('.jdgm-rev__pic-link');
+        if (!hasPic && body && !body.textContent.trim()) rev.remove();
+      });
+    });
+  }
+
   function initReviewMarquee(root) {
     (root || document).querySelectorAll('.hp-revs--showcase').forEach(function (section) {
       var tries = 0;
@@ -1629,6 +1675,7 @@
     initMotion(document);
     initVideoTriggers(document);
     initReviewPager(document);
+    initStoreReviews(document);
     initReviewMarquee(document);
     initBgVideo(document);
     initLazyPreviewVideos(document);
@@ -1648,6 +1695,7 @@
     initMotion(e.target);
     initVideoTriggers(e.target);
     initReviewPager(e.target);
+    initStoreReviews(e.target);
     initReviewMarquee(e.target);
     initBgVideo(e.target);
     initLazyPreviewVideos(e.target);

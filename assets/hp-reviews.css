@@ -1428,3 +1428,238 @@
   .hp-revs__title { font-size: clamp(2.6rem, 8vw, 3.4rem); }
   .hp-revs__text { font-size: 1.4rem; }
 }
+
+/* ==========================================================================
+   Showcase for the classic markup (store-wide reviews)
+   ==========================================================================
+   The shop metafield ships the classic .jdgm-rev markup, not the revamped
+   widget's jm-* components, so the showcase card design is expressed a second
+   time against those class names. Same card, same rules, different source.
+
+   Media detection has to test .jdgm-rev__pic-link, not .jdgm-rev__pics: the
+   app always emits the .jdgm-rev__pics wrapper and simply leaves it empty when
+   a review has no photo, so testing the wrapper would make every card a media
+   card with nothing in it.
+   ---------------------------------------------------------------------- */
+
+.hp-revs__store {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 1.8rem !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.6rem 0 2rem;
+  margin: 0 !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 249, 223, 0.4) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.hp-revs__store::-webkit-scrollbar { height: 6px; }
+.hp-revs__store::-webkit-scrollbar-track {
+  background: rgba(255, 249, 223, 0.12);
+  border-radius: var(--hp-r-pill);
+}
+.hp-revs__store::-webkit-scrollbar-thumb {
+  background: rgba(255, 249, 223, 0.4);
+  border-radius: var(--hp-r-pill);
+}
+
+.hp-revs--showcase .hp-revs__store .jdgm-rev {
+  position: relative;
+  flex: 0 0 30rem;
+  width: 30rem;
+  height: 38rem;
+  margin: 0 !important;
+  padding: 2.6rem 2.4rem !important;
+  border-radius: 20px !important;
+  overflow: hidden;
+  display: flex !important;
+  flex-direction: column;
+  background: var(--hp-teal-card) !important;
+  border: 1px solid rgba(255, 249, 223, 0.3) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 249, 223, 0.12);
+  transition: transform 0.5s var(--hp-ease), box-shadow 0.5s var(--hp-ease),
+    border-color 0.3s var(--hp-ease);
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 249, 223, 0.55) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 249, 223, 0.2),
+    0 30px 50px -30px rgba(8, 26, 27, 0.75);
+}
+
+/* header: stars first, everything else pushed to the card footer */
+.hp-revs--showcase .hp-revs__store .jdgm-rev__header {
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  order: 1;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev__content { order: 2; flex: 1 1 auto; min-height: 0; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev__icon,
+.hp-revs--showcase .hp-revs__store .jdgm-rev__actions,
+.hp-revs--showcase .hp-revs__store .jdgm-rev__reply,
+.hp-revs--showcase .hp-revs__store .jdgm-rev__br,
+.hp-revs--showcase .hp-revs__store .jdgm-rev__custom-form,
+.hp-revs--showcase .hp-revs__store .jdgm-rev__transparency-badge-wrapper,
+.hp-revs--showcase .hp-revs__store .jdgm-rev__vids:empty,
+.hp-revs--showcase .hp-revs__store .jdgm-rev__pics:empty { display: none !important; }
+
+.hp-revs--showcase .hp-revs__store .jdgm-rev__rating { font-size: 1.5rem; }
+.hp-revs--showcase .hp-revs__store .jdgm-star { color: var(--hp-gold) !important; }
+.hp-revs--showcase .hp-revs__store .jdgm-star.jdgm--off { color: rgba(224, 164, 34, 0.3) !important; }
+
+/* the decorative quote mark, as on the product page */
+.hp-revs--showcase .hp-revs__store .jdgm-rev:not(:has(.jdgm-rev__pic-link))::before {
+  content: '\201C';
+  position: absolute;
+  top: 1.2rem;
+  right: 2rem;
+  font-family: var(--hp-font-display);
+  font-size: 7rem;
+  line-height: 1;
+  color: var(--hp-cream);
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+/* the review itself carries the quote; its title repeats the body often enough
+   that showing both reads as a stutter */
+.hp-revs--showcase .hp-revs__store .jdgm-rev__title { display: none !important; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev__body,
+.hp-revs--showcase .hp-revs__store .jdgm-rev__body p {
+  font-family: var(--hp-font-display) !important;
+  font-style: italic;
+  font-weight: 500 !important;
+  font-size: 1.85rem !important;
+  line-height: 1.55 !important;
+  color: var(--hp-cream) !important;
+  margin: 0;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev__body {
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* footer: reviewer, then the product they reviewed as the supporting line —
+   on a store-wide rail that product name is the useful piece of context */
+.hp-revs--showcase .hp-revs__store .jdgm-rev__author-wrapper {
+  order: 3;
+  margin-top: auto;
+  z-index: 2;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev__author {
+  font-family: var(--hp-font-ui) !important;
+  font-weight: 600 !important;
+  font-size: 1.35rem !important;
+  color: var(--hp-cream) !important;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev__prod-info-wrapper {
+  order: 4;
+  z-index: 2;
+  background: none !important;
+  border: 0 !important;
+  padding: 0.2rem 0 0 !important;
+  margin: 0 !important;
+  font-size: 1.15rem !important;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev__prod-link {
+  color: var(--hp-cream) !important;
+  opacity: 0.72;
+  font-size: 1.15rem !important;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev__prod-link:hover { opacity: 1; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev__timestamp {
+  order: 5;
+  z-index: 2;
+  color: var(--hp-cream) !important;
+  opacity: 0.55;
+  font-size: 1.1rem !important;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev__buyer-badge-wrapper { order: 3; z-index: 2; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev__buyer-badge {
+  background: rgba(255, 249, 223, 0.16) !important;
+  border: 1px solid rgba(255, 249, 223, 0.45) !important;
+  color: var(--hp-cream) !important;
+}
+
+/* ---- media card: the review's own photo fills it ----------------------- */
+
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) { padding: 0 !important; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__body,
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__rating { display: none !important; }
+
+.hp-revs--showcase .hp-revs__store .jdgm-rev__pics {
+  position: absolute;
+  inset: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev__pic-link {
+  position: absolute;
+  inset: 0;
+  display: block;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+/* extra photos stay in the review, not on the card face */
+.hp-revs--showcase .hp-revs__store .jdgm-rev__pic-link ~ .jdgm-rev__pic-link { display: none !important; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev__pic-img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+  transition: transform 0.7s var(--hp-ease);
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev:hover .jdgm-rev__pic-img { transform: scale(1.05); }
+
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(8, 26, 27, 0) 40%, rgba(8, 26, 27, 0.88) 100%);
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__header {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 1.8rem;
+  z-index: 2;
+}
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__author,
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__prod-link,
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__timestamp {
+  text-shadow: 0 1px 6px rgba(8, 26, 27, 0.65);
+}
+
+@media screen and (min-width: 1200px) {
+  .hp-revs--showcase .hp-revs__store .jdgm-rev {
+    flex-basis: 32rem;
+    width: 32rem;
+    height: 40rem;
+  }
+  .hp-revs--showcase .hp-revs__store .jdgm-rev__body,
+  .hp-revs--showcase .hp-revs__store .jdgm-rev__body p { font-size: 1.95rem !important; }
+}
+
+@media screen and (max-width: 749px) {
+  .hp-revs--showcase .hp-revs__store .jdgm-rev {
+    flex-basis: 78vw;
+    width: 78vw;
+    max-width: 30rem;
+    height: 34rem;
+    padding: 2.2rem 2rem !important;
+  }
+  .hp-revs--showcase .hp-revs__store .jdgm-rev__body,
+  .hp-revs--showcase .hp-revs__store .jdgm-rev__body p { font-size: 1.65rem !important; }
+  .hp-revs--showcase .hp-revs__store .jdgm-rev__body { -webkit-line-clamp: 6; }
+  .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) { padding: 0 !important; }
+  .hp-revs--showcase .hp-revs__store { gap: 1.2rem !important; }
+}
