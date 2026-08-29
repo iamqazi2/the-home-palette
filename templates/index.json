@@ -736,20 +736,6 @@
         "link": "shopify://collections/thp-weave-collection"
       }
     },
-    "hp_reviews_all": {
-      "type": "hp-reviews",
-      "settings": {
-        "eyebrow": "Real Tables · Real Reviews",
-        "heading": "Loved Across Pakistan",
-        "text": "Every review below is a verified Judge.me review, from homes, hosts and restaurants across the country.",
-        "align": "center",
-        "source": "store",
-        "card_style": "showcase",
-        "bg": "cream",
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
     "178804420628c6c380": {
       "type": "apps",
       "blocks": {
@@ -807,7 +793,6 @@
     "hp_occasion",
     "hp_style_rail",
     "hp_cta",
-    "hp_reviews_all",
     "178804420628c6c380"
   ]
 }
