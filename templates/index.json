@@ -780,11 +780,11 @@
         "heading": "Loved Across Pakistan",
         "text": "Every review below is a verified Judge.me review, from homes, hosts and restaurants across the country.",
         "align": "center",
-        "bg": "cream-soft",
-        "card_style": "default",
+        "source": "store",
+        "card_style": "showcase",
+        "bg": "cream",
         "padding_top": 64,
-        "padding_bottom": 64,
-        "source": "store"
+        "padding_bottom": 64
       }
     }
   },
