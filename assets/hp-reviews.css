@@ -1269,3 +1269,162 @@
   scroll-snap-type: none;   /* snapping fights a continuous drift */
   scroll-behavior: auto;
 }
+
+/* ==========================================================================
+   Showcase refinements — desktop and mobile
+   ========================================================================== */
+
+/* ---- header: a tidy summary bar ----------------------------------------
+   Judge.me's minimal header is a wide flex row whose middle collapses to dead
+   space at desktop widths, leaving the rating marooned on the far left and the
+   button on the far right. Cap the row and let its parts sit together. */
+
+.hp-revs--showcase .jm-review-widget-minimal-header {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem 2.4rem;
+  padding: 2rem 2.4rem;
+}
+.hp-revs--showcase .jm-review-widget-minimal-header__button-and-filters,
+.hp-revs--showcase .jm-review-widget-minimal-header__action-buttons,
+.hp-revs--showcase .jm-review-widget-minimal-header__filter-container {
+  flex: 0 0 auto;
+  margin: 0 !important;
+}
+.hp-revs--showcase .jm-average-rating-display {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font-size: 2.6rem !important;
+}
+/* the app's medal badges are tiny blue seals that read as artefacts on teal */
+.hp-revs--showcase .jm-medals { max-height: 4.4rem; }
+
+/* the header's customer-photo strip: even thumbnails, not one stray square */
+.hp-revs--showcase .jm-media-grid {
+  width: 100%;
+  order: 3;
+}
+.hp-revs--showcase .jm-media-grid__container {
+  display: flex !important;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.hp-revs--showcase .jm-media-grid__container::-webkit-scrollbar { display: none; }
+.hp-revs--showcase .jm-media-grid__item {
+  flex: 0 0 auto;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.hp-revs--showcase .jm-media-grid__item .jm-media-grid__image-container {
+  position: static !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ---- the rail: edges fade so it reads as scrollable --------------------- */
+
+.hp-revs--showcase .hp-revs__widget {
+  position: relative;
+  /* let the rail bleed to the viewport edge while the header stays measured */
+  margin-inline: calc(var(--hp-gap-x) * -1);
+  padding-inline: var(--hp-gap-x);
+  -webkit-mask-image: linear-gradient(
+    90deg, transparent 0, #000 var(--hp-gap-x), #000 calc(100% - var(--hp-gap-x)), transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg, transparent 0, #000 var(--hp-gap-x), #000 calc(100% - var(--hp-gap-x)), transparent 100%
+  );
+}
+
+/* keyboard users need to see where they are in a drifting rail */
+.hp-revs--showcase .jm-review-item:focus-within {
+  outline: 2px solid var(--hp-cream);
+  outline-offset: 3px;
+}
+
+/* ---- card polish -------------------------------------------------------- */
+
+.hp-revs--showcase .jm-review-item {
+  /* a hairline highlight along the top edge lifts the card off the teal */
+  box-shadow: inset 0 1px 0 rgba(255, 249, 223, 0.12);
+}
+.hp-revs--showcase .jm-review-item:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 249, 223, 0.2),
+    0 30px 50px -30px rgba(8, 26, 27, 0.75);
+}
+.hp-revs--showcase .jm-star-rating { font-size: 1.5rem; }
+
+/* photos get a slow push-in on hover, the same gesture as the product rails */
+.hp-revs--showcase .jm-media-thumbnail-list__thumbnail img {
+  transition: transform 0.7s var(--hp-ease);
+}
+.hp-revs--showcase .jm-review-item:hover .jm-media-thumbnail-list__thumbnail img {
+  transform: scale(1.05);
+}
+
+/* ---- desktop: larger cards on roomy screens ----------------------------- */
+
+@media screen and (min-width: 1200px) {
+  .hp-revs--showcase .jm-review-item {
+    flex-basis: 32rem !important;
+    width: 32rem !important;
+    height: 40rem !important;
+    min-height: 40rem !important;
+    max-height: 40rem !important;
+  }
+  .hp-revs--showcase .jm-review-content__body,
+  .hp-revs--showcase .jdgm-review-content__body-content { font-size: 1.95rem !important; }
+  .hp-revs--showcase .jdgm-review-list { gap: 2rem !important; }
+}
+
+/* ---- mobile --------------------------------------------------------------
+   One card should sit just short of the full width so the next one peeks in
+   and the rail is legible as a rail. */
+
+@media screen and (max-width: 749px) {
+  .hp-revs--showcase .jm-review-item {
+    flex-basis: 78vw !important;
+    width: 78vw !important;
+    max-width: 30rem !important;
+    height: 34rem !important;
+    min-height: 34rem !important;
+    max-height: 34rem !important;
+  }
+  .hp-revs--showcase .jm-review-item:not(:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid)) .jm-review-item__content {
+    padding: 2.2rem 2rem;
+  }
+  .hp-revs--showcase .jm-review-content__body,
+  .hp-revs--showcase .jdgm-review-content__body-content { font-size: 1.65rem !important; }
+  .hp-revs--showcase .jm-review-body-wrapper { -webkit-line-clamp: 6; }
+  .hp-revs--showcase .jm-review-item:not(:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid))::before {
+    font-size: 5.4rem;
+    top: 0.8rem;
+    right: 1.4rem;
+  }
+  /* the summary stacks rather than squeezing the button onto its own line */
+  .hp-revs--showcase .jm-review-widget-minimal-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.8rem;
+    gap: 1.4rem;
+  }
+  .hp-revs--showcase .jm-average-rating-display { font-size: 2.2rem !important; }
+  .hp-revs--showcase .jm-button--primary { width: 100%; text-align: center; }
+  .hp-revs--showcase .jm-media-grid__item { width: 6.4rem; height: 6.4rem; }
+  .hp-revs--showcase .jm-reviewer-info { padding: 1.4rem !important; }
+}
+
+/* Judge.me's own font-size ramp assumes its stock layout; hold the section's
+   heading to the site scale on small screens so it does not tower over the
+   cards it introduces. */
+@media screen and (max-width: 560px) {
+  .hp-revs__title { font-size: clamp(2.6rem, 8vw, 3.4rem); }
+  .hp-revs__text { font-size: 1.4rem; }
+}

@@ -902,6 +902,19 @@
         "card_color": "#1a4b46",
         "show_video_cards": false
       }
+    },
+    "hp_reviews_all": {
+      "type": "hp-reviews",
+      "settings": {
+        "eyebrow": "Trusted By Venues",
+        "heading": "Loved Across Pakistan",
+        "text": "Verified Judge.me reviews from restaurants, hotels and event teams.",
+        "align": "center",
+        "bg": "teal",
+        "card_style": "showcase",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
@@ -913,6 +926,7 @@
     "hosp_gallery",
     "hosp_process",
     "hosp_packages",
-    "hosp_reviews"
+    "hosp_reviews",
+    "hp_reviews_all"
   ]
 }

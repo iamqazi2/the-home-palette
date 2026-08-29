@@ -907,6 +907,19 @@
         "eyebrow_color": "#fff9df",
         "card_color": "#1a4b46"
       }
+    },
+    "hp_reviews_all": {
+      "type": "hp-reviews",
+      "settings": {
+        "eyebrow": "Real Tables · Real Reviews",
+        "heading": "Loved Across Pakistan",
+        "text": "Every review below is a verified Judge.me review, from homes, hosts and restaurants across the country.",
+        "align": "center",
+        "bg": "teal",
+        "card_style": "showcase",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
@@ -921,6 +934,7 @@
     "hp_cta",
     "hp_wooden_line_rail",
     "173573001120319a38",
-    "hp_video_reviews"
+    "hp_video_reviews",
+    "hp_reviews_all"
   ]
 }

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Home Palette — Product Tagging Manual</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm 18mm; }
+  @page :first { margin: 0; }
+  :root{
+    --teal:#1a4b46; --teal-d:#123532; --cream:#fff9df; --paper:#fffdf4;
+    --ink:#1c211f; --muted:#5d6a66; --line:#d9d3bd; --accent:#c4703a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+       color:var(--ink);font-size:10.2pt;line-height:1.55;background:#fff}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:600;margin:0}
+  a{color:var(--teal)}
+
+  .cover{background:var(--teal);color:var(--cream);padding:32mm 20mm;
+         page-break-after:always;height:297mm;width:210mm;
+         display:flex;flex-direction:column}
+  .cover code{background:rgba(255,249,223,.14);border-color:rgba(255,249,223,.3);
+              color:var(--cream)}
+  .cover .eyebrow{font-size:9pt;letter-spacing:.24em;text-transform:uppercase;
+                  color:rgba(255,249,223,.72);margin:0 0 14mm}
+  .cover h1{font-size:34pt;line-height:1.12;letter-spacing:-.01em}
+  .cover p.sub{font-size:12pt;color:rgba(255,249,223,.82);margin:8mm 0 0;max-width:120mm}
+  .cover .meta{margin-top:auto;border-top:1px solid rgba(255,249,223,.25);padding-top:6mm;
+               font-size:9pt;color:rgba(255,249,223,.7)}
+  .cover .toc{margin-top:18mm}
+  .cover .toc li{margin:2.5mm 0;font-size:11pt;color:rgba(255,249,223,.9)}
+
+  h2{font-size:17pt;color:var(--teal);margin:11mm 0 3mm;padding-bottom:2mm;
+     border-bottom:2px solid var(--teal);page-break-after:avoid}
+  h3{font-size:12.5pt;color:var(--teal-d);margin:7mm 0 2mm;page-break-after:avoid}
+  p{margin:0 0 3mm}
+  ul,ol{margin:0 0 3mm;padding-left:5mm}
+  li{margin:1.2mm 0}
+
+  code{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:9.2pt;
+       background:var(--cream);border:1px solid var(--line);border-radius:3px;
+       padding:.4mm 1.4mm;white-space:nowrap}
+  table{width:100%;border-collapse:collapse;margin:3mm 0 5mm;font-size:9.4pt;
+        page-break-inside:avoid}
+  th{background:var(--teal);color:var(--cream);text-align:left;padding:2.2mm 2.5mm;
+     font-size:8.6pt;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  td{padding:2mm 2.5mm;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:var(--paper)}
+  td code{background:#fff}
+
+  .swatch{display:inline-block;width:4mm;height:4mm;border-radius:50%;
+          border:1px solid rgba(0,0,0,.18);vertical-align:-.6mm;margin-right:1.8mm}
+  .pill{display:inline-block;font-size:7.6pt;letter-spacing:.08em;text-transform:uppercase;
+        padding:.6mm 2mm;border-radius:20px;font-weight:600;white-space:nowrap}
+  .live{background:#dff0e6;color:#1d6b40;border:1px solid #a9d5bd}
+  .todo{background:#fdeadd;color:#8f4517;border:1px solid #f0c3a1}
+
+  .note{border-left:3px solid var(--accent);background:var(--paper);
+        padding:3mm 4mm;margin:4mm 0;page-break-inside:avoid}
+  .note b{color:var(--accent)}
+  .rule{border-left:3px solid var(--teal);background:var(--cream);
+        padding:3mm 4mm;margin:4mm 0;page-break-inside:avoid}
+  .steps{counter-reset:s;list-style:none;padding:0}
+  .steps li{counter-increment:s;position:relative;padding-left:9mm;margin:3mm 0}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:.2mm;
+    width:6mm;height:6mm;border-radius:50%;background:var(--teal);color:var(--cream);
+    font-size:8.5pt;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .pagebreak{page-break-before:always}
+  .foot{margin-top:12mm;border-top:1px solid var(--line);padding-top:4mm;
+        font-size:8.6pt;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <p class="eyebrow">The Home Palette — Operations</p>
+  <h1>Product Tagging<br>Manual</h1>
+  <p class="sub">The exact tags to enter in a product's Organization panel so it appears
+     under Shop by Occasion, Shop by Style and Shop by Colour on the homepage.</p>
+  <div class="toc" style="margin-top:auto">
+    <ol>
+      <li>How tagging works here</li>
+      <li>How to add a tag (step by step)</li>
+      <li>Shop by Occasion — exact tags</li>
+      <li>Shop by Style — exact tags</li>
+      <li>Shop by Colour — exact tags</li>
+      <li>The <code>online</code> tag — required on everything</li>
+      <li>Worked examples</li>
+      <li>Troubleshooting</li>
+      <li>One-time setup: collections still to be created</li>
+    </ol>
+  </div>
+  <div class="meta">
+    Version 1.0 · Prepared 29 August 2026 · Applies to the live theme (homepage sections
+    <code>hp-occasion</code>, <code>hp-style-rail</code>, <code>hp-shop-by-color</code>)
+  </div>
+</section>
+
+<h2>1. How tagging works here</h2>
+<p>Every tag goes in the same place: the <b>Tags</b> box inside the <b>Product organization</b>
+card on the right-hand side of the product page in Shopify admin. There is nothing else to
+configure per product.</p>
+<p>What the tag does depends on the section:</p>
+<table>
+  <tr><th style="width:30%">Section</th><th>What the tag actually does</th></tr>
+  <tr><td><b>Shop by Occasion</b></td><td>The homepage card links to a Shopify <i>automated collection</i>. That collection has one rule: <i>Product tag is equal to&nbsp;…</i>. Tag the product and it joins the collection within seconds.</td></tr>
+  <tr><td><b>Shop by Style</b></td><td>Identical mechanism — an automated collection with a single tag rule.</td></tr>
+  <tr><td><b>Shop by Colour</b></td><td>No collection involved. The theme reads the tag directly off the product and files it under the matching swatch.</td></tr>
+</table>
+
+<div class="rule">
+  <b>Golden rules</b>
+  <ul>
+    <li>Tags are <b>lowercase with hyphens</b>. Type them exactly as printed in this manual.</li>
+    <li>Shopify autocompletes existing tags — <b>always pick the suggestion</b> rather than retyping, so you never create <code>occasion-eid</code> and <code>Occasion-Eid</code> as two separate tags.</li>
+    <li>A product may carry as many of these tags as genuinely apply. A gold-rimmed platter can be <code>occasion-eid</code>, <code>occasion-wedding-gifts</code>, <code>style-contemporary</code> and <code>gold</code> all at once.</li>
+    <li>Press <b>Enter</b> after each tag, then <b>Save</b>.</li>
+  </ul>
+</div>
+
+<h2>2. How to add a tag — step by step</h2>
+<ol class="steps">
+  <li>Shopify admin → <b>Products</b> → open the product.</li>
+  <li>Scroll the right-hand column to the <b>Product organization</b> card.</li>
+  <li>Click into the <b>Tags</b> field.</li>
+  <li>Start typing the tag. A dropdown of existing tags appears — <b>click the matching suggestion</b>. Only type it in full if it is a brand-new tag from this manual.</li>
+  <li>Press <b>Enter</b>. The tag appears as a grey chip below the field.</li>
+  <li>Repeat for every tag that applies (occasion, style, colour, plus <code>online</code>).</li>
+  <li>Click <b>Save</b> (top right).</li>
+  <li>Open the storefront homepage and hard-refresh. The product should now appear under its swatch / card.</li>
+</ol>
+
+<h3>Tagging many products at once</h3>
+<ol class="steps">
+  <li>Products list → tick the checkboxes of the products.</li>
+  <li>Click <b>Add tags</b> in the bulk action bar at the top.</li>
+  <li>Type or select the tag → <b>Apply changes</b>.</li>
+</ol>
+<div class="note"><b>Careful:</b> bulk <i>Add tags</i> adds to every selected product. Only bulk-tag products that all share the same occasion, style or colour.</div>
+
+<h2 class="pagebreak">3. Shop by Occasion — exact tags</h2>
+<p>Six cards on the homepage. Tag a product with the value in the <b>Tag to add</b> column
+and it appears on that card's collection page.</p>
+<table>
+  <tr><th style="width:26%">Card on homepage</th><th style="width:30%">Tag to add</th><th style="width:24%">Collection</th><th>Status</th></tr>
+  <tr><td><b>Everyday Dining</b><br><span style="color:var(--muted)">Sturdy, beautiful staples</span></td><td><code>occasion-everyday-dining</code></td><td>Everyday Dining</td><td><span class="pill todo">Collection to create</span></td></tr>
+  <tr><td><b>Hosting Guests</b><br><span style="color:var(--muted)">Sets that impress</span></td><td><code>occasion-hosting-guests</code></td><td>Hosting Guests</td><td><span class="pill todo">Collection to create</span></td></tr>
+  <tr><td><b>Tea Time</b><br><span style="color:var(--muted)">Slow afternoon rituals</span></td><td><code>occasion-tea-time</code></td><td>Tea Time</td><td><span class="pill live">Live — 37 products</span></td></tr>
+  <tr><td><b>Ramadan</b><br><span style="color:var(--muted)">Iftar &amp; suhoor tables</span></td><td><code>occasion-ramadan</code></td><td>Ramadan</td><td><span class="pill todo">Collection to create</span></td></tr>
+  <tr><td><b>Eid</b><br><span style="color:var(--muted)">Festive gatherings</span></td><td><code>occasion-eid</code></td><td>Eid</td><td><span class="pill todo">Collection to create</span></td></tr>
+  <tr><td><b>Wedding Gifts</b><br><span style="color:var(--muted)">Heirlooms to give</span></td><td><code>occasion-wedding-gifts</code></td><td>Wedding Gifts</td><td><span class="pill todo">Collection to create</span></td></tr>
+</table>
+<div class="note"><b>Read this before you start.</b> Only <b>Tea Time</b> is wired up today. The other five homepage cards still point at older manual collections (Plates, Serveware, Platters, New Arrivals, Dinner&nbsp;/&nbsp;Breakfast Sets), so tagging alone will not change them yet. Section&nbsp;9 has the one-time setup that switches them over. You can start tagging products now — the tags will take effect the moment the collections exist.</div>
+
+<h2>4. Shop by Style — exact tags</h2>
+<p>Five tiles on the homepage. Same mechanism as Occasion.</p>
+<table>
+  <tr><th style="width:26%">Tile on homepage</th><th style="width:30%">Tag to add</th><th style="width:24%">Collection</th><th>Status</th></tr>
+  <tr><td><b>Minimalist</b></td><td><code>style-minimalist</code></td><td>Minimalist</td><td><span class="pill todo">Collection to create</span></td></tr>
+  <tr><td><b>Earthy</b></td><td><code>style-earthy</code></td><td>Earthy</td><td><span class="pill live">Live — 12 products</span></td></tr>
+  <tr><td><b>Reactive</b></td><td><code>style-reactive</code></td><td>Reactive</td><td><span class="pill live">Live — 8 products</span></td></tr>
+  <tr><td><b>Contemporary</b></td><td><code>style-contemporary</code></td><td>Contemporary</td><td><span class="pill todo">Collection to create</span></td></tr>
+  <tr><td><b>Hotel Collection</b></td><td><code>style-hotel-collection</code></td><td>Hotel Collection</td><td><span class="pill todo">Collection to create</span></td></tr>
+</table>
+<h3>Which style is which?</h3>
+<ul>
+  <li><b>Minimalist</b> — plain, undecorated, single flat colour; clean silhouettes.</li>
+  <li><b>Earthy</b> — natural materials and textures: jute, rattan, wood, rope, unglazed clay.</li>
+  <li><b>Reactive</b> — reactive-glaze stoneware where the colour pools and varies piece to piece.</li>
+  <li><b>Contemporary</b> — patterned or decorated modern tableware; full dinner/breakfast sets.</li>
+  <li><b>Hotel Collection</b> — hospitality-grade serveware, crisp white/ivory, stackable.</li>
+</ul>
+
+<h2 class="pagebreak">5. Shop by Colour — exact tags</h2>
+<p>Twenty-one swatches. These do <b>not</b> use collections — the theme reads the tag straight
+off the product, so the tag works the moment you save.</p>
+
+<div class="rule">
+  <b>Important — when the colour tag is ignored</b>
+  <p style="margin:2mm 0 0">If the product has a variant option literally named
+  <b>Color</b>, <b>Colour</b>, <b>Shade</b> or <b>Glaze</b>, the theme uses that option and
+  <b>ignores colour tags completely</b>. That is deliberate: a handi sold in nine glazes must
+  appear under nine swatches, each showing its own variant photo.</p>
+  <ul style="margin:2mm 0 0">
+    <li><b>Product sold in several colours from one listing</b> → do <i>not</i> add colour tags. Instead make sure the option is named <code>Color</code> and each option value is spelled exactly as the swatch name in the table below.</li>
+    <li><b>Product that comes in one colour only</b> → add the colour tag from the table.</li>
+  </ul>
+</div>
+
+<table>
+  <tr><th style="width:34%">Swatch</th><th style="width:34%">Tag to add</th><th>Also matches these names</th></tr>
+  <tr><td><span class="swatch" style="background:#e3c10c"></span>Whimsy Yellow</td><td><code>whimsy-yellow</code></td><td>—</td></tr>
+  <tr><td><span class="swatch" style="background:#93c9c2"></span>Aqua</td><td><code>aqua</code></td><td>—</td></tr>
+  <tr><td><span class="swatch" style="background:#6e7c4f"></span>Sage Green</td><td><code>sage-green</code></td><td>—</td></tr>
+  <tr><td><span class="swatch" style="background:#f0ead9"></span>Ivory White</td><td><code>ivory-white</code></td><td>Cream</td></tr>
+  <tr><td><span class="swatch" style="background:#c4703a"></span>Burnt Maple</td><td><code>burnt-maple</code></td><td>—</td></tr>
+  <tr><td><span class="swatch" style="background:#33506f"></span>Riviera Blue</td><td><code>riviera-blue</code></td><td>—</td></tr>
+  <tr><td><span class="swatch" style="background:#8a6660"></span>Coconut Terra</td><td><code>coconut-terra</code></td><td>Coconut</td></tr>
+  <tr><td><span class="swatch" style="background:#1e5560"></span>Teal</td><td><code>teal</code></td><td>—</td></tr>
+  <tr><td><span class="swatch" style="background:#1e3468"></span>Reactive Santorini Blue</td><td><code>reactive-santorini-blue</code></td><td>Santorini Blue</td></tr>
+  <tr><td><span class="swatch" style="background:#bbb0a2"></span>Reactive Cloud Grey</td><td><code>reactive-cloud-grey</code></td><td>Cloud Grey</td></tr>
+  <tr><td><span class="swatch" style="background:#f0b71c"></span>Limone Yellow</td><td><code>limone-yellow</code></td><td>Limone Gardenia</td></tr>
+  <tr><td><span class="swatch" style="background:#be4a55"></span>Windsor Red</td><td><code>windsor-red</code></td><td>Windsor Bloom</td></tr>
+  <tr><td><span class="swatch" style="background:#efe7d7"></span>Boho Floral</td><td><code>boho-floral</code></td><td>Boho Garden</td></tr>
+  <tr><td><span class="swatch" style="background:#afc7c0"></span>Aqua-grey</td><td><code>aqua-grey</code></td><td>—</td></tr>
+  <tr><td><span class="swatch" style="background:#c2a878"></span>Jute Natural</td><td><code>jute-natural</code></td><td>Jute, Rattan, Rustic, Rope, Handwoven</td></tr>
+  <tr><td><span class="swatch" style="background:#8c9091"></span>Stone Grey</td><td><code>stone-grey</code></td><td>Stone</td></tr>
+  <tr><td><span class="swatch" style="background:#c9a227"></span>Gold</td><td><code>gold</code></td><td>Golden</td></tr>
+  <tr><td><span class="swatch" style="background:#b87333"></span>Copper</td><td><code>copper</code></td><td>—</td></tr>
+  <tr><td><span class="swatch" style="background:#b9bcc0"></span>Silver</td><td><code>silver</code></td><td>—</td></tr>
+  <tr><td><span class="swatch" style="background:#1f1f1f"></span>Black</td><td><code>black</code></td><td>Matte black, Black Matte</td></tr>
+  <tr><td><span class="swatch" style="background:#3fb8ad"></span>Turquoise</td><td><code>turquoise</code></td><td>—</td></tr>
+</table>
+
+<h3>Two things that catch people out</h3>
+<ul>
+  <li><b>Aqua vs Aqua-grey.</b> If you tag a product <code>aqua-grey</code> it shows only under Aqua-grey. Without a tag, the theme falls back to the product title — and a title containing "Aqua-grey" is deliberately kept out of plain Aqua. Tagging removes all ambiguity, so tag anything in these two shades.</li>
+  <li><b>The product must be in at least one collection.</b> Shop by Colour walks the store's collections. A product that belongs to no collection at all will never appear under any swatch, however it is tagged.</li>
+</ul>
+
+<h2 class="pagebreak">6. The <code>online</code> tag — required on everything</h2>
+<p>The main <b>Shop</b> collection (90 products today) is automated with three rules, all of
+which must be true:</p>
+<table>
+  <tr><th>Rule</th><th>Meaning</th></tr>
+  <tr><td>Price is greater than 1</td><td>The product has a real price</td></tr>
+  <tr><td>Inventory is greater than 1</td><td>At least 2 in stock</td></tr>
+  <tr><td>Product tag is equal to <code>online</code></td><td><b>You must add this tag by hand</b></td></tr>
+</table>
+<div class="note"><b>Every new product needs the <code>online</code> tag</b>, or it will not appear in the Shop collection no matter how well it is tagged otherwise. Make this the first tag you add.</div>
+
+<h2>7. Worked examples</h2>
+
+<h3>Example A — a single-colour serving platter for Eid</h3>
+<p><i>"Meraki Serving Platter — Gold"</i>, one colour only, hospitality style.</p>
+<p>Tags to enter: <code>online</code>, <code>occasion-eid</code>, <code>occasion-hosting-guests</code>,
+<code>style-hotel-collection</code>, <code>gold</code></p>
+
+<h3>Example B — a handi sold in nine glazes</h3>
+<p><i>"Hand-Painted Handi"</i>, with a <b>Color</b> variant option.</p>
+<p>Tags to enter: <code>online</code>, <code>occasion-everyday-dining</code>, <code>style-reactive</code></p>
+<p><b>No colour tag.</b> Instead, open <b>Variants</b> and check the option is named
+<code>Color</code> and its values read exactly <i>Sage Green</i>, <i>Aqua</i>, <i>Teal</i> and so
+on — spelled as in the section&nbsp;5 table. Each variant then appears under its own swatch with
+its own photo.</p>
+
+<h3>Example C — a jute placemat set</h3>
+<p><i>"Jute Weave Placemats — Set of 2"</i>.</p>
+<p>Tags to enter: <code>online</code>, <code>occasion-everyday-dining</code>,
+<code>style-earthy</code>, <code>jute-natural</code></p>
+
+<h2>8. Troubleshooting</h2>
+<table>
+  <tr><th style="width:40%">Symptom</th><th>Fix</th></tr>
+  <tr><td>Product does not appear under its colour swatch</td><td>Check it is in at least one collection; check it has no <code>Color</code>/<code>Colour</code>/<code>Shade</code>/<code>Glaze</code> variant option (if it does, fix the option values instead of tagging); check the tag spelling against section&nbsp;5.</td></tr>
+  <tr><td>Product does not appear on an Occasion or Style page</td><td>Confirm the collection exists and is automated on that exact tag (section&nbsp;9). Then re-check the tag spelling — a trailing space or a capital letter creates a separate tag.</td></tr>
+  <tr><td>Product missing from the Shop page</td><td>Missing <code>online</code> tag, price of 0, or stock of 1 or less.</td></tr>
+  <tr><td>Two versions of the same tag in the dropdown</td><td>Bulk-select the products on the wrong variant, remove it, add the correct one. Then always pick from autocomplete.</td></tr>
+  <tr><td>A colour swatch says "Nothing in this shade just yet"</td><td>No product currently matches. Tag some products, or hide that swatch in the theme editor.</td></tr>
+  <tr><td>Only 12 products show per colour</td><td>By design — the swatch grid is capped at 12. Change it in the theme editor under <i>Shop by Colour → Products to show</i>.</td></tr>
+</table>
+
+<h2 class="pagebreak">9. One-time setup — collections still to be created</h2>
+<p>This is a store-admin task, done once. Until it is done, only Tea Time, Earthy and Reactive
+respond to tags.</p>
+
+<h3>Create each missing collection</h3>
+<ol class="steps">
+  <li>Shopify admin → <b>Products → Collections → Create collection</b>.</li>
+  <li><b>Title</b>: the card name (e.g. <i>Wedding Gifts</i>).</li>
+  <li>Under <b>Collection type</b> choose <b>Automated</b>.</li>
+  <li>Set <b>Products must match: all conditions</b>.</li>
+  <li>Condition: <b>Product tag</b> — <b>is equal to</b> — the tag from the table below.</li>
+  <li><b>Save</b>. Note the handle Shopify generates.</li>
+</ol>
+
+<table>
+  <tr><th style="width:32%">Collection title</th><th style="width:34%">Rule: product tag equals</th><th>Handle</th></tr>
+  <tr><td>Everyday Dining</td><td><code>occasion-everyday-dining</code></td><td><code>everyday-dining</code></td></tr>
+  <tr><td>Hosting Guests</td><td><code>occasion-hosting-guests</code></td><td><code>hosting-guests</code></td></tr>
+  <tr><td>Ramadan</td><td><code>occasion-ramadan</code></td><td><code>ramadan</code></td></tr>
+  <tr><td>Eid</td><td><code>occasion-eid</code></td><td><code>eid</code></td></tr>
+  <tr><td>Wedding Gifts</td><td><code>occasion-wedding-gifts</code></td><td><code>wedding-gifts</code></td></tr>
+  <tr><td>Minimalist</td><td><code>style-minimalist</code></td><td><code>minimalist</code></td></tr>
+  <tr><td>Contemporary</td><td><code>style-contemporary</code></td><td><code>contemporary</code></td></tr>
+  <tr><td>Hotel Collection</td><td><code>style-hotel-collection</code></td><td><code>hotel-collection</code></td></tr>
+</table>
+
+<h3>Point the homepage cards at them</h3>
+<ol class="steps">
+  <li>Online Store → <b>Themes → Customize</b> on the live theme.</li>
+  <li>Open the <b>THP Shop by Occasion</b> section, click a card block.</li>
+  <li>Set <b>Collection</b> to the new collection. <b>Clear the "Custom link" field</b> — a custom link overrides the collection, and five of the six cards have one set today.</li>
+  <li>Repeat for every card, then for each tile in <b>THP Shop by Style</b> (those use the <b>Link</b> field, currently empty — leave it empty and just set the collection).</li>
+  <li><b>Save</b>, then check the homepage.</li>
+</ol>
+<div class="note"><b>The product counts on the Occasion cards are live.</b> A newly created collection reads "0 varieties" until products are tagged, so tag before you switch the cards over, or switch and tag the same day.</div>
+
+<h3>Backfilling the existing catalogue</h3>
+<p>The three tag-driven collections cover 37, 12 and 8 products. Everything else is untagged for
+occasion and style, and no product carries a colour tag yet. Suggested order of work:</p>
+<ol>
+  <li>Bulk-add <code>online</code> to every product that should be sellable.</li>
+  <li>Work collection by collection — open Plates, tag them all <code>occasion-everyday-dining</code>; open Serveware, tag <code>occasion-hosting-guests</code>; and so on.</li>
+  <li>Then styles, using the definitions in section&nbsp;4.</li>
+  <li>Colours last, and only for products that do <b>not</b> have a colour variant option.</li>
+</ol>
+
+<div class="foot">
+  The Home Palette — Product Tagging Manual · v1.0 · 29 August 2026<br>
+  Colour tags are defined in the theme under <i>Shop by Colour → each swatch → Product tag</i>.
+  If a swatch is renamed or added, update section&nbsp;5 of this manual to match.
+</div>
+
+</body>
+</html>
