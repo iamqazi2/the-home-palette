@@ -577,6 +577,14 @@
    them on an ancestor alone would lose.
    ---------------------------------------------------------------------- */
 
+/* Scoped to the whole section, not to one widget's class name. Judge.me ships
+   several widgets — review widget, all-reviews, featured carousel, cards
+   carousel — and they do not share a wrapper class. Custom properties cost
+   nothing where they are unused, so declaring them on the section means any
+   block a merchant drops in is branded without the theme having to know what
+   that block calls itself. */
+.hp-revs,
+.hp-revs *,
 .jdgm-widget-revamp,
 .jdgm-widget-revamp *,
 .hp-revs .jm-review-widget,
@@ -597,6 +605,7 @@
 }
 
 /* the app's global settings vars, in case a surface reads them directly */
+.hp-revs,
 .jdgm-widget-revamp,
 .hp-revs .jm-review-widget {
   --jdgm-primary-color: var(--hp-teal) !important;
@@ -2337,3 +2346,142 @@
 .hp-revs--showcase .jm-review-widget-minimal-header .jdgm-write-rev-link .jm-text {
   color: var(--hp-teal) !important;
 }
+
+
+/* ==========================================================================
+   Cards Carousel
+   ==========================================================================
+   Judge.me's Cards Carousel is the widget that leads with the photo a customer
+   attached — the reason to pick it over the plain list. It is added as an app
+   block like any other, so the section already renders it; this is what dresses
+   it in the theme's design.
+
+   Written against the app's own custom properties first and its class names
+   second. The properties are the stable surface: they are what the app reads to
+   colour itself, they are declared for the whole section above, and they keep
+   working when Judge.me renames a class. The class rules below only add the
+   things a property cannot express — the card surface, the crop on the media,
+   and the arrows.
+
+   Nothing here hides a control. The last pass that did that cost the section
+   its Write a Review button and its pager, and a carousel's arrows are the only
+   way through it.
+   ---------------------------------------------------------------------- */
+
+.hp-revs--carousel .hp-revs__widget { position: relative; }
+
+/* the card */
+.hp-revs--carousel .jdgm-carousel-item,
+.hp-revs--carousel .jm-cards-carousel__card,
+.hp-revs--carousel .jm-review-card {
+  box-sizing: border-box;
+  border-radius: 16px !important;
+  overflow: hidden;
+  background: var(--hp-teal-card) !important;
+  border: 1px solid rgba(255, 249, 223, 0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 249, 223, 0.12);
+  padding: 0 !important;
+}
+.hp-revs--carousel .jdgm-carousel-item,
+.hp-revs--carousel .jdgm-carousel-item *,
+.hp-revs--carousel .jm-cards-carousel__card,
+.hp-revs--carousel .jm-cards-carousel__card * {
+  color: var(--hp-cream) !important;
+}
+
+/* The photo is the point of this widget, so it is cropped to a consistent
+   frame rather than left at whatever aspect the customer's camera produced —
+   a column of different-height images is what makes a carousel look unmade.
+   Matched loosely on the class substring because the card's inner wrappers are
+   the part of Judge.me's markup most likely to be renamed, and the rule is
+   already scoped to this section. */
+.hp-revs--carousel [class*='carousel'] img,
+.hp-revs--carousel [class*='carousel'] video,
+.hp-revs--carousel [class*='card'] img,
+.hp-revs--carousel [class*='card'] video {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 0 !important;
+  display: block;
+}
+
+/* the review copy under the photo */
+.hp-revs--carousel .jdgm-carousel-item__review-body,
+.hp-revs--carousel .jm-cards-carousel__card-body {
+  font-family: var(--hp-font-display) !important;
+  font-style: italic;
+  font-size: 1.7rem !important;
+  line-height: 1.5 !important;
+  padding: 1.6rem 1.6rem 0;
+}
+.hp-revs--carousel .jdgm-carousel-item__reviewer-name,
+.hp-revs--carousel .jm-cards-carousel__card-author {
+  font-family: var(--hp-font-ui) !important;
+  font-weight: 600 !important;
+  font-size: 1.3rem !important;
+  padding: 0 1.6rem;
+}
+.hp-revs--carousel .jdgm-carousel-item__product-title,
+.hp-revs--carousel .jm-cards-carousel__card-product {
+  font-family: var(--hp-font-ui) !important;
+  font-size: 1.15rem !important;
+  opacity: 0.72;
+  padding: 0 1.6rem 1.6rem;
+}
+
+/* the arrows: the theme's circular control, not the app's bare chevron */
+.hp-revs--carousel .jdgm-carousel__left-arrow,
+.hp-revs--carousel .jdgm-carousel__right-arrow,
+.hp-revs--carousel [class*='carousel'] [class*='arrow'],
+.hp-revs--carousel [class*='carousel'] button[class*='prev'],
+.hp-revs--carousel [class*='carousel'] button[class*='next'] {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50% !important;
+  border: 1px solid rgba(26, 75, 70, 0.35) !important;
+  background: var(--hp-cream) !important;
+  color: var(--hp-teal) !important;
+  box-shadow: 0 6px 18px -10px rgba(16, 48, 44, 0.5);
+  transition: background 0.3s var(--hp-ease), color 0.3s var(--hp-ease);
+}
+.hp-revs--carousel .jdgm-carousel__left-arrow:hover,
+.hp-revs--carousel .jdgm-carousel__right-arrow:hover,
+.hp-revs--carousel [class*='carousel'] [class*='arrow']:hover {
+  background: var(--hp-teal) !important;
+  color: var(--hp-cream) !important;
+}
+
+/* the app draws its own frame around the strip; the section supplies one */
+.hp-revs--carousel .jdgm-carousel-wrapper,
+.hp-revs--carousel .jdgm-carousel {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+@media screen and (max-width: 749px) {
+  .hp-revs--carousel .jdgm-carousel-item__review-body,
+  .hp-revs--carousel .jm-cards-carousel__card-body { font-size: 1.55rem !important; }
+}
+
+/* Equal-height cards. Reviews vary in length, so left alone the strip is a row
+   of different-height boxes with their photos at different heights — the thing
+   that reads as unmade. Only alignment is touched: the app keeps ownership of
+   the track and its scrolling. */
+.hp-revs--carousel .jdgm-carousel,
+.hp-revs--carousel [class*='carousel'][class*='track'],
+.hp-revs--carousel [class*='carousel__list'] {
+  align-items: stretch;
+}
+.hp-revs--carousel .jdgm-carousel-item,
+.hp-revs--carousel .jm-cards-carousel__card {
+  display: flex;
+  flex-direction: column;
+}
+/* the product line settles at the foot of the card whatever the review's length */
+.hp-revs--carousel .jdgm-carousel-item__product-title,
+.hp-revs--carousel .jm-cards-carousel__card-product { margin-top: auto; }
