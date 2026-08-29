@@ -101,20 +101,21 @@
     {%- endfor -%}
 
     {%- comment -%}
-      The "Table Stories" group: a dropdown of links into home-page sections.
-      Rendered here rather than added to the Shopify menu because its items are
-      anchors, not pages — see snippets/hp-nav-group.liquid.
+      The "Table Stories" group: Shop by Colour / Style / Occasion, each with
+      its own page. Kept here rather than in the Shopify menu so the three
+      items keep their labels and order without being rebuilt in the menu
+      editor — see snippets/hp-nav-group.liquid.
     {%- endcomment -%}
     {% render 'hp-nav-group',
       variant: 'desktop',
       label: section.settings.hp_group_label,
       scheme: section.settings.menu_color_scheme,
       i1_label: section.settings.hp_group_1_label,
-      i1_anchor: section.settings.hp_group_1_anchor,
+      i1_url: section.settings.hp_group_1_url | default: '/pages/shop-by-style',
       i2_label: section.settings.hp_group_2_label,
-      i2_anchor: section.settings.hp_group_2_anchor,
+      i2_url: section.settings.hp_group_2_url | default: '/pages/shop-by-colour',
       i3_label: section.settings.hp_group_3_label,
-      i3_anchor: section.settings.hp_group_3_anchor
+      i3_url: section.settings.hp_group_3_url | default: '/pages/shop-by-occasion'
     %}
 
     {% render 'hp-nav-extra',

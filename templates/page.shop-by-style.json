@@ -1,0 +1,163 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 48,
+        "padding_bottom": 8
+      }
+    },
+    "hp_style_rail": {
+      "type": "hp-style-rail",
+      "blocks": {
+        "style_1": {
+          "type": "style",
+          "settings": {
+            "title": "Minimalist",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
+            "collection": "plates",
+            "link": ""
+          }
+        },
+        "style_2": {
+          "type": "style",
+          "settings": {
+            "title": "Earthy",
+            "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
+            "collection": "thp-weave-collection",
+            "link": ""
+          }
+        },
+        "style_3": {
+          "type": "style",
+          "settings": {
+            "title": "Reactive",
+            "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
+            "collection": "aesthetic-bowls",
+            "link": ""
+          }
+        },
+        "style_4": {
+          "type": "style",
+          "settings": {
+            "title": "Contemporary",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
+            "collection": "dinner-breakfast-sets",
+            "link": ""
+          }
+        },
+        "style_5": {
+          "type": "style",
+          "settings": {
+            "title": "Hotel Collection",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+            "collection": "serveware",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "style_1",
+        "style_2",
+        "style_3",
+        "style_4",
+        "style_5"
+      ],
+      "settings": {
+        "eyebrow": "Textures & Glazes",
+        "heading": "Shop by Style",
+        "scrim": 65,
+        "bg_color": "#fff9df",
+        "show_count": false,
+        "count_label": "varieties"
+      }
+    },
+    "hp_trust": {
+      "type": "hp-trust-strip",
+      "blocks": {
+        "trust_1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Nationwide Delivery",
+            "text": "Flat Rs. 299 — free above Rs. 8,000",
+            "link": ""
+          }
+        },
+        "trust_2": {
+          "type": "item",
+          "settings": {
+            "icon": "award",
+            "title": "Handcrafted",
+            "text": "Made by Pakistani artisans",
+            "link": ""
+          }
+        },
+        "trust_3": {
+          "type": "item",
+          "settings": {
+            "icon": "shield-check",
+            "title": "Quality Checked",
+            "text": "Every piece inspected by hand",
+            "link": ""
+          }
+        },
+        "trust_4": {
+          "type": "item",
+          "settings": {
+            "icon": "sparkles",
+            "title": "5% Off Online Payment",
+            "text": "Website orders only",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "trust_1",
+        "trust_2",
+        "trust_3",
+        "trust_4"
+      ],
+      "settings": {
+        "bg_color": "#fff9df",
+        "text_color": "#252525",
+        "chip_color": "#1a4b46",
+        "chip_icon_color": "#fff9df"
+      }
+    },
+    "hp_cta": {
+      "type": "hp-cta-band",
+      "settings": {
+        "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
+        "layout": "split",
+        "flip": false,
+        "duotone": true,
+        "scrim": 90,
+        "eyebrow": "The Weave Collection",
+        "heading": "Woven for the Everyday Feast",
+        "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
+        "bg_color": "#fff9df",
+        "panel_color": "#1a4b46",
+        "scrim_color": "#1a4b46",
+        "text_color": "#fff9df",
+        "button_label": "Explore THP Weaves",
+        "link": "shopify://collections/thp-weave-collection"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "hp_style_rail",
+    "hp_trust",
+    "hp_cta"
+  ]
+}

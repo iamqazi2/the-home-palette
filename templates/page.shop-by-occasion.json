@@ -1,0 +1,182 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 48,
+        "padding_bottom": 8
+      }
+    },
+    "hp_occasion": {
+      "type": "hp-occasion",
+      "blocks": {
+        "occ_1": {
+          "type": "occasion",
+          "settings": {
+            "icon": "utensils",
+            "title": "Everyday Dining",
+            "caption": "Sturdy, beautiful staples",
+            "collection": "plates",
+            "link": "shopify://collections/dinner-breakfast-sets"
+          }
+        },
+        "occ_2": {
+          "type": "occasion",
+          "settings": {
+            "icon": "users",
+            "title": "Hosting Guests",
+            "caption": "Sets that impress",
+            "collection": "serveware",
+            "link": "shopify://collections/serveware"
+          }
+        },
+        "occ_3": {
+          "type": "occasion",
+          "settings": {
+            "icon": "coffee",
+            "title": "Tea Time",
+            "caption": "Slow afternoon rituals",
+            "collection": "tea-coffee-essentials",
+            "link": "shopify://collections/tea-coffee-essentials"
+          }
+        },
+        "occ_4": {
+          "type": "occasion",
+          "settings": {
+            "icon": "moon-star",
+            "title": "Ramadan",
+            "caption": "Iftar & suhoor tables",
+            "collection": "platters",
+            "link": "shopify://collections"
+          }
+        },
+        "occ_5": {
+          "type": "occasion",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Eid",
+            "caption": "Festive gatherings",
+            "collection": "new-arrivals",
+            "link": "shopify://collections/new-arrivals"
+          }
+        },
+        "occ_6": {
+          "type": "occasion",
+          "settings": {
+            "icon": "heart",
+            "title": "Wedding Gifts",
+            "caption": "Heirlooms to give",
+            "collection": "dinner-breakfast-sets",
+            "link": "shopify://collections"
+          }
+        }
+      },
+      "block_order": [
+        "occ_1",
+        "occ_2",
+        "occ_3",
+        "occ_4",
+        "occ_5",
+        "occ_6"
+      ],
+      "settings": {
+        "eyebrow": "Set the Table",
+        "heading": "Shop by Occasion",
+        "text": "From quiet weekday meals to grand celebrations — find the pieces that suit the moment.",
+        "bg_color": "#fff9df",
+        "card_color": "#1a4b46",
+        "card_color_hover": "#123532",
+        "show_count": true,
+        "count_label": "varieties",
+        "cta_label": "Shop now"
+      }
+    },
+    "hp_trust": {
+      "type": "hp-trust-strip",
+      "blocks": {
+        "trust_1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Nationwide Delivery",
+            "text": "Flat Rs. 299 — free above Rs. 8,000",
+            "link": ""
+          }
+        },
+        "trust_2": {
+          "type": "item",
+          "settings": {
+            "icon": "award",
+            "title": "Handcrafted",
+            "text": "Made by Pakistani artisans",
+            "link": ""
+          }
+        },
+        "trust_3": {
+          "type": "item",
+          "settings": {
+            "icon": "shield-check",
+            "title": "Quality Checked",
+            "text": "Every piece inspected by hand",
+            "link": ""
+          }
+        },
+        "trust_4": {
+          "type": "item",
+          "settings": {
+            "icon": "sparkles",
+            "title": "5% Off Online Payment",
+            "text": "Website orders only",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "trust_1",
+        "trust_2",
+        "trust_3",
+        "trust_4"
+      ],
+      "settings": {
+        "bg_color": "#fff9df",
+        "text_color": "#252525",
+        "chip_color": "#1a4b46",
+        "chip_icon_color": "#fff9df"
+      }
+    },
+    "hp_cta": {
+      "type": "hp-cta-band",
+      "settings": {
+        "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
+        "layout": "split",
+        "flip": false,
+        "duotone": true,
+        "scrim": 90,
+        "eyebrow": "The Weave Collection",
+        "heading": "Woven for the Everyday Feast",
+        "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
+        "bg_color": "#fff9df",
+        "panel_color": "#1a4b46",
+        "scrim_color": "#1a4b46",
+        "text_color": "#fff9df",
+        "button_label": "Explore THP Weaves",
+        "link": "shopify://collections/thp-weave-collection"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "hp_occasion",
+    "hp_trust",
+    "hp_cta"
+  ]
+}

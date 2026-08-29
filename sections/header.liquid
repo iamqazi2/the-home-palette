@@ -1145,21 +1145,20 @@
     },
     {
       "type": "paragraph",
-      "content": "A dropdown shown in both the desktop nav and the phone menu, whose items scroll to a section of the home page. These cannot live in Content > Menus, because a menu link needs a real URL and these point at sections. Clear the group name to hide the whole dropdown, or clear an item's label to drop just that one."
+      "content": "A dropdown shown in both the desktop nav and the phone menu. Point each item at its page — Shop by Colour, Shop by Style, Shop by Occasion. Clear the group name to hide the whole dropdown, or clear an item's label or link to drop just that one."
     },
     { "type": "text", "id": "hp_group_label", "label": "Dropdown name", "default": "Table Stories" },
     { "type": "text", "id": "hp_group_1_label", "label": "Item 1", "default": "Shop by Style" },
     {
-      "type": "text",
-      "id": "hp_group_1_anchor",
-      "label": "Item 1 target",
-      "default": "hp-styles",
-      "info": "The id of the home-page section to scroll to. The three that exist are hp-styles, hp-colours and hp-occasions."
+      "type": "url",
+      "id": "hp_group_1_url",
+      "label": "Item 1 link",
+      "info": "Pick the page for this item. An in-page anchor such as /#hp-styles still works if you would rather it scrolled the home page instead."
     },
     { "type": "text", "id": "hp_group_2_label", "label": "Item 2", "default": "Shop by Colour" },
-    { "type": "text", "id": "hp_group_2_anchor", "label": "Item 2 target", "default": "hp-colours" },
+    { "type": "url", "id": "hp_group_2_url", "label": "Item 2 link" },
     { "type": "text", "id": "hp_group_3_label", "label": "Item 3", "default": "Shop by Occasion" },
-    { "type": "text", "id": "hp_group_3_anchor", "label": "Item 3 target", "default": "hp-occasions" }
+    { "type": "url", "id": "hp_group_3_url", "label": "Item 3 link" }
   ],
   "blocks": [
     {

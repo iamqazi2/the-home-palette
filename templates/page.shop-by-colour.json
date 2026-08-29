@@ -1,0 +1,349 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 48,
+        "padding_bottom": 8
+      }
+    },
+    "hp_shop_by_color": {
+      "type": "hp-shop-by-color",
+      "blocks": {
+        "colour_5": {
+          "type": "colour",
+          "settings": {
+            "title": "Whimsy Yellow",
+            "swatch": "#e3c10c",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "whimsy-yellow"
+          }
+        },
+        "colour_3": {
+          "type": "colour",
+          "settings": {
+            "title": "Aqua",
+            "swatch": "#93c9c2",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "aqua"
+          }
+        },
+        "colour_1": {
+          "type": "colour",
+          "settings": {
+            "title": "Sage Green",
+            "swatch": "#6e7c4f",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "sage-green"
+          }
+        },
+        "colour_2": {
+          "type": "colour",
+          "settings": {
+            "title": "Ivory White",
+            "swatch": "#f0ead9",
+            "view_all_url": "",
+            "aliases": "Cream",
+            "tag": "ivory-white"
+          }
+        },
+        "colour_4": {
+          "type": "colour",
+          "settings": {
+            "title": "Burnt Maple",
+            "swatch": "#c4703a",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "burnt-maple"
+          }
+        },
+        "colour_6": {
+          "type": "colour",
+          "settings": {
+            "title": "Riviera Blue",
+            "swatch": "#33506f",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "riviera-blue"
+          }
+        },
+        "colour_7": {
+          "type": "colour",
+          "settings": {
+            "title": "Coconut Terra",
+            "swatch": "#8a6660",
+            "view_all_url": "",
+            "aliases": "Coconut",
+            "tag": "coconut-terra"
+          }
+        },
+        "colour_8": {
+          "type": "colour",
+          "settings": {
+            "title": "Teal",
+            "swatch": "#1e5560",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "teal"
+          }
+        },
+        "colour_9": {
+          "type": "colour",
+          "settings": {
+            "title": "Reactive Santorini Blue",
+            "swatch": "#1e3468",
+            "view_all_url": "",
+            "aliases": "Santorini Blue",
+            "tag": "reactive-santorini-blue"
+          }
+        },
+        "colour_10": {
+          "type": "colour",
+          "settings": {
+            "title": "Reactive Cloud Grey",
+            "swatch": "#bbb0a2",
+            "view_all_url": "",
+            "aliases": "Cloud Grey",
+            "tag": "reactive-cloud-grey"
+          }
+        },
+        "colour_11": {
+          "type": "colour",
+          "settings": {
+            "title": "Limone Yellow",
+            "swatch": "#f0b71c",
+            "view_all_url": "",
+            "aliases": "Limone Gardenia",
+            "tag": "limone-yellow"
+          }
+        },
+        "colour_12": {
+          "type": "colour",
+          "settings": {
+            "title": "Windsor Red",
+            "swatch": "#be4a55",
+            "view_all_url": "",
+            "aliases": "Windsor Bloom",
+            "tag": "windsor-red"
+          }
+        },
+        "colour_13": {
+          "type": "colour",
+          "settings": {
+            "title": "Boho Floral",
+            "swatch": "#efe7d7",
+            "view_all_url": "",
+            "aliases": "Boho Garden",
+            "tag": "boho-floral"
+          }
+        },
+        "colour_14": {
+          "type": "colour",
+          "settings": {
+            "title": "Aqua-grey",
+            "swatch": "#afc7c0",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "aqua-grey"
+          }
+        },
+        "colour_15": {
+          "type": "colour",
+          "settings": {
+            "title": "Jute Natural",
+            "swatch": "#c2a878",
+            "view_all_url": "",
+            "aliases": "Jute, Rattan, Rustic, Rope, Handwoven",
+            "tag": "jute-natural"
+          }
+        },
+        "colour_16": {
+          "type": "colour",
+          "settings": {
+            "title": "Stone Grey",
+            "swatch": "#8c9091",
+            "view_all_url": "",
+            "aliases": "Stone",
+            "tag": "stone-grey"
+          }
+        },
+        "colour_17": {
+          "type": "colour",
+          "settings": {
+            "title": "Gold",
+            "swatch": "#c9a227",
+            "view_all_url": "",
+            "aliases": "Golden",
+            "tag": "gold"
+          }
+        },
+        "colour_18": {
+          "type": "colour",
+          "settings": {
+            "title": "Copper",
+            "swatch": "#b87333",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "copper"
+          }
+        },
+        "colour_19": {
+          "type": "colour",
+          "settings": {
+            "title": "Silver",
+            "swatch": "#b9bcc0",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "silver"
+          }
+        },
+        "colour_20": {
+          "type": "colour",
+          "settings": {
+            "title": "Black",
+            "swatch": "#1f1f1f",
+            "view_all_url": "",
+            "aliases": "Matte black, Black Matte",
+            "tag": "black"
+          }
+        },
+        "colour_21": {
+          "type": "colour",
+          "settings": {
+            "title": "Turquoise",
+            "swatch": "#3fb8ad",
+            "view_all_url": "",
+            "aliases": "",
+            "tag": "turquoise"
+          }
+        }
+      },
+      "block_order": [
+        "colour_5",
+        "colour_3",
+        "colour_1",
+        "colour_2",
+        "colour_4",
+        "colour_6",
+        "colour_7",
+        "colour_8",
+        "colour_9",
+        "colour_10",
+        "colour_11",
+        "colour_12",
+        "colour_13",
+        "colour_14",
+        "colour_15",
+        "colour_16",
+        "colour_17",
+        "colour_18",
+        "colour_19",
+        "colour_20",
+        "colour_21"
+      ],
+      "settings": {
+        "eyebrow": "The Palette",
+        "heading": "Shop by Colour",
+        "text": "Every glaze we fire, in one place. Pick a colour and see each piece made in it.",
+        "products_to_show": 12,
+        "columns": 4,
+        "default_index": 1,
+        "view_all_label": "View all",
+        "bg_color": "#fff9df",
+        "quick_add": "standard",
+        "show_count": false,
+        "count_label": "varieties"
+      }
+    },
+    "hp_trust": {
+      "type": "hp-trust-strip",
+      "blocks": {
+        "trust_1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Nationwide Delivery",
+            "text": "Flat Rs. 299 — free above Rs. 8,000",
+            "link": ""
+          }
+        },
+        "trust_2": {
+          "type": "item",
+          "settings": {
+            "icon": "award",
+            "title": "Handcrafted",
+            "text": "Made by Pakistani artisans",
+            "link": ""
+          }
+        },
+        "trust_3": {
+          "type": "item",
+          "settings": {
+            "icon": "shield-check",
+            "title": "Quality Checked",
+            "text": "Every piece inspected by hand",
+            "link": ""
+          }
+        },
+        "trust_4": {
+          "type": "item",
+          "settings": {
+            "icon": "sparkles",
+            "title": "5% Off Online Payment",
+            "text": "Website orders only",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "trust_1",
+        "trust_2",
+        "trust_3",
+        "trust_4"
+      ],
+      "settings": {
+        "bg_color": "#fff9df",
+        "text_color": "#252525",
+        "chip_color": "#1a4b46",
+        "chip_icon_color": "#fff9df"
+      }
+    },
+    "hp_cta": {
+      "type": "hp-cta-band",
+      "settings": {
+        "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
+        "layout": "split",
+        "flip": false,
+        "duotone": true,
+        "scrim": 90,
+        "eyebrow": "The Weave Collection",
+        "heading": "Woven for the Everyday Feast",
+        "text": "Hand-woven placemats and baskets that ground every table setting in warmth.",
+        "bg_color": "#fff9df",
+        "panel_color": "#1a4b46",
+        "scrim_color": "#1a4b46",
+        "text_color": "#fff9df",
+        "button_label": "Explore THP Weaves",
+        "link": "shopify://collections/thp-weave-collection"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "hp_shop_by_color",
+    "hp_trust",
+    "hp_cta"
+  ]
+}

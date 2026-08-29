@@ -1,17 +1,17 @@
 {%- comment -%}
-  A nav dropdown whose children scroll to sections of the home page.
+  A nav dropdown, built from theme settings rather than from the Shopify menu,
+  and rendered alongside the real menu in both the desktop nav and the drawer.
 
-  This group is NOT part of the Shopify navigation menu. Its items are anchors
-  into home-page sections rather than pages, so there is nothing in Content >
-  Menus for them to point at — a menu link needs a URL that resolves, and
-  "the Shop by Colour section" is not one. It is therefore built from theme
-  settings and rendered alongside the real menu in both surfaces.
+  Its items now point at their own pages — /pages/shop-by-colour and the rest —
+  so each is an ordinary link. They were homepage anchors before those pages
+  existed, which is why this group could not live in Content > Menus at the
+  time; it stays here so the three items keep their own labels and order
+  without depending on someone rebuilding them in the menu editor.
 
-  Each href is a real URL — the home page plus the anchor — so it works with
-  no JavaScript and from any other page in the store. When the target is on
-  the page already, hp-theme.js intercepts the click (data-hp-jump), closes
-  the drawer and scrolls with the sticky header's height taken off. Arriving
-  from another page, honourHashOffset does the same after the page settles.
+  A URL is used as given, so it works with no JavaScript and from anywhere in
+  the store. Should a target ever be set back to an in-page anchor, hp-theme.js
+  still handles it: any href starting with # gets data-hp-jump, which closes
+  the drawer and scrolls with the sticky header's height taken off.
 
   Every value is passed in explicitly rather than read off `section` here.
   This snippet is rendered from header-dropdown-menu and header-drawer, which
@@ -24,22 +24,22 @@
                          'drawer' renders the mobile drawer's accordion markup
     label       {string} the group's own title; nothing renders when blank
     scheme      {string} the header's menu colour scheme, for the panel classes
-    i1_label / i1_anchor  {string} first item's text and target section id
-    i2_label / i2_anchor  {string} second item
-    i3_label / i3_anchor  {string} third item
+    i1_label / i1_url  {string} first item's text and destination
+    i2_label / i2_url  {string} second item
+    i3_label / i3_url  {string} third item
 {%- endcomment -%}
 
 {%- liquid
   assign group_label = label
 
   assign has_items = false
-  if i1_label != blank and i1_anchor != blank
+  if i1_label != blank and i1_url != blank
     assign has_items = true
   endif
-  if i2_label != blank and i2_anchor != blank
+  if i2_label != blank and i2_url != blank
     assign has_items = true
   endif
-  if i3_label != blank and i3_anchor != blank
+  if i3_label != blank and i3_url != blank
     assign has_items = true
   endif
 -%}
@@ -74,21 +74,21 @@
                   case n
                     when 1
                       assign it_label = i1_label
-                      assign it_anchor = i1_anchor
+                      assign it_url = i1_url
                     when 2
                       assign it_label = i2_label
-                      assign it_anchor = i2_anchor
+                      assign it_url = i2_url
                     when 3
                       assign it_label = i3_label
-                      assign it_anchor = i3_anchor
+                      assign it_url = i3_url
                   endcase
                 -%}
-                {%- if it_label != blank and it_anchor != blank -%}
+                {%- if it_label != blank and it_url != blank -%}
                   <li>
                     <a
-                      href="{{ routes.root_url }}#{{ it_anchor }}"
+                      href="{{ it_url }}"
                       class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
-                      data-hp-jump="{{ it_anchor }}"
+                      {%- if it_url contains '#' %} data-hp-jump="{{ it_url | split: '#' | last }}"{% endif %}
                     >
                       {{ it_label | escape }}
                     </a>
@@ -122,21 +122,21 @@
                 case n
                   when 1
                     assign it_label = i1_label
-                    assign it_anchor = i1_anchor
+                    assign it_url = i1_url
                   when 2
                     assign it_label = i2_label
-                    assign it_anchor = i2_anchor
+                    assign it_url = i2_url
                   when 3
                     assign it_label = i3_label
-                    assign it_anchor = i3_anchor
+                    assign it_url = i3_url
                 endcase
               -%}
-              {%- if it_label != blank and it_anchor != blank -%}
+              {%- if it_label != blank and it_url != blank -%}
                 <li>
                   <a
-                    href="{{ routes.root_url }}#{{ it_anchor }}"
+                    href="{{ it_url }}"
                     class="header__menu-item list-menu__item link link--text focus-inset caption-large"
-                    data-hp-jump="{{ it_anchor }}"
+                    {%- if it_url contains '#' %} data-hp-jump="{{ it_url | split: '#' | last }}"{% endif %}
                   >
                     {{ it_label | escape }}
                   </a>

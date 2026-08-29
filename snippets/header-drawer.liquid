@@ -136,21 +136,20 @@
 
               {%- comment -%}
                 The "Table Stories" group, the same one the desktop nav shows.
-                It replaces the two loose "Shop by …" shortcut pills that used
+                It replaced the two loose "Shop by …" shortcut pills that used
                 to sit here: those were phone-only and covered two of these
-                three sections, so keeping both would have listed the same
-                links twice in one drawer.
+                three, so keeping both would have listed the same links twice.
               {%- endcomment -%}
               {% render 'hp-nav-group',
                 variant: 'drawer',
                 label: section.settings.hp_group_label,
                 scheme: section.settings.menu_color_scheme,
                 i1_label: section.settings.hp_group_1_label,
-                i1_anchor: section.settings.hp_group_1_anchor,
+                i1_url: section.settings.hp_group_1_url | default: '/pages/shop-by-style',
                 i2_label: section.settings.hp_group_2_label,
-                i2_anchor: section.settings.hp_group_2_anchor,
+                i2_url: section.settings.hp_group_2_url | default: '/pages/shop-by-colour',
                 i3_label: section.settings.hp_group_3_label,
-                i3_anchor: section.settings.hp_group_3_anchor
+                i3_url: section.settings.hp_group_3_url | default: '/pages/shop-by-occasion'
               %}
 
               {% render 'hp-nav-extra',
