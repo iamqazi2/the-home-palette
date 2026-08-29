@@ -383,6 +383,134 @@
         "count_label": "50 hospitality brands and counting"
       }
     },
+    "hosp_gallery": {
+      "type": "hp-hosp-gallery",
+      "blocks": {
+        "g01": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_0774.jpg",
+            "venue": "Breakfast, plated",
+            "note": "Café service",
+            "size": "standard"
+          }
+        },
+        "g02": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8876.heic",
+            "venue": "Banquet table",
+            "note": "Hotel service",
+            "size": "standard"
+          }
+        },
+        "g03": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_0773.jpg",
+            "venue": "Main course",
+            "note": "Restaurant service",
+            "size": "wide"
+          }
+        },
+        "g04": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8879.heic",
+            "venue": "Signature colour set",
+            "note": "Custom order",
+            "size": "standard"
+          }
+        },
+        "g05": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8883.jpg",
+            "venue": "Breakfast spread",
+            "note": "Hotel buffet",
+            "size": "standard"
+          }
+        },
+        "g06": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_0776.jpg",
+            "venue": "Sharing platter",
+            "note": "Restaurant service",
+            "size": "standard"
+          }
+        },
+        "g07": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8878.heic",
+            "venue": "Cobalt tea service",
+            "note": "Custom order",
+            "size": "standard"
+          }
+        },
+        "g08": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8884.heic",
+            "venue": "Chafing service",
+            "note": "Banquet",
+            "size": "standard"
+          }
+        },
+        "g09": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8880.heic",
+            "venue": "Bread basket & omelette",
+            "note": "Café breakfast",
+            "size": "standard"
+          }
+        },
+        "g10": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8881.heic",
+            "venue": "Tea on the terrace",
+            "note": "Resort service",
+            "size": "standard"
+          }
+        },
+        "g11": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8886.heic",
+            "venue": "Handi service",
+            "note": "Banquet",
+            "size": "standard"
+          }
+        }
+      },
+      "block_order": [
+        "g01",
+        "g02",
+        "g03",
+        "g04",
+        "g05",
+        "g06",
+        "g07",
+        "g08",
+        "g09",
+        "g10",
+        "g11"
+      ],
+      "settings": {
+        "bg_color": "#fff9df",
+        "columns": 4,
+        "center_head": true,
+        "eyebrow": "In Service",
+        "heading": "Our Crockery, Mid-Shift",
+        "text": "Not styled studio shots — plates, cups and chafing dishes photographed on the tables they were made for.",
+        "foot_text": "Want your venue on this wall? Send us a photo of your current setting and we will show you what it could look like.",
+        "button_label": "Start Your Order",
+        "button_link": "https://wa.me/923376111399"
+      }
+    },
     "hosp_story": {
       "type": "hp-about-story",
       "blocks": {
@@ -518,134 +646,6 @@
         "text": "If food leaves your kitchen on a plate, we can make that plate — in the quantity your room needs and the colours your brand uses."
       }
     },
-    "hosp_gallery": {
-      "type": "hp-hosp-gallery",
-      "blocks": {
-        "g01": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_0774.jpg",
-            "venue": "Breakfast, plated",
-            "note": "Café service",
-            "size": "standard"
-          }
-        },
-        "g02": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_8876.heic",
-            "venue": "Banquet table",
-            "note": "Hotel service",
-            "size": "standard"
-          }
-        },
-        "g03": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_0773.jpg",
-            "venue": "Main course",
-            "note": "Restaurant service",
-            "size": "wide"
-          }
-        },
-        "g04": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_8879.heic",
-            "venue": "Signature colour set",
-            "note": "Custom order",
-            "size": "standard"
-          }
-        },
-        "g05": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_8883.jpg",
-            "venue": "Breakfast spread",
-            "note": "Hotel buffet",
-            "size": "standard"
-          }
-        },
-        "g06": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_0776.jpg",
-            "venue": "Sharing platter",
-            "note": "Restaurant service",
-            "size": "standard"
-          }
-        },
-        "g07": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_8878.heic",
-            "venue": "Cobalt tea service",
-            "note": "Custom order",
-            "size": "standard"
-          }
-        },
-        "g08": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_8884.heic",
-            "venue": "Chafing service",
-            "note": "Banquet",
-            "size": "standard"
-          }
-        },
-        "g09": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_8880.heic",
-            "venue": "Bread basket & omelette",
-            "note": "Café breakfast",
-            "size": "standard"
-          }
-        },
-        "g10": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_8881.heic",
-            "venue": "Tea on the terrace",
-            "note": "Resort service",
-            "size": "standard"
-          }
-        },
-        "g11": {
-          "type": "shot",
-          "settings": {
-            "image": "shopify://shop_images/IMG_8886.heic",
-            "venue": "Handi service",
-            "note": "Banquet",
-            "size": "standard"
-          }
-        }
-      },
-      "block_order": [
-        "g01",
-        "g02",
-        "g03",
-        "g04",
-        "g05",
-        "g06",
-        "g07",
-        "g08",
-        "g09",
-        "g10",
-        "g11"
-      ],
-      "settings": {
-        "bg_color": "#fff9df",
-        "columns": 4,
-        "center_head": true,
-        "eyebrow": "In Service",
-        "heading": "Our Crockery, Mid-Shift",
-        "text": "Not styled studio shots — plates, cups and chafing dishes photographed on the tables they were made for.",
-        "foot_text": "Want your venue on this wall? Send us a photo of your current setting and we will show you what it could look like.",
-        "button_label": "Start Your Order",
-        "button_link": "https://wa.me/923376111399"
-      }
-    },
     "hosp_process": {
       "type": "hp-about-process",
       "blocks": {
@@ -768,18 +768,50 @@
         "note": "Not sure which one fits? Send us your cover count and a photo of your current table setting — we will come back with a recommendation and a quote."
       }
     },
-    "hp_reviews_all": {
-      "type": "hp-reviews",
+    "1788045679096c3afd": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_cards_carousel_dE683N": {
+          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": true,
+            "reviews_selection": "all",
+            "products": [],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "star_rating": "all",
+            "show_review_media": true,
+            "display_order": "media_first",
+            "no_image_fallback": "review_text_only",
+            "max_reviews": 20,
+            "review_length": "medium",
+            "text_size": "medium",
+            "image_ratio": "1",
+            "reviews_shown": 4,
+            "show_reviewer_name": true,
+            "show_product_name": true,
+            "hide_arrows_mobile": true,
+            "arrows_position": "sides",
+            "max_width": 1100,
+            "corner_styling": "soft",
+            "header_text_color": "#000000",
+            "text_color": "#000000",
+            "card_color": "#F9F9F9",
+            "stars_color": "",
+            "arrows_color": "#000000",
+            "transition_speed": 5,
+            "header_text": "Customers are saying",
+            "show_average_rating": true,
+            "rating_display": "default"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_cards_carousel_dE683N"
+      ],
       "settings": {
-        "eyebrow": "Trusted By Venues",
-        "heading": "Loved Across Pakistan",
-        "text": "Verified Judge.me reviews from restaurants, hotels and event teams.",
-        "align": "center",
-        "source": "store",
-        "card_style": "showcase",
-        "bg": "cream",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "include_margins": true
       }
     }
   },
@@ -792,6 +824,6 @@
     "hosp_venues",
     "hosp_process",
     "hosp_packages",
-    "hp_reviews_all"
+    "1788045679096c3afd"
   ]
 }
