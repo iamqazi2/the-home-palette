@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main-cart-items": {
@@ -36,17 +45,44 @@
         "include_margins": true
       }
     },
-    "hp_recs": {
-      "type": "hp-recommendations",
-      "settings": {}
-    },
     "hp_cart_recs": {
       "type": "hp-cart-recommendations",
       "settings": {
         "heading": "Complete your table",
+        "intent": "complementary",
         "limit": 4,
         "loader_section": "hp_recs"
       }
+    },
+    "17880455246253d473": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_verified_badge_hcL7aw": {
+          "type": "shopify://apps/judge-me-reviews/blocks/verified_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "judge_me_reviews_all_reviews_page_zihwNx": {
+          "type": "shopify://apps/judge-me-reviews/blocks/all_reviews_page/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "max_width": 1200,
+            "review_source": "all",
+            "show_all_reviews_in_same_tab": false,
+            "show_first": "product",
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_verified_badge_hcL7aw",
+        "judge_me_reviews_all_reviews_page_zihwNx"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "hp_recs": {
+      "type": "hp-recommendations",
+      "settings": {}
     }
   },
   "order": [
@@ -54,6 +90,7 @@
     "main-cart-footer",
     "17472397444e598508",
     "hp_cart_recs",
+    "17880455246253d473",
     "hp_recs"
   ]
 }
