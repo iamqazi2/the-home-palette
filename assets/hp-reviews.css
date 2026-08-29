@@ -2027,6 +2027,11 @@
    is the part that lets a customer actually write a review. */
 
 .hp-revs--showcase .hp-revs__row .jm-review-item {
+  /* Judge.me leaves these on content-box, so the padding landed OUTSIDE the
+     stated height and the card measured 25.2rem against the 22rem it asked
+     for — taller than the store cards beside it, and with a text budget that
+     never matched the box. The store cards carry the same fix. */
+  box-sizing: border-box !important;
   height: 24rem !important;
   min-height: 24rem !important;
   max-height: 24rem !important;
@@ -2070,6 +2075,32 @@
 .hp-revs--showcase .hp-revs__row .jm-review-content { flex: 0 1 auto; min-height: 0; }
 .hp-revs--showcase .hp-revs__row .jm-reviewer-info { margin-top: 0.8rem; }
 
+/* ---- the quote must end, not get cut ------------------------------------
+   The line clamp was only ever set on .jm-review-body-wrapper. When the app
+   puts the text straight into .jm-review-content__body — no wrapper — nothing
+   limited it, and a fixed-height card simply clipped the last line through
+   the middle of the letters. That is the text cut off on mobile.
+
+   So the clamp is declared on the text elements themselves as well as the
+   wrapper, and backed by a max-height in em. The clamp alone depends on
+   -webkit-box surviving whatever the app sets; the max-height is plain CSS
+   and cannot fail, so the quote always ends on a line boundary. Both are
+   derived from the same line count and the 1.5 line-height set above. */
+.hp-revs--showcase .hp-revs__row .jm-review-content,
+.hp-revs--showcase .hp-revs__row .jm-review-body-wrapper {
+  min-height: 0;
+  overflow: hidden;
+}
+.hp-revs--showcase .hp-revs__row .jm-review-body-wrapper,
+.hp-revs--showcase .hp-revs__row .jm-review-content__body,
+.hp-revs--showcase .hp-revs__row .jdgm-review-content__body-content {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 4 !important;
+  overflow: hidden !important;
+  max-height: 6em !important;   /* 4 lines x 1.5 line-height */
+}
+
 @media screen and (min-width: 1200px) {
   .hp-revs--showcase .hp-revs__row .jm-review-item {
     height: 25rem !important;
@@ -2089,4 +2120,13 @@
   .hp-revs--showcase .hp-revs__row .jm-review-item:has(.jm-media-thumbnail-list__thumbnail, .jm-media-grid) { padding: 0 !important; }
   .hp-revs--showcase .hp-revs__row .jm-review-content__body,
   .hp-revs--showcase .hp-revs__row .jdgm-review-content__body-content { font-size: 1.5rem !important; }
+  /* the mobile card is 22rem tall against 24rem on desktop, and the stars,
+     name and date above the quote cost the same either way — so the quote
+     gets one line fewer here rather than being clipped to fit */
+  .hp-revs--showcase .hp-revs__row .jm-review-body-wrapper,
+  .hp-revs--showcase .hp-revs__row .jm-review-content__body,
+  .hp-revs--showcase .hp-revs__row .jdgm-review-content__body-content {
+    -webkit-line-clamp: 3 !important;
+    max-height: 4.5em !important;   /* 3 lines x 1.5 line-height */
+  }
 }
