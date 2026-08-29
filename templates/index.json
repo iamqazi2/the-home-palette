@@ -12,17 +12,6 @@
     "hp_hero": {
       "type": "hp-hero",
       "blocks": {
-        "slide_1": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
-            "kicker": "Handcrafted Heritage · Pakistan",
-            "heading": "Exquisite Dining",
-            "subheading": "Our happy colors uplift the mood — premium serveware for homes and hospitality.",
-            "button_label": "Dinner Sets",
-            "link": "shopify://collections/dinner-breakfast-sets"
-          }
-        },
         "slide_2": {
           "type": "slide",
           "settings": {
@@ -32,6 +21,17 @@
             "subheading": "The evolution of craft into quiet luxury, one table at a time.",
             "button_label": "All Collections",
             "link": "shopify://collections"
+          }
+        },
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
+            "kicker": "Handcrafted Heritage · Pakistan",
+            "heading": "Exquisite Dining",
+            "subheading": "Our happy colors uplift the mood — premium serveware for homes and hospitality.",
+            "button_label": "Dinner Sets",
+            "link": "shopify://collections/dinner-breakfast-sets"
           }
         },
         "slide_3": {
@@ -45,35 +45,33 @@
             "link": "shopify://collections/thp-cutlery-glassware"
           }
         },
+        "slide_5": {
+          "type": "slide",
+          "settings": {
+            "kicker": "Celebrate Heritage",
+            "heading": "Authentic Pakistani Craftsmanship",
+            "subheading": "Beautifully crafted tableware for slow afternoons and long conversations.",
+            "button_label": "Platters / Plates",
+            "link": "shopify://collections/platters"
+          }
+        },
         "slide_4": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
             "kicker": "The Weave Collection",
             "heading": "Woven Placemats",
             "subheading": "From everyday meals to grand gatherings, make every dish special.",
             "button_label": "THP Weaves",
             "link": "shopify://collections/thp-weave-collection"
           }
-        },
-        "slide_5": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
-            "kicker": "Celebrate Heritage",
-            "heading": "Authentic Pakistani Craftsmanship",
-            "subheading": "Beautifully crafted tableware for slow afternoons and long conversations.",
-            "button_label": "Tea & Coffee",
-            "link": "shopify://collections/tea-coffee-essentials"
-          }
         }
       },
       "block_order": [
-        "slide_1",
         "slide_2",
+        "slide_1",
         "slide_3",
-        "slide_4",
-        "slide_5"
+        "slide_5",
+        "slide_4"
       ],
       "settings": {
         "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4",
@@ -119,15 +117,6 @@
             "link": ""
           }
         },
-        "trust_3": {
-          "type": "item",
-          "settings": {
-            "icon": "shield-check",
-            "title": "Quality Checked",
-            "text": "Every piece inspected by hand",
-            "link": ""
-          }
-        },
         "trust_4": {
           "type": "item",
           "settings": {
@@ -136,13 +125,22 @@
             "text": "Website orders only",
             "link": ""
           }
+        },
+        "trust_3": {
+          "type": "item",
+          "settings": {
+            "icon": "shield-check",
+            "title": "Quality Checked",
+            "text": "Every piece inspected by hand",
+            "link": ""
+          }
         }
       },
       "block_order": [
         "trust_1",
         "trust_2",
-        "trust_3",
-        "trust_4"
+        "trust_4",
+        "trust_3"
       ],
       "settings": {
         "bg_color": "#fff9df",
