@@ -71,6 +71,7 @@
         "hp_show_excerpt": false,
         "hp_excerpt_words": 45,
         "hp_show_meta": true,
+        "hp_show_reviews": true,
         "hp_reviews_title": "",
         "hp_reviews_per_page": 2,
         "hp_star_color": "#e0a422",
@@ -161,7 +162,7 @@
           "settings": {
             "quote": "Bought the dinner set for our new home — it made the whole table feel special. Ordering the tea set next.",
             "name": "Zara A.",
-            "role": "Newlywed · Rawalpindi",
+            "role": "Rawalpindi",
             "stars": 5
           }
         },
@@ -238,12 +239,12 @@
         "text": "Real tables, real reviews — from homes, hosts and restaurants across the country.",
         "speed": 5,
         "fallback_video_url": "https://cdn.shopify.com/videos/c/o/v/8675ed13040d4bd1b669a8bc95ca19ce.mp4",
+        "show_video_cards": false,
         "loop_previews": false,
         "bg_color": "#1a4b46",
         "text_color": "#fff9df",
         "eyebrow_color": "#fff9df",
-        "card_color": "#1a4b46",
-        "show_video_cards": false
+        "card_color": "#1a4b46"
       }
     },
     "1735728895025f6c98": {
