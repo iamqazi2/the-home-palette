@@ -1008,6 +1008,7 @@
 
     var paused = false;
     var raf = null;
+    var settle;
 
     function step() {
       if (!paused && document.visibilityState === 'visible') {
@@ -1024,14 +1025,21 @@
     function pause() { paused = true; }
     function resume() { paused = false; }
 
-    ['mouseenter', 'focusin', 'touchstart', 'pointerdown'].forEach(function (ev) {
+    /* Hover deliberately does NOT pause: the rail is meant to keep drifting
+       while it is read. Only a real interaction stops it — a touch or drag, a
+       wheel, or keyboard focus, where a card scrolling out from under the
+       focus ring would strand the reader. */
+    ['focusin', 'touchstart', 'pointerdown'].forEach(function (ev) {
       rail.addEventListener(ev, pause, { passive: true });
     });
-    ['mouseleave', 'focusout'].forEach(function (ev) {
-      rail.addEventListener(ev, resume, { passive: true });
+    rail.addEventListener('focusout', resume, { passive: true });
+    ['touchend', 'pointerup', 'pointercancel'].forEach(function (ev) {
+      rail.addEventListener(ev, function () {
+        window.clearTimeout(settle);
+        settle = window.setTimeout(resume, 2000);
+      }, { passive: true });
     });
     // a manual scroll should hand control back only once the reader stops
-    var settle;
     rail.addEventListener('wheel', function () {
       pause();
       window.clearTimeout(settle);

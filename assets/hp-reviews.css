@@ -307,9 +307,8 @@
 .jdgm-ugc-media__thumbnail {
   border-radius: 14px !important;
   overflow: hidden;
-  transition: transform 0.4s var(--hp-ease);
 }
-.jdgm-gallery__thumbnail-link:hover .jdgm-gallery__thumbnail { transform: scale(1.04); }
+
 
 /* ---- the review card --------------------------------------------------- */
 
@@ -698,8 +697,7 @@
   border-radius: 14px !important;
   overflow: hidden;
 }
-.jm-media-grid__image { transition: transform 0.4s var(--hp-ease); }
-.jm-media-grid__item:hover .jm-media-grid__image { transform: scale(1.05); }
+
 
 /* ==========================================================================
    The review rail: cards in a horizontally scrollable grid
@@ -753,8 +751,6 @@
 }
 .jm-review-item:hover {
   border-color: rgba(26, 75, 70, 0.25) !important;
-  box-shadow: var(--hp-shadow-card);
-  transform: translateY(-2px);
 }
 .jm-review-item__content,
 .jm-review-item__body { min-width: 0; }
@@ -964,11 +960,10 @@
   background: var(--hp-teal-card) !important;
   border: 1px solid rgba(255, 249, 223, 0.18) !important;
   scroll-snap-align: start;
-  transition: transform 0.5s var(--hp-ease), box-shadow 0.5s var(--hp-ease);
+  transition: border-color 0.3s var(--hp-ease);
 }
 .hp-revs--showcase .jm-review-item:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 30px 50px -30px rgba(8, 26, 27, 0.7);
+  border-color: rgba(255, 249, 223, 0.55) !important;
 }
 
 /* the app's own inner stacks must fill the card so the footer can sit at the
@@ -1356,18 +1351,12 @@
   box-shadow: inset 0 1px 0 rgba(255, 249, 223, 0.12);
 }
 .hp-revs--showcase .jm-review-item:hover {
-  box-shadow: inset 0 1px 0 rgba(255, 249, 223, 0.2),
-    0 30px 50px -30px rgba(8, 26, 27, 0.75);
+  border-color: rgba(255, 249, 223, 0.55) !important;
 }
 .hp-revs--showcase .jm-star-rating { font-size: 1.5rem; }
 
-/* photos get a slow push-in on hover, the same gesture as the product rails */
-.hp-revs--showcase .jm-media-thumbnail-list__thumbnail img {
-  transition: transform 0.7s var(--hp-ease);
-}
-.hp-revs--showcase .jm-review-item:hover .jm-media-thumbnail-list__thumbnail img {
-  transform: scale(1.05);
-}
+
+
 
 /* ---- desktop: larger cards on roomy screens ----------------------------- */
 
@@ -1488,10 +1477,7 @@
     border-color 0.3s var(--hp-ease);
 }
 .hp-revs--showcase .hp-revs__store .jdgm-rev:hover {
-  transform: translateY(-6px);
   border-color: rgba(255, 249, 223, 0.55) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 249, 223, 0.2),
-    0 30px 50px -30px rgba(8, 26, 27, 0.75);
 }
 
 /* Layout note: the app nests the stars, the reviewer, the product link and the
@@ -1689,11 +1675,10 @@
   /* their rule vertically centres the thumbnail with a transform; clearing it
      frees the property for the hover push-in below */
   transform: none !important;
-  transition: transform 0.7s var(--hp-ease) !important;
 }
-.hp-revs--showcase .hp-revs__store .jdgm-rev:hover .jdgm-rev__pic-img {
-  transform: scale(1.05) !important;
-}
+/* No hover motion on these cards. The rails drift continuously, so a card is
+   moving under the cursor: any hover transform would fire and unfire as cards
+   pass, which reads as jitter rather than as a response to the reader. */
 
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link)::after {
   content: '';
@@ -1704,35 +1689,51 @@
   /* reviewer photos are unpredictable — a pale tablecloth under the caption is
      common — so the scrim starts earlier and finishes darker than the video
      cards needed */
-  background: linear-gradient(
-    180deg,
-    rgba(8, 26, 27, 0) 30%,
-    rgba(8, 26, 27, 0.45) 62%,
-    rgba(8, 26, 27, 0.92) 100%
-  );
+  background: linear-gradient(180deg, rgba(8, 26, 27, 0.28) 0%, rgba(8, 26, 27, 0) 45%);
 }
+/* The caption over a photo gets its own panel rather than relying on a gradient
+   over the image. Reviewer photos are arbitrary — a white plate, a pale cloth,
+   a bright window — and a scrim tuned to one of them fails on the next. A
+   translucent panel with a blur behind it holds the same contrast on any
+   photo. inset/order/padding are forced because the app's own rules for these
+   nodes land after the theme's. */
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__header {
-  position: absolute;
-  inset: auto 0 0 0;
+  position: absolute !important;
+  top: auto !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
   z-index: 2;
-  padding: 1.8rem;
+  padding: 1.2rem 1.4rem !important;
+  /* the app carries a bottom margin on this node, which left a sliver of photo
+     showing under the panel */
+  margin: 0 !important;
   /* order: only has meaning on a flex/grid child. Left as a block, the date,
      product link, badge and name all ran together on one line over the photo. */
   display: flex !important;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.2rem;
+  gap: 0.15rem;
+  background: rgba(8, 26, 27, 0.78);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  backdrop-filter: blur(10px) saturate(1.1);
+  border-top: 1px solid rgba(255, 249, 223, 0.14);
 }
+/* name first, then what they reviewed, then when — asserted here because the
+   values set for the quote cards are on a different stacking context */
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__author-wrapper { order: 1 !important; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__buyer-badge-wrapper { order: 2 !important; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__prod-info-wrapper { order: 3 !important; }
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__timestamp { order: 4 !important; }
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__prod-info-wrapper,
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__author-wrapper,
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__timestamp {
   display: block !important;
   width: 100%;
 }
-.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__author,
 .hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__prod-link,
-.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__timestamp {
-  text-shadow: 0 1px 6px rgba(8, 26, 27, 0.65);
+.hp-revs--showcase .hp-revs__store .jdgm-rev:has(.jdgm-rev__pic-link) .jdgm-rev__prod-link-prefix {
+  opacity: 0.85;
 }
 
 @media screen and (min-width: 1200px) {
