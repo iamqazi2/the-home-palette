@@ -735,12 +735,6 @@
         "link": "shopify://collections/thp-weave-collection"
       }
     },
-    "173573001120319a38": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
     "hp_reviews_all": {
       "type": "hp-reviews",
       "settings": {
@@ -766,7 +760,6 @@
     "hp_occasion",
     "hp_style_rail",
     "hp_cta",
-    "173573001120319a38",
     "hp_reviews_all"
   ]
 }
