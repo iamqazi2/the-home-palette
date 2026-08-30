@@ -675,8 +675,8 @@
           "settings": {
             "title": "Reactive",
             "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
-            "collection": "aesthetic-bowls",
-            "link": ""
+            "collection": "",
+            "link": "shopify://collections/reactive"
           }
         },
         "style_4": {
