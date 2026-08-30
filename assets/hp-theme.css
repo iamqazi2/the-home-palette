@@ -1531,9 +1531,22 @@ hp-recommendations[hidden], hp-drawer-recs[hidden] { display: none !important; }
 .mobile-facets__inner { background: var(--hp-cream-soft); }
 .product-count__text, .facets__status { font-family: var(--hp-font-ui); color: var(--hp-taupe); }
 
-/* product grid rhythm */
-.collection .product-grid, .product-grid { column-gap: 1.2rem; row-gap: 2.4rem; }
-@media screen and (min-width: 750px) { .collection .product-grid, .product-grid { column-gap: 1.8rem; row-gap: 3.2rem; } }
+/* product grid rhythm.
+
+   Set through Dawn's own spacing variables rather than column-gap directly.
+   Dawn sizes each card FROM those variables — a two-up card is
+   `calc(50% - var(--grid-mobile-horizontal-spacing) / 2)` — so overriding the
+   gap on its own widened the gutter while the cards kept the width they had
+   at Dawn's 10px. Two cards plus the wider gap then came to more than the row,
+   and every card wrapped onto a line of its own: a single column with the
+   other half of the grid left empty. Setting the variable keeps the two in
+   step, whatever the gap. */
+.collection .product-grid, .product-grid {
+  --grid-mobile-horizontal-spacing: 1.2rem;
+  --grid-desktop-horizontal-spacing: 1.8rem;
+  row-gap: 2.4rem;
+}
+@media screen and (min-width: 750px) { .collection .product-grid, .product-grid { row-gap: 3.2rem; } }
 .collection__title { margin-bottom: 1.6rem; }
 .collection .loading-overlay { backdrop-filter: blur(2px); }
 

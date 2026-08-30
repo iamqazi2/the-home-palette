@@ -1320,22 +1320,46 @@
       // hero ships its desktop clip on the src attribute so it plays without
       // JS, and reloading the same file would restart it for no reason.
       whenIdleForVideo(function () {
-      if (src && v.getAttribute('src') !== src) {
-        v.setAttribute('src', src);
-        // 'auto', not 'metadata': the markup for a screen that has a clip to
-        // swap now ships with no autoplay/preload of its own (see
-        // hp-hero.liquid) specifically so nothing downloads until this point
-        // decides which file the screen actually needs — this is the one
-        // fetch that should happen, so it should ask for the whole thing.
-        v.preload = 'auto';
-        v.load();
-      }
+        /* 'is-playing' is added on the `playing` event rather than on the
+           attempt, so the still stays put until frames are actually running.
+           Guessing left a transparent <video> over the poster whenever the
+           clip had been chosen but never started. */
+        var show = function () { v.classList.add('is-playing'); };
+        v.addEventListener('playing', show);
 
-      var show = function () { v.classList.add('is-playing'); };
-      if (v.readyState >= 3) show();
-      v.addEventListener('canplay', show, { once: true });
-      var p = v.play();
-      if (p && p.catch) p.catch(function () { v.classList.remove('is-playing'); });
+        var attempt = function () {
+          var p = v.play();
+          if (p && p.catch) p.catch(function () { /* poster stays */ });
+        };
+
+        if (src && v.getAttribute('src') !== src) {
+          v.setAttribute('src', src);
+          // 'auto', not 'metadata': the markup ships with no autoplay or
+          // preload of its own (see hp-hero.liquid) precisely so nothing
+          // downloads until this point has decided which file this screen
+          // needs. This is the one fetch that should happen, so it asks for
+          // the whole thing.
+          v.preload = 'auto';
+          /* The markup carries no autoplay attribute — that is what stopped a
+             phone fetching the desktop cut before this code could choose. Set
+             it as a PROPERTY now the right file is chosen, so the browser
+             starts the clip itself the moment it can, exactly as it used to.
+             Relying on the play() below alone was the mistake: called in the
+             same turn as load(), while the element is still restarting its
+             resource selection, the promise rejects and the clip sat loaded
+             but paused with the poster showing over it. */
+          v.autoplay = true;
+          v.load();
+          /* and a nudge on each event that means "there is something to show",
+             for the browsers that will not start it on their own */
+          v.addEventListener('loadeddata', attempt, { once: true });
+          v.addEventListener('canplay', attempt, { once: true });
+        } else {
+          v.autoplay = true;
+          attempt();
+        }
+
+        if (v.readyState >= 3) { show(); attempt(); }
       });
     });
   }
