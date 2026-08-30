@@ -175,7 +175,7 @@
           "type": "tile",
           "settings": {
             "collection": "thp-weave-collection",
-            "title": "Placemats & Baskets"
+            "title": "THP Weaves"
           }
         },
         "tile_5": {
@@ -236,7 +236,7 @@
       "settings": {
         "eyebrow": "Chapter One — The Collections",
         "heading": "Every Table Tells a Story",
-        "text": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
+        "text": "Multiple families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
         "center_head": true,
         "columns": 5,
         "scrim": 90,
@@ -675,7 +675,15 @@
           "settings": {
             "title": "Reactive",
             "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
-            "collection": "aesthetic-bowls",
+            "collection": "",
+            "link": "shopify://collections/reactive"
+          }
+        },
+        "style_J74iL9": {
+          "type": "style",
+          "settings": {
+            "title": "Minimalist",
+            "collection": "",
             "link": ""
           }
         },
@@ -684,8 +692,8 @@
           "settings": {
             "title": "Contemporary",
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
-            "collection": "dinner-breakfast-sets",
-            "link": ""
+            "collection": "",
+            "link": "shopify://collections/contemporary"
           }
         },
         "style_5": {
@@ -693,8 +701,8 @@
           "settings": {
             "title": "Hotel Collection",
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
-            "collection": "serveware",
-            "link": ""
+            "collection": "hotel-collection",
+            "link": "shopify://collections/hotel-collection"
           }
         }
       },
@@ -702,6 +710,7 @@
         "style_1",
         "style_2",
         "style_3",
+        "style_J74iL9",
         "style_4",
         "style_5"
       ],
