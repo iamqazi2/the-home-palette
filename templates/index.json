@@ -175,7 +175,7 @@
           "type": "tile",
           "settings": {
             "collection": "thp-weave-collection",
-            "title": "Placemats & Baskets"
+            "title": "THP Weaves"
           }
         },
         "tile_5": {
@@ -236,7 +236,7 @@
       "settings": {
         "eyebrow": "Chapter One — The Collections",
         "heading": "Every Table Tells a Story",
-        "text": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
+        "text": "Multiple families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
         "center_head": true,
         "columns": 5,
         "scrim": 90,
