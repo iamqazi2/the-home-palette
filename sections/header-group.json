@@ -11,36 +11,6 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
-    "header": {
-      "type": "header",
-      "settings": {
-        "logo_position": "middle-left",
-        "menu": "main-menu",
-        "menu_type_desktop": "dropdown",
-        "sticky_header_type": "none",
-        "show_line_separator": false,
-        "color_scheme": "scheme-1e4cf721-940b-43e2-85b1-b578f1e92a67",
-        "menu_color_scheme": "scheme-2",
-        "enable_country_selector": true,
-        "enable_language_selector": false,
-        "enable_customer_avatar": true,
-        "mobile_logo_position": "center",
-        "margin_bottom": 0,
-        "padding_top": 0,
-        "padding_bottom": 0,
-        "hp_search_right": false,
-        "hp_band_enable": true,
-        "hp_band_color": "#1a4b46",
-        "hp_band_text": "#fff9df",
-        "hp_show_account": false
-      }
-    },
-    "17358360248ef50bda": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
     "hp_announcement": {
       "type": "hp-announcement",
       "blocks": {
@@ -91,6 +61,43 @@
         "bg_color": "#1a4b46",
         "text_color": "#fff9df",
         "speed": 34
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "hp_show_account": false,
+        "hp_search_right": false,
+        "hp_band_enable": true,
+        "hp_band_color": "#1a4b46",
+        "hp_band_text": "#fff9df",
+        "logo_position": "middle-left",
+        "menu": "main-menu",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "none",
+        "show_line_separator": false,
+        "color_scheme": "scheme-1e4cf721-940b-43e2-85b1-b578f1e92a67",
+        "menu_color_scheme": "scheme-2",
+        "enable_country_selector": true,
+        "enable_language_selector": false,
+        "enable_customer_avatar": true,
+        "mobile_logo_position": "center",
+        "margin_bottom": 0,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "hp_group_label": "Shop Options",
+        "hp_group_1_label": "Shop by Style",
+        "hp_group_1_url": "",
+        "hp_group_2_label": "Shop by Colour",
+        "hp_group_2_url": "",
+        "hp_group_3_label": "Shop by Occasion",
+        "hp_group_3_url": ""
+      }
+    },
+    "17358360248ef50bda": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
       }
     }
   },
