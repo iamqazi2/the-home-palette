@@ -679,13 +679,21 @@
             "link": "shopify://collections/reactive"
           }
         },
+        "style_J74iL9": {
+          "type": "style",
+          "settings": {
+            "title": "Minimalist",
+            "collection": "",
+            "link": ""
+          }
+        },
         "style_4": {
           "type": "style",
           "settings": {
             "title": "Contemporary",
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
-            "collection": "dinner-breakfast-sets",
-            "link": ""
+            "collection": "",
+            "link": "shopify://collections/contemporary"
           }
         },
         "style_5": {
@@ -702,6 +710,7 @@
         "style_1",
         "style_2",
         "style_3",
+        "style_J74iL9",
         "style_4",
         "style_5"
       ],
