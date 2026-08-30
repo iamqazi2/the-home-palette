@@ -688,13 +688,29 @@
             "link": ""
           }
         },
+        "style_E6wtJ4": {
+          "type": "style",
+          "settings": {
+            "title": "Minimalist",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "style_g9yP44": {
+          "type": "style",
+          "settings": {
+            "title": "Minimalist",
+            "collection": "",
+            "link": ""
+          }
+        },
         "style_5": {
           "type": "style",
           "settings": {
             "title": "Hotel Collection",
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
-            "collection": "serveware",
-            "link": ""
+            "collection": "",
+            "link": "shopify://collections/hotel-collection"
           }
         }
       },
@@ -703,6 +719,8 @@
         "style_2",
         "style_3",
         "style_4",
+        "style_E6wtJ4",
+        "style_g9yP44",
         "style_5"
       ],
       "settings": {
