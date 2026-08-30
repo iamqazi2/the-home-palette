@@ -1078,12 +1078,20 @@
   var HP_REV_SHORT_LINES = 3;
 
   function fitReviewQuotes(root) {
+    /* Three markup generations, because Judge.me has shipped three and which
+       one appears depends on the widget and the app block in use:
+         .jdgm-carousel-item   the "Cards carousel" app block  <- what the
+                               store renders on the home page
+         .jm-review-item       the revamped review widget
+         .jdgm-rev             the original review list
+       The carousel one is NOT inside a .hp-revs section, so it is matched
+       unscoped. */
     var cards = (root || document).querySelectorAll(
-      '.hp-revs--showcase .jm-review-item, .hp-revs--showcase .hp-revs__store .jdgm-rev'
+      '.jdgm-carousel-item, .hp-revs--showcase .jm-review-item, .hp-revs--showcase .hp-revs__store .jdgm-rev'
     );
     cards.forEach(function (card) {
       var body = card.querySelector(
-        '.jm-review-content__body, .jdgm-review-content__body-content, .jdgm-rev__body'
+        '.jdgm-text p, .jm-review-content__body, .jdgm-review-content__body-content, .jdgm-rev__body'
       );
       if (!body) { card.classList.remove('hp-rev--short'); return; }
 
@@ -1097,6 +1105,36 @@
 
       card.classList.toggle('hp-rev--short', lines > 0 && lines <= HP_REV_SHORT_LINES);
     });
+  }
+
+  /* The carousel is injected by the Judge.me app, arrives after the theme's
+     own boot, and clones its cards as it rotates. So: measure now, keep
+     looking until it appears, and re-measure whenever it rebuilds. */
+  function initReviewCardFit(root) {
+    var scope = root || document;
+    fitReviewQuotes(scope);
+
+    var tries = 0;
+    (function poll() {
+      var hosts = document.querySelectorAll('.jdgm-cards-carousel, .hp-revs--showcase');
+      if (!hosts.length) {
+        if (tries++ < 40) window.setTimeout(poll, 250);
+        return;
+      }
+      hosts.forEach(function (host) {
+        fitReviewQuotes(host);
+        if (host.dataset.hpFitObserved) return;
+        host.dataset.hpFitObserved = '1';
+        if (!window.MutationObserver) return;
+        var t = null;
+        new window.MutationObserver(function () {
+          window.clearTimeout(t);
+          t = window.setTimeout(function () { fitReviewQuotes(host); }, 120);
+        }).observe(host, { childList: true, subtree: true });
+      });
+      // cards can still be arriving after the container exists
+      if (tries++ < 40) window.setTimeout(poll, 250);
+    })();
   }
 
   /* Line count is a function of card width, so a rotation or a resized window
@@ -2575,6 +2613,7 @@
     initReviewPager(document);
     initStoreReviews(document);
     initReviewMarquee(document);
+    initReviewCardFit(document);
     initBgVideo(document);
     initLazyPreviewVideos(document);
     initDealPopup(document);
@@ -2598,6 +2637,7 @@
     initReviewPager(e.target);
     initStoreReviews(e.target);
     initReviewMarquee(e.target);
+    initReviewCardFit(e.target);
     initBgVideo(e.target);
     initLazyPreviewVideos(e.target);
     initDealPopup(e.target);

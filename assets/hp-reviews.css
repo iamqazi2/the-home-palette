@@ -2539,6 +2539,46 @@
   min-height: 0 !important;
 }
 
+/* ---- short reviews: use the room instead of leaving it empty ------------
+   The card is stretched to the tallest review in the row, so a one-line review
+   sat against the top of .jdgm-text with the rest of the box empty. Measured
+   live: a 169px box around 26px of text — 16px above, 128px of dead teal
+   below.
+
+   align-content centres the grid's single row in that box (place-items above
+   aligns the item WITHIN its row, which is a different axis and stays as it
+   is). The text-align override has to be !important and has to sit after the
+   rule above, which pins every carousel quote left — correct for a paragraph,
+   wrong for two words in the middle of a tall card.
+
+   hp-rev--short is set by fitReviewQuotes in hp-theme.js: it measures the
+   rendered line count, because CSS cannot ask how long a string is. Re-run on
+   resize and whenever the carousel rebuilds itself.
+   ---------------------------------------------------------------------- */
+.jdgm-carousel-item .jdgm-text { align-content: center; }
+
+/* The long selectors are not decoration. Judge.me injects its own stylesheet
+   from its script, so it lands after this file — and, being in the body, after
+   anything in the head — and its `text-align: left !important` on the carousel
+   quote beats an equal-specificity rule of ours on order alone. These win on
+   specificity instead, which order cannot undo.
+
+   justify-items as well as text-align, and this is the part that is easy to
+   miss: `place-items: start` above makes the <p> a shrink-wrapped grid item,
+   so for a two-word review the paragraph box is only as wide as the words.
+   text-align centres text INSIDE that box and therefore does nothing — the box
+   itself is still parked at the left. Measured on the live carousel:
+   "Beautiful!" sat 16px from the left edge with 244px of empty teal to its
+   right, and text-align alone left it exactly there. justify-items centres the
+   box; text-align centres a second line within it when one wraps. */
+.jdgm-widget.jdgm-cards-carousel .jdgm-card.jdgm-carousel-item.hp-rev--short .jdgm-text {
+  justify-items: center !important;
+}
+.jdgm-widget.jdgm-cards-carousel .jdgm-card.jdgm-carousel-item.hp-rev--short .jdgm-text,
+.jdgm-widget.jdgm-cards-carousel .jdgm-card.jdgm-carousel-item.hp-rev--short .jdgm-text p {
+  text-align: center !important;
+}
+
 .jdgm-cards-carousel .jdgm-media-card .jdgm-rating-section {
   align-items: flex-start !important;
   gap: 0.6rem !important;
