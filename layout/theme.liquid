@@ -394,6 +394,42 @@
     {%- endcomment -%}
     <link rel="stylesheet" href="{{ 'hp-reviews.css' | asset_url }}" media="print" onload="this.media='all'">
     <noscript>{{ 'hp-reviews.css' | asset_url | stylesheet_tag }}</noscript>
+
+    {%- comment -%}
+      One of the installed apps injects <div id="fv-loading-icon">🔄</div> as
+      the first child of <body>, about 800ms into the load. Measured, it is:
+
+        opacity: 0.0001    never changes, over twelve seconds of observation
+        pointer-events: none
+        z-index: -99       behind everything on the page
+        position: absolute, 412 x 815 on a phone
+
+      So it is an anti-flicker cloak that is never actually revealed — nobody
+      has ever seen it and nobody can interact with it. But Chrome sizes Largest
+      Contentful Paint candidates by area, and at 339,076px² it is 15% larger
+      than the hero (294,386px²). Largest Contentful Paint only ever moves to a
+      LARGER element, so this one element is the entire LCP measurement and the
+      hero can never take it, however fast the hero gets. Measured on the live
+      page: it is the ONLY candidate Chrome ever records, and its render is
+      whenever the app's script gets round to injecting it — 8.4s on the last
+      PageSpeed run, against a hero still that is preloaded and on screen at
+      457ms.
+
+      opacity: 0 is the whole fix. Chrome excludes fully transparent elements
+      from LCP, so the measurement falls to the hero, which is what a visitor
+      actually looks at. Nothing about the page changes: 0.0001 and 0 are the
+      same picture, the element keeps its box, its position and its size, so
+      anything the app measures about it still reads the same.
+
+      Verified by rewriting the live page with exactly this rule: the LCP
+      element moves from #fv-loading-icon to .hp-hero__video.
+
+      If this element ever needs to be genuinely visible, delete this block —
+      and expect LCP to go back to tracking it rather than the hero.
+    {%- endcomment -%}
+    {%- style -%}
+      #fv-loading-icon { opacity: 0 !important; }
+    {%- endstyle -%}
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
