@@ -24,8 +24,33 @@
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
 <style>
+  /* Everything here is about the drawer taking up NO SPACE before its own
+     stylesheet has arrived.
+
+     `visibility: hidden` alone — which is all this block used to carry — hides
+     the drawer without taking it out of the flow. And the flow is the problem:
+     <cart-drawer> is the first element in <body>, which is a grid, so until
+     component-cart-drawer.css lands and makes it `position: fixed`, it is a
+     static block roughly 930px tall sitting in the first row and pushing the
+     announcement bar, the header and the whole of <main> down the page by that
+     much. When the stylesheet does land, all of it snaps back up.
+
+     Measured on the live home page: a single 929px jump, worth 0.87 CLS on its
+     own — the difference between a passing Core Web Vitals assessment and a
+     failing one. It was invisible only for as long as the page was slow enough
+     that nothing had painted yet when the stylesheet arrived; every millisecond
+     shaved off first paint made it more likely to be seen.
+
+     These four properties are copied verbatim from the `cart-drawer` rule in
+     component-cart-drawer.css, so nothing changes when that file applies — it
+     simply is no longer the first moment the drawer is out of the flow. */
   .drawer {
     visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
   }
 </style>
 
