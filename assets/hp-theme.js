@@ -1442,6 +1442,171 @@
     });
   }
 
+  /* ---- Sale / deal popup --------------------------------------------------
+     Driven by a "deal" block on the announcement bar section. The markup ships
+     with `hidden` on it and this is what takes it off, so the popup cannot be
+     on screen before the code that closes it exists.
+  ---------------------------------------------------------------------- */
+  var dealPopupShown = false;
+
+  function initDealPopup(root) {
+    (root || document).querySelectorAll('[data-hp-deal]').forEach(function (el) {
+      if (el.dataset.hpDealDone) return;
+      el.dataset.hpDealDone = '1';
+
+      var id = el.getAttribute('data-hp-deal-id') || '';
+
+      /* Re-parent to <body>. The block is authored inside the header group,
+         and a position: fixed element is measured against the nearest ancestor
+         carrying a transform, filter or containment rather than the viewport —
+         several header and drawer states have one. Moving the popup out
+         removes that entire class of "it is stuck inside the header" bug
+         instead of trying to enumerate which ancestors cause it. */
+      if (el.parentNode !== document.body) {
+        /* A section re-render in the theme editor emits a fresh copy of this
+           markup while the previous one is still parked on the body. Clear the
+           old one first or the editor accumulates a stack of popups. */
+        Array.prototype.slice.call(document.body.children).forEach(function (node) {
+          if (node !== el && node.hasAttribute && node.hasAttribute('data-hp-deal') &&
+              node.getAttribute('data-hp-deal-id') === id) {
+            node.parentNode.removeChild(node);
+          }
+        });
+        document.body.appendChild(el);
+      }
+
+      var panel = el.querySelector('.hp-deal__panel');
+      var freq = el.getAttribute('data-frequency') || 'always';
+      var delay = parseFloat(el.getAttribute('data-delay') || '2') * 1000;
+      var designMode = !!(window.Shopify && window.Shopify.designMode);
+      var key = 'hp-deal-' + id;
+      var lastFocus = null;
+      var hideTimer = null;
+
+      /* 'Once per visit' is sessionStorage, 'once a day' is localStorage —
+         each frequency stored where its lifetime already matches, so nothing
+         has to expire a session by hand. Every access is wrapped: storage
+         throws outright in some privacy modes, and a popup is not worth an
+         exception that stops the rest of the script. */
+      function store() { return freq === 'day' ? window.localStorage : window.sessionStorage; }
+      function seen() {
+        if (freq === 'always') return false;
+        try {
+          var v = store().getItem(key);
+          if (!v) return false;
+          if (freq === 'session') return true;
+          return (Date.now() - parseInt(v, 10)) < 86400000;
+        } catch (e) { return false; }
+      }
+      function mark() {
+        if (freq === 'always') return;
+        try { store().setItem(key, String(Date.now())); } catch (e) { /* nothing to do */ }
+      }
+
+      function focusables() {
+        return el.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+      }
+
+      function onKey(e) {
+        if (e.key === 'Escape' || e.key === 'Esc') { close(); return; }
+        if (e.key !== 'Tab') return;
+        /* Keep Tab inside the dialog. Without this the focus ring walks off
+           into the page behind the backdrop, where nothing is clickable and
+           the visitor cannot see where they are. */
+        var f = focusables();
+        if (!f.length) return;
+        var first = f[0];
+        var last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+
+      function videos() { return el.querySelectorAll('[data-hp-lazy-video]'); }
+
+      function open() {
+        if (!el.hasAttribute('hidden') && el.classList.contains('is-open')) return;
+        window.clearTimeout(hideTimer);
+        /* Fetch the clip now, not on page load: a popup set to "once a day"
+           should cost nothing on the days it does not appear. */
+        videos().forEach(function (v) {
+          startLazyVideo(v);
+          var p = v.play();
+          if (p && p.catch) p.catch(function () { /* the still stays */ });
+        });
+        lastFocus = document.activeElement;
+        el.removeAttribute('hidden');
+        /* One frame between "displayed" and "open" so the fade actually has a
+           start state to travel from; adding both together gives no
+           transition at all. */
+        window.requestAnimationFrame(function () {
+          window.requestAnimationFrame(function () { el.classList.add('is-open'); });
+        });
+        document.documentElement.classList.add('hp-deal-open');
+        document.addEventListener('keydown', onKey);
+        if (panel) panel.focus();
+        mark();
+      }
+
+      function close() {
+        el.classList.remove('is-open');
+        /* A looping clip behind a hidden element still decodes frames and still
+           costs battery. Nothing can see it, so stop it. */
+        videos().forEach(function (v) { try { v.pause(); } catch (e) {} });
+        document.documentElement.classList.remove('hp-deal-open');
+        document.removeEventListener('keydown', onKey);
+        /* Wait out the fade before hiding, on a timer rather than transitionend:
+           a browser that never fires the event (or fires it for a different
+           property) would otherwise leave the popup displayed but invisible,
+           sitting over the page and swallowing every click. */
+        hideTimer = window.setTimeout(function () { el.setAttribute('hidden', ''); }, 480);
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      el.querySelectorAll('[data-hp-deal-close]').forEach(function (btn) {
+        btn.addEventListener('click', close);
+      });
+      /* A click that starts and ends on the panel must not close, even when it
+         finishes over the backdrop — dragging to select text in the copy
+         otherwise dismisses the popup. Only a press that began on the backdrop
+         counts. */
+      var backdrop = el.querySelector('.hp-deal__backdrop');
+      if (backdrop) {
+        var pressedOnBackdrop = false;
+        backdrop.addEventListener('mousedown', function () { pressedOnBackdrop = true; });
+        document.addEventListener('mouseup', function () {
+          window.setTimeout(function () { pressedOnBackdrop = false; }, 0);
+        });
+        backdrop.addEventListener('click', function (e) {
+          if (e.target === backdrop && pressedOnBackdrop) close();
+        });
+      }
+
+      if (designMode) {
+        /* In the editor the popup opens when the merchant selects the block and
+           closes when they move on, so it is never in the way while they work
+           on the rest of the page — and it never opens on its own there, which
+           would make every other section impossible to edit. */
+        document.addEventListener('shopify:block:select', function (e) {
+          if (e.target === el || el.contains(e.target)) open();
+        });
+        document.addEventListener('shopify:block:deselect', function (e) {
+          if (e.target === el || el.contains(e.target)) close();
+        });
+        return;
+      }
+
+      if (seen()) return;
+      window.setTimeout(function () {
+        /* Two deal blocks must not stack two popups over each other. First one
+           due wins; the other stays put until the merchant reorders or hides
+           one. */
+        if (dealPopupShown) return;
+        dealPopupShown = true;
+        open();
+      }, delay);
+    });
+  }
+
   /* ---- Lazy "poster" videos (review cards with no real poster image) ----
      [data-hp-lazy-video] ships with no src and preload="none" — see the
      comment in hp-video-reviews.liquid for why: these clips are not
@@ -1449,23 +1614,37 @@
      instead of a small header. Fetching the real src only once a card is
      about to scroll into view keeps that cost off every page load and pays
      it only for cards someone actually reaches. */
+  /* Module-level so the deal popup can start its own clip on open. A popup is
+     display:none until then, which makes it invisible to the intersection
+     observer below — watching it would wait forever. "The popup opened" is the
+     better trigger anyway: it is the exact moment the clip becomes worth
+     fetching. */
+  function startLazyVideo(v) {
+    if (v.dataset.hpLazyDone) return;
+    v.dataset.hpLazyDone = '1';
+    v.src = v.dataset.src;
+    if (v.hasAttribute('data-hp-lazy-autoplay')) {
+      v.loop = true;
+      v.addEventListener('loadeddata', function () {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      }, { once: true });
+    }
+    v.load();
+  }
+
   function initLazyPreviewVideos(root) {
-    var nodes = (root || document).querySelectorAll('[data-hp-lazy-video]');
+    var all = (root || document).querySelectorAll('[data-hp-lazy-video]');
+    /* Clips inside a deal popup are owned by initDealPopup and excluded here:
+       the popup is also re-parented to <body> after this runs, so a section
+       this observer had already latched on to would no longer contain the
+       video by the time it fired. */
+    var nodes = Array.prototype.filter.call(all, function (v) {
+      return !v.closest('[data-hp-deal]');
+    });
     if (!nodes.length) return;
 
-    var start = function (v) {
-      if (v.dataset.hpLazyDone) return;
-      v.dataset.hpLazyDone = '1';
-      v.src = v.dataset.src;
-      if (v.hasAttribute('data-hp-lazy-autoplay')) {
-        v.loop = true;
-        v.addEventListener('loadeddata', function () {
-          var p = v.play();
-          if (p && p.catch) p.catch(function () {});
-        }, { once: true });
-      }
-      v.load();
-    };
+    var start = startLazyVideo;
 
     if (!('IntersectionObserver' in window)) {
       nodes.forEach(start);
@@ -2024,6 +2203,7 @@
     initReviewMarquee(document);
     initBgVideo(document);
     initLazyPreviewVideos(document);
+    initDealPopup(document);
     initCounters(document);
     initTimeline(document);
     initJumpLinks(document);
@@ -2045,6 +2225,7 @@
     initReviewMarquee(e.target);
     initBgVideo(e.target);
     initLazyPreviewVideos(e.target);
+    initDealPopup(e.target);
     initCounters(e.target);
     initTimeline(e.target);
     initJumpLinks(e.target);
