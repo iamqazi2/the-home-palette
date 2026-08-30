@@ -695,9 +695,27 @@
         btn.addEventListener('click', function () { el.select(btn); });
       });
 
-      /* Start on whichever swatch the template marked active, so the visible
-         group and the highlighted swatch agree on first paint. */
-      var initial = el.swatches.filter(function (b) {
+      /* A ?colour= in the URL wins over the template's default. This is what
+         "View all" links to: the destination page runs this same section, so
+         deep-linking the colour means the visitor lands on exactly the set of
+         products the swatch they clicked was showing — no search, no second
+         matching rule that could disagree with the first. Both spellings are
+         accepted so a hand-written link works either way. */
+      var wanted = null;
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var asked = params.get('colour') || params.get('color');
+        if (asked) {
+          asked = asked.toLowerCase();
+          wanted = el.swatches.filter(function (b) {
+            return b.getAttribute('data-hp-colour-key') === asked;
+          })[0] || null;
+        }
+      } catch (e) { wanted = null; }
+
+      /* Otherwise start on whichever swatch the template marked active, so the
+         visible group and the highlighted swatch agree on first paint. */
+      var initial = wanted || el.swatches.filter(function (b) {
         return b.classList.contains('is-active');
       })[0] || el.swatches[0];
       el.select(initial, true);
@@ -721,10 +739,19 @@
       });
 
       if (el.titleEl) el.titleEl.textContent = btn.getAttribute('data-hp-label') || '';
+      /* A colour with no destination hides the link rather than leaving the
+         previous colour's. Without the else branch, switching from a colour
+         that has a "View all" to one that does not left the old href in place,
+         so the link silently pointed at the wrong colour. */
       var url = btn.getAttribute('data-hp-url');
-      if (el.linkEl && url) {
-        el.linkEl.href = url;
-        el.linkEl.hidden = false;
+      if (el.linkEl) {
+        if (url) {
+          el.linkEl.href = url;
+          el.linkEl.hidden = false;
+        } else {
+          el.linkEl.removeAttribute('href');
+          el.linkEl.hidden = true;
+        }
       }
 
       if (!shownGroup || initial) return;
@@ -1439,6 +1466,278 @@
       var mq = window.matchMedia(HP_PHONE_MQ);
       if (mq.addEventListener) mq.addEventListener('change', apply);
       else if (mq.addListener) mq.addListener(apply);
+    });
+  }
+
+  /* ---- Pinch-zoom / drag-pan on product photos (touch) --------------------
+     Dawn's own zoom is magnify.js, wired to onmousemove and onmouseleave. A
+     phone fires neither, so tapping a product photo opened the lightbox and
+     that was the end of it — a picture at exactly screen size, no way in.
+
+     This adds the two gestures people actually try on a phone: pinch to zoom
+     and drag to pan, plus double-tap as the quick way in and out. It runs only
+     on a coarse pointer, so a mouse keeps the stock hover/lightbox behaviour
+     exactly as it was.
+
+     Geometry note: everything is done in screen coordinates against
+     getBoundingClientRect, with transform-origin at the top-left (set in CSS).
+     That origin is what makes it tractable — scaling from 0 0 leaves the
+     element's left/top where they are, so its on-screen box is simply
+     base + translate, and `base` can be recovered as rect.left - tx at any
+     moment without tracking layout separately.
+  ---------------------------------------------------------------------- */
+  var HP_ZOOM_MAX = 4;
+  var HP_ZOOM_TAP = 2.5;      // where a double-tap lands
+
+  function initProductZoom(root) {
+    /* Touch only. A desktop mouse has the hover magnifier and the lightbox
+       already, and taking over its gestures would be a regression. */
+    if (!window.matchMedia('(pointer: coarse)').matches) return;
+
+    (root || document).querySelectorAll('product-modal').forEach(function (modal) {
+      if (modal.dataset.hpZoomDone) return;
+      modal.dataset.hpZoomDone = '1';
+
+      var content = modal.querySelector('.product-media-modal__content');
+      if (!content) return;
+
+      var img = null;             // the image this gesture belongs to
+      var scale = 1, tx = 0, ty = 0;
+      var base = null;            // untransformed screen box of img
+      var startScale = 1, startTx = 0, startTy = 0;
+      var startDist = 0, startMid = null, panFrom = null;
+      var downAt = 0, downX = 0, downY = 0, moved = false;
+      var lastTapAt = 0, lastTapX = 0, lastTapY = 0;
+
+      function apply() {
+        if (!img) return;
+        img.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')';
+        img.classList.toggle('is-zoomed', scale > 1.01);
+      }
+
+      /* Where the image would sit with no transform at all, in screen
+         coordinates. transform-origin is 0 0, so a transformed element's
+         on-screen left is simply base.left + tx — which inverts to give base
+         from a single measurement.
+
+         This MUST be taken while the DOM still matches tx/ty/scale, i.e. at
+         the start of a gesture and never mid-calculation. Measuring it after
+         the new values had been assigned but before they were written out was
+         a real bug: getBoundingClientRect returned the OLD transform's box
+         while the arithmetic used the NEW translate, so every clamp was off by
+         a whole gesture and a pinch threw the photo a thousand pixels off
+         screen. Cache it once per gesture and the arithmetic stays honest. */
+      function measureBase() {
+        if (!img) return;
+        var r = img.getBoundingClientRect();
+        base = { left: r.left - tx, top: r.top - ty, w: img.offsetWidth, h: img.offsetHeight };
+      }
+
+      /* Keep the image inside the frame: centred when it is smaller than the
+         frame, and never pulled far enough for a strip of background to appear
+         beside it when it is bigger. */
+      function clampPan() {
+        if (!img || !base) return;
+        var cr = content.getBoundingClientRect();
+        var w = base.w * scale;
+        var h = base.h * scale;
+
+        if (w <= cr.width) tx = cr.left + (cr.width - w) / 2 - base.left;
+        else tx = Math.min(cr.left - base.left, Math.max(cr.right - w - base.left, tx));
+
+        if (h <= cr.height) ty = cr.top + (cr.height - h) / 2 - base.top;
+        else ty = Math.min(cr.top - base.top, Math.max(cr.bottom - h - base.top, ty));
+      }
+
+      /* Rescale about a fixed screen point, so the spot between the fingers
+         (or under the double-tap) stays put instead of the image jumping to
+         centre. */
+      function scaleAround(next, px, py) {
+        if (!base) measureBase();
+        next = Math.min(HP_ZOOM_MAX, Math.max(1, next));
+        var ix = (px - base.left - tx) / scale;      // the point, in image space
+        var iy = (py - base.top - ty) / scale;
+        scale = next;
+        tx = px - base.left - ix * scale;
+        ty = py - base.top - iy * scale;
+        clampPan();
+      }
+
+      function animated(fn) {
+        if (!img) return;
+        var el = img;
+        el.classList.add('is-animating');
+        fn();
+        apply();
+        window.setTimeout(function () { el.classList.remove('is-animating'); }, 320);
+      }
+
+      function rest() {
+        scale = 1; tx = 0; ty = 0;
+        clampPan();
+      }
+
+      function reset(el) {
+        if (!el) return;
+        el.style.transform = '';
+        el.classList.remove('is-zoomed', 'is-animating');
+      }
+
+      function resetAll() {
+        content.querySelectorAll('.hp-zoomable').forEach(reset);
+        img = null; base = null; scale = 1; tx = 0; ty = 0;
+      }
+
+      function imageFrom(target) {
+        var el = target && target.closest ? target.closest('img') : null;
+        return el && content.contains(el) && el.classList.contains('hp-zoomable') ? el : null;
+      }
+
+      function dist(a, b) { return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); }
+      function mid(a, b) {
+        return { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
+      }
+
+      /* A photo the visitor has never touched starts at rest rather than
+         inheriting whatever the last one was left at. */
+      function adopt(el) {
+        if (img === el) return;
+        img = el;
+        if (!el.style.transform) { scale = 1; tx = 0; ty = 0; }
+      }
+
+      content.addEventListener('touchstart', function (e) {
+        var el = imageFrom(e.target);
+        if (!el) return;
+        adopt(el);
+        img.classList.remove('is-animating');
+        measureBase();
+
+        if (e.touches.length === 2) {
+          startDist = dist(e.touches[0], e.touches[1]);
+          startMid = mid(e.touches[0], e.touches[1]);
+          startScale = scale;
+          startTx = tx; startTy = ty;
+          panFrom = null;
+          e.preventDefault();
+          return;
+        }
+
+        if (e.touches.length === 1) {
+          var t = e.touches[0];
+          downAt = Date.now(); downX = t.clientX; downY = t.clientY; moved = false;
+
+          /* Only claim the drag once zoomed. At rest the lightbox still needs
+             to scroll normally under the finger. */
+          if (scale > 1.01) {
+            panFrom = { x: t.clientX, y: t.clientY };
+            startTx = tx; startTy = ty;
+          }
+        }
+      }, { passive: false });
+
+      content.addEventListener('touchmove', function (e) {
+        if (!img) return;
+
+        if (e.touches.length === 2 && startDist > 0) {
+          e.preventDefault();
+          moved = true;
+          var d = dist(e.touches[0], e.touches[1]);
+          var m = mid(e.touches[0], e.touches[1]);
+          /* Rebuild from the gesture's starting state each frame rather than
+             accumulating, so rounding cannot drift over a long pinch. */
+          scale = startScale; tx = startTx; ty = startTy;
+          scaleAround(startScale * (d / startDist), startMid.x, startMid.y);
+          tx += m.x - startMid.x;          // follow the fingers as they travel
+          ty += m.y - startMid.y;
+          clampPan();
+          apply();
+          return;
+        }
+
+        if (e.touches.length === 1) {
+          var t = e.touches[0];
+          if (Math.abs(t.clientX - downX) > 10 || Math.abs(t.clientY - downY) > 10) moved = true;
+          if (!panFrom) return;
+          e.preventDefault();
+          tx = startTx + (t.clientX - panFrom.x);
+          ty = startTy + (t.clientY - panFrom.y);
+          clampPan();
+          apply();
+        }
+      }, { passive: false });
+
+      function end(e) {
+        if (!img) return;
+        var left = e.touches ? e.touches.length : 0;
+
+        if (left === 1 && startDist > 0) {
+          /* One finger lifted mid-pinch: hand over to a pan from where that
+             finger now is, rather than letting the image jump. */
+          startDist = 0;
+          measureBase();
+          panFrom = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+          startTx = tx; startTy = ty;
+          moved = true;
+          return;
+        }
+        if (left > 0) return;
+
+        var wasPinch = startDist > 0;
+        startDist = 0;
+        panFrom = null;
+
+        /* A tap is a touch that went down and came up in the same place,
+           quickly. Testing that here rather than on touchstart is what keeps a
+           pan from being read as a tap: three quick drags from the same spot
+           used to register as double-taps and yank the zoom around
+           mid-gesture. */
+        var now = Date.now();
+        var isTap = !wasPinch && !moved && (now - downAt) < 250;
+        if (isTap) {
+          if (now - lastTapAt < 320 &&
+              Math.abs(downX - lastTapX) < 30 && Math.abs(downY - lastTapY) < 30) {
+            lastTapAt = 0;
+            measureBase();
+            animated(function () {
+              if (scale > 1.01) rest();
+              else scaleAround(HP_ZOOM_TAP, downX, downY);
+            });
+            return;
+          }
+          lastTapAt = now; lastTapX = downX; lastTapY = downY;
+          return;
+        }
+
+        // Settle back if a pinch ended below 1x.
+        if (scale <= 1.01) animated(rest);
+      }
+      content.addEventListener('touchend', end);
+      content.addEventListener('touchcancel', end);
+
+      /* iOS Safari runs its own pinch on top of touch events and ignores
+         preventDefault on those; these are the events that stop the whole page
+         zooming behind the lightbox. */
+      ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (name) {
+        content.addEventListener(name, function (ev) { ev.preventDefault(); });
+      });
+
+      /* Mark the still images as zoomable, and start every visit to the
+         lightbox at rest — reopening on a different photo should not inherit
+         the last one's zoom. Videos and 3D models keep their own controls. */
+      function markImages() {
+        content.querySelectorAll('img').forEach(function (el) {
+          if (!el.closest('.deferred-media') && !el.closest('.product-media-modal__model')) {
+            el.classList.add('hp-zoomable');
+          }
+        });
+      }
+      markImages();
+
+      new MutationObserver(function () {
+        markImages();
+        resetAll();
+      }).observe(modal, { attributes: true, attributeFilter: ['open'] });
     });
   }
 
@@ -2204,6 +2503,7 @@
     initBgVideo(document);
     initLazyPreviewVideos(document);
     initDealPopup(document);
+    initProductZoom(document);
     initCounters(document);
     initTimeline(document);
     initJumpLinks(document);
@@ -2226,6 +2526,7 @@
     initBgVideo(e.target);
     initLazyPreviewVideos(e.target);
     initDealPopup(e.target);
+    initProductZoom(e.target);
     initCounters(e.target);
     initTimeline(e.target);
     initJumpLinks(e.target);

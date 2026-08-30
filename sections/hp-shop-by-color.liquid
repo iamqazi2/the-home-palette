@@ -49,6 +49,20 @@
   # everything it has in a sensible 4-up grid.
   assign per_row = section.settings.columns | default: 4
   assign show_limit = section.settings.products_to_show | default: 12
+
+  # Slider or grid. On the home page this section is one band among many and a
+  # sideways-scrolling shelf is right; on its own page it IS the page, and a
+  # shelf that hides most of a colour behind a scroll is not. 'auto' reads the
+  # template so both get the correct one with nothing to configure, and the
+  # explicit options are there to override it per placement.
+  assign layout = section.settings.layout | default: 'auto'
+  if layout == 'auto'
+    if template.name == 'index'
+      assign layout = 'slider'
+    else
+      assign layout = 'grid'
+    endif
+  endif
   assign last_index = section.blocks.size | minus: 1
   assign requested = section.settings.default_index | default: 1 | minus: 1
   if requested > last_index
@@ -215,6 +229,37 @@
       --hp-sbc-item: calc((100% - (var(--hp-sbc-gap) * {{ per_row | minus: 1 }})) / {{ per_row }});
     }
   }
+  /* ---- grid layout ----
+     Same cards, laid out rather than railed: every product for the selected
+     colour on screen at once, no sideways scrolling. */
+  .hp-colors--grid .hp-colors__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--hp-sbc-gap);
+    overflow: visible;
+    scroll-snap-type: none;
+    padding-bottom: 0;
+  }
+  /* Restated for the grid, and it must be: the browser's own
+     [hidden] { display: none } is a UA rule, and `.hp-colors--grid
+     .hp-colors__grid` outranks it — without this line all twenty-one colours
+     would paint stacked on top of each other. Same trap as the flex rule
+     above, one specificity step higher. */
+  .hp-colors--grid .hp-colors__grid[hidden] { display: none; }
+  .hp-colors--grid .hp-colors__cell {
+    flex: initial;
+    width: auto;
+    max-width: none;
+    scroll-snap-align: none;
+  }
+  .hp-colors--grid .hp-colors__empty { grid-column: 1 / -1; }
+  @media screen and (min-width: 750px) {
+    .hp-colors--grid .hp-colors__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media screen and (min-width: 990px) {
+    .hp-colors--grid .hp-colors__grid { grid-template-columns: repeat({{ per_row }}, minmax(0, 1fr)); }
+  }
+
   hp-colour-shop.is-loading .hp-colors__grid { opacity: 0.35; }
   /* Which glaze this card is showing — the cards sit in a grid of nine
      near-identical handis otherwise. */
@@ -246,7 +291,7 @@
   }
 {%- endstyle -%}
 
-<div class="hp-colors hp-section" id="hp-colours">
+<div class="hp-colors hp-section{% if layout == 'grid' %} hp-colors--grid{% endif %}" id="hp-colours">
   <div class="hp-container">
     <div class="hp-section-head hp-section-head--center">
       {%- if section.settings.eyebrow != blank -%}
@@ -264,20 +309,40 @@
       <div class="hp-colors__row" role="group" aria-label="{{ section.settings.heading | escape }}">
         {%- for block in section.blocks -%}
           {%- liquid
-            # "View all" goes to a real search results page for the colour, which
-            # is a page that genuinely exists and is not limited by how many
-            # products this section chooses to show. Search covers all three ways
-            # a colour is expressed here — product title, colour tag and variant
-            # title — so a listing sold in nine colours turns up under each.
+            # Where "View all" goes, in order of preference.
             #
-            # Only the term is encoded. The whole chain used to run through
-            # url_encode, which escaped the slash and the "?" as well and left
-            # href="%2Fsearch%3Fq%3DSage+Green&type=product" — a relative path to
-            # a page that does not exist, hence the 404.
-            assign colour_query = block.settings.title | url_encode
-            assign target = routes.search_url | append: '?q=' | append: colour_query | append: '&type=product'
+            # It used to always be /search?q=<colour>, and that is the bug: the
+            # store's search matches a product's DESCRIPTION as well as its
+            # title and tags, so "Copper" returned the Mughal Serving Platter
+            # and the Royal Mandi Platter — neither of which is copper — mixed
+            # in with the real ones. There is also no colour tag on these
+            # products to filter a collection by (checked: their tags are
+            # things like "serveware" and "dining"), so a /collections/all/
+            # <tag> URL would come back empty.
+            #
+            # The only thing that knows which products are actually this colour
+            # is this section's own matching logic. So the link points back at
+            # this same section on its own page, deep-linked to the colour —
+            # the destination re-runs the identical matching and therefore
+            # shows exactly the set the swatch showed, never more.
+            assign colour_key = block.settings.title | handleize
             if block.settings.view_all_url != blank
               assign target = block.settings.view_all_url
+            elsif section.settings.view_all_page != blank
+              # The #hp-colours fragment lands the visitor on the palette
+              # rather than at the top of the page above it.
+              assign target = section.settings.view_all_page.url | append: '?colour=' | append: colour_key | append: '#hp-colours'
+            elsif layout == 'grid'
+              # Already on a page showing every product for the colour. Linking
+              # to a fuzzy search from here would be a step backwards, so there
+              # is no link at all — the JS hides it when this is empty.
+              assign target = ''
+            else
+              # Last resort, and still the loose one: no destination page has
+              # been chosen in the section settings. Kept so the link is never
+              # dead, but pick a page in "View all goes to" and this is not used.
+              assign colour_query = block.settings.title | url_encode
+              assign target = routes.search_url | append: '?q=' | append: colour_query | append: '&type=product'
             endif
             assign count = null
           -%}
@@ -285,7 +350,7 @@
             type="button"
             class="hp-colors__item{% if forloop.index0 == requested %} is-active{% endif %}"
             data-hp-colour
-            data-hp-colour-key="{{ block.settings.title | handleize }}"
+            data-hp-colour-key="{{ colour_key }}"
             data-hp-url="{{ target }}"
             data-hp-label="{{ block.settings.title | escape }}"
             aria-pressed="{% if forloop.index0 == requested %}true{% else %}false{% endif %}"
@@ -546,14 +611,26 @@
     { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Colour" },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Pick a glaze — the collection below updates instantly." },
     {
+      "type": "select",
+      "id": "layout",
+      "label": "Product layout",
+      "default": "auto",
+      "info": "Auto uses the sideways shelf on the home page and a full grid everywhere else — which is almost always what you want.",
+      "options": [
+        { "value": "auto", "label": "Auto — shelf on the home page, grid elsewhere" },
+        { "value": "slider", "label": "Shelf — scrolls sideways" },
+        { "value": "grid", "label": "Grid — every product on screen" }
+      ]
+    },
+    {
       "type": "range",
       "id": "products_to_show",
       "min": 4,
-      "max": 24,
+      "max": 50,
       "step": 2,
       "label": "Products per colour",
       "default": 12,
-      "info": "How many products a colour shows before it stops. Raise it if a colour has more pieces than fit."
+      "info": "How many products a colour shows before it stops. On a page using the grid layout, turn this up so a colour shows everything it has. Very high values on a palette with many colours will slow the page down."
     },
     {
       "type": "range",
@@ -574,6 +651,12 @@
       "default": 1
     },
     { "type": "text", "id": "view_all_label", "label": "View-all label", "default": "View all" },
+    {
+      "type": "page",
+      "id": "view_all_page",
+      "label": "\u201cView all\u201d goes to",
+      "info": "Point this at your Shop by Colour page. The link then opens that page with the chosen colour already selected, so it shows exactly the products the swatch showed. Leave empty and the link falls back to a store search, which also matches product descriptions and will bring back other colours."
+    },
     { "type": "color", "id": "bg_color", "label": "Section background", "default": "#fffdf4" },
     {
       "type": "select",

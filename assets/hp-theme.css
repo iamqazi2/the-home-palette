@@ -328,6 +328,12 @@ button.shopify-payment-button__button--unbranded {
   transform-origin: left;
   transition: transform 0.45s var(--hp-ease);
 }
+/* An author-level `display` beats the browser's own [hidden] { display: none },
+   which is a UA rule — so `.hp-link` with display: inline-flex rendered every
+   link the theme had marked hidden, regardless of the attribute. The Shop by
+   Colour "View all" was the visible symptom: it stayed on screen for colours
+   that have no destination. Restated at author level so the attribute works. */
+.hp-link[hidden] { display: none; }
 .hp-link:hover::after { transform: scaleX(1); }
 .hp-link .hp-icon { transition: transform 0.35s var(--hp-ease); }
 .hp-link:hover .hp-icon { transform: translateX(4px); }
@@ -749,6 +755,40 @@ html.hp-gsap [data-hp-reveal] { opacity: 0; }
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
 }
+
+/* --------------------------------------------------------------------------
+   8b. PRODUCT PHOTO ZOOM (touch)
+
+   Pinch to zoom, drag to pan and double-tap inside the product lightbox. Dawn
+   ships magnify.js for this, but it is built on onmousemove/onmouseleave — a
+   phone fires neither, so on touch there was no zoom at all, only a full-screen
+   image the size of the screen.
+
+   The class is added by initProductZoom in hp-theme.js and ONLY on a coarse
+   pointer, so a desktop mouse keeps the stock behaviour untouched.
+   -------------------------------------------------------------------------- */
+
+.hp-zoomable {
+  /* Scaling from the top-left keeps the maths honest: the element's left/top
+     stay put under transform, so its on-screen box is base + translate and the
+     pan clamps can be computed from getBoundingClientRect alone. */
+  transform-origin: 0 0;
+  will-change: transform;
+  /* pan-y, not none: at rest the visitor must still be able to scroll the
+     lightbox itself — on a tablet every image is stacked in it. Any value other
+     than auto/pinch-zoom/manipulation also turns OFF the browser's own pinch
+     and double-tap zoom on this element, which is what hands both gestures to
+     the code rather than leaving the page zooming underneath it. */
+  touch-action: pan-y;
+}
+
+/* Once zoomed the element owns every gesture, or a drag toward the edge would
+   scroll the lightbox out from under the finger mid-pan. */
+.hp-zoomable.is-zoomed { touch-action: none; }
+
+/* No transition while a finger is down — the image must track the finger
+   exactly. It is only used for the double-tap jump and the snap back. */
+.hp-zoomable.is-animating { transition: transform 0.28s var(--hp-ease); }
 
 /* --------------------------------------------------------------------------
    9. VIDEO LIGHTBOX
