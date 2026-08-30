@@ -681,14 +681,6 @@
             "link": "shopify://collections/reactive"
           }
         },
-        "style_J74iL9": {
-          "type": "style",
-          "settings": {
-            "title": "Minimalist",
-            "collection": "",
-            "link": ""
-          }
-        },
         "style_4": {
           "type": "style",
           "settings": {
@@ -712,7 +704,6 @@
         "style_1",
         "style_2",
         "style_3",
-        "style_J74iL9",
         "style_4",
         "style_5"
       ],
