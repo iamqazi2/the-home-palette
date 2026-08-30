@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Home Palette — Client Demo Runbook</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm 18mm; }
+  @page :first { margin: 0; }
+  :root{
+    --teal:#1a4b46; --teal-d:#123532; --cream:#fff9df; --paper:#fffdf4;
+    --ink:#1c211f; --muted:#5d6a66; --line:#d9d3bd; --accent:#c4703a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+       color:var(--ink);font-size:10.2pt;line-height:1.55;background:#fff}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:600;margin:0}
+
+  .cover{background:var(--teal);color:var(--cream);padding:32mm 20mm;
+         page-break-after:always;height:297mm;width:210mm;display:flex;flex-direction:column}
+  .cover code{background:rgba(255,249,223,.14);border-color:rgba(255,249,223,.3);color:var(--cream)}
+  .cover .eyebrow{font-size:9pt;letter-spacing:.24em;text-transform:uppercase;
+                  color:rgba(255,249,223,.72);margin:0 0 14mm}
+  .cover h1{font-size:34pt;line-height:1.12;letter-spacing:-.01em}
+  .cover p.sub{font-size:12pt;color:rgba(255,249,223,.82);margin:8mm 0 0;max-width:120mm}
+  .cover .meta{margin-top:auto;border-top:1px solid rgba(255,249,223,.25);padding-top:6mm;
+               font-size:9pt;color:rgba(255,249,223,.7)}
+  .cover .toc{margin-top:auto}
+  .cover .toc li{margin:2.5mm 0;font-size:11pt;color:rgba(255,249,223,.9)}
+
+  h2{font-size:17pt;color:var(--teal);margin:11mm 0 3mm;padding-bottom:2mm;
+     border-bottom:2px solid var(--teal);page-break-after:avoid}
+  h3{font-size:12.5pt;color:var(--teal-d);margin:7mm 0 2mm;page-break-after:avoid}
+  p{margin:0 0 3mm} ul,ol{margin:0 0 3mm;padding-left:5mm} li{margin:1.2mm 0}
+
+  code{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:9.2pt;
+       background:var(--cream);border:1px solid var(--line);border-radius:3px;
+       padding:.4mm 1.4mm;white-space:nowrap}
+  table{width:100%;border-collapse:collapse;margin:3mm 0 5mm;font-size:9.4pt;page-break-inside:avoid}
+  th{background:var(--teal);color:var(--cream);text-align:left;padding:2.2mm 2.5mm;
+     font-size:8.6pt;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  td{padding:2mm 2.5mm;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:var(--paper)}
+  td code{background:#fff}
+
+  .pill{display:inline-block;font-size:7.6pt;letter-spacing:.08em;text-transform:uppercase;
+        padding:.6mm 2mm;border-radius:20px;font-weight:600;white-space:nowrap}
+  .live{background:#dff0e6;color:#1d6b40;border:1px solid #a9d5bd}
+  .todo{background:#fdeadd;color:#8f4517;border:1px solid #f0c3a1}
+
+  .note{border-left:3px solid var(--accent);background:var(--paper);
+        padding:3mm 4mm;margin:4mm 0;page-break-inside:avoid}
+  .note b{color:var(--accent)}
+  .rule{border-left:3px solid var(--teal);background:var(--cream);
+        padding:3mm 4mm;margin:4mm 0;page-break-inside:avoid}
+  .say{border:1px dashed var(--teal);border-radius:4px;background:#fff;
+       padding:3mm 4mm;margin:3mm 0;page-break-inside:avoid}
+  .say::before{content:"SAY";display:block;font-size:7.4pt;letter-spacing:.16em;
+               color:var(--teal);font-weight:700;margin-bottom:1.4mm}
+  .say p{font-style:italic;color:#2c3b38;margin:0}
+
+  .steps{counter-reset:s;list-style:none;padding:0}
+  .steps li{counter-increment:s;position:relative;padding-left:9mm;margin:3mm 0}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:.2mm;
+    width:6mm;height:6mm;border-radius:50%;background:var(--teal);color:var(--cream);
+    font-size:8.5pt;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .act{background:var(--teal);color:var(--cream);padding:4mm 5mm;border-radius:4px;
+       margin:8mm 0 4mm;page-break-after:avoid;page-break-inside:avoid}
+  .act h2{border:0;color:var(--cream);margin:0;font-size:16pt}
+  .act p{margin:1.5mm 0 0;color:rgba(255,249,223,.82);font-size:9.6pt}
+  .act code{background:rgba(255,249,223,.16);border-color:rgba(255,249,223,.32);color:var(--cream)}
+  .chk{list-style:none;padding:0}
+  .chk li{position:relative;padding-left:7mm;margin:2mm 0}
+  .chk li::before{content:"";position:absolute;left:0;top:1mm;width:3.6mm;height:3.6mm;
+    border:1.2px solid var(--teal);border-radius:2px}
+  .pagebreak{page-break-before:always}
+  .foot{margin-top:12mm;border-top:1px solid var(--line);padding-top:4mm;
+        font-size:8.6pt;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <p class="eyebrow">The Home Palette — Operations</p>
+  <h1>Client Demo<br>Runbook</h1>
+  <p class="sub">A 12-minute live walkthrough proving that adding one tag to a product
+     puts it into the right category — for Shop by Colour, Shop by Occasion and Shop by Style.</p>
+  <div class="toc">
+    <ol>
+      <li>What you are proving, and the running order</li>
+      <li>Prep — 15 minutes, the day before</li>
+      <li>Act 1 — Shop by Colour (no setup needed)</li>
+      <li>Act 2 — Shop by Occasion (build a category live)</li>
+      <li>Act 3 — Shop by Style</li>
+      <li>If something does not appear — live recovery</li>
+      <li>Rollback after the demo</li>
+      <li>Questions the client will ask</li>
+    </ol>
+  </div>
+  <div class="meta">
+    Version 1.0 · 29 August 2026 · Store: thehomepalette.com.pk<br>
+    Every product, tag, count and URL below was verified against the live catalogue.
+  </div>
+</section>
+
+<h2>1. What you are proving, and the running order</h2>
+<p>One sentence, repeated three times in three different places:</p>
+<div class="say"><p>"You never touch the website. You add a tag to the product, and the product
+files itself into the right place on the storefront — instantly."</p></div>
+
+<table>
+  <tr><th style="width:8%">Act</th><th style="width:24%">Section</th><th style="width:32%">What the client watches</th><th>Prep needed</th></tr>
+  <tr><td><b>1</b></td><td>Shop by Colour</td><td>A platter with no colour in its name appears under the Copper swatch</td><td><span class="pill live">None</span></td></tr>
+  <tr><td><b>2</b></td><td>Shop by Occasion</td><td>A brand-new <b>Eid</b> category goes from 0 to 3 products</td><td><span class="pill todo">5 min</span></td></tr>
+  <tr><td><b>3</b></td><td>Shop by Style</td><td>The <b>Earthy</b> category goes from 12 to 13 products</td><td><span class="pill todo">2 min</span></td></tr>
+</table>
+
+<div class="rule">
+  <b>Set the room up first.</b> You need two browser tabs side by side, ideally on one screen:
+  <ul style="margin:2mm 0 0">
+    <li><b>Tab A — Shopify admin</b>, already logged in, on the Products list.</li>
+    <li><b>Tab B — the live storefront</b>, <code>thehomepalette.com.pk</code>.</li>
+  </ul>
+  <p style="margin:2mm 0 0">The client should be able to see both. The whole demo is: change something
+  in Tab A, refresh Tab B, point at the result.</p>
+</div>
+
+<div class="note"><b>Always hard-refresh Tab B</b> — <b>Cmd+Shift+R</b> (Mac) or <b>Ctrl+F5</b> (Windows).
+A normal refresh can serve a cached page and make a working demo look broken.</div>
+
+<h2>2. Prep — 15 minutes, the day before</h2>
+
+<h3>2.1 Do a full dry run</h3>
+<p>Run all three acts exactly as written, then roll everything back (section 7). Do not
+let the client's session be the first time you run this.</p>
+
+<h3>2.2 Point the homepage cards at the right collections</h3>
+<p>This is the one thing that will quietly break the demo. Today the homepage
+<b>Shop by Occasion</b> cards and <b>Shop by Style</b> tiles link to older manual
+collections, not the tag-driven ones. The Tea Time card, for example, goes to
+<i>Tea &amp; Coffee Cups</i> rather than the tag-driven <i>Tea Time</i> collection.</p>
+<ol class="steps">
+  <li>Online Store → <b>Themes</b>. On the live theme choose <b>Duplicate</b>, then <b>Customize</b> the copy. Do the demo on the copy — the live site stays untouched until the client says yes.</li>
+  <li>Open the <b>THP Shop by Occasion</b> section. Click each card block and <b>clear the "Custom link" field</b>, then set <b>Collection</b> to the matching tag-driven collection. The custom link overrides the collection, and five of the six cards have one set.</li>
+  <li>Open <b>THP Shop by Style</b>. Set the <b>Earthy</b> tile's collection to <b>Earthy</b> and the <b>Reactive</b> tile's to <b>Reactive</b>. Leave the Link field empty.</li>
+  <li><b>Save.</b> Use the theme preview URL for Tab B during the demo.</li>
+</ol>
+<div class="note"><b>Short on time?</b> Skip this and run every act on the collection URL directly
+(<code>/collections/earthy</code>, <code>/collections/eid</code>). The proof is identical — you just
+lose the homepage card as the visual. Act 1 works on the homepage either way.</div>
+
+<h3>2.3 Create nothing else yet</h3>
+<p>Leave the <b>Eid</b> collection uncreated. Building it live in front of the client is the
+strongest moment in the demo.</p>
+
+<h3>2.4 Pre-flight checklist</h3>
+<ul class="chk">
+  <li>Logged into Shopify admin, admin tab open on Products</li>
+  <li>Storefront (or theme preview) open in a second tab</li>
+  <li>Dry run completed and rolled back</li>
+  <li>The four demo products confirmed in stock and published (table in section 3 and 4)</li>
+  <li>This runbook open on your phone or a printout</li>
+</ul>
+
+<div class="act">
+  <h2>Act 1 — Shop by Colour</h2>
+  <p>~3 minutes · no setup · the tag takes effect the second you hit Save</p>
+</div>
+
+<p><b>The product:</b> <b>Arabic Mandi Platter</b> — handle <code>arabic-mandi-platter</code>,
+53 in stock, published, sits in New Arrivals / THP Metalware / Shop.</p>
+<p><b>Why this one:</b> its name contains no colour, and it has no colour variant option. So today
+it appears under <b>no swatch at all</b> — which is exactly the problem tags solve.</p>
+
+<h3>Run it</h3>
+<ol class="steps">
+  <li><b>Tab B:</b> homepage → scroll to <b>Shop by Colour</b> → click the <b>Copper</b> swatch. Three copper pieces show. The Mandi platter is not one of them.</li>
+  <li>Say the line below, then switch to Tab A.</li>
+  <li><b>Tab A:</b> Products → search <i>Arabic Mandi Platter</i> → open it.</li>
+  <li>Right-hand column → <b>Product organization</b> → <b>Tags</b> field.</li>
+  <li>Type <code>copper</code> and press <b>Enter</b>. Let the client see the chip appear.</li>
+  <li>Click <b>Save</b>.</li>
+  <li><b>Tab B:</b> hard-refresh, click <b>Copper</b> again. The Arabic Mandi Platter is now in the grid.</li>
+</ol>
+
+<div class="say"><p>"This platter is copper, but the word 'copper' isn't in its name — so the site
+has no way of knowing. Watch. I add one word to the product, and it joins the copper palette.
+No developer, no code, no waiting."</p></div>
+
+<div class="rule">
+  <b>The point to land</b> — Shop by Colour does not use collections at all. The theme reads the
+  tag straight off the product, so there is nothing to set up and no delay. This is the fastest,
+  most reliable act; that is why it goes first.
+</div>
+
+<div class="note"><b>Do not pick a product that has a Color variant option for this act.</b>
+If a product sells in several colours from one listing, the theme uses the variant option and
+ignores colour tags entirely — the tag will appear to do nothing. The Arabic Mandi Platter's only
+option is size, which is why it was chosen.</div>
+
+<div class="act pagebreak">
+  <h2>Act 2 — Shop by Occasion</h2>
+  <p>~5 minutes · you build a brand-new category from nothing, live</p>
+</div>
+
+<p>This is the centrepiece. The client watches an empty <b>Eid</b> category fill up.</p>
+
+<h3>Step A — create the category (2 min)</h3>
+<ol class="steps">
+  <li><b>Tab A:</b> Products → <b>Collections</b> → <b>Create collection</b>.</li>
+  <li><b>Title:</b> <code>Eid</code></li>
+  <li>Collection type → <b>Automated</b>.</li>
+  <li>Products must match: <b>all conditions</b>.</li>
+  <li>Condition: <b>Product tag</b> · <b>is equal to</b> · <code>occasion-eid</code></li>
+  <li><b>Save.</b> Point at the panel: <b>0 products</b>.</li>
+</ol>
+
+<div class="say"><p>"I've just created the Eid category. It's empty, and notice I never picked a
+single product — I told it a rule: anything tagged 'occasion-eid' belongs here. Now let me put
+things in it, without ever coming back to this screen."</p></div>
+
+<h3>Step B — tag three products (3 min)</h3>
+<p>All three are verified published and in stock. Open each, add the tag, Save.</p>
+<table>
+  <tr><th style="width:44%">Product</th><th style="width:26%">Tag to add</th><th>In stock</th></tr>
+  <tr><td>Golden Luxe Cutlery Set - 24 Pcs</td><td><code>occasion-eid</code></td><td>131</td></tr>
+  <tr><td>Matte Gold Premium Cutlery Set</td><td><code>occasion-eid</code></td><td>7</td></tr>
+  <tr><td>Arabic Mandi Platter</td><td><code>occasion-eid</code></td><td>53</td></tr>
+</table>
+
+<div class="rule">
+  <b>Use the Arabic Mandi Platter last, and say this:</b>
+  <p style="margin:2mm 0 0"><i>"This is the same platter I tagged copper two minutes ago. It now
+  carries both tags — it's in the copper palette and in the Eid category at the same time. A product
+  can live in as many categories as it genuinely belongs to."</i></p>
+</div>
+
+<p><b>Faster alternative:</b> in the Products list, tick all three checkboxes → <b>Add tags</b> in
+the bar at the top → type <code>occasion-eid</code> → <b>Apply changes</b>. One action, three products.
+Use this if you are running short on time.</p>
+
+<h3>Step C — show the result</h3>
+<ol class="steps">
+  <li><b>Tab A:</b> back to Collections → <b>Eid</b>. It now reads <b>3 products</b>. It filled itself.</li>
+  <li><b>Tab B:</b> open <code>thehomepalette.com.pk/collections/eid</code> — the three products are live on the storefront.</li>
+  <li>If you did prep 2.2: go to the homepage instead and show the <b>Eid</b> card under Shop by Occasion. Its product count is live and now reads <b>3 varieties</b>.</li>
+</ol>
+
+<div class="say"><p>"That's a new shopping category, built and populated, in five minutes, with no
+developer involved. Ramadan, Wedding Gifts, Hosting Guests — all of them work exactly the same way."</p></div>
+
+<div class="act">
+  <h2>Act 3 — Shop by Style</h2>
+  <p>~2 minutes · proves it works on a category that already has products in it</p>
+</div>
+
+<p><b>The category:</b> <b>Earthy</b> — an automated collection already live, rule
+<code>style-earthy</code>, currently <b>12 products</b>.</p>
+<p><b>The product:</b> <b>Burnt Maple Platter</b> — handle <code>burnt-maple-platter</code>,
+157 in stock, published, in Platters / Shop / New Arrivals, not currently in Earthy.</p>
+
+<ol class="steps">
+  <li><b>Tab B:</b> open <code>thehomepalette.com.pk/collections/earthy</code> (or the Earthy tile on the homepage if you did prep 2.2). Note out loud: 12 products, no Burnt Maple Platter.</li>
+  <li><b>Tab A:</b> open <b>Burnt Maple Platter</b> → Tags → add <code>style-earthy</code> → <b>Save</b>.</li>
+  <li><b>Tab B:</b> hard-refresh. <b>13 products</b>, and the Burnt Maple Platter is among them.</li>
+</ol>
+
+<div class="say"><p>"Same mechanism, on a category that's already running. Adding to it is one tag.
+Removing from it is deleting that tag. That's the whole system."</p></div>
+
+<div class="note"><b>Have the tag list to hand.</b> Clients almost always ask "so what are all the
+tags?" here. Hand them the <b>Product Tagging Manual</b> — it lists all six occasions, five styles
+and twenty-one colours with the exact spelling.</div>
+
+<h2 class="pagebreak">6. If something does not appear — live recovery</h2>
+<p>Work down this list. Stay calm and narrate it as "let me show you how we'd check this" — the
+diagnosis is itself a good demo of how simple the system is.</p>
+<table>
+  <tr><th style="width:38%">Symptom</th><th>Do this</th></tr>
+  <tr><td>Nothing changed after refresh</td><td>Hard-refresh: <b>Cmd+Shift+R</b> / <b>Ctrl+F5</b>. This fixes it nine times out of ten.</td></tr>
+  <tr><td>Collection still says 0 products</td><td>Check the rule reads <i>Product tag</i> · <i>is equal to</i> and the tag is spelled exactly, all lowercase with hyphens. A capital letter or trailing space creates a different tag.</td></tr>
+  <tr><td>Tag saved but product not in the collection</td><td>Confirm you pressed <b>Enter</b> after typing — an untyped-but-unconfirmed tag is not saved. Reopen the product and look for the grey chip.</td></tr>
+  <tr><td>Colour swatch did not pick up the product</td><td>The product almost certainly has a <b>Color</b> / <b>Colour</b> / <b>Shade</b> / <b>Glaze</b> variant option, which overrides colour tags. Switch to the Arabic Mandi Platter, which does not.</td></tr>
+  <tr><td>Product missing from the storefront entirely</td><td>It is unpublished. Check <b>Publishing → Online Store</b> on the product page. Several products in the catalogue are currently unpublished — that is why this runbook names specific verified ones.</td></tr>
+  <tr><td>Homepage card did not change but the collection page did</td><td>The card still has a custom link overriding its collection — prep step 2.2. Fall back to showing the collection URL; the proof is the same.</td></tr>
+  <tr><td>Product missing from the main Shop page</td><td>It needs the <code>online</code> tag, a price above 1, and stock above 1. Not part of this demo, but worth knowing if the client goes exploring.</td></tr>
+</table>
+
+<h2>7. Rollback after the demo</h2>
+<p>Do this the same day, unless the client asks to keep the changes.</p>
+<ul class="chk">
+  <li>Arabic Mandi Platter — remove <code>copper</code> and <code>occasion-eid</code></li>
+  <li>Golden Luxe Cutlery Set - 24 Pcs — remove <code>occasion-eid</code></li>
+  <li>Matte Gold Premium Cutlery Set — remove <code>occasion-eid</code></li>
+  <li>Burnt Maple Platter — remove <code>style-earthy</code></li>
+  <li>Delete the <b>Eid</b> collection, or keep it if the client wants it — it empties itself once the tags are gone</li>
+  <li>If you demoed on a duplicate theme, delete the duplicate</li>
+</ul>
+<p>To remove a tag: open the product → Tags → click the <b>×</b> on the chip → <b>Save</b>.</p>
+<div class="note"><b>Nothing in this demo is destructive.</b> Every step is a tag added to a product
+or a collection created — both fully reversible in seconds. No product data, pricing or inventory
+is touched at any point.</div>
+
+<h2>8. Questions the client will ask</h2>
+<table>
+  <tr><th style="width:40%">Question</th><th>Answer</th></tr>
+  <tr><td>"How long until it shows on the site?"</td><td>Immediately. Colour tags are read live by the theme. Collection rules apply within seconds of saving.</td></tr>
+  <tr><td>"Can a product be in more than one category?"</td><td>Yes, as many as apply — you saw the Mandi platter in Copper and Eid at once.</td></tr>
+  <tr><td>"What if we spell a tag wrong?"</td><td>The product silently does not appear. That is why Shopify autocompletes existing tags — always pick the suggestion rather than retyping. The manual has the exact spellings.</td></tr>
+  <tr><td>"Can we add a new occasion, like Mother's Day?"</td><td>Yes — create an automated collection with rule <code>occasion-mothers-day</code>, tag the products, then add a card to the homepage section in the theme editor. Same five minutes you just watched.</td></tr>
+  <tr><td>"Can staff do this, or do we need you?"</td><td>Staff, entirely. It is one field on the product page. The Product Tagging Manual is written for exactly that.</td></tr>
+  <tr><td>"What about products that come in several colours?"</td><td>Those are handled automatically from the variant options — one listing appears under every colour it sells in, each showing its own photo. No tagging needed.</td></tr>
+  <tr><td>"How much of the catalogue is tagged today?"</td><td>Be straight: Tea Time has 37, Earthy 12, Reactive 8. Everything else needs a first pass — roughly a day of work for the whole catalogue, and it can be done in bulk, collection by collection.</td></tr>
+</table>
+
+<div class="foot">
+  The Home Palette — Client Demo Runbook · v1.0 · 29 August 2026<br>
+  Companion document: <b>The Home Palette — Product Tagging Manual</b> (full tag reference).
+</div>
+
+</body>
+</html>
