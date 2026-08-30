@@ -127,6 +127,7 @@
       "block_order": [
         "deal_r3NNLd"
       ],
+      "disabled": true,
       "name": "t:sections.announcement-bar.presets.name",
       "settings": {
         "color_scheme": "",
