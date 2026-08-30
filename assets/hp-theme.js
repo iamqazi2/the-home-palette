@@ -1064,6 +1064,49 @@
     list.classList.add('hp-revs__store--rows', 'hp-revs__railed');
   }
 
+  /* ---- Short review quotes get centred -----------------------------------
+     Reviews run from two words to a paragraph, and the cards in a row are all
+     the height of the tallest. A short one printed at the top-left of a full
+     height card leaves a block of dead teal beneath it.
+
+     The vertical centring is pure CSS (see .jm-review-content in
+     hp-reviews.css) and costs nothing on a long review, which fills the space
+     anyway. Deciding whether to centre the text HORIZONTALLY needs a
+     measurement CSS cannot make — how many lines the quote actually ran to at
+     this width — so it is done here and published as a class.
+  ---------------------------------------------------------------------- */
+  var HP_REV_SHORT_LINES = 3;
+
+  function fitReviewQuotes(root) {
+    var cards = (root || document).querySelectorAll(
+      '.hp-revs--showcase .jm-review-item, .hp-revs--showcase .hp-revs__store .jdgm-rev'
+    );
+    cards.forEach(function (card) {
+      var body = card.querySelector(
+        '.jm-review-content__body, .jdgm-review-content__body-content, .jdgm-rev__body'
+      );
+      if (!body) { card.classList.remove('hp-rev--short'); return; }
+
+      /* scrollHeight rather than the box height: these quotes are
+         -webkit-line-clamp boxes, so a long review that has been clipped still
+         reports its full height here and is correctly judged long. */
+      var cs = window.getComputedStyle(body);
+      var lh = parseFloat(cs.lineHeight);
+      if (!lh || isNaN(lh)) lh = parseFloat(cs.fontSize) * 1.55;   // 'normal'
+      var lines = lh > 0 ? Math.round(body.scrollHeight / lh) : 0;
+
+      card.classList.toggle('hp-rev--short', lines > 0 && lines <= HP_REV_SHORT_LINES);
+    });
+  }
+
+  /* Line count is a function of card width, so a rotation or a resized window
+     can turn a short quote into a long one and back. */
+  var hpRevFitTimer = null;
+  window.addEventListener('resize', function () {
+    window.clearTimeout(hpRevFitTimer);
+    hpRevFitTimer = window.setTimeout(function () { fitReviewQuotes(document); }, 180);
+  }, { passive: true });
+
   function initReviewMarquee(root) {
     (root || document).querySelectorAll('.hp-revs--showcase').forEach(function (section) {
       var tries = 0;
@@ -1092,6 +1135,11 @@
            to deal yet, and again once it has already run. */
         var list = section.querySelector('.jdgm-review-list');
         if (list) dealReviewRows(list);
+
+        /* Re-measured on every pass, not once: cards arrive progressively and
+           the web fonts settle after them, and both change how many lines a
+           quote runs to. */
+        fitReviewQuotes(section);
 
         var rails = section.querySelectorAll('[data-hp-rail]');
         if (!rails.length) {

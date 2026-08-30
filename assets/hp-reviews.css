@@ -1019,6 +1019,30 @@
 .hp-revs--showcase .jm-review-content {
   flex: 1 1 auto;
   min-height: 0;
+  /* Sit the quote in the middle of whatever room is left between the stars and
+     the reviewer. Without this a two-word review printed hard against the top
+     of a 38rem card and left a column of empty teal under it — the exact
+     complaint the .jdgm-rev__content rule further down already answers for the
+     other card generation. This is its missing counterpart for the revamped
+     widget, which is the one actually rendering these cards. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* A quote of a line or two reads better centred; a paragraph must stay
+   left-aligned or it turns into a ragged block that is harder to read. CSS
+   cannot ask how long a string is, so hp-rev--short is set by fitReviewQuotes
+   in hp-theme.js, which measures the rendered line count and re-measures on
+   resize. Both card generations are covered — which one Judge.me serves
+   depends on the widget version. */
+.hp-revs--showcase .jm-review-item.hp-rev--short .jm-review-content,
+.hp-revs--showcase .jm-review-item.hp-rev--short .jm-review-content__body,
+.hp-revs--showcase .jm-review-item.hp-rev--short .jm-review-body-wrapper,
+.hp-revs--showcase .hp-revs__store .jdgm-rev.hp-rev--short .jdgm-rev__content,
+.hp-revs--showcase .hp-revs__store .jdgm-rev.hp-rev--short .jdgm-rev__body,
+.hp-revs--showcase .hp-revs__store .jdgm-rev.hp-rev--short .jdgm-rev__body p {
+  text-align: center;
 }
 .hp-revs--showcase .jm-review-content__title,
 .hp-revs--showcase .jm-review-content__body,
