@@ -898,20 +898,10 @@
 .hp-revs--teal .hp-revpager__btn { border-color: var(--hp-cream); color: var(--hp-cream); }
 .hp-revs--teal .hp-revpager__btn:hover:not(:disabled) { background: var(--hp-cream); color: var(--hp-teal); }
 
-/* The floating "Reviews" tab stays off site-wide. Repeated from hp-theme.css
-   because this file is also imported into roots a <head> stylesheet cannot
-   reach. */
-.jdgm-rev-tab,
-#jdgm-rev-tab,
-.jdgm-all-reviews-tab,
-#judgeme_all_reviews_tab,
-.jdgm-floating-tab,
-#judgeme_floating_tab,
-[class*='jdgm'][class*='-tab'] {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
+/* The floating "Reviews" tab is left alone here too. This file repeated
+   hp-theme.css's hide so the tab was covered in roots a <head> stylesheet
+   cannot reach; with the tab wanted again, both copies are gone. Nothing in
+   the theme styles it — the app owns it. */
 
 /* ==========================================================================
    Showcase layout — the "Loved Across Pakistan" card design, driven by Judge.me
