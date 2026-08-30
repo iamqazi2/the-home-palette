@@ -99,11 +99,50 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "announcement_bar_rWADWf": {
+      "type": "announcement-bar",
+      "blocks": {
+        "deal_r3NNLd": {
+          "type": "deal",
+          "settings": {
+            "eyebrow": "Limited time",
+            "title": "Winter Sale — 20% off",
+            "text": "<p>On every dinner set until the 30th. Discount applied at checkout.</p>",
+            "image": "shopify://shop_images/69D3157E-B764-477C-867F-984A98982C1F.jpg",
+            "video": "shopify://files/videos/mahrukhiqbal-Indoor table Setup-Boho Garden Dinner Set (11-August).mp4",
+            "flip": true,
+            "button_label": "Shop the sale",
+            "link": "",
+            "dismiss_label": "No thanks",
+            "frequency": "always",
+            "delay": 2,
+            "bg_color": "#1a4b46",
+            "text_color": "#fff9df",
+            "button_color": "#e0a422",
+            "button_text_color": "#1a4b46"
+          }
+        }
+      },
+      "block_order": [
+        "deal_r3NNLd"
+      ],
+      "name": "t:sections.announcement-bar.presets.name",
+      "settings": {
+        "color_scheme": "",
+        "show_line_separator": true,
+        "show_social": false,
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      }
     }
   },
   "order": [
     "hp_announcement",
     "header",
-    "17358360248ef50bda"
+    "17358360248ef50bda",
+    "announcement_bar_rWADWf"
   ]
 }
