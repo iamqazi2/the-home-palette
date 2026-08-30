@@ -31,7 +31,15 @@
     gap: 1rem 2rem;
     margin-bottom: 1.6rem;
   }
+  .related-products__head .related-products__titles { min-width: 0; }
   .related-products__head .related-products__heading { margin: 0; }
+  .related-products__source {
+    margin: 0.6rem 0 0;
+    font-family: var(--hp-font-ui);
+    font-size: 1.3rem;
+    color: var(--hp-taupe);
+  }
+  .related-products__source a { color: inherit; text-underline-offset: 0.3em; }
   .related-products__all {
     display: inline-flex;
     align-items: center;
@@ -174,17 +182,43 @@
   >
     {% if recommendations.performed and recommendations.products_count > 0 %}
       {%- liquid
-        # "View all" needs somewhere real to go. Recommendations come from the
-        # recommendations API, not a collection, so there is no "collection of
-        # related products" to link to — the closest honest target is the
-        # collection this product itself sits in, falling back to all products.
-        assign va_collection = product.collections.first
-        assign va_url = va_collection.url | default: routes.all_products_collection_url
+        # Where "View all" goes.
+        #
+        # It used to be product.collections.first — the collection this product
+        # happens to sit in. That is not "all the matched products", it is every
+        # product on the same shelf, so clicking "View all" under "Match it
+        # with..." landed on a page of unrelated things.
+        #
+        # Recommendations come from the recommendations API, not a collection,
+        # so there is no ready-made collection URL for "the pairings of product
+        # X". The page that does exist is this product's own `matches` template
+        # (templates/product.matches.json), which runs this same section as a
+        # full grid — same product, same intent, same API call, so it can only
+        # ever show the same set the band was showing.
+        assign va_url = blank
+        if section.settings.view_all_target == 'collection'
+          assign va_collection = product.collections.first
+          assign va_url = va_collection.url | default: routes.all_products_collection_url
+        else
+          assign va_url = product.url | append: '?view=matches'
+        endif
       -%}
       <div class="related-products__head">
-        <h2 class="related-products__heading inline-richtext {{ section.settings.heading_size }}">
-          {{ section.settings.heading }}
-        </h2>
+        <div class="related-products__titles">
+          <h2 class="related-products__heading inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h2>
+          {%- comment -%}
+            Which product these are matches FOR. Off on the product page, where
+            the product is right above; on for the matches page, where it is the
+            only thing saying what the visitor is looking at.
+          {%- endcomment -%}
+          {%- if section.settings.show_source_product and product != blank -%}
+            <p class="related-products__source">
+              For <a href="{{ product.url }}">{{ product.title | escape }}</a>
+            </p>
+          {%- endif -%}
+        </div>
         {%- if section.settings.show_view_all and va_url != blank -%}
           <a class="related-products__all" href="{{ va_url }}">
             {{ section.settings.view_all_label | default: 'View all' | escape }}
@@ -403,8 +437,25 @@
       "type": "checkbox",
       "id": "show_view_all",
       "default": true,
-      "label": "Show \"view all\" link",
-      "info": "Links to the collection this product belongs to."
+      "label": "Show \"view all\" link"
+    },
+    {
+      "type": "select",
+      "id": "view_all_target",
+      "label": "\"View all\" goes to",
+      "default": "matches",
+      "info": "The matched-products page shows exactly the products in this band, in a full grid. The collection option is the old behaviour and shows everything on the same shelf, matched or not.",
+      "options": [
+        { "value": "matches", "label": "All the matched products" },
+        { "value": "collection", "label": "This product's collection" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_source_product",
+      "label": "Name the product these match",
+      "default": false,
+      "info": "Adds a line under the heading saying which product the matches belong to. Meant for the matched-products page, not the product page."
     },
     {
       "type": "text",

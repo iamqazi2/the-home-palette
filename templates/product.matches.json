@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "matches": {
+      "type": "related-products",
+      "settings": {
+        "heading": "Match it with..",
+        "heading_size": "h1",
+        "intent": "complementary",
+        "fallback_to_related": true,
+        "show_source_product": true,
+        "enable_scroll": false,
+        "show_view_all": false,
+        "products_to_show": 10,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": true,
+        "quick_add": "standard",
+        "padding_top": 48,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": ["matches"]
+}
