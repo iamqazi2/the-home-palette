@@ -34,7 +34,7 @@
           "settings": {
             "title": "Earthy",
             "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
-            "collection": "thp-weave-collection",
+            "collection": "",
             "link": ""
           }
         },
@@ -76,11 +76,11 @@
       "settings": {
         "eyebrow": "Textures & Glazes",
         "heading": "Shop by Style",
+        "mobile_layout": "grid",
         "scrim": 65,
         "bg_color": "#fff9df",
         "show_count": true,
-        "count_label": "varieties",
-        "mobile_layout": "grid"
+        "count_label": "varieties"
       }
     },
     "hp_trust": {
