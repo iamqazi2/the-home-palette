@@ -786,6 +786,15 @@ html.hp-gsap [data-hp-reveal] { opacity: 0; }
    scroll the lightbox out from under the finger mid-pan. */
 .hp-zoomable.is-zoomed { touch-action: none; }
 
+/* While zoomed, the photo is allowed out of its own box and over the whole
+   lightbox. Without this it stays trapped in .product-media-modal__content,
+   which is only as tall as the photo at rest — on a phone that is a letterbox
+   in the middle of the screen with a dead strip above and below that the
+   picture can never be dragged into. Only applied when that box is not itself
+   a scroller (see canFull in initProductZoom), so nothing that relies on
+   scrolling loses it. */
+.product-media-modal__content.hp-zoom-full { overflow: visible; }
+
 /* No transition while a finger is down — the image must track the finger
    exactly. It is only used for the double-tap jump and the snap back. */
 .hp-zoomable.is-animating { transition: transform 0.28s var(--hp-ease); }

@@ -1500,6 +1500,7 @@
 
       var content = modal.querySelector('.product-media-modal__content');
       if (!content) return;
+      var dialog = modal.querySelector('.product-media-modal__dialog') || modal;
 
       var img = null;             // the image this gesture belongs to
       var scale = 1, tx = 0, ty = 0;
@@ -1508,11 +1509,33 @@
       var startDist = 0, startMid = null, panFrom = null;
       var downAt = 0, downX = 0, downY = 0, moved = false;
       var lastTapAt = 0, lastTapX = 0, lastTapY = 0;
+      var canFull = true;
+
+      /* Can the photo be let out of its box when zoomed? Only if that box is
+         not doing a job of its own — on a tablet the lightbox stacks every
+         image and scrolls, and switching a scrolled container to
+         overflow: visible would throw its scroll position away.
+
+         Measured only while nothing is zoomed. A transformed image overflows
+         its container, so scrollHeight reads as scrollable the moment a zoom
+         starts, and asking mid-gesture would always answer "no". */
+      function measureScrollable() {
+        canFull = content.scrollHeight <= content.clientHeight + 1;
+      }
+
+      /* What the pan is allowed to move within. At rest that is the photo's own
+         box; zoomed, it is the whole lightbox, so every edge of the picture can
+         be brought to every edge of the screen. */
+      function frameRect() {
+        return (canFull && scale > 1.01) ? dialog.getBoundingClientRect()
+                                         : content.getBoundingClientRect();
+      }
 
       function apply() {
         if (!img) return;
         img.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')';
         img.classList.toggle('is-zoomed', scale > 1.01);
+        content.classList.toggle('hp-zoom-full', canFull && scale > 1.01);
       }
 
       /* Where the image would sit with no transform at all, in screen
@@ -1538,7 +1561,7 @@
          beside it when it is bigger. */
       function clampPan() {
         if (!img || !base) return;
-        var cr = content.getBoundingClientRect();
+        var cr = frameRect();
         var w = base.w * scale;
         var h = base.h * scale;
 
@@ -1585,6 +1608,7 @@
 
       function resetAll() {
         content.querySelectorAll('.hp-zoomable').forEach(reset);
+        content.classList.remove('hp-zoom-full');
         img = null; base = null; scale = 1; tx = 0; ty = 0;
       }
 
@@ -1611,6 +1635,7 @@
         if (!el) return;
         adopt(el);
         img.classList.remove('is-animating');
+        if (scale <= 1.01) measureScrollable();
         measureBase();
 
         if (e.touches.length === 2) {
@@ -1733,10 +1758,12 @@
         });
       }
       markImages();
+      measureScrollable();
 
       new MutationObserver(function () {
         markImages();
         resetAll();
+        measureScrollable();
       }).observe(modal, { attributes: true, attributeFilter: ['open'] });
     });
   }
