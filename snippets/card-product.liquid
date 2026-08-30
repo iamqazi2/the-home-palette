@@ -22,11 +22,18 @@
 {% endcomment %}
 {%- unless skip_styles -%}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
-  {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
-
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
-  {{ 'quick-order-list.css' | asset_url | stylesheet_tag }}
-  {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
+  {%- comment -%}
+    The other three style nothing on the card itself — they are the insides of
+    the quick-add modal (tiered pricing, the quantity stepper, the quick-order
+    rows), which does not exist until someone opens it. Render-blocking, they
+    held up first paint on every page that shows a product card, which is most
+    of the store. Asynchronous, they are still in place long before any modal
+    can be opened, because opening one takes a deliberate tap.
+  {%- endcomment -%}
+  <link rel="stylesheet" href="{{ 'component-volume-pricing.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'quick-order-list.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'quantity-popover.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endunless -%}
 {%- if card_product and card_product != empty -%}
   {%- liquid

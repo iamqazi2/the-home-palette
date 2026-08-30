@@ -28,7 +28,16 @@
     doc.classList.add('hp-gsap');
     window.gsap.registerPlugin(window.ScrollTrigger);
 
-    if (window.Lenis && !designMode) {
+    /* Lenis is configured for one thing here — smoothWheel — and a touch
+       device has no wheel to smooth. What it does have is a gsap.ticker
+       callback running Lenis's virtual-scroll maths on every animation frame,
+       and lagSmoothing turned off so none of that work is ever skipped, for a
+       behaviour the device cannot express. It also takes over touch scrolling,
+       which phones already do natively and better. Skipped on coarse
+       pointers: the phone keeps its own scrolling, and gets the frames back. */
+    var wantsLenis = !window.matchMedia('(pointer: coarse)').matches;
+
+    if (window.Lenis && !designMode && wantsLenis) {
       try {
         lenis = new window.Lenis({ duration: 1.1, smoothWheel: true });
         doc.classList.add('hp-lenis');
@@ -686,10 +695,9 @@
     HpColourShop.prototype.connectedCallback = function () {
       var el = this;
       el.swatches = Array.prototype.slice.call(el.querySelectorAll('[data-hp-colour]'));
-      el.groups = Array.prototype.slice.call(el.querySelectorAll('[data-hp-colour-group]'));
       el.titleEl = el.querySelector('[data-hp-colour-title]');
       el.linkEl = el.querySelector('[data-hp-colour-link]');
-      if (!el.swatches.length || !el.groups.length) return;
+      if (!el.swatches.length || !el.groups().length) return;
 
       el.swatches.forEach(function (btn) {
         btn.addEventListener('click', function () { el.select(btn); });
@@ -721,9 +729,49 @@
       el.select(initial, true);
     };
 
+    /* Colour keys come from `handleize`, so they are already safe in a
+       selector — but CSS.escape is what guarantees it, and the fallback keeps
+       older browsers working rather than throwing on the querySelector. */
+    function hpCssEscape(s) {
+      return (window.CSS && CSS.escape) ? CSS.escape(s) : String(s).replace(/["\\]/g, '\\$&');
+    }
+
+    /* The groups that are actually IN the document. Only the colour the
+       template marked active starts there; the rest arrive on first use, so
+       this is read fresh each time rather than cached at connect. */
+    HpColourShop.prototype.groups = function () {
+      return Array.prototype.slice.call(this.querySelectorAll('[data-hp-colour-group]'));
+    };
+
+    /* Lift one colour's cards out of its <template> and into the document, in
+       place, so the swap keeps the authored order. Cheap and one-way: the
+       template is consumed, and a second click finds a real group already
+       there. Cards inside a template were never upgraded or revealed, so the
+       usual passes are run over the group once it lands — the quick-add and
+       product-form elements inside it define themselves on insertion.
+
+       Returns the group element, or null when there was no such colour. */
+    HpColourShop.prototype.hydrate = function (key) {
+      var tpl = this.querySelector('template[data-hp-colour-defer="' + hpCssEscape(key) + '"]');
+      if (!tpl) return null;
+      var frag = tpl.content.cloneNode(true);
+      var group = frag.querySelector('[data-hp-colour-group]');
+      tpl.parentNode.replaceChild(frag, tpl);
+      /* The section just got taller by however many cards this colour has, so
+         every trigger positioned below it is now measuring against the old
+         page height. */
+      if (hasGsap) window.ScrollTrigger.refresh();
+      return group;
+    };
+
     HpColourShop.prototype.select = function (btn, initial) {
       var el = this;
       var key = btn.getAttribute('data-hp-colour-key');
+
+      /* Bring this colour into the document before anything looks for it. */
+      if (!el.querySelector('[data-hp-colour-group="' + hpCssEscape(key) + '"]')) {
+        el.hydrate(key);
+      }
 
       el.swatches.forEach(function (b) {
         var on = b === btn;
@@ -732,7 +780,7 @@
       });
 
       var shownGroup = null;
-      el.groups.forEach(function (g) {
+      el.groups().forEach(function (g) {
         var on = g.getAttribute('data-hp-colour-group') === key;
         g.hidden = !on;
         if (on) shownGroup = g;
@@ -1435,6 +1483,35 @@
     return mobileSrc ? { src: mobileSrc } : null;
   }
 
+  /* Shopify encodes an uploaded video at several bitrates and exposes each one
+     as its own progressive MP4:
+
+       <id>.HD-720p-2.1Mbps-92799387.mp4     2.3 MB
+       <id>.SD-480p-1.0Mbps-92799387.mp4     1.1 MB
+
+     …differing only in the quality token. The theme was handing phones an HD
+     URL, which made that one file the heaviest thing on the page — heavier
+     than the document, every stylesheet, every script and every image put
+     together. A phone screen is not what an HD encode is for, and the hero
+     sits behind an 80%-strength scrim, a vignette and film grain, all of which
+     hide exactly the detail the extra megabyte buys.
+
+     Which SD bitrate exists depends on the source, so this returns the two
+     Shopify actually uses, in order, and the caller walks them: a rendition
+     that was never encoded 404s, the element fires `error`, and the next
+     candidate — ultimately the original URL — is tried. Nothing here can leave
+     the hero without a video that it would otherwise have had.
+
+     Returns [] for anything that is not a Shopify rendition URL (an external
+     MP4, a Files-hosted upload), which is left exactly as authored. */
+  function hpSdCandidates(url) {
+    var m = /^(.*\/[^/?#]+)\.(?:HD|SD)-\d+p-[\d.]+Mbps-(\d+)\.mp4([?#].*)?$/.exec(url || '');
+    if (!m) return [];
+    return ['SD-480p-1.0Mbps', 'SD-480p-0.6Mbps'].map(function (rendition) {
+      return m[1] + '.' + rendition + '-' + m[2] + '.mp4' + (m[3] || '');
+    });
+  }
+
   function shouldLoadBgVideo(host) {
     if (!hpIsPhone()) return true;
 
@@ -1537,9 +1614,60 @@
         if (current === pick.src) return;
         current = pick.src;
         hpStashSources(v);          // the src attribute is the only candidate
-        v.setAttribute('src', pick.src);
+
+        /* On a phone, try the SD encodes of this same file before the one the
+           settings named. The list always ends with the authored URL, so the
+           worst case is the behaviour this had before — one 404 earlier. */
+        var queue = [pick.src];
+        if (host.hasAttribute('data-hp-video-sd') && hpIsPhone()) {
+          queue = hpSdCandidates(pick.src).concat(pick.src);
+        }
+        v.hpQueue = queue;
+        v.hpQueueAt = 0;
+        v.setAttribute('src', queue[0]);
         start();
       };
+
+      /* A candidate that does not exist comes back as a media error rather than
+         a failed fetch, because the URL is on the element rather than in a
+         fetch() we could inspect. Step to the next one and start again; when
+         the list runs out, stop and leave the still image showing. */
+      v.addEventListener('error', function () {
+        /* Clearing the element (a phone that declined the clip) empties it and
+           can surface as an error too. No src means nothing to fall back to. */
+        if (v.getAttribute('src') === null) return;
+        var queue = v.hpQueue;
+        if (!queue || v.hpQueueAt >= queue.length - 1) return;
+        v.hpQueueAt += 1;
+        current = queue[v.hpQueueAt];
+        v.setAttribute('src', current);
+        start();
+      });
+
+      /* Once the hero has scrolled off, the clip is decoding frames nobody is
+         looking at and pulling the remainder of a file nobody needs yet — on a
+         phone that is the main thread and the connection both, spent on an
+         empty room. Pause on the way out, resume on the way back in.
+
+         Guarded on the attribute so this only applies where the markup asked
+         for it, and skipped entirely where IntersectionObserver is missing:
+         the clip simply keeps playing, as it did before. */
+      if (host.hasAttribute('data-hp-video-pause-offscreen') && window.IntersectionObserver) {
+        var seen = true;
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting === seen) return;
+            seen = entry.isIntersecting;
+            if (!v.getAttribute('src')) return;
+            if (seen) {
+              var p = v.play();
+              if (p && p.catch) p.catch(function () {});
+            } else {
+              try { v.pause(); } catch (e) {}
+            }
+          });
+        }, { rootMargin: '100px' }).observe(host);
+      }
 
       whenIdleForVideo(apply);
 

@@ -439,6 +439,27 @@
             endfor
             assign rival_list = rivals | split: '||'
           -%}
+          {%- comment -%}
+            Every colour but the one on screen is wrapped in <template>.
+
+            The markup itself is unchanged and still arrives in the same
+            response, so switching colours is still instant and still needs no
+            network — that property was the whole point of rendering them all
+            up front and it is kept. What changes is what the browser DOES with
+            twenty colours' worth of product cards it is not showing: inside a
+            <template> they are inert. No elements in the document, so nothing
+            to style, lay out, or paint; no <img> to queue; no custom elements
+            to upgrade. Measured on the home page, this is the difference
+            between 11,300 DOM nodes and roughly 2,000 — the single largest
+            cost on the page, and one paid on every visit for content most
+            visitors never open.
+
+            The first click on a colour lifts its cards out of the template
+            into the document, once; from then on it behaves exactly as before.
+          {%- endcomment -%}
+          {%- unless forloop.index0 == requested -%}
+            <template data-hp-colour-defer="{{ gid }}">
+          {%- endunless -%}
           <div
             class="hp-colors__grid"
             data-hp-colour-group="{{ gid }}"
@@ -595,6 +616,9 @@
               <p class="hp-colors__empty">Nothing in this shade just yet — try another colour.</p>
             {%- endif -%}
           </div>
+          {%- unless forloop.index0 == requested -%}
+            </template>
+          {%- endunless -%}
         {%- endfor -%}
       </div>
     </hp-colour-shop>

@@ -31,7 +31,43 @@
   assign shade_low = shade | times: 0.22
   assign shade_rgb = section.settings.overlay_color | default: '#1a4b46' | color_to_rgb | remove: 'rgb(' | remove: ')'
   assign hero_text = section.settings.text_color | default: '#fff9df'
+
+  # ---- Poster still --------------------------------------------------------
+  # Without one, a phone looks at a flat block of overlay colour for as long as
+  # it takes the clip to arrive — and the clip is deliberately held back until
+  # the page has loaded and gone idle, so that is seconds, not milliseconds.
+  # Worse for the score: the video's first frame then becomes the Largest
+  # Contentful Paint, timed at whenever the download finished. A still painted
+  # into the same box, at the same size, takes that role instead and takes it
+  # early — LCP only updates for an element LARGER than the current best, and
+  # the video is exactly the same size, so it never displaces the still.
+  #
+  # The bundled files are frame 0 of the two clips currently configured, which
+  # is why the swap is invisible: the still IS the frame the video opens on.
+  # That is also why it is a setting — change the videos and the still no
+  # longer matches, so it should be turned off or replaced.
+  assign poster_wide = ''
+  assign poster_phone = ''
+  if has_video and section.settings.video_poster
+    assign poster_wide = section.settings.video_poster | image_url: width: 1600
+    assign poster_phone = section.settings.video_poster | image_url: width: 640
+  elsif has_video and section.settings.builtin_poster
+    assign poster_wide = 'hp-hero-poster.webp' | asset_url
+    assign poster_phone = 'hp-hero-poster-mobile.webp' | asset_url
+  endif
 -%}
+
+{%- if poster_phone != blank -%}
+  {%- comment -%}
+    A background-image is not fetched until the box that carries it has been
+    laid out, which is late for the thing that is now the page's LCP. These
+    two preloads hand the URL to the preload scanner instead, so the fetch
+    starts alongside the stylesheet rather than after it. `media` keeps each
+    screen to the one file it will actually paint.
+  {%- endcomment -%}
+  <link rel="preload" as="image" href="{{ poster_phone }}" media="(max-width: 749px)" fetchpriority="high">
+  <link rel="preload" as="image" href="{{ poster_wide }}" media="(min-width: 750px)" fetchpriority="high">
+{%- endif -%}
 
 {%- style -%}
   .hp-hero {
@@ -82,7 +118,7 @@
   {%- endif -%}
   .hp-hero__media { position: absolute; inset: 0; }
 
-  {%- if section.settings.video_poster and has_video -%}
+  {%- if poster_wide != blank -%}
   /* The still is painted as a background on the stage rather than as the
      video's poster attribute. A poster is one URL for every screen, so a phone
      was downloading the 2400px desktop still — on mobile that outweighed the
@@ -90,15 +126,26 @@
      suits the screen, it still shows with JavaScript off, and it is what the
      video fades in over once it is ready. */
   .hp-hero__video {
-    background-image: url({{ section.settings.video_poster | image_url: width: 1800 }});
+    background-image: url({{ poster_wide }});
     background-size: cover;
     background-position: {{ section.settings.focal | default: 'center' }};
     background-repeat: no-repeat;
   }
   @media screen and (max-width: 749px) {
     .hp-hero__video {
-      background-image: url({{ section.settings.video_poster | image_url: width: 900 }});
+      background-image: url({{ poster_phone }});
     }
+  }
+  /* The clip crossfades in over the still it opens on, so the moment the
+     download lands is not a visible cut. Until then the <video> holds no file
+     and paints nothing, and the still behind it is what the visitor sees. */
+  .hp-hero__video video {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .hp-hero__video video.is-playing { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-hero__video video { transition: none; }
   }
   {%- endif -%}
 
@@ -182,6 +229,20 @@
     100% { transform: translate(0, 0); }
   }
   @media (prefers-reduced-motion: reduce) { .hp-hero__grain { animation: none; } }
+  /* On a phone the grain keeps its texture but loses its shimmer.
+
+     The animation is why the layer is drawn at inset: -50% — it needs slack to
+     translate into — and that makes it four times the area of the hero, which
+     is itself most of the screen. Composited at a phone's pixel ratio that is
+     a very large texture, re-composited every frame, for the entire time the
+     hero exists, whether or not anyone is still looking at it. The static
+     grain is what actually does the work of masking compression; the drift is
+     a desktop flourish, and on a small screen at arm's length it is close to
+     invisible anyway. Without the animation the layer no longer needs the
+     slack either, so it shrinks to the hero's own box. */
+  @media screen and (max-width: 749px) {
+    .hp-hero__grain { inset: 0; animation: none; }
+  }
   {%- endif -%}
 
   /* ---- copy ---- */
@@ -391,6 +452,21 @@
       {% if has_video %}data-hp-bg-video{% endif %}
       {% if section.settings.video_url != blank %}data-src-desktop="{{ section.settings.video_url }}"{% endif %}
       {% if section.settings.video_url_mobile != blank %}data-src-mobile="{{ section.settings.video_url_mobile }}"{% endif %}
+      {%- comment -%}
+        Shopify encodes every uploaded video at several bitrates and the theme
+        was handing phones the 720p one — 2.3MB, the heaviest single file on
+        the page by some distance. This marker lets initBgVideo ask the CDN
+        for the SD cut of the SAME video instead (1.1MB), falling back to the
+        original URL if that rendition does not exist. It only applies to
+        phones, and only to the file a phone was going to fetch anyway.
+      {%- endcomment %}
+      {% if section.settings.mobile_sd %}data-hp-video-sd{% endif %}
+      {%- comment -%}
+        Once the hero has scrolled away there is nothing to look at, so there
+        is no reason to keep decoding frames or pulling the rest of the file.
+        initBgVideo watches the stage and pauses on the way out.
+      {%- endcomment %}
+      data-hp-video-pause-offscreen
     >
       {%- if section.settings.video != null -%}
         {%- comment -%}
@@ -588,7 +664,21 @@
       "default": true,
       "info": "Off shows the still image instead. The clip is the single heaviest thing a phone downloads on this page, so turning it off is the biggest saving available here."
     },
+    {
+      "type": "checkbox",
+      "id": "mobile_sd",
+      "label": "Send phones the SD cut of the clip",
+      "default": true,
+      "info": "Asks Shopify's CDN for the standard-definition encode of the same video instead of the HD one — roughly half the bytes. The hero sits behind an overlay, a vignette and film grain, so the difference is hard to see on a phone. Falls back to the HD file automatically if there is no SD encode."
+    },
     { "type": "image_picker", "id": "video_poster", "label": "Poster frame (for external URL)" },
+    {
+      "type": "checkbox",
+      "id": "builtin_poster",
+      "label": "Use the built-in poster still",
+      "default": true,
+      "info": "A still of the hero clips, bundled with the theme, painted immediately so the hero is never an empty block of colour while the video loads. Used only when no poster frame is uploaded above. Turn it off if you change the hero videos — the still is frame one of the current ones."
+    },
     { "type": "header", "content": "Layout & legibility" },
     {
       "type": "select",

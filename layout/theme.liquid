@@ -382,8 +382,18 @@
       alone. Loading the review styles globally (after hp-theme.css, so they win
       on equal specificity) keeps the product page, the carousel and the
       all-reviews page on one design wherever the app renders.
+
+      Loaded off the critical path. It is the largest stylesheet in the theme
+      and, until now, the third render-blocking one on every page of the site —
+      including pages with no reviews on them at all. Nothing it styles is
+      above the fold anywhere: the .jdgm-* rules wait on Judge.me's own loader,
+      which does not run until well after this file has landed, and the theme's
+      own .hp-rev* sections sit far down the product and reviews pages. It
+      still loads on every page, and still after hp-theme.css, so it keeps
+      winning on equal specificity — it just no longer holds up first paint.
     {%- endcomment -%}
-    {{ 'hp-reviews.css' | asset_url | stylesheet_tag }}
+    <link rel="stylesheet" href="{{ 'hp-reviews.css' | asset_url }}" media="print" onload="this.media='all'">
+    <noscript>{{ 'hp-reviews.css' | asset_url | stylesheet_tag }}</noscript>
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
