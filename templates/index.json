@@ -106,21 +106,21 @@
             "link": ""
           }
         },
-        "trust_2": {
-          "type": "item",
-          "settings": {
-            "icon": "award",
-            "title": "Handcrafted",
-            "text": "Made by Pakistani artisans",
-            "link": ""
-          }
-        },
         "trust_4": {
           "type": "item",
           "settings": {
             "icon": "sparkles",
             "title": "5% Off Online Payment",
             "text": "Website orders only",
+            "link": ""
+          }
+        },
+        "trust_2": {
+          "type": "item",
+          "settings": {
+            "icon": "award",
+            "title": "Handcrafted",
+            "text": "Made by Pakistani artisans",
             "link": ""
           }
         },
@@ -136,8 +136,8 @@
       },
       "block_order": [
         "trust_1",
-        "trust_2",
         "trust_4",
+        "trust_2",
         "trust_3"
       ],
       "settings": {
@@ -555,10 +555,12 @@
         "eyebrow": "The Palette",
         "heading": "Shop by Colour",
         "text": "Pick a glaze — every piece in that colour appears below.",
+        "layout": "auto",
         "products_to_show": 12,
         "columns": 4,
         "default_index": 1,
         "view_all_label": "View all",
+        "view_all_page": "",
         "bg_color": "#fff9df",
         "quick_add": "standard",
         "show_count": false,
@@ -656,7 +658,7 @@
           "type": "style",
           "settings": {
             "title": "Minimalist",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
+            "image": "shopify://shop_images/IMG_8883.jpg",
             "collection": "plates",
             "link": ""
           }
