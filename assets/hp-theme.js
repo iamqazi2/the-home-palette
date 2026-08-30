@@ -583,12 +583,17 @@
         }, { threshold: 0.15 }).observe(el);
       }
 
+      /* The background clip is NOT started here. This runs as soon as the
+         element upgrades, which is before initBgVideo has decided whether this
+         screen wants the desktop cut or the phone one — and a play() call at
+         this point starts whatever file the markup happens to be holding, which
+         is the desktop cut. That is how a phone ended up showing the landscape
+         clip: the eager play() won the race, and whether initBgVideo's swap
+         landed afterwards depended on timing and on the connection check, so
+         the same phone could get either video on different loads. Source
+         choice and playback both belong to initBgVideo, and only there. */
       var vid = el.querySelector('.hp-hero__video video');
-      if (vid) {
-        vid.muted = true;
-        var p = vid.play();
-        if (p && p.catch) p.catch(function () { el.classList.add('hp-hero--video-blocked'); });
-      }
+      if (vid) vid.muted = true;
 
       el.render();
       el.play();
@@ -1257,8 +1262,68 @@
      the video costs the design very little and saves megabytes. Three reasons
      to decline: the merchant turned it off for phones, the visitor asked for
      less data, or the connection reports itself as slow. */
+  /* One breakpoint, one answer. Every decision below asks this same function,
+     so "is this a phone?" cannot come out differently in the check that gates
+     the download, the one that picks the file, and the one that schedules the
+     fetch. It matches the 749px query the hero's CSS uses for the poster. */
+  var HP_PHONE_MQ = '(max-width: 749px)';
+  function hpIsPhone() { return window.matchMedia(HP_PHONE_MQ).matches; }
+
+  /* The <source> children Shopify's video_tag emits ARE the desktop cut, and a
+     <video> that still owns them keeps them as a candidate the browser may fall
+     back to on its own. Take them out of the element and hold on to them, so
+     that once a file has been chosen the src attribute is the only candidate
+     there is — on a phone, nothing can quietly reinstate the landscape clip. */
+  function hpStashSources(v) {
+    if (!v.hpSources) {
+      v.hpSources = Array.prototype.slice.call(v.querySelectorAll('source'));
+    }
+    v.hpSources.forEach(function (n) { if (n.parentNode) n.parentNode.removeChild(n); });
+  }
+  function hpRestoreSources(v) {
+    if (!v.hpSources) return;
+    v.hpSources.forEach(function (n) { if (!n.parentNode) v.appendChild(n); });
+  }
+  /* Put the element back to holding no file at all — used when this screen has
+     decided it wants no clip, so the still image is what shows and there is
+     nothing left for the browser to start. */
+  function hpClearVideo(v) {
+    hpStashSources(v);
+    v.autoplay = false;
+    v.removeAttribute('autoplay');
+    try { v.pause(); } catch (e) {}
+    if (v.getAttribute('src') !== null) { v.removeAttribute('src'); v.load(); }
+    v.classList.remove('is-playing');
+  }
+
+  /* Which file this screen should get.
+
+     The rule that matters: the markup's <source> children are a DESKTOP
+     candidate and only ever a desktop one. Treating them as a generic fallback
+     is what let the landscape clip through on phones. A phone takes the phone
+     cut, and reaches for a desktop file only when no phone cut was authored at
+     all — an authored phone clip always wins on a phone, and never appears on a
+     wide screen. */
+  function hpPickSource(host, v, phone) {
+    var desktopSrc = host.getAttribute('data-src-desktop') || '';
+    var mobileSrc = host.getAttribute('data-src-mobile') || '';
+    var hasSources = !!(v.hpSources && v.hpSources.length);
+    var markupSrc = v.hpMarkupSrc || '';
+
+    if (phone) {
+      if (mobileSrc) return { src: mobileSrc };
+      if (desktopSrc) return { src: desktopSrc };
+      if (hasSources) return { sources: true };
+      return markupSrc ? { src: markupSrc } : null;
+    }
+    if (desktopSrc) return { src: desktopSrc };
+    if (hasSources) return { sources: true };
+    if (markupSrc) return { src: markupSrc };
+    return mobileSrc ? { src: mobileSrc } : null;
+  }
+
   function shouldLoadBgVideo(host) {
-    if (!window.matchMedia('(max-width: 749px)').matches) return true;
+    if (!hpIsPhone()) return true;
 
     var allowed = host.getAttribute('data-hp-video-mobile');
     if (allowed === 'false') return false;
@@ -1278,7 +1343,7 @@
      idle moment moves it out of that contention entirely. Desktop starts
      immediately, where the bandwidth is not the constraint. */
   function whenIdleForVideo(fn) {
-    if (!window.matchMedia('(max-width: 749px)').matches) return fn();
+    if (!hpIsPhone()) return fn();
     var go = function () {
       if (window.requestIdleCallback) window.requestIdleCallback(fn, { timeout: 2500 });
       else window.setTimeout(fn, 600);
@@ -1291,8 +1356,6 @@
     (root || document).querySelectorAll('[data-hp-bg-video]').forEach(function (host) {
       if (host.dataset.hpVidDone) return;
       host.dataset.hpVidDone = '1';
-      if (reducedMotion) return;   // leave the still image
-      if (!shouldLoadBgVideo(host)) return;   // leave the still image
 
       /* The marker sits on the <video> when the markup builds the tag itself,
          and on the wrapper when Shopify's video_tag built it (that filter takes
@@ -1300,67 +1363,82 @@
       var v = host.tagName === 'VIDEO' ? host : host.querySelector('video');
       if (!v) return;
 
-      /* Pick the clip for this screen before touching the network, so a phone
-         never downloads the desktop cut (or the other way round). Either
-         attribute may be empty, in which case the other one covers both. */
-      var phone = window.matchMedia('(max-width: 749px)').matches;
-      var desktopSrc = host.getAttribute('data-src-desktop') || '';
-      var mobileSrc = host.getAttribute('data-src-mobile') || '';
+      /* Record what the markup shipped, then take its <source> children away,
+         before any decision and on every screen. From here on this element
+         holds exactly the one file we hand it and nothing else. */
+      v.hpMarkupSrc = v.getAttribute('src') || '';
+      hpStashSources(v);
+      v.muted = true;
 
-      /* A video_tag-built element carries <source> children instead of a src,
-         and those ARE the desktop cut. Falling back to the phone URL on desktop
-         just because data-src-desktop is empty would put the portrait clip on
-         wide screens — the same bug in reverse. */
-      var hasNativeSources = !!v.querySelector('source');
-      var src = phone
-        ? (mobileSrc || desktopSrc)
-        : (desktopSrc || (hasNativeSources ? '' : mobileSrc));
-      if (!src && !v.getAttribute('src') && !hasNativeSources) return;
-      // Only touch the element when the file actually differs — the homepage
-      // hero ships its desktop clip on the src attribute so it plays without
-      // JS, and reloading the same file would restart it for no reason.
-      whenIdleForVideo(function () {
-        /* 'is-playing' is added on the `playing` event rather than on the
-           attempt, so the still stays put until frames are actually running.
-           Guessing left a transparent <video> over the poster whenever the
-           clip had been chosen but never started. */
-        var show = function () { v.classList.add('is-playing'); };
-        v.addEventListener('playing', show);
+      var show = function () { v.classList.add('is-playing'); };
+      v.addEventListener('playing', show);
 
-        var attempt = function () {
-          var p = v.play();
-          if (p && p.catch) p.catch(function () { /* poster stays */ });
-        };
+      var attempt = function () {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () { /* the still image stays */ });
+      };
 
-        if (src && v.getAttribute('src') !== src) {
-          v.setAttribute('src', src);
-          // 'auto', not 'metadata': the markup ships with no autoplay or
-          // preload of its own (see hp-hero.liquid) precisely so nothing
-          // downloads until this point has decided which file this screen
-          // needs. This is the one fetch that should happen, so it asks for
-          // the whole thing.
-          v.preload = 'auto';
-          /* The markup carries no autoplay attribute — that is what stopped a
-             phone fetching the desktop cut before this code could choose. Set
-             it as a PROPERTY now the right file is chosen, so the browser
-             starts the clip itself the moment it can, exactly as it used to.
-             Relying on the play() below alone was the mistake: called in the
-             same turn as load(), while the element is still restarting its
-             resource selection, the promise rejects and the clip sat loaded
-             but paused with the poster showing over it. */
-          v.autoplay = true;
-          v.load();
-          /* and a nudge on each event that means "there is something to show",
-             for the browsers that will not start it on their own */
-          v.addEventListener('loadeddata', attempt, { once: true });
-          v.addEventListener('canplay', attempt, { once: true });
-        } else {
-          v.autoplay = true;
-          attempt();
+      /* 'auto', not 'metadata': the markup ships with no autoplay or preload of
+         its own (see hp-hero.liquid) precisely so nothing downloads until this
+         point has chosen the file. This is the one fetch that should happen, so
+         it asks for the whole thing. autoplay is set as a PROPERTY, now that the
+         right file is in place, so the browser starts the clip itself as soon as
+         it can — play() alone, called in the same turn as load(), rejects while
+         the element is still restarting resource selection. */
+      var start = function () {
+        v.preload = 'auto';
+        v.autoplay = true;
+        v.load();
+        v.addEventListener('loadeddata', attempt, { once: true });
+        v.addEventListener('canplay', attempt, { once: true });
+        if (v.readyState >= 3) { show(); attempt(); }
+      };
+
+      // What the element is currently set to: a URL, 'sources', or null.
+      var current = null;
+
+      var apply = function () {
+        if (reducedMotion || !shouldLoadBgVideo(host)) {
+          /* Also covers the very first pass, where the element may still be
+             holding the desktop URL the markup shipped: strip it, so a phone
+             that has declined the video has nothing left that could start. */
+          if (current !== null || v.getAttribute('src') !== null) {
+            hpClearVideo(v);
+            current = null;
+          }
+          return;                                  // the still image stands alone
         }
 
-        if (v.readyState >= 3) { show(); attempt(); }
-      });
+        var pick = hpPickSource(host, v, hpIsPhone());
+        if (!pick) return;
+
+        if (pick.sources) {
+          if (current === 'sources') return;
+          current = 'sources';
+          v.removeAttribute('src');
+          hpRestoreSources(v);
+          start();
+          return;
+        }
+
+        if (current === pick.src) return;
+        current = pick.src;
+        hpStashSources(v);          // the src attribute is the only candidate
+        v.setAttribute('src', pick.src);
+        start();
+      };
+
+      whenIdleForVideo(apply);
+
+      /* Re-run when the screen crosses the breakpoint — a phone rotated into
+         landscape, a desktop window dragged narrow, the theme editor switching
+         device preview. Without this the element keeps whichever cut it was
+         handed on first load, which is the second way to end up showing the
+         wrong one. Re-entering apply() is cheap: it returns immediately unless
+         the file for this screen has actually changed. */
+      var mq = window.matchMedia(HP_PHONE_MQ);
+      if (mq.addEventListener) mq.addEventListener('change', apply);
+      else if (mq.addListener) mq.addListener(apply);
     });
   }
 

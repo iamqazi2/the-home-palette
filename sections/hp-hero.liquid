@@ -393,27 +393,25 @@
       {% if section.settings.video_url_mobile != blank %}data-src-mobile="{{ section.settings.video_url_mobile }}"{% endif %}
     >
       {%- if section.settings.video != null -%}
-        {%- if section.settings.video_url_mobile != blank -%}
-          {%- comment -%}
-            No autoplay/preload here on purpose. video_tag's native <source>
-            starts fetching the moment the browser parses it — autoplay makes
-            that immediate, before initBgVideo's JS has even run — so on a
-            phone this clip (the desktop cut) was downloading in full at the
-            same time as the phone clip it was about to be swapped out for.
-            Measured: both fully downloaded on a single load, ~6MB combined.
-            initBgVideo calls .play() itself once it has decided which file
-            this screen actually needs.
-          {%- endcomment -%}
-          {{
-            section.settings.video
-            | video_tag: loop: true, muted: true, controls: false, playsinline: true, preload: 'none', image_size: '1920x'
-          }}
-        {%- else -%}
-          {{
-            section.settings.video
-            | video_tag: loop: true, muted: true, controls: false, playsinline: true, preload: 'none', image_size: '1920x'
-          }}
-        {%- endif -%}
+        {%- comment -%}
+          No autoplay/preload here on purpose. video_tag's native <source>
+          starts fetching the moment the browser parses it — autoplay makes
+          that immediate, before initBgVideo's JS has even run — so on a phone
+          this clip (the desktop cut) was downloading in full at the same time
+          as the phone clip it was about to be swapped out for. Measured: both
+          fully downloaded on a single load, ~6MB combined.
+
+          Those <source> children are the DESKTOP cut, always. initBgVideo
+          detaches them the moment it runs and only puts them back on a wide
+          screen, so on a phone they cannot be reached at all — the portrait
+          clip is the element's only candidate rather than merely its
+          preferred one. It also calls .play() itself, once it has decided
+          which file this screen actually needs.
+        {%- endcomment -%}
+        {{
+          section.settings.video
+          | video_tag: loop: true, muted: true, controls: false, playsinline: true, preload: 'none', image_size: '1920x'
+        }}
       {%- else -%}
         {%- comment -%}
           The desktop clip stays on the src attribute so the element still has
