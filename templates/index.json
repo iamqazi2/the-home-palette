@@ -74,8 +74,6 @@
         "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4",
         "video_url": "https://cdn.shopify.com/videos/c/o/v/9db3a7bd9a20491cb9b8984238847066.mp4",
         "video_on_mobile": true,
-        "mobile_sd": true,
-        "builtin_poster": true,
         "height": "standard",
         "text_position": "left",
         "overlay_strength": 80,
@@ -108,21 +106,21 @@
             "link": ""
           }
         },
-        "trust_4": {
-          "type": "item",
-          "settings": {
-            "icon": "sparkles",
-            "title": "5% Off Online Payment",
-            "text": "Website orders only",
-            "link": ""
-          }
-        },
         "trust_2": {
           "type": "item",
           "settings": {
             "icon": "award",
             "title": "Handcrafted",
             "text": "Made by Pakistani artisans",
+            "link": ""
+          }
+        },
+        "trust_4": {
+          "type": "item",
+          "settings": {
+            "icon": "sparkles",
+            "title": "5% Off Online Payment",
+            "text": "Website orders only",
             "link": ""
           }
         },
@@ -138,8 +136,8 @@
       },
       "block_order": [
         "trust_1",
-        "trust_4",
         "trust_2",
+        "trust_4",
         "trust_3"
       ],
       "settings": {
@@ -177,7 +175,7 @@
           "type": "tile",
           "settings": {
             "collection": "thp-weave-collection",
-            "title": "THP Weaves"
+            "title": "Placemats & Baskets"
           }
         },
         "tile_5": {
@@ -238,7 +236,7 @@
       "settings": {
         "eyebrow": "Chapter One — The Collections",
         "heading": "Every Table Tells a Story",
-        "text": "Multiple families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
+        "text": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
         "center_head": true,
         "columns": 5,
         "scrim": 90,
@@ -557,12 +555,10 @@
         "eyebrow": "The Palette",
         "heading": "Shop by Colour",
         "text": "Pick a glaze — every piece in that colour appears below.",
-        "layout": "auto",
         "products_to_show": 12,
         "columns": 4,
         "default_index": 1,
         "view_all_label": "View all",
-        "view_all_page": "",
         "bg_color": "#fff9df",
         "quick_add": "standard",
         "show_count": false,
@@ -572,44 +568,14 @@
     "hp_occasion": {
       "type": "hp-occasion",
       "blocks": {
-        "occ_1": {
-          "type": "occasion",
-          "settings": {
-            "icon": "utensils",
-            "title": "Everyday Dining",
-            "caption": "Sturdy, beautiful staples",
-            "collection": "plates",
-            "link": "shopify://collections/dinner-breakfast-sets"
-          }
-        },
         "occ_3": {
           "type": "occasion",
           "settings": {
             "icon": "coffee",
             "title": "Tea Time",
             "caption": "Slow afternoon rituals",
-            "collection": "tea-coffee-essentials",
+            "collection": "tea-time-1",
             "link": "shopify://collections/tea-coffee-essentials"
-          }
-        },
-        "occ_4": {
-          "type": "occasion",
-          "settings": {
-            "icon": "moon-star",
-            "title": "Ramadan",
-            "caption": "Iftar & suhoor tables",
-            "collection": "platters",
-            "link": "shopify://collections"
-          }
-        },
-        "occ_5": {
-          "type": "occasion",
-          "settings": {
-            "icon": "sparkles",
-            "title": "Eid",
-            "caption": "Festive gatherings",
-            "collection": "new-arrivals",
-            "link": "shopify://collections/new-arrivals"
           }
         },
         "occ_6": {
@@ -618,17 +584,58 @@
             "icon": "heart",
             "title": "Wedding Gifts",
             "caption": "Heirlooms to give",
-            "collection": "dinner-breakfast-sets",
+            "collection": "wedding-gifts",
+            "link": "shopify://collections"
+          }
+        },
+        "occ_2": {
+          "type": "occasion",
+          "settings": {
+            "icon": "users",
+            "title": "Hosting Guests",
+            "caption": "Sets that impress",
+            "collection": "hosting-guests",
+            "link": "shopify://collections/serveware"
+          }
+        },
+        "occ_1": {
+          "type": "occasion",
+          "settings": {
+            "icon": "utensils",
+            "title": "Everyday Dining",
+            "caption": "Sturdy, beautiful staples",
+            "collection": "everyday-dining",
+            "link": "shopify://collections/dinner-breakfast-sets"
+          }
+        },
+        "occ_5": {
+          "type": "occasion",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Eid",
+            "caption": "Festive gatherings",
+            "collection": "eid",
+            "link": "shopify://collections/new-arrivals"
+          }
+        },
+        "occ_4": {
+          "type": "occasion",
+          "settings": {
+            "icon": "moon-star",
+            "title": "Ramadan",
+            "caption": "Iftar & suhoor tables",
+            "collection": "ramadan",
             "link": "shopify://collections"
           }
         }
       },
       "block_order": [
-        "occ_1",
         "occ_3",
-        "occ_4",
+        "occ_6",
+        "occ_2",
+        "occ_1",
         "occ_5",
-        "occ_6"
+        "occ_4"
       ],
       "settings": {
         "eyebrow": "Chapter Three — The Table",
@@ -649,7 +656,7 @@
           "type": "style",
           "settings": {
             "title": "Minimalist",
-            "image": "shopify://shop_images/IMG_8883.jpg",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
             "collection": "plates",
             "link": ""
           }
@@ -672,6 +679,14 @@
             "link": "shopify://collections/reactive"
           }
         },
+        "style_J74iL9": {
+          "type": "style",
+          "settings": {
+            "title": "Minimalist",
+            "collection": "",
+            "link": ""
+          }
+        },
         "style_4": {
           "type": "style",
           "settings": {
@@ -679,14 +694,6 @@
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
             "collection": "",
             "link": "shopify://collections/contemporary"
-          }
-        },
-        "style_UarDyV": {
-          "type": "style",
-          "settings": {
-            "title": "Minimalist",
-            "collection": "minimalist",
-            "link": "shopify://collections/minimalist"
           }
         },
         "style_5": {
@@ -703,8 +710,8 @@
         "style_1",
         "style_2",
         "style_3",
+        "style_J74iL9",
         "style_4",
-        "style_UarDyV",
         "style_5"
       ],
       "settings": {
