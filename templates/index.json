@@ -74,6 +74,8 @@
         "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4",
         "video_url": "https://cdn.shopify.com/videos/c/o/v/9db3a7bd9a20491cb9b8984238847066.mp4",
         "video_on_mobile": true,
+        "mobile_sd": true,
+        "builtin_poster": true,
         "height": "standard",
         "text_position": "left",
         "overlay_strength": 80,
@@ -555,10 +557,12 @@
         "eyebrow": "The Palette",
         "heading": "Shop by Colour",
         "text": "Pick a glaze — every piece in that colour appears below.",
+        "layout": "auto",
         "products_to_show": 12,
         "columns": 4,
         "default_index": 1,
         "view_all_label": "View all",
+        "view_all_page": "",
         "bg_color": "#fff9df",
         "quick_add": "standard",
         "show_count": false,
@@ -657,7 +661,7 @@
           "settings": {
             "title": "Minimalist",
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
-            "collection": "plates",
+            "collection": "minimalist",
             "link": ""
           }
         },
@@ -677,14 +681,6 @@
             "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
             "collection": "",
             "link": "shopify://collections/reactive"
-          }
-        },
-        "style_J74iL9": {
-          "type": "style",
-          "settings": {
-            "title": "Minimalist",
-            "collection": "",
-            "link": ""
           }
         },
         "style_4": {
@@ -710,7 +706,6 @@
         "style_1",
         "style_2",
         "style_3",
-        "style_J74iL9",
         "style_4",
         "style_5"
       ],
