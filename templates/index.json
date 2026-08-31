@@ -74,6 +74,8 @@
         "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4",
         "video_url": "https://cdn.shopify.com/videos/c/o/v/9db3a7bd9a20491cb9b8984238847066.mp4",
         "video_on_mobile": true,
+        "mobile_sd": true,
+        "builtin_poster": true,
         "height": "standard",
         "text_position": "left",
         "overlay_strength": 80,
@@ -580,16 +582,6 @@
             "link": "shopify://collections/dinner-breakfast-sets"
           }
         },
-        "occ_2": {
-          "type": "occasion",
-          "settings": {
-            "icon": "users",
-            "title": "Hosting Guests",
-            "caption": "Sets that impress",
-            "collection": "serveware",
-            "link": "shopify://collections/serveware"
-          }
-        },
         "occ_3": {
           "type": "occasion",
           "settings": {
@@ -633,7 +625,6 @@
       },
       "block_order": [
         "occ_1",
-        "occ_2",
         "occ_3",
         "occ_4",
         "occ_5",
@@ -690,6 +681,14 @@
             "link": "shopify://collections/contemporary"
           }
         },
+        "style_UarDyV": {
+          "type": "style",
+          "settings": {
+            "title": "Minimalist",
+            "collection": "minimalist",
+            "link": "shopify://collections/minimalist"
+          }
+        },
         "style_5": {
           "type": "style",
           "settings": {
@@ -705,6 +704,7 @@
         "style_2",
         "style_3",
         "style_4",
+        "style_UarDyV",
         "style_5"
       ],
       "settings": {
