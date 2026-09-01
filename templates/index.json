@@ -578,8 +578,7 @@
             "icon": "coffee",
             "title": "Tea Time",
             "caption": "Slow afternoon rituals",
-            "collection": "tea-time-1",
-            "link": "shopify://collections/tea-coffee-essentials"
+            "collection": "tea-time-1"
           }
         },
         "occ_6": {
@@ -588,8 +587,7 @@
             "icon": "heart",
             "title": "Wedding Gifts",
             "caption": "Heirlooms to give",
-            "collection": "wedding-gifts",
-            "link": "shopify://collections"
+            "collection": "wedding-gifts"
           }
         },
         "occ_2": {
@@ -598,8 +596,7 @@
             "icon": "users",
             "title": "Hosting Guests",
             "caption": "Sets that impress",
-            "collection": "hosting-guests",
-            "link": "shopify://collections/serveware"
+            "collection": "hosting-guests"
           }
         },
         "occ_1": {
@@ -608,8 +605,7 @@
             "icon": "utensils",
             "title": "Everyday Dining",
             "caption": "Sturdy, beautiful staples",
-            "collection": "everyday-dining",
-            "link": "shopify://collections/dinner-breakfast-sets"
+            "collection": "everyday-dining"
           }
         },
         "occ_5": {
@@ -618,8 +614,7 @@
             "icon": "sparkles",
             "title": "Eid",
             "caption": "Festive gatherings",
-            "collection": "eid",
-            "link": "shopify://collections/new-arrivals"
+            "collection": "eid"
           }
         },
         "occ_4": {
@@ -628,8 +623,7 @@
             "icon": "moon-star",
             "title": "Ramadan",
             "caption": "Iftar & suhoor tables",
-            "collection": "ramadan",
-            "link": "shopify://collections"
+            "collection": "ramadan"
           }
         }
       },
