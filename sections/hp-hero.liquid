@@ -453,14 +453,14 @@
       {% if section.settings.video_url != blank %}data-src-desktop="{{ section.settings.video_url }}"{% endif %}
       {% if section.settings.video_url_mobile != blank %}data-src-mobile="{{ section.settings.video_url_mobile }}"{% endif %}
       {%- comment -%}
-        Shopify encodes every uploaded video at several bitrates and the theme
-        was handing phones the 720p one — 2.3MB, the heaviest single file on
-        the page by some distance. This marker lets initBgVideo ask the CDN
-        for the SD cut of the SAME video instead (1.1MB), falling back to the
-        original URL if that rendition does not exist. It only applies to
-        phones, and only to the file a phone was going to fetch anyway.
+        How long a phone keeps showing the still before it starts fetching the
+        clip, on top of waiting for load and an idle moment. This is what pays
+        for the video being served at full quality: phones used to be handed a
+        480p re-encode to save the bytes, which was visibly soft in the one
+        place on the site that can least afford it. Deferring the same bytes
+        costs nothing to look at, because the still IS the opening frame.
       {%- endcomment %}
-      {% if section.settings.mobile_sd %}data-hp-video-sd{% endif %}
+      data-hp-video-hold="{{ section.settings.mobile_hold | times: 1000 | round }}"
       {%- comment -%}
         Once the hero has scrolled away there is nothing to look at, so there
         is no reason to keep decoding frames or pulling the rest of the file.
@@ -665,11 +665,15 @@
       "info": "Off shows the still image instead. The clip is the single heaviest thing a phone downloads on this page, so turning it off is the biggest saving available here."
     },
     {
-      "type": "checkbox",
-      "id": "mobile_sd",
-      "label": "Send phones the SD cut of the clip",
-      "default": true,
-      "info": "Asks Shopify's CDN for the standard-definition encode of the same video instead of the HD one — roughly half the bytes. The hero sits behind an overlay, a vignette and film grain, so the difference is hard to see on a phone. Falls back to the HD file automatically if there is no SD encode."
+      "type": "range",
+      "id": "mobile_hold",
+      "label": "Hold the still image on phones",
+      "min": 0,
+      "max": 6,
+      "step": 0.5,
+      "unit": "s",
+      "default": 2,
+      "info": "How long a phone shows the poster frame before it begins downloading the clip — counted after the page has finished loading, so it never delays anything you can see. The still is the video's own first frame, so a longer hold just means the hero stays a photograph for a moment. Raise it to take the clip further out of the way of the rest of the page; 0 loads it as soon as the page settles."
     },
     { "type": "image_picker", "id": "video_poster", "label": "Poster frame (for external URL)" },
     {

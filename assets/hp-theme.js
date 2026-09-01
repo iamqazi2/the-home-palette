@@ -1483,35 +1483,6 @@
     return mobileSrc ? { src: mobileSrc } : null;
   }
 
-  /* Shopify encodes an uploaded video at several bitrates and exposes each one
-     as its own progressive MP4:
-
-       <id>.HD-720p-2.1Mbps-92799387.mp4     2.3 MB
-       <id>.SD-480p-1.0Mbps-92799387.mp4     1.1 MB
-
-     …differing only in the quality token. The theme was handing phones an HD
-     URL, which made that one file the heaviest thing on the page — heavier
-     than the document, every stylesheet, every script and every image put
-     together. A phone screen is not what an HD encode is for, and the hero
-     sits behind an 80%-strength scrim, a vignette and film grain, all of which
-     hide exactly the detail the extra megabyte buys.
-
-     Which SD bitrate exists depends on the source, so this returns the two
-     Shopify actually uses, in order, and the caller walks them: a rendition
-     that was never encoded 404s, the element fires `error`, and the next
-     candidate — ultimately the original URL — is tried. Nothing here can leave
-     the hero without a video that it would otherwise have had.
-
-     Returns [] for anything that is not a Shopify rendition URL (an external
-     MP4, a Files-hosted upload), which is left exactly as authored. */
-  function hpSdCandidates(url) {
-    var m = /^(.*\/[^/?#]+)\.(?:HD|SD)-\d+p-[\d.]+Mbps-(\d+)\.mp4([?#].*)?$/.exec(url || '');
-    if (!m) return [];
-    return ['SD-480p-1.0Mbps', 'SD-480p-0.6Mbps'].map(function (rendition) {
-      return m[1] + '.' + rendition + '-' + m[2] + '.mp4' + (m[3] || '');
-    });
-  }
-
   function shouldLoadBgVideo(host) {
     if (!hpIsPhone()) return true;
 
@@ -1531,12 +1502,29 @@
      begins downloading the clip during load is competing with the images and
      fonts the first screen actually needs; waiting for load and then for an
      idle moment moves it out of that contention entirely. Desktop starts
-     immediately, where the bandwidth is not the constraint. */
-  function whenIdleForVideo(fn) {
+     immediately, where the bandwidth is not the constraint.
+
+     The hold on top of that is what pays for the clip being full quality
+     again. Nothing is missing while it runs: the still is the frame the video
+     opens on, painted as the stage's own background, so a longer hold is a
+     longer look at a photograph rather than an empty box — and every byte of
+     the clip is spent after the page has settled instead of against it.
+
+     Read off the section so it is tunable from the theme editor; the fallback
+     applies to any stage that predates the attribute. */
+  var HP_VIDEO_HOLD_MS = 2000;
+
+  function whenIdleForVideo(fn, host) {
     if (!hpIsPhone()) return fn();
+
+    var hold = parseInt(host && host.getAttribute('data-hp-video-hold'), 10);
+    if (!(hold >= 0)) hold = HP_VIDEO_HOLD_MS;
+
     var go = function () {
-      if (window.requestIdleCallback) window.requestIdleCallback(fn, { timeout: 2500 });
-      else window.setTimeout(fn, 600);
+      window.setTimeout(function () {
+        if (window.requestIdleCallback) window.requestIdleCallback(fn, { timeout: 2500 });
+        else fn();
+      }, hold);
     };
     if (document.readyState === 'complete') go();
     else window.addEventListener('load', go, { once: true });
@@ -1615,13 +1603,15 @@
         current = pick.src;
         hpStashSources(v);          // the src attribute is the only candidate
 
-        /* On a phone, try the SD encodes of this same file before the one the
-           settings named. The list always ends with the authored URL, so the
-           worst case is the behaviour this had before — one 404 earlier. */
+        /* The file the settings named, at the quality they named it — on every
+           screen. Phones used to be handed a 480p re-encode of this same clip
+           to save about a megabyte, and the saving was real, but so was the
+           softness: the hero is the first thing anyone sees and it looked it.
+           The bytes are bought back by holding the still image longer instead
+           (see whenIdleForVideo) rather than by degrading the picture.
+
+           Still a queue of one, because the error handler below walks it. */
         var queue = [pick.src];
-        if (host.hasAttribute('data-hp-video-sd') && hpIsPhone()) {
-          queue = hpSdCandidates(pick.src).concat(pick.src);
-        }
         v.hpQueue = queue;
         v.hpQueueAt = 0;
         v.setAttribute('src', queue[0]);
@@ -1669,7 +1659,7 @@
         }, { rootMargin: '100px' }).observe(host);
       }
 
-      whenIdleForVideo(apply);
+      whenIdleForVideo(apply, host);
 
       /* Re-run when the screen crosses the breakpoint — a phone rotated into
          landscape, a desktop window dragged narrow, the theme editor switching
