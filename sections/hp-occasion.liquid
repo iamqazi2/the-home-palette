@@ -192,7 +192,7 @@
         >
           {%- if block.settings.image -%}
             <span class="hp-occasion__media">
-              {{ block.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', alt: block.settings.title }}
+              {{ block.settings.image | image_url: width: 700 | image_tag: widths: '300, 450, 600, 700', sizes: '(min-width: 1200px) 16vw, (min-width: 750px) 33vw, 50vw', loading: 'lazy', alt: block.settings.title }}
             </span>
           {%- else -%}
             <span class="hp-chip">{% render 'hp-icon', icon: block.settings.icon, size: 20 %}</span>

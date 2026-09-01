@@ -358,7 +358,7 @@
           >
             <span class="hp-colors__dot" style="background: {{ block.settings.swatch }};">
               {%- if block.settings.image -%}
-                {{ block.settings.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: block.settings.title }}
+                {{ block.settings.image | image_url: width: 200 | image_tag: widths: '90, 130, 180, 200', sizes: '(min-width: 990px) 8.8rem, 6.4rem', loading: 'lazy', alt: block.settings.title }}
               {%- endif -%}
             </span>
             <span class="hp-colors__label">
