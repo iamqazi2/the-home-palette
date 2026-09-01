@@ -40,13 +40,24 @@
   .hp-abt-time__fill {
     position: absolute;
     inset: 0 0 auto 0;
-    height: 0;
+    height: 100%;
     background: linear-gradient(180deg, {{ accent }} 0%, {{ section.settings.accent_2_color | default: '#7dc6bb' }} 100%);
     transform-origin: top center;
+    {%- comment -%}
+      Scrubbed by GSAP on scroll (see initTimeline in hp-theme.js) — was
+      animating `height`, a layout property, so every scroll tick forced a
+      synchronous reflow (this is what PageSpeed's "Forced reflow" insight was
+      catching, and it taxes the same main thread INP measures). The box is
+      already absolutely positioned inside an overflow:hidden rail and never
+      affects any sibling's layout, so nothing needs the box to actually
+      resize — transform: scaleY reads the same visually and is
+      compositor-only, no layout involved. Collapsed by default; JS un-hides
+      it by scaling from 0, and the no-JS/no-GSAP fallback below keeps it at
+      full scale so the rail still reads as complete.
+    {%- endcomment -%}
+    transform: scaleY(0);
   }
-  /* without GSAP there is nothing to scrub the fill, so show the rail complete
-     rather than permanently empty */
-  html:not(.hp-gsap) .hp-abt-time__fill { height: 100%; }
+  html:not(.hp-gsap) .hp-abt-time__fill { transform: scaleY(1); }
 
   .hp-abt-time__item {
     position: relative;

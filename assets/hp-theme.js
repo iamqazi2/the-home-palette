@@ -2473,12 +2473,12 @@
       var items = Array.prototype.slice.call(wrap.querySelectorAll('[data-hp-timeline-item]'));
 
       if (fill && hasGsap) {
-        window.gsap.fromTo(fill, { height: '0%' }, {
-          height: '100%', ease: 'none',
+        window.gsap.fromTo(fill, { scaleY: 0 }, {
+          scaleY: 1, ease: 'none',
           scrollTrigger: { trigger: wrap, start: 'top 72%', end: 'bottom 72%', scrub: true }
         });
       } else if (fill) {
-        fill.style.height = '100%';
+        fill.style.transform = 'scaleY(1)';
       }
 
       if (!items.length) return;
