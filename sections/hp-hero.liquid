@@ -42,17 +42,24 @@
   # early — LCP only updates for an element LARGER than the current best, and
   # the video is exactly the same size, so it never displaces the still.
   #
-  # The bundled files are frame 0 of the two clips currently configured, which
-  # is why the swap is invisible: the still IS the frame the video opens on.
-  # That is also why it is a setting — change the videos and the still no
-  # longer matches, so it should be turned off or replaced.
+  # The bundled files are frame 0 of the two clips configured when they were
+  # made, which is why the swap is invisible: the still IS the frame the video
+  # opens on. Change either video without replacing its still (via the
+  # thumbnail fields below) and that stops being true for the one you changed.
+  # Desktop and phone each pick their own upload independently, then each
+  # falls back to the matching half of the bundled still on its own — so
+  # uploading only one (say, after swapping just the phone clip) does not
+  # blank out the other, which still has a real video to match.
   assign poster_wide = ''
   assign poster_phone = ''
-  if has_video and section.settings.video_poster
-    assign poster_wide = section.settings.video_poster | image_url: width: 1600
-    assign poster_phone = section.settings.video_poster | image_url: width: 640
+  if has_video and section.settings.video_poster_desktop
+    assign poster_wide = section.settings.video_poster_desktop | image_url: width: 1600
   elsif has_video and section.settings.builtin_poster
     assign poster_wide = 'hp-hero-poster.webp' | asset_url
+  endif
+  if has_video and section.settings.video_poster_mobile
+    assign poster_phone = section.settings.video_poster_mobile | image_url: width: 640
+  elsif has_video and section.settings.builtin_poster
     assign poster_phone = 'hp-hero-poster-mobile.webp' | asset_url
   endif
 -%}
@@ -652,10 +659,22 @@
       "info": "Used below 750px — a portrait clip suits a phone far better than a cropped landscape one. Falls back to the video below."
     },
     {
+      "type": "image_picker",
+      "id": "video_poster_mobile",
+      "label": "Thumbnail for the phone video",
+      "info": "Shown on phones before the clip above loads, and while it is paused. Pick a still from that same clip — ideally its opening frame, so the swap into video is invisible. Update this whenever you change the phone video; nothing does it automatically. Leave blank to use the built-in still below instead."
+    },
+    {
       "type": "text",
       "id": "video_url",
       "label": "…or external MP4 URL",
       "info": "Used only when no video is picked above."
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster_desktop",
+      "label": "Thumbnail for the desktop video",
+      "info": "Shown on wider screens before the clip above loads. Pick a still from that same clip — ideally its opening frame, so the swap into video is invisible. Update this whenever you change the desktop video; nothing does it automatically. Leave blank to use the built-in still below instead."
     },
     {
       "type": "checkbox",
@@ -675,13 +694,12 @@
       "default": 2,
       "info": "How long a phone shows the poster frame before it begins downloading the clip — counted after the page has finished loading, so it never delays anything you can see. The still is the video's own first frame, so a longer hold just means the hero stays a photograph for a moment. Raise it to take the clip further out of the way of the rest of the page; 0 loads it as soon as the page settles."
     },
-    { "type": "image_picker", "id": "video_poster", "label": "Poster frame (for external URL)" },
     {
       "type": "checkbox",
       "id": "builtin_poster",
-      "label": "Use the built-in poster still",
+      "label": "Use the built-in poster stills as a fallback",
       "default": true,
-      "info": "A still of the hero clips, bundled with the theme, painted immediately so the hero is never an empty block of colour while the video loads. Used only when no poster frame is uploaded above. Turn it off if you change the hero videos — the still is frame one of the current ones."
+      "info": "Stills of the two hero clips as configured today, bundled with the theme, painted immediately so the hero is never an empty block of colour while the video loads. Used only where the matching thumbnail field above is left blank. Swapping a video without uploading its thumbnail will show a still that no longer matches — turn this off in that case, or upload one above."
     },
     { "type": "header", "content": "Layout & legibility" },
     {

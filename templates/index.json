@@ -74,7 +74,6 @@
         "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4",
         "video_url": "https://cdn.shopify.com/videos/c/o/v/9db3a7bd9a20491cb9b8984238847066.mp4",
         "video_on_mobile": true,
-        "mobile_sd": true,
         "builtin_poster": true,
         "height": "standard",
         "text_position": "left",
