@@ -129,24 +129,24 @@
           "type": "point",
           "settings": {
             "icon": "gem",
-            "title": "Sourced at the source",
-            "text": "We buy straight from the potteries and weaving families we work with — no importers, no middle layer, no mystery about who made your plate."
+            "title": "Designed to Belong Together",
+            "text": "Build your entire table around complementary aesthetics. Our collections are designed to mix, match and layer beautifully, so every piece feels part of a considered whole."
           }
         },
         "point_2": {
           "type": "point",
           "settings": {
             "icon": "sparkles",
-            "title": "Designed in colour families",
-            "text": "Fourteen glazes, chosen to sit beside one another. A bowl bought a year later still belongs with the set you already own."
+            "title": "Inspired by Everywhere",
+            "text": "From the timeless character of Windsor to the sun-soaked charm of Limone, our collections take inspiration from different places, moods and traditions around the world — each with a personality of its own."
           }
         },
         "point_3": {
           "type": "point",
           "settings": {
             "icon": "shield-check",
-            "title": "Checked piece by piece",
-            "text": "Nothing ships without being turned over, tapped for a clean ring and matched against the rest of its set."
+            "title": "Curated for Every Table",
+            "text": "From everyday family meals to intimate gatherings, special events and restaurants, our curated themes make it easy to create a table that feels intentional, memorable and entirely your own."
           }
         }
       },
@@ -165,7 +165,7 @@
         "badge_color": "#1a4b46",
         "eyebrow": "Chapter One — The Beginning",
         "heading": "A Palette Built in Pakistan, for Pakistani Tables",
-        "text": "<p>We started The Home Palette in 2024 with one dinner set, a small studio in Bahria Town and a long list of potteries to visit. What we found was extraordinary: family workshops turning out ceramics as good as anything imported — and almost none of it reaching the homes it was made for.</p><p>So we became the bridge. We buy directly from the workshops, agree the quality standard together, and bring the pieces to you under one palette of colours that genuinely work with each other. No catalogue of a thousand mismatched items; a considered range you can build on over years.</p><p>Today that range covers ten collections — ceramics, glass, woven jute, wood and metalware — and sets tables in homes, cafés, restaurants and hotels across Pakistan.</p>",
+        "text": "<p>The Home Palette started in 2024 with a simple ambition: to bring a level of ceramic tableware to Pakistan that had never been offered here before. At the time, finding truly handcrafted, A-grade ceramics with a premium finish meant looking beyond Pakistan. We saw a gap and decided to fill it.</p><p>Today, The Home Palette is built around bringing premium, beautifully crafted tableware closer to home. What began as an idea has grown into partnerships with multiple factories and workshops across the country, supported by trained artisans and an in-house design team. </p><p>Every day, our pieces make their way into thousands of homes, bringing colour, character, and considered design to the table.</p>",
         "quote": "A table should look like the people who set it — warm, colourful, and entirely their own.",
         "sign_name": "The Home Palette",
         "sign_role": "Paradise Commercial, Bahria Town Phase 4",
@@ -473,7 +473,7 @@
             "corner_styling": "soft",
             "header_text_color": "#000000",
             "text_color": "#000000",
-            "card_color": "#F9F9F9",
+            "card_color": "#f9f9f9",
             "stars_color": "",
             "arrows_color": "#000000",
             "transition_speed": 5,
