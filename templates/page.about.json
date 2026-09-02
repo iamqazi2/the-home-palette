@@ -182,7 +182,7 @@
         "eyebrow": "Chapter Two — Our Core Belief",
         "heading": "A Home Is Made in the Details",
         "lede": "<p>At The Home Palette, we believe that a beautiful home is created through the little details — the pieces you choose, the way you style them, and the moments you create around them.</p>",
-        "body": "<p>The Home Palette is a pioneer of handcrafted, premium, and A-grade tableware in Pakistan, bringing together thoughtfully crafted ceramics, woven pieces, metalware, cutlery and wooden accessories, designed to add warmth, character and personality to your spaces.</p><p>But for us, it’s about more than just beautiful products. We’re passionate about supporting local women artisans and celebrating the craftsmanship behind every piece. From hand-finished ceramics to beautifully woven placemats, runners, tissue boxes and accessories, each piece represents skill, creativity, and the hands that bring it to life.</p><p>We believe beautiful tableware should also be made for real living. That’s why we focus on pieces that are safe, durable, functional and made to be enjoyed every day — whether it’s a quiet breakfast at home, a dinner with loved ones, or a table set for a special celebration.</p><p>Today, The Home Palette is loved not only by individuals and families, but also by hotels and restaurants across Pakistan, who choose our pieces to bring a distinctive touch to their spaces and tables.</p><p>From everyday homes to hospitality spaces, we’re proud to be a part of the places where people gather, connect, celebrate and create memories.</p>",
+        "body": "<p>The Home Palette is a pioneer in handcrafted, premium, and A-grade tableware in Pakistan, bringing together thoughtfully crafted ceramics, woven pieces, metalware, cutlery and wooden accessories, designed to add warmth, character and personality to your spaces.</p><p>But for us, it’s about more than just beautiful products. We’re passionate about supporting local women artisans and celebrating the craftsmanship behind every piece. From hand-finished ceramics to beautifully woven placemats, runners, tissue boxes and accessories, each piece represents skill, creativity, and the hands that bring it to life.</p><p>We believe beautiful tableware should also be made for real living. That’s why we focus on pieces that are safe, durable, functional and made to be enjoyed every day — whether it’s a quiet breakfast at home, a dinner with loved ones, or a table set for a special celebration.</p><p>Today, The Home Palette is loved not only by individuals and families, but also by hotels and restaurants across Pakistan, who choose our pieces to bring a distinctive touch to their spaces and tables.</p><p>From everyday homes to hospitality spaces, we’re proud to be a part of the places where people gather, connect, celebrate and create memories.</p>",
         "quote_lead": "Because we don’t just want to decorate your table",
         "quote": "We want to make every tablescape a moment.",
         "button_label": "Shop the Collections",
@@ -198,10 +198,10 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/thp-workshop-bowls-drying.jpg",
-            "title": "Clay & sourcing",
-            "text": "Every batch begins at the workshop, with clay chosen in person rather than ordered from a catalogue. We work with a small number of family-run potteries and buy whole production runs instead of cherry-picking, which is what lets those workshops plan months ahead instead of week to week.",
+            "title": "Sourcing & Craftsmanship",
+            "text": "Every piece begins with A-grade ceramic materials and the skilled hands of trained artisans. We work with trusted workshops across Pakistan to create handcrafted tableware with the premium finish and consistency we believe every table deserves.",
             "caption": "Greenware on the workshop racks",
-            "meta": "Family-run partners",
+            "meta": "",
             "meta_icon": "leaf"
           }
         },
@@ -210,9 +210,9 @@
           "settings": {
             "image": "shopify://shop_images/thp-workshop-plates-drying.jpg",
             "title": "Shaping & casting",
-            "text": "Plates and bowls are thrown on the wheel or slip-cast in plaster moulds, then left to firm up to leather-hard before the foot is trimmed. It is the slowest stage of the whole process, and the one that decides whether a stack of six plates will sit flush on your shelf.",
+            "text": "Plates and bowls are carefully shaped on the wheel or formed in plaster moulds, then left to firm before each piece is finished by hand. This stage gives every piece its clean form, balanced proportions and polished finish.",
             "caption": "Cast plates firming up on plaster",
-            "meta": "24–48 hours drying",
+            "meta": "",
             "meta_icon": "ruler"
           }
         },
@@ -221,9 +221,9 @@
           "settings": {
             "image": "shopify://shop_images/thp-workshop-platters-drying.jpg",
             "title": "The first firing",
-            "text": "Dried greenware goes into its bisque firing and comes out porous and chalky — strong enough to handle, thirsty enough to take glaze evenly. Anything that warped or cracked is pulled here, before a single rupee of glaze is spent on it.",
+            "text": "Once shaped and dried, each piece undergoes its first firing, transforming the clay into a strong, porous form ready for glazing. Every piece is carefully inspected at this stage to ensure only those meeting our standards move forward.",
             "caption": "Waiting on the racks for the kiln",
-            "meta": "≈900°C",
+            "meta": "",
             "meta_icon": "flame"
           }
         },
@@ -231,10 +231,10 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
-            "title": "Glaze & colour matching",
-            "text": "This is where the palette is actually made. Glazes are mixed in batches and checked against the master tile for each colour — Sage Green, Limone Yellow, Reactive Cloud Grey — so the range stays consistent season after season. Reactive glazes are the deliberate exception: they are allowed to move in the kiln, which is why no two pieces come out identical.",
+            "title": "Glaze & Coloring",
+            "text": "This is where the palette comes to life. Each glaze is carefully mixed and checked against our established colour standards, ensuring the shades remain true and consistent across the collection. From Sage Green and Limone Yellow to Reactive Cloud Grey, every colour is developed to work beautifully within the wider palette.",
             "caption": "Matched against the master tile",
-            "meta": "14 colour families",
+            "meta": "",
             "meta_icon": "sparkles"
           }
         },
@@ -243,9 +243,9 @@
           "settings": {
             "image": "shopify://shop_images/IMG-20250612-WA0107_3.webp",
             "title": "Into the kiln",
-            "text": "The glost firing takes each piece well past 1,100°C, where the glaze vitrifies into a hard, food-safe surface that survives daily use and the dishwasher. Roughly twelve hours up and twelve hours back down — rush the cooling and the glaze crazes.",
+            "text": "The final firing transforms each piece at high temperatures, setting the glaze into a durable, food-safe surface made for everyday use. It is a carefully controlled process that gives our tableware the strength and finish to become part of your everyday rituals.",
             "caption": "Twelve hours up, twelve hours down",
-            "meta": "1,100°C and beyond",
+            "meta": "",
             "meta_icon": "flame"
           }
         },
@@ -253,10 +253,10 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
-            "title": "Inspection & packing",
-            "text": "Every piece is turned over, tapped for a clean ring, checked for pinholes and measured against the rest of its set. What passes is wrapped in foam sleeves, corner-blocked and boxed in double-wall cartons — which is why breakage is the rarest email in our inbox.",
+            "title": "Inspection & Packing",
+            "text": "Every piece is carefully inspected, from its finish and form to its overall quality, before it becomes part of the collection. Only pieces that meet our standards are selected, carefully packed and prepared to make their way to your table.",
             "caption": "Wrapped, corner-blocked, double-boxed",
-            "meta": "Piece by piece",
+            "meta": "",
             "meta_icon": "shield-check"
           }
         }
@@ -274,9 +274,9 @@
         "accent_color": "#7dc6bb",
         "flip": false,
         "center_head": true,
-        "eyebrow": "Chapter Three — Inside the Workshop",
-        "heading": "How a Piece Becomes Part of the Palette",
-        "text": "Six stages, most of them done by hand. It is slower than machine production — and it is the reason no two reactive-glaze pieces ever leave the kiln identical.",
+        "eyebrow": "Chapter Three — The Craftsmanship",
+        "heading": "How a Collection Comes Together",
+        "text": "Six stages, thoughtfully crafted and finished by hand. It may take longer than machine production, but that time is part of what makes our pieces special.",
         "foot_text": "Pieces that do not pass inspection stay at the workshop. We would rather be short of stock for a week than send out a second as though it were a first.",
         "button_label": "See the Collections",
         "button_link": "shopify://collections"
