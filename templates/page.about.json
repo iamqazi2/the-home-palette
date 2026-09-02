@@ -209,7 +209,7 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/thp-workshop-plates-drying.jpg",
-            "title": "Shaping & casting",
+            "title": "Shaping & Casting",
             "text": "Plates and bowls are carefully shaped on the wheel or formed in plaster moulds, then left to firm before each piece is finished by hand. This stage gives every piece its clean form, balanced proportions and polished finish.",
             "caption": "Cast plates firming up on plaster",
             "meta": "",
@@ -220,7 +220,7 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/thp-workshop-platters-drying.jpg",
-            "title": "The first firing",
+            "title": "The First Firing",
             "text": "Once shaped and dried, each piece undergoes its first firing, transforming the clay into a strong, porous form ready for glazing. Every piece is carefully inspected at this stage to ensure only those meeting our standards move forward.",
             "caption": "Waiting on the racks for the kiln",
             "meta": "",
@@ -230,7 +230,7 @@
         "step_4": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
+            "image": "shopify://shop_images/WhatsAppImage2026-09-01at6.29.53PM.jpg",
             "title": "Glaze & Coloring",
             "text": "This is where the palette comes to life. Each glaze is carefully mixed and checked against our established colour standards, ensuring the shades remain true and consistent across the collection. From Sage Green and Limone Yellow to Reactive Cloud Grey, every colour is developed to work beautifully within the wider palette.",
             "caption": "Matched against the master tile",
@@ -277,7 +277,7 @@
         "eyebrow": "Chapter Three — The Craftsmanship",
         "heading": "How a Collection Comes Together",
         "text": "Six stages, thoughtfully crafted and finished by hand. It may take longer than machine production, but that time is part of what makes our pieces special.",
-        "foot_text": "Pieces that do not pass inspection stay at the workshop. We would rather be short of stock for a week than send out a second as though it were a first.",
+        "foot_text": "Not every piece makes it to the end, and that is exactly how it should be. We take the time to select only what meets our standards, because we believe premium tableware is not just about how it looks, but about the care behind every piece you bring home.",
         "button_label": "See the Collections",
         "button_link": "shopify://collections"
       }
