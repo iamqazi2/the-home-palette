@@ -309,7 +309,7 @@
           "type": "value",
           "settings": {
             "icon": "shield-check",
-            "title": "Hand-checked, every piece",
+            "title": "Hand-checked, every time",
             "text": "Inspected, tapped and matched before packing. Nothing goes out as a second, and nothing goes out unwrapped.",
             "link_label": "",
             "link": ""
@@ -320,7 +320,7 @@
           "settings": {
             "icon": "hand-platter",
             "title": "Built for real use",
-            "text": "Made for weekday dinners and full restaurant service alike — not for a shelf. Care notes come with every set.",
+            "text": "Made for weekday dinners and full restaurant service alike — not for a shelf.",
             "link_label": "",
             "link": ""
           }
@@ -329,8 +329,8 @@
           "type": "value",
           "settings": {
             "icon": "package",
-            "title": "Packed to arrive whole",
-            "text": "Foam sleeves, corner blocks and double-wall cartons on every parcel. If something does arrive damaged, we make it right.",
+            "title": "5-Layer Packaging For Safe Delivery",
+            "text": "Five-layer protective packaging on every parcel, designed to keep your pieces safe from our hands to your table. If something does arrive damaged, we make it right.",
             "link_label": "Shipping policy",
             "link": "/policies/shipping-policy"
           }
@@ -339,8 +339,8 @@
           "type": "value",
           "settings": {
             "icon": "message-circle",
-            "title": "Answered by a human",
-            "text": "Message us on WhatsApp and you reach the same small team that packed your order — usually the same day.",
+            "title": "Prompt Customer Service",
+            "text": "Message us on WhatsApp and you’ll reach the same team behind your order — with prompt, personal support whenever you need us.",
             "link_label": "Chat with us",
             "link": "https://wa.me/923376111399"
           }
@@ -362,8 +362,8 @@
         "show_numbers": true,
         "columns": 3,
         "eyebrow": "Chapter Four — What We Stand For",
-        "heading": "Six Promises We Keep on Every Order",
-        "text": "Not a mission statement — the working rules we hold ourselves to, order after order."
+        "heading": "Six Standards We Never Compromise",
+        "text": "Not just promises, but standards we follow with every piece, every order, every time."
       }
     },
     "hp_about_timeline": {
@@ -374,7 +374,7 @@
           "settings": {
             "year": "2024",
             "title": "The first collection",
-            "text": "The Home Palette opens with a single dinner set, a studio in Paradise Commercial, Bahria Town Phase 4, and a long list of potteries worth visiting.",
+            "text": "The Home Palette began with a simple thought: to bring premium ceramics to Pakistani tables — thoughtfully designed, beautifully made, and made to be lived with.",
             "image": "shopify://shop_images/IMG-20250612-WA0065.webp"
           }
         },
@@ -383,7 +383,7 @@
           "settings": {
             "year": "2025",
             "title": "Colour becomes the system",
-            "text": "Glazes are standardised into named colour families so pieces bought months apart still match — and Shop by Colour goes live on the site.",
+            "text": "Our glazes were developed into carefully defined colour families, so pieces bought months apart can still come together beautifully — making it easy to build your table by colour as your collection grows.",
             "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp"
           }
         },
@@ -392,7 +392,7 @@
           "settings": {
             "year": "2025",
             "title": "The Weave Collection",
-            "text": "Hand-woven jute placemats, coasters and baskets join the ceramics — our first non-ceramic line, and still one of the most reordered.",
+            "text": "Hand-woven jute placemats, coasters and baskets join our ceramics, marking the beginning of a wider collection of pieces designed to bring the same warmth and character to your table.",
             "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp"
           }
         },
@@ -401,7 +401,7 @@
           "settings": {
             "year": "2025",
             "title": "Hospitality begins",
-            "text": "Cafés, restaurants and hotels start ordering by the crate. Theme consultation and tailored packages follow soon after.",
+            "text": "Cafés, restaurants and hotels begin choosing The Home Palette for their spaces, with curated themes and tailored packages created to bring their tables to life.",
             "image": "shopify://shop_images/IMG-20250612-WA0107_3.webp"
           }
         },
@@ -441,7 +441,7 @@
         "center_head": true,
         "eyebrow": "Chapter Five — The Journey",
         "heading": "From One Dinner Set to Ten Collections",
-        "text": "A short history of the palette — and where it is headed next."
+        "text": "A short history of our brand — and where it is headed next."
       }
     },
     "178804563340807bc1": {
