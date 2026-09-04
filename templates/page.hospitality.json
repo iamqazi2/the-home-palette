@@ -594,23 +594,12 @@
             "link_label": "",
             "link": ""
           }
-        },
-        "v5": {
-          "type": "value",
-          "settings": {
-            "icon": "users",
-            "title": "Banquets & Events",
-            "text": "Serveware made to handle high-volume service without compromising on presentation. From dinnerware to statement serving pieces, we can supply consistent collections in the quantities your events demand.",
-            "link_label": "",
-            "link": ""
-          }
         }
       },
       "block_order": [
         "v1",
         "v2",
-        "v3",
-        "v5"
+        "v3"
       ],
       "settings": {
         "bg_color": "#fff9df",
