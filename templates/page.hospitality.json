@@ -570,7 +570,7 @@
           "settings": {
             "icon": "utensils",
             "title": "Restaurants",
-            "text": "Dinner plates, bowls, platters and serving pieces that survive a full service and still look handmade.",
+            "text": "Crockery designed to complement your menu, table setting, and service style. From everyday dining to signature dishes, we provide pieces that perform beautifully through every service.",
             "link_label": "",
             "link": ""
           }
@@ -580,7 +580,7 @@
           "settings": {
             "icon": "coffee",
             "title": "Cafés & Tea Houses",
-            "text": "Cups, saucers, mugs and dessert plates in colours that photograph as well as they pour.",
+            "text": "From coffee cups and dessert plates to serving pieces made for display, we create crockery that fits the character of your café or bakery.",
             "link_label": "",
             "link": ""
           }
@@ -590,17 +590,7 @@
           "settings": {
             "icon": "star",
             "title": "Hotels & Resorts",
-            "text": "Breakfast buffets, in-room dining and banquet service, supplied at volume with consistent reorders.",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "v4": {
-          "type": "value",
-          "settings": {
-            "icon": "sparkles",
-            "title": "Bakeries & Patisseries",
-            "text": "Display trays, cake stands and counter pieces that make the counter do the selling.",
+            "text": "Made for spaces where presentation and durability go hand in hand. We provide coordinated crockery for restaurants, room service, buffets, and guest experiences, designed to work seamlessly across your property.",
             "link_label": "",
             "link": ""
           }
@@ -610,17 +600,7 @@
           "settings": {
             "icon": "users",
             "title": "Banquets & Events",
-            "text": "Chafing dishes, handis, copper and steel service for weddings, iftars and large functions.",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "v6": {
-          "type": "value",
-          "settings": {
-            "icon": "package",
-            "title": "Cloud Kitchens & Studios",
-            "text": "Photography-ready sets for menus, shoots and delivery brands building a look from scratch.",
+            "text": "Serveware made to handle high-volume service without compromising on presentation. From dinnerware to statement serving pieces, we can supply consistent collections in the quantities your events demand.",
             "link_label": "",
             "link": ""
           }
@@ -630,9 +610,7 @@
         "v1",
         "v2",
         "v3",
-        "v4",
-        "v5",
-        "v6"
+        "v5"
       ],
       "settings": {
         "bg_color": "#fff9df",
@@ -641,9 +619,9 @@
         "center_head": true,
         "show_numbers": false,
         "columns": 3,
-        "eyebrow": "Who We Supply",
-        "heading": "Crockery for Every Kind of Service",
-        "text": "If food leaves your kitchen on a plate, we can make that plate — in the quantity your room needs and the colours your brand uses."
+        "eyebrow": "Designed for Your Venue",
+        "heading": "Crockery Made for Every Service",
+        "text": "From intimate cafés to busy hotel kitchens, our crockery is made to fit the way you serve, beautifully, consistently, and at scale."
       }
     },
     "hosp_process": {
@@ -654,9 +632,9 @@
           "settings": {
             "image": "shopify://shop_images/IMG_8881.heic",
             "title": "Consultation",
-            "text": "Tell us the concept, the cover count and the budget. We look at your menu, your interiors and how your team actually plates, then recommend shapes and finishes that will hold up in your service.",
-            "caption": "It starts with your table, not our catalogue",
-            "meta": "Free of charge",
+            "text": "Share your concept, cover count, budget, and menu with us. We’ll consider your interiors and service style, then recommend the right shapes, sizes, and finishes for your space.",
+            "caption": "",
+            "meta": "",
             "meta_icon": "message-circle"
           }
         },
@@ -664,10 +642,10 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/IMG_8879.heic",
-            "title": "Design & colour matching",
-            "text": "We match glazes to your brand palette, adjust rim profiles and sizes, and lay out the full setting — plate, bowl, cup, platter — so you can see the table before anything is fired.",
-            "caption": "Glazes matched to your brand palette",
-            "meta": "14 colour families",
+            "title": "Design & Colour Matching",
+            "text": "We refine the shapes, sizes, and colors to match your brand and bring your concept to life. From signature shades to custom details, every piece is designed to feel right for your space.",
+            "caption": "",
+            "meta": "",
             "meta_icon": "sparkles"
           }
         },
@@ -675,30 +653,18 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/IMG_8878.heic",
-            "title": "Sampling & approval",
-            "text": "Physical samples reach your hands before the production run. Weight, stack height, dishwasher behaviour and thermal shock all get checked against real service conditions, and nothing scales up until you sign off.",
-            "caption": "Samples before the production run",
-            "meta": "Approved by you",
+            "title": "Production and Handling",
+            "text": "Once the designs are approved, we move into production with careful attention to quality and consistency. Your pieces are made to meet your requirements and perform reliably through everyday service.",
+            "caption": "",
+            "meta": "",
             "meta_icon": "shield-check"
-          }
-        },
-        "s4": {
-          "type": "step",
-          "settings": {
-            "image": "shopify://shop_images/IMG_8886.heic",
-            "title": "Production & delivery",
-            "text": "We schedule the run against your opening or reorder date and deliver nationwide, packed to survive the journey — with every future reorder matched back to your master sample.",
-            "caption": "Delivered to your door, nationwide",
-            "meta": "Nationwide",
-            "meta_icon": "truck"
           }
         }
       },
       "block_order": [
         "s1",
         "s2",
-        "s3",
-        "s4"
+        "s3"
       ],
       "settings": {
         "bg_color": "#1a4b46",
@@ -709,63 +675,8 @@
         "heading": "Have a Design in Mind? We'll Help You Bring It to Life",
         "text": "Whether you are launching a new restaurant, refreshing an existing concept or looking for a signature collection, our team works with you from concept and design through to production and delivery.",
         "foot_text": "Let's create tableware that makes your brand impossible to forget.",
-        "button_label": "Start the Conversation",
+        "button_label": "Take The First Step",
         "button_link": "https://wa.me/923376111399"
-      }
-    },
-    "hosp_packages": {
-      "type": "hp-hosp-packages",
-      "blocks": {
-        "pk1": {
-          "type": "package",
-          "settings": {
-            "title": "Café Starter",
-            "seats": "20–50 seats",
-            "features": "Free theme consultation\nCurated starter set — plates, bowls, cups\nQuick delivery\nReorder support on every piece",
-            "featured": false,
-            "flag": "",
-            "button_label": "Enquire on WhatsApp",
-            "button_link": "https://wa.me/923376111399"
-          }
-        },
-        "pk2": {
-          "type": "package",
-          "settings": {
-            "title": "Bistro Pro",
-            "seats": "50–100 seats",
-            "features": "Full theme curation\nCustom colour matching\nSample set before production\nPriority dispatch",
-            "featured": true,
-            "flag": "Most popular",
-            "button_label": "Enquire on WhatsApp",
-            "button_link": "https://wa.me/923376111399"
-          }
-        },
-        "pk3": {
-          "type": "package",
-          "settings": {
-            "title": "Restaurant Luxe",
-            "seats": "100+ seats",
-            "features": "Full-service customisation\nBespoke elements and signature pieces\nDedicated production slot\nScheduled reorders against your master sample",
-            "featured": false,
-            "flag": "",
-            "button_label": "Enquire on WhatsApp",
-            "button_link": "https://wa.me/923376111399"
-          }
-        }
-      },
-      "block_order": [
-        "pk1",
-        "pk2",
-        "pk3"
-      ],
-      "settings": {
-        "bg_color": "#fff9df",
-        "featured_color": "#1a4b46",
-        "center_head": true,
-        "eyebrow": "Packages",
-        "heading": "Built for the Size of Your Room",
-        "text": "Three starting points for hospitality orders. Every one of them is adjusted to your menu, your covers and your brand before we quote.",
-        "note": "Not sure which one fits? Send us your cover count and a photo of your current table setting — we will come back with a recommendation and a quote."
       }
     },
     "1788045679096c3afd": {
@@ -823,7 +734,6 @@
     "hosp_story",
     "hosp_venues",
     "hosp_process",
-    "hosp_packages",
     "1788045679096c3afd"
   ]
 }
