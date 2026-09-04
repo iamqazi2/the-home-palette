@@ -255,13 +255,15 @@
         "colour_21"
       ],
       "settings": {
-        "eyebrow": "The Palette",
+        "eyebrow": "The Home Palette",
         "heading": "Shop by Colour",
-        "text": "Every glaze we fire, in one place. Pick a colour and see each piece made in it.",
+        "text": "Every colour we create, all in one place.\nPick a shade and explore every piece made in it.",
+        "layout": "auto",
         "products_to_show": 12,
         "columns": 4,
         "default_index": 1,
         "view_all_label": "View all",
+        "view_all_page": "",
         "bg_color": "#fff9df",
         "quick_add": "standard",
         "show_count": false,
