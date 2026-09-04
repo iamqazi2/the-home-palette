@@ -285,7 +285,7 @@
       "settings": {
         "eyebrow": "The Shelf",
         "heading": "Shop the Range",
-        "text": "Three collections that cover the whole table — from the everyday plate to the set you bring out for guests.",
+        "text": "Pieces from collections that cover the whole table; from the everyday plates to the the dinner sets you bring out for guests.",
         "bg_color": "#fff9df",
         "columns_desktop": 4,
         "peek_mobile": 2.2,
@@ -558,7 +558,7 @@
       "settings": {
         "eyebrow": "The Palette",
         "heading": "Shop by Colour",
-        "text": "Pick a glaze — every piece in that colour appears below.",
+        "text": "Have a preference for a color family? We have everything in all your favorite colors.",
         "layout": "auto",
         "products_to_show": 12,
         "columns": 4,
@@ -646,7 +646,7 @@
       "settings": {
         "eyebrow": "Chapter Three — The Table",
         "heading": "Shop by Occasion",
-        "text": "From quiet weekday meals to grand celebrations — set the table for the moment.",
+        "text": "From quiet weekday meals to grand celebrations, set the table for the moment.",
         "bg_color": "#fff9df",
         "card_color": "#1a4b46",
         "card_color_hover": "#123532",
