@@ -277,7 +277,7 @@
           "type": "rail",
           "settings": {
             "collection": "thp-weave-collection",
-            "title": "THP Weave",
+            "title": "THP Weaves",
             "products_to_show": 8
           }
         }
@@ -312,7 +312,7 @@
         "flip": false,
         "eyebrow": "Chapter Two — A Story of Craftsmanship",
         "heading": "Crafted in Pakistan, Made for Fine Dining",
-        "text": "<p><strong>Home starts here.</strong> Every piece in our palette is thoughtfully shaped, glazed, and finished by local artisans, celebrating Pakistani craftsmanship while bringing timeless tableware to homes, hotels, and restaurants across the country.</p><p>More than just dishes, these are pieces made to be loved, used, and passed down, there are <strong>heirlooms in the making.</strong></p>",
+        "text": "<p><strong>Home starts here.</strong> Every piece in our palette is thoughtfully shaped, glazed, and finished by local artisans, celebrating Pakistani craftsmanship while bringing timeless tableware to homes, hotels, and restaurants across the country.</p><p>More than just dishes, these are pieces made to be loved, used, and passed down, these are <strong>heirlooms in the making.</strong></p>",
         "stat_1_value": "100%",
         "stat_1_label": "Handcrafted",
         "stat_2_value": "10+",
@@ -329,11 +329,11 @@
         "colour_5": {
           "type": "colour",
           "settings": {
-            "title": "Whimsy Yellow",
+            "title": "Yellow",
             "swatch": "#e3c10c",
             "view_all_url": "",
             "aliases": "",
-            "tag": "whimsy-yellow"
+            "tag": "yellow"
           }
         },
         "colour_3": {
