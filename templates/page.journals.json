@@ -68,7 +68,7 @@
         "post_4"
       ],
       "settings": {
-        "hero_image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
+        "hero_image": "shopify://shop_images/Riviera-Blue-Dinner-Set-32-pcs-The-Home-Palette-42870190801195.webp",
         "scrim": 85,
         "scrim_color": "#1a4b46",
         "eyebrow": "The Journal",
@@ -76,7 +76,7 @@
         "text": "Styling notes, care guides and table stories from The Home Palette.",
         "count_label": "stories",
         "topics_label": "topics",
-        "bg_color": "#FFF9DF",
+        "bg_color": "#fff9df",
         "lead_card_color": "#1a4b46",
         "flip": false,
         "show_filter": true,
