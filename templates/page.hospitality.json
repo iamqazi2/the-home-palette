@@ -378,7 +378,7 @@
         "center_head": true,
         "eyebrow": "Trusted By Renowned Brands",
         "heading": "The Tables We Already Set",
-        "text": "From hotel banquets in Islamabad to neighbourhood cafés and tea houses — these brands serve on crockery we made with them.",
+        "text": "Over the years, we have thoughtfully curated crockery for tables that are made to welcome, serve, and impress.",
         "show_count": false,
         "count_label": "50 hospitality brands and counting"
       }
@@ -416,9 +416,9 @@
         "g04": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/IMG_8879.heic",
-            "venue": "Signature colour set",
-            "note": "Custom order",
+            "image": "shopify://shop_images/limone-gardenia-yellow-floral-dinner-setting_9faafad8-0b55-4237-a84a-b6d91f42f16e.webp",
+            "venue": "",
+            "note": "",
             "size": "standard"
           }
         },
@@ -426,8 +426,8 @@
           "type": "shot",
           "settings": {
             "image": "shopify://shop_images/IMG_8883.jpg",
-            "venue": "Breakfast spread",
-            "note": "Hotel buffet",
+            "venue": "",
+            "note": "",
             "size": "standard"
           }
         },
@@ -435,17 +435,17 @@
           "type": "shot",
           "settings": {
             "image": "shopify://shop_images/IMG_0776.jpg",
-            "venue": "Sharing platter",
-            "note": "Restaurant service",
+            "venue": "",
+            "note": "",
             "size": "standard"
           }
         },
         "g07": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/IMG_8878.heic",
-            "venue": "Cobalt tea service",
-            "note": "Custom order",
+            "image": "shopify://shop_images/57C257C9-C99D-467F-BBA3-DDE2C1D4E36A.jpg",
+            "venue": "",
+            "note": "",
             "size": "standard"
           }
         },
@@ -453,8 +453,8 @@
           "type": "shot",
           "settings": {
             "image": "shopify://shop_images/IMG_8884.heic",
-            "venue": "Chafing service",
-            "note": "Banquet",
+            "venue": "",
+            "note": "",
             "size": "standard"
           }
         },
@@ -462,8 +462,8 @@
           "type": "shot",
           "settings": {
             "image": "shopify://shop_images/IMG_8880.heic",
-            "venue": "Bread basket & omelette",
-            "note": "Café breakfast",
+            "venue": "",
+            "note": "",
             "size": "standard"
           }
         },
@@ -471,8 +471,8 @@
           "type": "shot",
           "settings": {
             "image": "shopify://shop_images/IMG_8881.heic",
-            "venue": "Tea on the terrace",
-            "note": "Resort service",
+            "venue": "",
+            "note": "",
             "size": "standard"
           }
         },
@@ -480,8 +480,8 @@
           "type": "shot",
           "settings": {
             "image": "shopify://shop_images/IMG_8886.heic",
-            "venue": "Handi service",
-            "note": "Banquet",
+            "venue": "",
+            "note": "",
             "size": "standard"
           }
         }
@@ -503,11 +503,11 @@
         "bg_color": "#fff9df",
         "columns": 4,
         "center_head": true,
-        "eyebrow": "In Service",
-        "heading": "Our Crockery, Mid-Shift",
-        "text": "Not styled studio shots — plates, cups and chafing dishes photographed on the tables they were made for.",
-        "foot_text": "Want your venue on this wall? Send us a photo of your current setting and we will show you what it could look like.",
-        "button_label": "Start Your Order",
+        "eyebrow": "Made to Serve",
+        "heading": "Our Designs, On the Table",
+        "text": "Our ceramic serveware and more, bringing life and colors to real hospitality spaces.",
+        "foot_text": "Looking for the right designs for your café? Explore our ceramic tableware, made to complement every table and every service.",
+        "button_label": "Let's Build Your Ideal Table",
         "button_link": "https://wa.me/923376111399"
       }
     },
@@ -519,7 +519,7 @@
           "settings": {
             "icon": "ruler",
             "title": "Custom shapes and sizes",
-            "text": "Rim profiles, depths and stack heights adjusted to your menu and your shelf space."
+            "text": "Sizes and shapes tailored to your menu, service needs, and available space."
           }
         },
         "p2": {
@@ -527,7 +527,7 @@
           "settings": {
             "icon": "sparkles",
             "title": "Colour matched to your brand",
-            "text": "Glazes mixed and tested against your palette, then locked to a master tile so reorders match."
+            "text": "Choose colors that complement your brand and bring your table setting to life. From subtle tones to signature shades, we create pieces that feel distinctly yours."
           }
         },
         "p3": {
@@ -535,7 +535,7 @@
           "settings": {
             "icon": "hand-platter",
             "title": "Signature serving pieces",
-            "text": "The one platter or handi nobody else has — the piece guests photograph and remember."
+            "text": "Distinctive serving pieces designed around your menu and made to make every table feel uniquely yours."
           }
         }
       },
@@ -545,19 +545,19 @@
         "p3"
       ],
       "settings": {
-        "image": "shopify://shop_images/IMG_8879.heic",
-        "image_2": "shopify://shop_images/IMG_8878.heic",
+        "image": "shopify://shop_images/ceramic-tableware.jpg",
+        "image_2": "shopify://shop_images/thp-metal-ware.webp",
         "flip": true,
         "bg_color": "#fff9df",
         "badge_value": "50+",
         "badge_label": "Hospitality brands served",
         "badge_color": "#1a4b46",
-        "eyebrow": "Custom Crockery",
-        "heading": "From Custom Shapes to Signature Serving Pieces",
-        "text": "<p>At The Home Palette, we work with restaurants, cafés, hotels and hospitality brands to create premium, custom crockery and tableware that brings your vision to the table. From custom shapes and colours to signature serving pieces, we turn your brand identity into tableware your guests remember.</p><p>Trusted by leading hospitality brands, we bring together thoughtful design, consistent quality and reliable production to deliver tableware made for your space and built for everyday service.</p>",
+        "eyebrow": "Customized Designs for Every Brand",
+        "heading": "From Custom Shapes to Signature Serving Pieces - We Do It All!",
+        "text": "<p>At The Home Palette, we work with restaurants, cafés, hotels, caterers, and hospitality brands to create premium, custom crockery and tableware that brings their vision to life. From custom shapes and colours to signature serving pieces, we turn a brand's identity into tableware their guests remember them for.</p><p>Trusted by leading hospitality brands across Pakistan, we bring together thoughtful design, consistent quality, and reliable production to deliver tableware made for your space and built for everyday service.</p>",
         "quote": "Your restaurant deserves tableware that feels as distinctive as the experience you create.",
-        "sign_name": "The Hospitality Desk",
-        "sign_role": "Paradise Commercial, Bahria Town Phase 4",
+        "sign_name": "Let’s Discuss Your Vision",
+        "sign_role": "Share your requirements and let’s create curated crockery for your restaurant.",
         "button_label": "Talk to Us on WhatsApp",
         "button_link": "https://wa.me/923376111399"
       }
