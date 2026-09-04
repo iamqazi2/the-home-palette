@@ -156,6 +156,7 @@
           "type": "tile",
           "settings": {
             "collection": "dinner-breakfast-sets",
+            "image": "shopify://shop_images/limone-gardenia-dinner-set-full-view.webp",
             "title": "Dinner Sets"
           }
         },
@@ -170,6 +171,7 @@
           "type": "tile",
           "settings": {
             "collection": "tea-coffee-essentials",
+            "image": "shopify://shop_images/Selin-Tea-Set-Sage-Green-The-Home-Palette-42217514041643.webp",
             "title": "Tea & Coffee"
           }
         },
@@ -184,6 +186,7 @@
           "type": "tile",
           "settings": {
             "collection": "thp-weave-collection",
+            "image": "shopify://shop_images/Cream-Napkin-Holders-Set-of-6-The-Home-Palette-43122201723179.webp",
             "title": "Placemats & Baskets"
           }
         },
@@ -191,6 +194,7 @@
           "type": "tile",
           "settings": {
             "collection": "thp-cutlery-glassware",
+            "image": "shopify://shop_images/Matte-Gold-Premium-Cutlery-Set-The-Home-Palette-43138127888683.webp",
             "title": "Cutlery & Metalware"
           }
         },
@@ -198,6 +202,7 @@
           "type": "tile",
           "settings": {
             "collection": "aesthetic-bowls",
+            "image": "shopify://shop_images/Eggo-Bowls-Set-of-2-The-Home-Palette-42215040811307.webp",
             "title": "Bowls"
           }
         },
@@ -205,6 +210,7 @@
           "type": "tile",
           "settings": {
             "collection": "plates",
+            "image": "shopify://shop_images/Ova-Plates-6-inch-Set-of-2-The-Home-Palette-42121446916395.webp",
             "title": "Plates"
           }
         },
@@ -212,6 +218,7 @@
           "type": "tile",
           "settings": {
             "collection": "new-arrivals",
+            "image": "shopify://shop_images/blush-peach-dinner-set-arranged.webp",
             "title": "New Arrivals"
           }
         },
@@ -238,7 +245,7 @@
       "settings": {
         "eyebrow": "Chapter One — The Collections",
         "heading": "Every Table Tells a Story",
-        "text": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
+        "text": "Offering a wide variety of handcrafted serveware, from everyday plates to heirloom dinner sets and more.",
         "center_head": true,
         "columns": 5,
         "scrim": 90,
@@ -281,9 +288,9 @@
         "rail_3"
       ],
       "settings": {
-        "eyebrow": "The Shelf",
+        "eyebrow": "",
         "heading": "Shop the Range",
-        "text": "Three collections that cover the whole table — from the everyday plate to the set you bring out for guests.",
+        "text": "Multiple collections designed to complete your table, from everyday essentials to elegant dinnerware made for entertaining guests.",
         "bg_color": "#fff9df",
         "columns_desktop": 4,
         "peek_mobile": 2.2,
@@ -303,9 +310,9 @@
         "custom_bg": "#1a4b46",
         "sepia": false,
         "flip": false,
-        "eyebrow": "Chapter Two — The Craft",
+        "eyebrow": "Chapter Two — A Story of Craftsmanship",
         "heading": "Crafted in Pakistan, Made for Fine Dining",
-        "text": "<p>Home starts here. Every piece in our palette is shaped, glazed and finished by local artisans — supporting Pakistani craft while setting tables for homes, hotels and restaurants across the country. These aren't just dishes; they're heirlooms in the making.</p>",
+        "text": "<p><strong>Home starts here.</strong> Every piece in our palette is thoughtfully shaped, glazed, and finished by local artisans, celebrating Pakistani craftsmanship while bringing timeless tableware to homes, hotels, and restaurants across the country.</p><p>More than just dishes, these are pieces made to be loved, used, and passed down, there are <strong>heirlooms in the making.</strong></p>",
         "stat_1_value": "100%",
         "stat_1_label": "Handcrafted",
         "stat_2_value": "10+",
@@ -556,7 +563,7 @@
       "settings": {
         "eyebrow": "The Palette",
         "heading": "Shop by Colour",
-        "text": "Pick a glaze — every piece in that colour appears below.",
+        "text": "Multiple color families for everyone to choose from.",
         "layout": "auto",
         "products_to_show": 12,
         "columns": 4,
@@ -644,7 +651,7 @@
       "settings": {
         "eyebrow": "Chapter Three — The Table",
         "heading": "Shop by Occasion",
-        "text": "From quiet weekday meals to grand celebrations — set the table for the moment.",
+        "text": "From quiet weekday meals to grand celebrations, set the table for the moment.",
         "bg_color": "#fff9df",
         "card_color": "#1a4b46",
         "card_color_hover": "#123532",
