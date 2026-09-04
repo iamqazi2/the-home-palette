@@ -74,6 +74,7 @@
         "video_url_mobile": "https://cdn.shopify.com/videos/c/vp/41de3e81715c4d2da707a88034efa437/41de3e81715c4d2da707a88034efa437.HD-720p-2.1Mbps-92799387.mp4",
         "video_url": "https://cdn.shopify.com/videos/c/o/v/9db3a7bd9a20491cb9b8984238847066.mp4",
         "video_on_mobile": true,
+        "mobile_hold": 2,
         "builtin_poster": true,
         "height": "standard",
         "text_position": "left",
@@ -158,6 +159,13 @@
             "title": "Dinner Sets"
           }
         },
+        "tile_7": {
+          "type": "tile",
+          "settings": {
+            "collection": "serveware",
+            "title": "Serveware"
+          }
+        },
         "tile_2": {
           "type": "tile",
           "settings": {
@@ -179,6 +187,13 @@
             "title": "Placemats & Baskets"
           }
         },
+        "tile_8": {
+          "type": "tile",
+          "settings": {
+            "collection": "thp-cutlery-glassware",
+            "title": "Cutlery & Metalware"
+          }
+        },
         "tile_5": {
           "type": "tile",
           "settings": {
@@ -193,18 +208,11 @@
             "title": "Plates"
           }
         },
-        "tile_7": {
+        "tile_10": {
           "type": "tile",
           "settings": {
-            "collection": "serveware",
-            "title": "Serveware"
-          }
-        },
-        "tile_8": {
-          "type": "tile",
-          "settings": {
-            "collection": "thp-cutlery-glassware",
-            "title": "Cutlery & Metalware"
+            "collection": "new-arrivals",
+            "title": "New Arrivals"
           }
         },
         "tile_9": {
@@ -213,26 +221,19 @@
             "collection": "thp-woodworks",
             "title": "The Wooden Line"
           }
-        },
-        "tile_10": {
-          "type": "tile",
-          "settings": {
-            "collection": "new-arrivals",
-            "title": "New Arrivals"
-          }
         }
       },
       "block_order": [
         "tile_1",
+        "tile_7",
         "tile_2",
         "tile_3",
         "tile_4",
+        "tile_8",
         "tile_5",
         "tile_6",
-        "tile_7",
-        "tile_8",
-        "tile_9",
-        "tile_10"
+        "tile_10",
+        "tile_9"
       ],
       "settings": {
         "eyebrow": "Chapter One — The Collections",
@@ -577,7 +578,8 @@
             "icon": "coffee",
             "title": "Tea Time",
             "caption": "Slow afternoon rituals",
-            "collection": "tea-time-1"
+            "collection": "tea-time-1",
+            "link": ""
           }
         },
         "occ_6": {
@@ -586,7 +588,8 @@
             "icon": "heart",
             "title": "Wedding Gifts",
             "caption": "Heirlooms to give",
-            "collection": "wedding-gifts"
+            "collection": "wedding-gifts",
+            "link": ""
           }
         },
         "occ_2": {
@@ -595,7 +598,8 @@
             "icon": "users",
             "title": "Hosting Guests",
             "caption": "Sets that impress",
-            "collection": "hosting-guests"
+            "collection": "hosting-guests",
+            "link": ""
           }
         },
         "occ_1": {
@@ -604,7 +608,8 @@
             "icon": "utensils",
             "title": "Everyday Dining",
             "caption": "Sturdy, beautiful staples",
-            "collection": "everyday-dining"
+            "collection": "everyday-dining",
+            "link": ""
           }
         },
         "occ_5": {
@@ -613,7 +618,8 @@
             "icon": "sparkles",
             "title": "Eid",
             "caption": "Festive gatherings",
-            "collection": "eid"
+            "collection": "eid",
+            "link": ""
           }
         },
         "occ_4": {
@@ -622,7 +628,8 @@
             "icon": "moon-star",
             "title": "Ramadan",
             "caption": "Iftar & suhoor tables",
-            "collection": "ramadan"
+            "collection": "ramadan",
+            "link": ""
           }
         }
       },
