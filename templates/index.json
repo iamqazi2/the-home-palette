@@ -17,7 +17,7 @@
           "settings": {
             "kicker": "The Home Palette",
             "heading": "Serving Redefined",
-            "subheading": "The evolution of craft into quiet luxury, one table at a time.",
+            "subheading": "The evolution of simple craft into quiet luxury, one collection at a time.",
             "button_label": "All Collections",
             "link": "shopify://collections"
           }
@@ -27,7 +27,7 @@
           "settings": {
             "kicker": "Handcrafted Heritage · Pakistan",
             "heading": "Exquisite Dining",
-            "subheading": "Our happy colors that can instantly uplift any table, premium serveware for homes and hospitality.",
+            "subheading": "Our beautiful colors can instantly uplift any table. Take a look at our premium tableware collection.",
             "button_label": "Dinner Sets",
             "link": "shopify://collections/dinner-breakfast-sets"
           }
@@ -36,7 +36,7 @@
           "type": "slide",
           "settings": {
             "kicker": "Old Ways, New Tables",
-            "heading": "Traditional Kitchenware",
+            "heading": "Exquisite Kitchenware",
             "subheading": "Quiet luxury for your table, shaped by local artisans.",
             "button_label": "Cutlery & Metalware",
             "link": "shopify://collections/thp-cutlery-glassware"
@@ -57,7 +57,7 @@
           "settings": {
             "kicker": "The Weave Collection",
             "heading": "Woven Placemats",
-            "subheading": "From everyday meals to grand gatherings, make every dish special.",
+            "subheading": "For tables that value details and style as much as the taste.",
             "button_label": "THP Weaves",
             "link": "shopify://collections/thp-weave-collection"
           }
