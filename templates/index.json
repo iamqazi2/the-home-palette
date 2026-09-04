@@ -681,7 +681,7 @@
           "settings": {
             "title": "Reactive",
             "image": "shopify://shop_images/Aura-Tea-Set-Reactive-Cloud-Grey-The-Home-Palette-43124399767851.webp",
-            "collection": "",
+            "collection": "reactive",
             "link": "shopify://collections/reactive"
           }
         },
@@ -690,7 +690,7 @@
           "settings": {
             "title": "Contemporary",
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM_1.webp",
-            "collection": "",
+            "collection": "contemporary",
             "link": "shopify://collections/contemporary"
           }
         },
