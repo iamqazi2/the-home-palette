@@ -205,6 +205,7 @@
           "type": "tile",
           "settings": {
             "collection": "plates",
+            "image": "shopify://shop_images/Ova-Plates-6-inch-Set-of-2-The-Home-Palette-42283793744171.webp",
             "title": "Plates"
           }
         },
@@ -212,6 +213,7 @@
           "type": "tile",
           "settings": {
             "collection": "new-arrivals",
+            "image": "shopify://shop_images/limone-gardenia-premium-dinner-set-36-pcs.webp",
             "title": "New Arrivals"
           }
         },
