@@ -300,7 +300,7 @@
     "hp_story": {
       "type": "hp-story",
       "settings": {
-        "image": "shopify://shop_images/ceramic-tableware.jpg",
+        "image": "shopify://shop_images/thp-metalware.png",
         "background": "teal",
         "custom_bg": "#1a4b46",
         "sepia": false,
