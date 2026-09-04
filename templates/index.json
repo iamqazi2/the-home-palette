@@ -17,7 +17,7 @@
           "settings": {
             "kicker": "The Home Palette",
             "heading": "Serving Redefined",
-            "subheading": "The evolution of simple craft into quiet luxury, one collection at a time.",
+            "subheading": "The evolution of craft into quiet luxury, one table at a time.",
             "button_label": "All Collections",
             "link": "shopify://collections"
           }
@@ -27,7 +27,7 @@
           "settings": {
             "kicker": "Handcrafted Heritage · Pakistan",
             "heading": "Exquisite Dining",
-            "subheading": "Our beautiful colors can instantly uplift any table. Take a look at our premium tableware collection.",
+            "subheading": "Our happy colors uplift the mood — premium serveware for homes and hospitality.",
             "button_label": "Dinner Sets",
             "link": "shopify://collections/dinner-breakfast-sets"
           }
@@ -36,7 +36,7 @@
           "type": "slide",
           "settings": {
             "kicker": "Old Ways, New Tables",
-            "heading": "Exquisite Kitchenware",
+            "heading": "Traditional Kitchenware",
             "subheading": "Quiet luxury for your table, shaped by local artisans.",
             "button_label": "Cutlery & Metalware",
             "link": "shopify://collections/thp-cutlery-glassware"
@@ -57,7 +57,7 @@
           "settings": {
             "kicker": "The Weave Collection",
             "heading": "Woven Placemats",
-            "subheading": "For tables that value details and style as much as the taste.",
+            "subheading": "From everyday meals to grand gatherings, make every dish special.",
             "button_label": "THP Weaves",
             "link": "shopify://collections/thp-weave-collection"
           }
@@ -205,7 +205,6 @@
           "type": "tile",
           "settings": {
             "collection": "plates",
-            "image": "shopify://shop_images/Ova-Plates-6-inch-Set-of-2-The-Home-Palette-42283793744171.webp",
             "title": "Plates"
           }
         },
@@ -213,7 +212,6 @@
           "type": "tile",
           "settings": {
             "collection": "new-arrivals",
-            "image": "shopify://shop_images/limone-gardenia-premium-dinner-set-36-pcs.webp",
             "title": "New Arrivals"
           }
         },
@@ -240,7 +238,7 @@
       "settings": {
         "eyebrow": "Chapter One — The Collections",
         "heading": "Every Table Tells a Story",
-        "text": "A vast collection of handcrafted tableware, from everyday plates to heirloom dinner sets.",
+        "text": "Ten families of handcrafted serveware — from everyday plates to heirloom dinner sets.",
         "center_head": true,
         "columns": 5,
         "scrim": 90,
@@ -285,7 +283,7 @@
       "settings": {
         "eyebrow": "The Shelf",
         "heading": "Shop the Range",
-        "text": "Pieces from collections that cover the whole table; from the everyday plates to the the dinner sets you bring out for guests.",
+        "text": "Three collections that cover the whole table — from the everyday plate to the set you bring out for guests.",
         "bg_color": "#fff9df",
         "columns_desktop": 4,
         "peek_mobile": 2.2,
@@ -305,9 +303,9 @@
         "custom_bg": "#1a4b46",
         "sepia": false,
         "flip": false,
-        "eyebrow": "Chapter Two — The Royal Craft",
-        "heading": "Royal Pieces To Complete Every Table",
-        "text": "<p>All premium tables have one thing in common: variety. Be it food or serveware, we understand how every table looks incomplete without contrasting textures and colors that give it a distinctive character. The same idea led to the creation of our metalware collection, comprising royal serveware & accessories that tell a story on their own.</p>",
+        "eyebrow": "Chapter Two — The Craft",
+        "heading": "Crafted in Pakistan, Made for Fine Dining",
+        "text": "<p>Home starts here. Every piece in our palette is shaped, glazed and finished by local artisans — supporting Pakistani craft while setting tables for homes, hotels and restaurants across the country. These aren't just dishes; they're heirlooms in the making.</p>",
         "stat_1_value": "100%",
         "stat_1_label": "Handcrafted",
         "stat_2_value": "10+",
@@ -558,7 +556,7 @@
       "settings": {
         "eyebrow": "The Palette",
         "heading": "Shop by Colour",
-        "text": "Have a preference for a color family? We have everything in all your favorite colors.",
+        "text": "Pick a glaze — every piece in that colour appears below.",
         "layout": "auto",
         "products_to_show": 12,
         "columns": 4,
@@ -644,9 +642,9 @@
         "occ_4"
       ],
       "settings": {
-        "eyebrow": "Chapter Three — Every Preference Catered",
+        "eyebrow": "Chapter Three — The Table",
         "heading": "Shop by Occasion",
-        "text": "From quiet weekday meals to grand celebrations, set the table for the moment.",
+        "text": "From quiet weekday meals to grand celebrations — set the table for the moment.",
         "bg_color": "#fff9df",
         "card_color": "#1a4b46",
         "card_color_hover": "#123532",
@@ -662,7 +660,7 @@
           "type": "style",
           "settings": {
             "title": "Minimalist",
-            "image": "shopify://shop_images/Ivory-White-Breakfast-Set-33-pcs-The-Home-Palette-42283807408427.webp",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_7.42.31_PM.webp",
             "collection": "minimalist",
             "link": ""
           }
@@ -671,7 +669,7 @@
           "type": "style",
           "settings": {
             "title": "Earthy",
-            "image": "shopify://shop_images/Coconut-Terra-Premium-Dinner-Set-36-pcs-The-Home-Palette-42699201118507.webp",
+            "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
             "collection": "earthy",
             "link": ""
           }
@@ -698,7 +696,7 @@
           "type": "style",
           "settings": {
             "title": "Hotel Collection",
-            "image": "shopify://shop_images/IMG_2392.jpg",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
             "collection": "hotel-collection",
             "link": "shopify://collections/hotel-collection"
           }
@@ -724,7 +722,7 @@
     "hp_cta": {
       "type": "hp-cta-band",
       "settings": {
-        "image": "shopify://shop_images/Handwoven-Basket-with-Rope-Handles-The-Home-Palette-42093705691435.webp",
+        "image": "shopify://shop_images/Jute-Weave-Placemats-Set-of-2-The-Home-Palette-42948126834987.webp",
         "layout": "split",
         "flip": false,
         "duotone": true,
