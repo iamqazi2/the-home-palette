@@ -29,15 +29,6 @@
             "link": ""
           }
         },
-        "style_2": {
-          "type": "style",
-          "settings": {
-            "title": "Earthy",
-            "image": "shopify://shop_images/Coconut-Terra-Premium-Dinner-Set-36-pcs-The-Home-Palette-42699201118507.webp",
-            "collection": "earthy",
-            "link": ""
-          }
-        },
         "style_3": {
           "type": "style",
           "settings": {
@@ -56,6 +47,15 @@
             "link": ""
           }
         },
+        "style_2": {
+          "type": "style",
+          "settings": {
+            "title": "Traditional",
+            "image": "shopify://shop_images/thp-metal-ware_d17c1b97-35dc-4c51-b4e7-28ff5badf456.webp",
+            "collection": "earthy",
+            "link": ""
+          }
+        },
         "style_5": {
           "type": "style",
           "settings": {
@@ -68,9 +68,9 @@
       },
       "block_order": [
         "style_1",
-        "style_2",
         "style_3",
         "style_4",
+        "style_2",
         "style_5"
       ],
       "settings": {
