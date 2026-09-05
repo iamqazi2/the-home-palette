@@ -108,6 +108,8 @@
         "show_vendor": false,
         "show_rating": true,
         "show_view_all": true,
+        "view_all_target": "matches",
+        "show_source_product": false,
         "view_all_label": "View all",
         "quick_add": "standard",
         "columns_mobile": "2",
@@ -134,44 +136,18 @@
     "17880457121649ed48": {
       "type": "apps",
       "blocks": {
-        "judge_me_reviews_cards_carousel_4UPJ7y": {
-          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "judge_me_reviews_review_widget_QPKWFB": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
-            "show_sample_reviews": true,
-            "reviews_selection": "current_product",
-            "products": [],
-            "filter_pinned": false,
-            "filter_featured": false,
-            "filter_custom_tags": "",
-            "star_rating": "all",
-            "show_review_media": true,
-            "display_order": "media_first",
-            "no_image_fallback": "review_text_only",
-            "max_reviews": 20,
-            "review_length": "medium",
-            "text_size": "medium",
-            "image_ratio": "1",
-            "reviews_shown": 4,
-            "show_reviewer_name": true,
-            "show_product_name": true,
-            "hide_arrows_mobile": true,
-            "arrows_position": "sides",
-            "max_width": 1100,
-            "corner_styling": "soft",
-            "header_text_color": "#000000",
-            "text_color": "#000000",
-            "card_color": "#F9F9F9",
-            "stars_color": "",
-            "arrows_color": "#000000",
-            "transition_speed": 5,
-            "header_text": "Customers are saying",
-            "show_average_rating": true,
-            "rating_display": "default"
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
           }
         }
       },
       "block_order": [
-        "judge_me_reviews_cards_carousel_4UPJ7y"
+        "judge_me_reviews_review_widget_QPKWFB"
       ],
       "settings": {
         "include_margins": true
