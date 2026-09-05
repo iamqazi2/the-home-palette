@@ -266,7 +266,7 @@
         "view_all_page": "",
         "bg_color": "#fff9df",
         "quick_add": "standard",
-        "show_count": false,
+        "show_count": true,
         "count_label": "varieties"
       }
     },
