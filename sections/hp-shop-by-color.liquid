@@ -18,8 +18,10 @@
      showing that colour's own variant image, not the product's cover shot.
      Such a product is deliberately NOT matched by tag or title: doing both is
      what put one-colour-per-card products into colours they do not come in.
-  2. Otherwise by colour tag, which is the only thing that can be right for a
-     product whose name does not mention its colour.
+  2. Otherwise by colour tag OR by Shopify's own "Color" category metafield
+     (shopify.color-pattern). Both are explicit statements of what colour the
+     product is, which is the only thing that can be right for a product whose
+     name does not mention its colour. Either one is enough on its own.
   3. Otherwise by title, excluding any longer colour name that contains the
      shorter one so Aqua-grey pieces never fall under Aqua.
 
@@ -540,9 +542,64 @@
                         endfor
                       endif
                     else
+                      # Shopify's own Category metafield ("Color", on the product
+                      # page) is read alongside the tag, and carries the same
+                      # weight: both are somebody stating the colour outright, so
+                      # both beat the title guess further down.
+                      #
+                      # shopify.color-pattern is a LIST of metaobject references,
+                      # so one product can name several colours and will show
+                      # under every swatch that matches one of them. Bracket
+                      # access is required — the key contains a hyphen, which
+                      # Liquid would otherwise read as a subtraction.
+                      #
+                      # Handle AND label are both indexed because they diverge in
+                      # this catalogue: the entry that displays as "Ivory White"
+                      # has the handle `white-matte`, so keying on either alone
+                      # silently loses matches. Values are joined and probed
+                      # wrapped in separators, exactly as the variant option list
+                      # is handled above, so the test stays exact — a plain
+                      # `contains` would file Aqua-grey pieces under Aqua too.
+                      assign mf_hit = false
+                      assign mf_colours = product.metafields.shopify["color-pattern"].value
+                      if mf_colours != blank
+                        assign mf_values = '~'
+                        for co in mf_colours
+                          assign co_handle = co.system.handle
+                          assign mf_values = mf_values | append: co_handle | append: '~'
+                          assign co_label = co.label | handleize
+                          if co_label != blank and co_label != co_handle
+                            assign mf_values = mf_values | append: co_label | append: '~'
+                          endif
+                        endfor
+
+                        # The swatch's own tag first, then its display name and
+                        # aliases. Going through the aliases too means a palette
+                        # name that differs from the metaobject's — "Limone
+                        # Yellow" against "Limone Gardenia" — is still caught by
+                        # the alias the swatch already carries, with nothing to
+                        # rename on either side.
+                        assign needle = '~' | append: ctag | append: '~'
+                        if mf_values contains needle
+                          assign mf_hit = true
+                        else
+                          for nm in name_list
+                            assign nm_handle = nm | handleize
+                            if nm_handle == blank
+                              continue
+                            endif
+                            assign needle = '~' | append: nm_handle | append: '~'
+                            if mf_values contains needle
+                              assign mf_hit = true
+                              break
+                            endif
+                          endfor
+                        endif
+                      endif
+
                       # An explicit colour tag always wins — it is the only thing
                       # that can be right for a product not named after its colour.
-                      if product.tags contains ctag or product.tags contains block.settings.title
+                      if mf_hit or product.tags contains ctag or product.tags contains block.settings.title
                         assign ok = true
                       else
                         # Handleized and wrapped in dashes, so a title written
@@ -724,7 +781,7 @@
           "type": "text",
           "id": "tag",
           "label": "Product tag",
-          "info": "The tag used on products of this colour, e.g. 'sage-green'. Products that sell several colours from one listing are matched on their Color option instead and show that colour's own variant photo; tags and names only decide the rest."
+          "info": "The tag used on products of this colour, e.g. 'sage-green'. Shopify's own Color category metafield counts too — a product whose Color lists this swatch's name (or one of its aliases) is matched even with no tag. Products that sell several colours from one listing are matched on their Color option instead and show that colour's own variant photo; tags, metafields and names only decide the rest."
         }
       ]
     }
