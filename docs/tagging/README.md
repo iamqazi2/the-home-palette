@@ -115,9 +115,16 @@ catalogue:
 If that trade is not wanted, the fix is to read only the **first** entry in the metafield
 (the primary colour) instead of all of them — a few lines in the same block.
 
-## Careful when deploying
+## Deploying
 
-The repo's `templates/index.json` is **behind the live theme's settings** — the first swatch
-is "Whimsy Yellow" here and "Yellow" on the live site. Push only
-`sections/hp-shop-by-color.liquid`, or pull the live settings first; pushing this
-`index.json` would revert theme-editor changes.
+`templates/index.json` was behind the live theme's settings until the Shopify sync commits
+were merged on 2026-09-08; it is now current (first swatch "Yellow", tag `yellow`). Theme
+settings reach this repo through the automatic "Update from Shopify for theme
+the-home-palette/main" commits, so **pull before pushing a theme** — if those commits have
+landed since your last pull, a push from a stale checkout would revert theme-editor changes.
+
+Deploy to an unpublished theme first:
+
+```bash
+shopify theme push --unpublished --theme "Colour metafield preview"
+```

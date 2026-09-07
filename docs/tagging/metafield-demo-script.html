@@ -116,12 +116,12 @@ It no longer guesses.</p>
   <li>Open the live site in another tab and click Copper there: <b>4</b>. Keep both tabs — the contrast is shot 1.</li>
 </ol>
 
-<div class="stop">
-  <b>Push the section file only.</b> The repo's <code>templates/index.json</code> is behind the
-  live theme's settings — the first swatch is "Whimsy Yellow" in the repo and "Yellow" on the
-  live site. A full push would revert theme-editor changes. If <code>theme push</code> offers a
-  file selection, restrict it to <code>sections/hp-shop-by-color.liquid</code>; otherwise pull
-  the live settings first with <code>shopify theme pull --only templates/index.json</code>.
+<div class="note">
+  <b>Pull before you push.</b> Theme settings reach the repo through Shopify's automatic
+  "Update from Shopify" commits. Those were merged on 8 September, so <code>main</code> is
+  current — but if more have landed since your last pull, pushing from a stale checkout would
+  revert theme-editor changes. Run <code>git pull</code> first; the push above then goes to a
+  new unpublished theme and cannot affect the live site either way.
 </div>
 
 <div class="note"><b>If the two platters do not appear on the preview,</b> stop and tell me
