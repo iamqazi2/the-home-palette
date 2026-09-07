@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Colour Metafield — Demo Script</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm 18mm; }
+  @page :first { margin: 0; }
+  :root{--teal:#1a4b46;--teal-d:#123532;--cream:#fff9df;--paper:#fffdf4;
+        --ink:#1c211f;--muted:#5d6a66;--line:#d9d3bd;--accent:#c4703a;--red:#a33b32}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+       color:var(--ink);font-size:10.2pt;line-height:1.55;background:#fff}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:600;margin:0}
+  .cover{background:var(--teal);color:var(--cream);padding:32mm 20mm;
+         page-break-after:always;height:297mm;width:210mm;display:flex;flex-direction:column}
+  .cover code{background:rgba(255,249,223,.14);border-color:rgba(255,249,223,.3);color:var(--cream)}
+  .cover .eyebrow{font-size:9pt;letter-spacing:.24em;text-transform:uppercase;
+                  color:rgba(255,249,223,.72);margin:0 0 14mm}
+  .cover h1{font-size:32pt;line-height:1.12;letter-spacing:-.01em}
+  .cover p.sub{font-size:12pt;color:rgba(255,249,223,.82);margin:8mm 0 0;max-width:124mm}
+  .cover .meta{margin-top:auto;border-top:1px solid rgba(255,249,223,.25);padding-top:6mm;
+               font-size:9pt;color:rgba(255,249,223,.7)}
+  .cover .box{margin-top:auto;background:rgba(255,249,223,.1);border:1px solid rgba(255,249,223,.28);
+              border-radius:5px;padding:5mm 6mm}
+  .cover .box b{color:#ffd9a8}
+  h2{font-size:17pt;color:var(--teal);margin:11mm 0 3mm;padding-bottom:2mm;
+     border-bottom:2px solid var(--teal);page-break-after:avoid}
+  h3{font-size:12.5pt;color:var(--teal-d);margin:7mm 0 2mm;page-break-after:avoid}
+  p{margin:0 0 3mm} ul,ol{margin:0 0 3mm;padding-left:5mm} li{margin:1.2mm 0}
+  code{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:9.2pt;
+       background:var(--cream);border:1px solid var(--line);border-radius:3px;
+       padding:.4mm 1.4mm;white-space:nowrap}
+  pre{background:var(--teal-d);color:var(--cream);border-radius:4px;padding:3mm 4mm;
+      font-family:"SF Mono",Menlo,Consolas,monospace;font-size:8.8pt;line-height:1.5;
+      overflow-x:auto;margin:3mm 0;page-break-inside:avoid}
+  table{width:100%;border-collapse:collapse;margin:3mm 0 5mm;font-size:9.4pt;page-break-inside:avoid}
+  th{background:var(--teal);color:var(--cream);text-align:left;padding:2.2mm 2.5mm;
+     font-size:8.6pt;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  td{padding:2mm 2.5mm;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:var(--paper)}
+  td code{background:#fff}
+  .note{border-left:3px solid var(--accent);background:var(--paper);padding:3mm 4mm;margin:4mm 0;page-break-inside:avoid}
+  .note b{color:var(--accent)}
+  .stop{border-left:3px solid var(--red);background:#fdf3f2;padding:3mm 4mm;margin:4mm 0;page-break-inside:avoid}
+  .stop b{color:var(--red)}
+  .rule{border-left:3px solid var(--teal);background:var(--cream);padding:3mm 4mm;margin:4mm 0;page-break-inside:avoid}
+  .say{border:1px dashed var(--teal);border-radius:4px;background:#fff;padding:3mm 4mm;margin:3mm 0;page-break-inside:avoid}
+  .say::before{content:"SAY";display:block;font-size:7.4pt;letter-spacing:.16em;color:var(--teal);font-weight:700;margin-bottom:1.4mm}
+  .say p{font-style:italic;color:#2c3b38;margin:0}
+  .steps{counter-reset:s;list-style:none;padding:0}
+  .steps li{counter-increment:s;position:relative;padding-left:9mm;margin:3mm 0}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:.2mm;width:6mm;height:6mm;
+    border-radius:50%;background:var(--teal);color:var(--cream);font-size:8.5pt;font-weight:700;
+    display:flex;align-items:center;justify-content:center}
+  .shot{background:var(--teal);color:var(--cream);padding:3.4mm 5mm;border-radius:4px;
+        margin:7mm 0 3mm;page-break-after:avoid;page-break-inside:avoid}
+  .shot h3{color:var(--cream);margin:0;font-size:13pt}
+  .shot span{font-size:8.6pt;color:rgba(255,249,223,.78);letter-spacing:.08em;text-transform:uppercase}
+  .chk{list-style:none;padding:0}
+  .chk li{position:relative;padding-left:7mm;margin:2mm 0}
+  .chk li::before{content:"";position:absolute;left:0;top:1mm;width:3.6mm;height:3.6mm;
+    border:1.2px solid var(--teal);border-radius:2px}
+  .big{font-family:Georgia,serif;font-size:15pt;color:var(--teal);font-weight:600}
+  .pagebreak{page-break-before:always}
+  .foot{margin-top:12mm;border-top:1px solid var(--line);padding-top:4mm;font-size:8.6pt;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <p class="eyebrow">The Home Palette — Operations</p>
+  <h1>Colour Metafield<br>Demo Script</h1>
+  <p class="sub">Showing the client that Shopify's own <b>Color</b> field now drives Shop by
+     Colour — the products file themselves into the palette, with no tagging at all.</p>
+  <div class="box">
+    <p style="margin:0"><b>This demo needs the new code on a theme first.</b> The change is
+    written and pushed to git, but it is not on your store. Section 1 puts it on an
+    <b>unpublished</b> preview theme — the live site is never touched.</p>
+  </div>
+  <div class="meta">
+    Version 1.0 · 8 September 2026 · Store: thehomepalette.com.pk<br>
+    Branch: <code>shop-by-colour-metafield</code> · Subject: Arabic Mandi Platter → Copper
+  </div>
+</section>
+
+<h2>What the client is going to see</h2>
+<p>Shopify already stores a <b>Color</b> on most products, under <b>Category metafields</b> on
+the product page. Until now Shop by Colour ignored it and guessed from the product's name.
+It no longer guesses.</p>
+
+<table>
+  <tr><th style="width:46%">Copper swatch</th><th style="width:16%">Count</th><th>Why</th></tr>
+  <tr><td>On the live site today</td><td class="big">4</td><td>Only products with "copper" in their name, plus one sold in a Copper variant</td></tr>
+  <tr><td>On the preview theme, before you touch anything</td><td class="big">6</td><td>Mughal Serving Platter and Royal Mandi Platter join — their Color field already said Copper</td></tr>
+  <tr><td>After the live edit in shot 3</td><td class="big">7</td><td>Arabic Mandi Platter joins, because you set its Color in front of the client</td></tr>
+</table>
+
+<div class="rule">
+  <b>The line the whole demo exists to land</b>
+  <p style="margin:2mm 0 0"><i>"You were already telling Shopify what colour each product is.
+  The site just wasn't listening. Now it does — and the two platters that appeared did so on
+  their own, with nobody tagging anything."</i></p>
+</div>
+
+<h2>1. Prep — put the code on a preview theme</h2>
+<p>Ten minutes, off camera. Nothing here changes the live storefront.</p>
+<ol class="steps">
+  <li>Pull the branch: <code>git checkout shop-by-colour-metafield</code></li>
+  <li>Push it to a brand-new <b>unpublished</b> theme:</li>
+</ol>
+<pre>shopify theme push --unpublished --theme "Colour metafield preview"</pre>
+<ol class="steps" style="counter-reset:s 2">
+  <li>The CLI prints a <b>preview URL</b>. That is your storefront tab for this demo.</li>
+  <li>Open it, go to <b>Shop by Colour</b>, click <b>Copper</b>. You should count <b>6</b>, including <i>Mughal Serving Platter</i> and <i>Royal Mandi Platter</i>.</li>
+  <li>Open the live site in another tab and click Copper there: <b>4</b>. Keep both tabs — the contrast is shot 1.</li>
+</ol>
+
+<div class="stop">
+  <b>Push the section file only.</b> The repo's <code>templates/index.json</code> is behind the
+  live theme's settings — the first swatch is "Whimsy Yellow" in the repo and "Yellow" on the
+  live site. A full push would revert theme-editor changes. If <code>theme push</code> offers a
+  file selection, restrict it to <code>sections/hp-shop-by-color.liquid</code>; otherwise pull
+  the live settings first with <code>shopify theme pull --only templates/index.json</code>.
+</div>
+
+<div class="note"><b>If the two platters do not appear on the preview,</b> stop and tell me
+before the client session. Both are verified to carry Copper in their Color metafield today, so
+if they are missing, the metafield is not being read and the rest of the demo will not work
+either.</div>
+
+<h3>Pre-flight checklist</h3>
+<ul class="chk">
+  <li>Preview theme pushed, preview URL saved</li>
+  <li>Copper reads <b>6</b> on the preview and <b>4</b> on the live site</li>
+  <li>Arabic Mandi Platter's Color field checked: it says <b>Silver</b>, not Copper</li>
+  <li>Two tabs only — admin and preview — everything else closed</li>
+  <li>Full run-through done once, then the Copper entry removed again</li>
+</ul>
+
+<h2 class="pagebreak">2. The demo — about 6 minutes</h2>
+
+<div class="shot"><h3>Shot 1 — the site was guessing</h3><span>~90 seconds · both storefront tabs</span></div>
+<ol class="steps">
+  <li>On the <b>live</b> tab, open Shop by Colour → <b>Copper</b>. Four products.</li>
+  <li>Point out what they have in common: every one has the word <i>copper</i> in its name, or is sold in a Copper variant.</li>
+  <li>Switch to the <b>preview</b> tab, same swatch. Six products.</li>
+  <li>Point at the two newcomers: <b>Mughal Serving Platter</b> and <b>Royal Mandi Platter</b>.</li>
+</ol>
+<div class="say"><p>"Neither of these has 'copper' anywhere in its name — so the old site had no
+way of knowing, and left them out of the palette. Nobody tagged them just now. Their Color field
+in Shopify already said Copper; the site simply started reading it."</p></div>
+
+<div class="note"><b>Both platters are currently out of stock,</b> so they carry a Sold out
+badge. Get in front of it — "those two are between deliveries" — rather than letting the client
+spot it and ask.</div>
+
+<div class="shot"><h3>Shot 2 — where the colour lives</h3><span>~60 seconds · admin tab</span></div>
+<ol class="steps">
+  <li>Open <b>Products → Arabic Mandi Platter</b>.</li>
+  <li>Scroll to <b>Category metafields</b>. The category reads <i>Serving Platters</i>.</li>
+  <li>Rest on the <b>Color</b> row. It currently says <b>Silver</b>.</li>
+</ol>
+<div class="say"><p>"This is the field, and it's Shopify's own — not something we invented. It's
+already on every product, under the product category. Right now this platter says Silver."</p></div>
+
+<div class="shot"><h3>Shot 3 — add a colour, live</h3><span>~90 seconds · admin, then preview</span></div>
+<ol class="steps">
+  <li>Click the <b>Color</b> field. Type <code>Copper</code> and pick the existing <b>Copper</b> entry from the list.</li>
+  <li>Leave <b>Silver</b> in place — two colours on one product is the point.</li>
+  <li>Click <b>Save</b> and wait for the confirmation.</li>
+  <li>Switch to the preview tab, hard-refresh (<b>Cmd+Shift+R</b>), click <b>Copper</b>.</li>
+  <li>Seven products. Rest the cursor on the <b>Arabic Mandi Platter</b> card.</li>
+  <li>Click <b>Silver</b>. It is there too — same product, both palettes, one entry each.</li>
+</ol>
+<div class="say"><p>"One field, two colours, and it now appears under both — no tags, no
+duplicate listings, no developer. And because this is Shopify's own colour field, it's the same
+field that feeds search, filters and the sales channels."</p></div>
+
+<div class="shot"><h3>Shot 4 — the products you never have to touch</h3><span>~60 seconds · optional</span></div>
+<p>Only if the client asks about products sold in many colours.</p>
+<ol class="steps">
+  <li>Still on the preview, click <b>Copper</b>, then <b>Silver</b>. <b>Persian Metal Handi</b> is in both.</li>
+  <li>Open it in the admin: it has a <b>Color</b> variant option with Copper and Silver.</li>
+</ol>
+<div class="say"><p>"This one sells in two finishes from a single listing, so it already appears
+under both — each showing its own photo. Products like this need nothing at all: the variants do
+the work."</p></div>
+
+<h2>3. Questions to expect</h2>
+<table>
+  <tr><th style="width:42%">Question</th><th>Answer</th></tr>
+  <tr><td>"So do we still need colour tags?"</td><td>No. The tag still works and still wins, but the metafield does the same job. Use whichever is already filled in; do not do both.</td></tr>
+  <tr><td>"What if the colour name isn't in the list?"</td><td>You can add your own entry — several already exist in this store: Burnt Maple, Lunar Ash, Reactive Cloud Grey, Santorini Blue, Riviera Blue, Blush Peach, Honey Mustard, Earthen Rose, Mist Green.</td></tr>
+  <tr><td>"What if Shopify's name differs from our palette name?"</td><td>Nothing gets renamed. Add Shopify's wording to that swatch's <b>Aliases</b> field in the theme editor and both names match from then on.</td></tr>
+  <tr><td>"How fast is it?"</td><td>Immediately — it is read live off the product on every page load.</td></tr>
+  <tr><td>"Can a product be in several colours?"</td><td>Yes, as many as its Color field lists. You just saw one in two.</td></tr>
+  <tr><td>"Will this put things in the wrong colour?"</td><td>Be straight — see the box below. It can, where the Color field lists accents as well as the main colour.</td></tr>
+</table>
+
+<div class="stop">
+  <b>Do not oversell this.</b> The Color field often lists accent colours and patterns, not only
+  the main colour, so a few products land in more swatches than you would choose by hand. Two in
+  the first fifty checked: <b>Ivory White Platter</b> shows under Black, and the <b>3D Teal Matte
+  Spiral Plate</b> shows under Sage Green. If the client raises it, the honest answer is that the
+  theme can be set to read only the first colour listed — the primary one — which removes both
+  without losing the two platters from shot 1. Offer it as a decision for them, not a defect.
+</div>
+
+<h2>4. After the demo</h2>
+<ul class="chk">
+  <li>Remove <b>Copper</b> from Arabic Mandi Platter's Color field — or keep it, since it is a correct value for that product</li>
+  <li>Decide with the client: all listed colours, or first colour only</li>
+  <li>Delete the preview theme, or keep it until the change is approved for the live site</li>
+  <li>Merge <code>shop-by-colour-metafield</code> once approved, then publish</li>
+</ul>
+
+<div class="foot">
+  The Home Palette — Colour Metafield Demo Script · v1.0 · 8 September 2026<br>
+  Companions: <b>Product Tagging Manual</b> · <b>Client Demo Runbook</b> · <b>Shop by Colour Recording Script</b>.
+</div>
+
+</body>
+</html>

@@ -8,15 +8,17 @@ and **Shop by Colour** on the homepage.
 | `tagging-manual.html` | `The-Home-Palette-Product-Tagging-Manual.pdf` — full tag reference for the team |
 | `demo-runbook.html` | `The-Home-Palette-Client-Demo-Runbook.pdf` — scripted live demo for the client |
 | `colour-recording-script.html` | `The-Home-Palette-Colour-Recording-Script.pdf` — 90-second Shop by Colour screen recording |
+| `metafield-demo-script.html` | `The-Home-Palette-Metafield-Demo-Script.pdf` — client demo of the Color metafield flow |
 
 ## Regenerating the PDFs
 
 ```bash
-for f in tagging-manual demo-runbook colour-recording-script; do
+for f in tagging-manual demo-runbook colour-recording-script metafield-demo-script; do
   case $f in
     tagging-manual) out="The-Home-Palette-Product-Tagging-Manual" ;;
     demo-runbook)   out="The-Home-Palette-Client-Demo-Runbook" ;;
     colour-recording-script) out="The-Home-Palette-Colour-Recording-Script" ;;
+    metafield-demo-script)   out="The-Home-Palette-Metafield-Demo-Script" ;;
   esac
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
     --headless --disable-gpu --no-pdf-header-footer \
