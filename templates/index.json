@@ -677,8 +677,8 @@
           "settings": {
             "title": "Floral",
             "image": "shopify://shop_images/Boho-Garden-Dinner-Set-32-pcs-The-Home-Palette-43084232098091.webp",
-            "collection": "reactive",
-            "link": "shopify://collections/reactive"
+            "collection": "floral",
+            "link": "shopify://collections/floral"
           }
         },
         "style_4": {
