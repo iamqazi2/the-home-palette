@@ -12,18 +12,6 @@
     "main": {
       "type": "hp-journal",
       "blocks": {
-        "post_WahAJH": {
-          "type": "post",
-          "settings": {
-            "title": "Tableware As Wedding Gifts: How to Choose the Right One?",
-            "excerpt": "",
-            "body": "A wedding gift doesn't have to be extravagant to be meaningful. The best gifts are often the ones that become part of everyday life, used over family dinners, morning tea, and the many little moments that follow the wedding day. A thoughtfully chosen dinnerware set can be both beautiful and practical, making it a timeless choice for a newly married couple.\n\nBut with so many dinner sets, tea sets, and tableware options available, choosing the right wedding gift can feel surprisingly difficult. Should you prioritize the design, the number of pieces, or the price? And does a more expensive set necessarily make a better gift?\n\nIn this guide, we'll look at five simple things to consider when choosing crockery for a wedding gift, so you can find something that feels special without losing sight of practicality.\n\n\n5 Things to Consider When Choosing a Wedding Dinnerware Gift\n\nBefore picking the prettiest set you see, let's talk about the details that actually make a difference. A wedding gift should suit the couple's lifestyle, feel appropriate for the occasion, and ideally be something they can enjoy for years rather than something that simply looks impressive when it's unwrapped.\n\n1. Start With Your Budget\n\nThe first step is knowing how much you're comfortable spending. Wedding gifting can quickly become overwhelming when you're comparing sets across a wide range of prices, so having a clear budget makes the decision much easier.\n\nMore importantly, expensive doesn't always mean better. A beautifully designed, well-made set at a sensible price can be a far more thoughtful gift than an overly expensive collection that doesn't suit the couple's taste or lifestyle.\n\nLook for quality materials, good craftsmanship, timeless designs, and pieces that offer genuine everyday value. The goal isn't to find the most expensive dinnerware—it’s to find something that feels worth gifting.",
-            "tag": "",
-            "image": "shopify://shop_images/ivory-pearl-premium-set.webp",
-            "handle": "",
-            "url": ""
-          }
-        },
         "post_1": {
           "type": "post",
           "settings": {
@@ -74,7 +62,6 @@
         }
       },
       "block_order": [
-        "post_WahAJH",
         "post_1",
         "post_2",
         "post_3",
