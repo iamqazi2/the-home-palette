@@ -12,6 +12,17 @@
     "main": {
       "type": "hp-journal",
       "blocks": {
+        "post_WahAJH": {
+          "type": "post",
+          "settings": {
+            "title": "Tableware As Wedding Gifts: How to Choose the Right One?",
+            "excerpt": "A wedding gift doesn't have to be extravagant to be meaningful. The best gifts are often the ones that become part of everyday life—used over family dinners, morning tea, and the many little moments that follow the wedding day. A thoughtfully chosen dinnerware set can be both beautiful and practical, making it a timeless choice for a newly married couple.\n\nBut with so many dinner sets, tea sets, and tableware options available, choosing the right wedding gift can feel surprisingly difficult. Should you prioritize the design, the number of pieces, or the price? And does a more expensive set necessarily make a better gift?\n\nIn this guide, we'll look at five simple things to consider when choosing crockery for a wedding gift, so you can find something that feels special without losing sight of practicality.",
+            "body": "",
+            "tag": "",
+            "handle": "",
+            "url": ""
+          }
+        },
         "post_1": {
           "type": "post",
           "settings": {
@@ -62,6 +73,7 @@
         }
       },
       "block_order": [
+        "post_WahAJH",
         "post_1",
         "post_2",
         "post_3",
