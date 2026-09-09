@@ -224,28 +224,6 @@
     border-top: 1px solid var(--hp-hairline);
   }
 
-  /* A chevron that slides in on hover marks a row as somewhere to go, and
-     gives the eye a consistent right edge to track down the list. Only on
-     links: a summary already carries a caret, and two arrows on one row would
-     say the heading both expands and navigates. */
-  .header__submenu a.header__menu-item::before {
-    content: '';
-    width: 0.5rem;
-    height: 0.5rem;
-    flex: 0 0 auto;
-    border-right: 1.5px solid currentColor;
-    border-bottom: 1.5px solid currentColor;
-    transform: rotate(-45deg) translateX(-0.3rem);
-    opacity: 0;
-    transition: opacity 0.18s var(--hp-ease), transform 0.18s var(--hp-ease);
-    order: 2;
-  }
-  .header__submenu a.header__menu-item:hover::before,
-  .header__submenu a.header__menu-item:focus-visible::before {
-    opacity: 0.55;
-    transform: rotate(-45deg) translateX(0);
-  }
-
   /* The page you are on, marked in the menu rather than left to be guessed. */
   .header__submenu .list-menu__item--active,
   .header__submenu .header__menu-item[aria-current='page'] {
