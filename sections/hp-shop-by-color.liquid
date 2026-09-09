@@ -417,24 +417,41 @@
             # this same section on its own page, deep-linked to the colour —
             # the destination re-runs the identical matching and therefore
             # shows exactly the set the swatch showed, never more.
+            #
+            # The search fallback that used to sit at the bottom of this chain
+            # is gone. It only ran when "View all goes to" had not been set,
+            # which is a state nobody notices from the theme editor — and the
+            # link it produced was the original bug: picking Sage Green landed
+            # on /search?q=Sage+Green, which matches descriptions and returned
+            # Aqua, Teal and Black pieces alongside the green ones. A link that
+            # shows the wrong products is worse than no link, so the chain now
+            # resolves the destination itself and hides the link if it cannot.
             assign colour_key = c_title | handleize
+
+            # The setting still wins; this only saves the merchant from having
+            # to know it exists. Handle lookup returns nil when the page is
+            # absent, which falls through to no link rather than to a guess.
+            assign colour_page = section.settings.view_all_page
+            if colour_page == blank
+              assign colour_page = pages['shop-by-colour']
+            endif
+
             if c_view != blank
               assign target = c_view
-            elsif section.settings.view_all_page != blank
-              # The #hp-colours fragment lands the visitor on the palette
-              # rather than at the top of the page above it.
-              assign target = section.settings.view_all_page.url | append: '?colour=' | append: colour_key | append: '#hp-colours'
             elsif layout == 'grid'
-              # Already on a page showing every product for the colour. Linking
-              # to a fuzzy search from here would be a step backwards, so there
-              # is no link at all — the JS hides it when this is empty.
+              # Already on a page showing every product for the colour, so a
+              # "View all" here would only point at itself. Checked before the
+              # page lookup for exactly that reason — the JS hides the link
+              # when this is empty.
               assign target = ''
+            elsif colour_page != blank
+              # The #hp-colours fragment lands the visitor on the palette
+              # rather than at the top of the page above it. The destination
+              # re-runs this same matching, so it shows exactly the set the
+              # swatch showed, never more.
+              assign target = colour_page.url | append: '?colour=' | append: colour_key | append: '#hp-colours'
             else
-              # Last resort, and still the loose one: no destination page has
-              # been chosen in the section settings. Kept so the link is never
-              # dead, but pick a page in "View all goes to" and this is not used.
-              assign colour_query = c_title | url_encode
-              assign target = routes.search_url | append: '?q=' | append: colour_query | append: '&type=product'
+              assign target = ''
             endif
             assign count = null
           -%}
@@ -859,7 +876,7 @@
       "type": "page",
       "id": "view_all_page",
       "label": "“View all” goes to",
-      "info": "Point this at your Shop by Colour page. The link then opens that page with the chosen colour already selected, so it shows exactly the products the swatch showed. Leave empty and the link falls back to a store search, which also matches product descriptions and will bring back other colours."
+      "info": "Point this at your Shop by Colour page. The link then opens that page with the chosen colour already selected, so it shows exactly the products the swatch showed. Leave empty and the section looks for a page with the handle 'shop-by-colour' on its own; if there is no such page the \u201cView all\u201d link is hidden rather than pointing somewhere that would show the wrong colours."
     },
     {
       "type": "color",

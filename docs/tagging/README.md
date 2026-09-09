@@ -180,3 +180,23 @@ The old `colour` blocks are gone from the schema, so the theme editor no longer 
 "Add colour" for this section. Both templates still carry their old block entries in
 JSON; they are inert — nothing reads them — and Shopify drops them the next time each
 template is saved in the editor.
+
+## "View all" on a colour swatch
+
+The swatch's "View all" opens the Shop by Colour page deep-linked to that colour
+(`/pages/shop-by-colour?colour=sage-green#hp-colours`). The destination re-runs the same
+matching, so it shows exactly the set the swatch showed.
+
+It used to fall back to `/search?q=Sage+Green` whenever the section's "View all goes to"
+setting was empty — and store search matches product **descriptions**, so picking Sage Green
+returned Aqua, Teal and Black pieces too. That fallback is gone. The chain is now:
+
+1. the colour's own "View all URL", if the row sets one;
+2. nothing, if this instance is the grid layout — it is already showing every product, so the
+   link would point at itself;
+3. the "View all goes to" page setting;
+4. otherwise the page with the handle `shop-by-colour`, looked up automatically;
+5. otherwise no link at all.
+
+A link that shows the wrong products is worse than no link, so there is no longer any branch
+that guesses.
