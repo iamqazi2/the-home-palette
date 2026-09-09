@@ -139,12 +139,17 @@ blocks, and `templates/*.json` is owned by the store (it arrives through the aut
 "Update from Shopify" commits), so editing the page template here would just be
 overwritten.
 
-The palette now lives in **`snippets/hp-colour-swatches.liquid`**, which both instances
-read. One list, no drift possible.
+The palette now lives **inline at the top of `sections/hp-shop-by-color.liquid`**, which both
+instances render. One list, no drift possible.
+
+It briefly lived in a snippet, and that broke the live homepage: the theme was pushed with
+only the section file, Shopify renders a missing snippet as empty output with no error, and
+the palette silently became zero colours. Keeping the data in the same file as the code that
+reads it means a single-file push is always complete.
 
 ### Adding, renaming or reordering a colour
 
-Edit the rows in that snippet and push the theme. Order in the file is the order the
+Edit the rows at the top of the section file and push the theme. Order in the file is the order the
 swatches appear in.
 
 ```
@@ -161,6 +166,13 @@ Eyebrow, heading, intro text, layout, columns, products per colour, default swat
 product counts, background and the "View all goes to" page are all still section
 settings, and the two pages legitimately differ on several of them. Only the palette
 is shared.
+
+### When editing the comments in that file
+
+A `{% liquid %}` tag body ends at the first closing delimiter the parser meets, and a `#`
+comment line does not protect one. Writing a tag delimiter literally inside one of those
+comments closes the block early and silently drops every `assign` below it — which is what
+happened here, and what emptied the palette. Theme check catches it as `UndefinedObject`.
 
 ### One-off after deploying
 
