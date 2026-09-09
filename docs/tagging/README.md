@@ -128,3 +128,43 @@ Deploy to an unpublished theme first:
 ```bash
 shopify theme push --unpublished --theme "Colour metafield preview"
 ```
+
+## The palette is defined once, in code
+
+The homepage and `/pages/shop-by-colour` are two instances of the same section.
+Shopify keeps block settings **per template**, so while the palette lived in section
+blocks it existed twice and drifted — the first swatch was renamed to "Yellow" on the
+homepage and stayed "Whimsy Yellow" on the page. Liquid cannot read another template's
+blocks, and `templates/*.json` is owned by the store (it arrives through the automatic
+"Update from Shopify" commits), so editing the page template here would just be
+overwritten.
+
+The palette now lives in **`snippets/hp-colour-swatches.liquid`**, which both instances
+read. One list, no drift possible.
+
+### Adding, renaming or reordering a colour
+
+Edit the rows in that snippet and push the theme. Order in the file is the order the
+swatches appear in.
+
+```
+Title | Swatch hex | Product tag | Aliases | View all URL
+```
+
+Only Title and Swatch hex are required. Product tag defaults to the handleized title.
+Aliases are comma-separated and are the no-rename escape hatch — they are matched
+against product titles, variant options and Color metafield entries alike.
+
+### What is still per instance
+
+Eyebrow, heading, intro text, layout, columns, products per colour, default swatch,
+product counts, background and the "View all goes to" page are all still section
+settings, and the two pages legitimately differ on several of them. Only the palette
+is shared.
+
+### One-off after deploying
+
+The old `colour` blocks are gone from the schema, so the theme editor no longer offers
+"Add colour" for this section. Both templates still carry their old block entries in
+JSON; they are inert — nothing reads them — and Shopify drops them the next time each
+template is saved in the editor.

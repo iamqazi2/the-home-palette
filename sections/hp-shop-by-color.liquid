@@ -44,6 +44,9 @@
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
 
+{%- capture hp_colour_data -%}
+  {%- render 'hp-colour-swatches' -%}
+{%- endcapture -%}
 {%- liquid
   # These used to be one setting: "products per colour" also decided how many
   # grid columns to draw. That capped the shelf at 6 products purely because 7
@@ -65,11 +68,31 @@
       assign layout = 'grid'
     endif
   endif
-  assign last_index = section.blocks.size | minus: 1
+  # The palette itself lives in snippets/hp-colour-swatches.liquid and is shared
+  # by every instance of this section — the homepage and /pages/shop-by-colour
+  # are two instances, and Shopify keeps block settings per template, so a
+  # palette held in blocks existed twice and drifted. That snippet carries the
+  # full reasoning.
+  #
+  # Captured rather than included so nothing crosses the scope boundary but the
+  # string itself. Stripping first means the trailing row separator does not
+  # produce an empty final row.
+  #
+  # Note for anyone editing the comments in here: a liquid tag body ends at the
+  # first "%}" the parser meets, and a "#" line does not protect one. Writing a
+  # tag literally in a comment closes the block early and silently drops every
+  # assign below it.
+  assign hp_colours = hp_colour_data | strip | split: ';'
+
+  assign last_index = hp_colours.size | minus: 1
   assign requested = section.settings.default_index | default: 1 | minus: 1
   if requested > last_index
     assign requested = 0
   endif
+
+  # The heading above the grid names the colour on screen at first paint.
+  assign requested_fields = hp_colours[requested] | strip | split: '|'
+  assign requested_title = requested_fields[0] | strip
 -%}
 
 {%- style -%}
@@ -309,8 +332,13 @@
 
     <hp-colour-shop data-section-id="{{ section.id }}">
       <div class="hp-colors__row" role="group" aria-label="{{ section.settings.heading | escape }}">
-        {%- for block in section.blocks -%}
+        {%- for row in hp_colours -%}
           {%- liquid
+            assign fields = row | strip | split: '|'
+            assign c_title = fields[0] | strip
+            assign c_swatch = fields[1] | strip
+            assign c_view = fields[4] | strip
+
             # Where "View all" goes, in order of preference.
             #
             # It used to always be /search?q=<colour>, and that is the bug: the
@@ -327,9 +355,9 @@
             # this same section on its own page, deep-linked to the colour —
             # the destination re-runs the identical matching and therefore
             # shows exactly the set the swatch showed, never more.
-            assign colour_key = block.settings.title | handleize
-            if block.settings.view_all_url != blank
-              assign target = block.settings.view_all_url
+            assign colour_key = c_title | handleize
+            if c_view != blank
+              assign target = c_view
             elsif section.settings.view_all_page != blank
               # The #hp-colours fragment lands the visitor on the palette
               # rather than at the top of the page above it.
@@ -343,7 +371,7 @@
               # Last resort, and still the loose one: no destination page has
               # been chosen in the section settings. Kept so the link is never
               # dead, but pick a page in "View all goes to" and this is not used.
-              assign colour_query = block.settings.title | url_encode
+              assign colour_query = c_title | url_encode
               assign target = routes.search_url | append: '?q=' | append: colour_query | append: '&type=product'
             endif
             assign count = null
@@ -354,17 +382,12 @@
             data-hp-colour
             data-hp-colour-key="{{ colour_key }}"
             data-hp-url="{{ target }}"
-            data-hp-label="{{ block.settings.title | escape }}"
+            data-hp-label="{{ c_title | escape }}"
             aria-pressed="{% if forloop.index0 == requested %}true{% else %}false{% endif %}"
-            {{ block.shopify_attributes }}
           >
-            <span class="hp-colors__dot" style="background: {{ block.settings.swatch }};">
-              {%- if block.settings.image -%}
-                {{ block.settings.image | image_url: width: 200 | image_tag: widths: '90, 130, 180, 200', sizes: '(min-width: 990px) 8.8rem, 6.4rem', loading: 'lazy', alt: block.settings.title }}
-              {%- endif -%}
-            </span>
+            <span class="hp-colors__dot" style="background: {{ c_swatch }};"></span>
             <span class="hp-colors__label">
-              <span class="hp-colors__name">{{ block.settings.title | escape }}</span>
+              <span class="hp-colors__name">{{ c_title | escape }}</span>
               {%- if count and section.settings.show_count -%}
                 <span class="hp-colors__count">{{ count }} {{ section.settings.count_label | default: 'varieties' | escape }}</span>
               {%- endif -%}
@@ -375,7 +398,7 @@
 
       <div class="hp-colors__results-head">
         <h3 class="hp-colors__results-title" data-hp-colour-title>
-          {{- section.blocks[requested].settings.title | escape -}}
+          {{- requested_title | escape -}}
         </h3>
         <a class="hp-link" data-hp-colour-link href="#" hidden>
           {{ section.settings.view_all_label | default: 'View all' | escape }}
@@ -411,20 +434,25 @@
         group that was hidden when the page loaded.
       {%- endcomment -%}
       <div class="hp-colors__results" data-hp-colour-results data-hp-no-anim>
-        {%- for block in section.blocks -%}
+        {%- for row in hp_colours -%}
           {%- liquid
-            assign cname = block.settings.title | downcase
-            assign ctag = block.settings.tag | default: block.settings.title | handleize
-            assign gid = block.settings.title | handleize
+            assign fields = row | strip | split: '|'
+            assign c_title = fields[0] | strip
+            assign c_tag = fields[2] | strip
+            assign c_aliases = fields[3] | strip
+
+            assign cname = c_title | downcase
+            assign ctag = c_tag | default: c_title | handleize
+            assign gid = c_title | handleize
 
             # A swatch's display name is not always what the products are called.
             # "Limone Yellow" on the palette is "Limone Gardenia" on the shelf,
             # and matching on the display name alone found nothing at all for
             # three of the fourteen colours. Aliases let the swatch keep its
             # palette name while still matching the names products actually use.
-            assign match_names = block.settings.title
-            if block.settings.aliases != blank
-              assign match_names = match_names | append: ',' | append: block.settings.aliases
+            assign match_names = c_title
+            if c_aliases != blank
+              assign match_names = match_names | append: ',' | append: c_aliases
             endif
             assign name_list = match_names | downcase | split: ','
 
@@ -432,10 +460,11 @@
             # "Aqua". Without this, every Aqua-grey piece would also be filed
             # under Aqua. Built once per colour rather than once per product.
             assign rivals = ''
-            for other in section.blocks
-              assign oname = other.settings.title | downcase
+            for other_row in hp_colours
+              assign other_title = other_row | strip | split: '|' | first | strip
+              assign oname = other_title | downcase
               if oname != cname and oname contains cname
-                assign ohandle = other.settings.title | handleize
+                assign ohandle = other_title | handleize
                 assign rivals = rivals | append: ohandle | append: '||'
               endif
             endfor
@@ -599,7 +628,7 @@
 
                       # An explicit colour tag always wins — it is the only thing
                       # that can be right for a product not named after its colour.
-                      if mf_hit or product.tags contains ctag or product.tags contains block.settings.title
+                      if mf_hit or product.tags contains ctag or product.tags contains c_title
                         assign ok = true
                       else
                         # Handleized and wrapped in dashes, so a title written
@@ -649,7 +678,7 @@
                       {% render 'hp-colour-card',
                         product: product,
                         variant: colour_variant,
-                        colour_label: block.settings.title,
+                        colour_label: c_title,
                         quick_add: section.settings.quick_add,
                         section_id: section.id
                       %}
@@ -686,11 +715,29 @@
 {
   "name": "THP Shop by Colour",
   "tag": "section",
-  "max_blocks": 26,
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Palette" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Colour" },
-    { "type": "textarea", "id": "text", "label": "Text", "default": "Pick a glaze — the collection below updates instantly." },
+    {
+      "type": "paragraph",
+      "content": "The colour swatches are shared by every instance of this section, so the homepage and the Shop by Colour page always match. To add, rename or reorder a colour, edit snippets/hp-colour-swatches.liquid in the theme code. Everything below is set per instance."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The Palette"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Colour"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Pick a glaze — the collection below updates instantly."
+    },
     {
       "type": "select",
       "id": "layout",
@@ -698,9 +745,18 @@
       "default": "auto",
       "info": "Auto uses the sideways shelf on the home page and a full grid everywhere else — which is almost always what you want.",
       "options": [
-        { "value": "auto", "label": "Auto — shelf on the home page, grid elsewhere" },
-        { "value": "slider", "label": "Shelf — scrolls sideways" },
-        { "value": "grid", "label": "Grid — every product on screen" }
+        {
+          "value": "auto",
+          "label": "Auto — shelf on the home page, grid elsewhere"
+        },
+        {
+          "value": "slider",
+          "label": "Shelf — scrolls sideways"
+        },
+        {
+          "value": "grid",
+          "label": "Grid — every product on screen"
+        }
       ]
     },
     {
@@ -731,72 +787,56 @@
       "label": "Colour selected on load",
       "default": 1
     },
-    { "type": "text", "id": "view_all_label", "label": "View-all label", "default": "View all" },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View-all label",
+      "default": "View all"
+    },
     {
       "type": "page",
       "id": "view_all_page",
-      "label": "\u201cView all\u201d goes to",
+      "label": "“View all” goes to",
       "info": "Point this at your Shop by Colour page. The link then opens that page with the chosen colour already selected, so it shows exactly the products the swatch showed. Leave empty and the link falls back to a store search, which also matches product descriptions and will bring back other colours."
     },
-    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#fffdf4" },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background",
+      "default": "#fffdf4"
+    },
     {
       "type": "select",
       "id": "quick_add",
       "label": "Add-to-cart button",
       "default": "standard",
       "options": [
-        { "value": "none", "label": "None" },
-        { "value": "standard", "label": "Standard" }
-      ]
-    },
-    { "type": "checkbox", "id": "show_count", "label": "Show live product counts", "default": false },
-    { "type": "text", "id": "count_label", "label": "Count label", "default": "varieties" }
-  ],
-  "blocks": [
-    {
-      "type": "colour",
-      "name": "Colour",
-      "settings": [
-        { "type": "text", "id": "title", "label": "Name", "default": "Sea Green" },
-        { "type": "color", "id": "swatch", "label": "Swatch colour", "default": "#3f7269" },
         {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Texture photo (optional)",
-          "info": "Shown inside the dot instead of the flat colour."
+          "value": "none",
+          "label": "None"
         },
         {
-          "type": "url",
-          "id": "view_all_url",
-          "label": "“View all” link",
-          "info": "Optional. Point this colour at a collection you have built for it; otherwise the link searches the store for the colour."
-        },
-        {
-          "type": "text",
-          "id": "aliases",
-          "label": "Also match these names",
-          "info": "Comma-separated. Use when products are named differently from the swatch, e.g. Limone Yellow also matching 'Limone Gardenia'."
-        },
-        {
-          "type": "text",
-          "id": "tag",
-          "label": "Product tag",
-          "info": "The tag used on products of this colour, e.g. 'sage-green'. Shopify's own Color category metafield counts too — a product whose Color lists this swatch's name (or one of its aliases) is matched even with no tag. Products that sell several colours from one listing are matched on their Color option instead and show that colour's own variant photo; tags, metafields and names only decide the rest."
+          "value": "standard",
+          "label": "Standard"
         }
       ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show live product counts",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "count_label",
+      "label": "Count label",
+      "default": "varieties"
     }
   ],
   "presets": [
     {
-      "name": "THP Shop by Colour",
-      "blocks": [
-        { "type": "colour" },
-        { "type": "colour", "settings": { "title": "Cloud Grey", "swatch": "#b8bdba" } },
-        { "type": "colour", "settings": { "title": "Cobalt", "swatch": "#2b4a76" } },
-        { "type": "colour", "settings": { "title": "Terracotta", "swatch": "#b06a4a" } },
-        { "type": "colour", "settings": { "title": "Ivory", "swatch": "#f2ead8" } },
-        { "type": "colour", "settings": { "title": "Charcoal", "swatch": "#3a3a38" } }
-      ]
+      "name": "THP Shop by Colour"
     }
   ]
 }
