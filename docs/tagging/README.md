@@ -129,57 +129,39 @@ Deploy to an unpublished theme first:
 shopify theme push --unpublished --theme "Colour metafield preview"
 ```
 
-## The palette is defined once, in code
+## Shop by Colour, Occasion and Style lists live in metaobjects
 
-The homepage and `/pages/shop-by-colour` are two instances of the same section.
-Shopify keeps block settings **per template**, so while the palette lived in section
-blocks it existed twice and drifted — the first swatch was renamed to "Yellow" on the
-homepage and stayed "Whimsy Yellow" on the page. Liquid cannot read another template's
-blocks, and `templates/*.json` is owned by the store (it arrives through the automatic
-"Update from Shopify" commits), so editing the page template here would just be
-overwritten.
+The homepage sections and the three "Shop by …" pages each render one shared list, kept in
+Shopify admin → **Content → Metaobjects**:
 
-The palette now lives **inline at the top of `sections/hp-shop-by-color.liquid`**, which both
-instances render. One list, no drift possible.
+| Section | Metaobject | Fields |
+|---|---|---|
+| Shop by Colour | **Colour swatch** (`colour_swatch`) | Title, Swatch colour, Position, Product tag, Aliases, View all link |
+| Shop by Occasion | **Shop by Occasion card** (`shop_occasion`) | Title, Position, Caption, Collection, Icon, Photo, Custom link |
+| Shop by Style | **Shop by Style tile** (`shop_style`) | Title, Position, Image, Collection, Custom link |
 
-It briefly lived in a snippet, and that broke the live homepage: the theme was pushed with
-only the section file, Shopify renders a missing snippet as empty output with no error, and
-the palette silently became zero colours. Keeping the data in the same file as the code that
-reads it means a single-file push is always complete.
+Add, edit or delete an entry there and both the homepage and the page update — no code, no
+theme push. **Position** sets the order: lower first, blank last.
 
-### Adding, renaming or reordering a colour
+Headings, intro text, layout, columns, counts and colours of the section itself are still set
+per page in the theme editor. Only the list is shared.
 
-Edit the rows at the top of the section file and push the theme. Order in the file is the order the
-swatches appear in.
+### Why not section blocks
 
-```
-Title | Swatch hex | Product tag | Aliases | View all URL
-```
+Blocks are stored per template, so the homepage and each page carried separate copies and
+drifted — Occasion cards in a different order, Style tiles with different links, and "Yellow"
+on one colour list but "Whimsy Yellow" on the other. The palette then spent a few days hardcoded
+in the section file, which synced it but meant the team could no longer add a colour. The
+metaobject list is the only option that is both shared and editable.
 
-Only Title and Swatch hex are required. Product tag defaults to the handleized title.
-Aliases are comma-separated and are the no-rename escape hatch — they are matched
-against product titles, variant options and Color metafield entries alike.
+### Limits and one-offs
 
-### What is still per instance
-
-Eyebrow, heading, intro text, layout, columns, products per colour, default swatch,
-product counts, background and the "View all goes to" page are all still section
-settings, and the two pages legitimately differ on several of them. Only the palette
-is shared.
-
-### When editing the comments in that file
-
-A `{% liquid %}` tag body ends at the first closing delimiter the parser meets, and a `#`
-comment line does not protect one. Writing a tag delimiter literally inside one of those
-comments closes the block early and silently drops every `assign` below it — which is what
-happened here, and what emptied the palette. Theme check catches it as `UndefinedObject`.
-
-### One-off after deploying
-
-The old `colour` blocks are gone from the schema, so the theme editor no longer offers
-"Add colour" for this section. Both templates still carry their old block entries in
-JSON; they are inert — nothing reads them — and Shopify drops them the next time each
-template is saved in the editor.
+- Liquid reads the first 50 entries of a metaobject type.
+- The definitions have storefront access set to public read. Changing that hides the lists.
+- The old blocks still sitting in `templates/*.json` are inert; the theme editor drops them the
+  next time each template is saved.
+- If a list is empty the section renders nothing on the storefront, and shows a pointer to the
+  metaobject in the theme editor only.
 
 ## "View all" on a colour swatch
 

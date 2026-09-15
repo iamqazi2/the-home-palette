@@ -45,69 +45,52 @@
 {%- endunless -%}
 
 {%- comment -%}
-  THP — the canonical Shop by Colour palette.
+  THP — the Shop by Colour palette.
 
-  The homepage and /pages/shop-by-colour are two instances of this section, and
-  Shopify keeps block settings per TEMPLATE. So while the palette lived in
-  section blocks it existed twice and the copies drifted: the first swatch was
-  renamed to "Yellow" on the homepage and stayed "Whimsy Yellow" on the page.
-  Liquid cannot read another template's blocks, and templates/*.json is owned by
-  the store — it arrives through the automatic "Update from Shopify" commits —
-  so fixing the page template in this repo would only be overwritten.
+  Swatches come from Shopify admin, Content, Metaobjects, "Colour swatch". That
+  one list is read by both the homepage section and the Shop by Colour page,
+  which is what keeps them in step while staying editable without code.
 
-  What both instances DO share is this file. So the palette lives here, inline.
+  History, because each step was a real failure: the palette first lived in
+  section blocks, which Shopify stores per template, so the two pages carried
+  separate copies and drifted ("Yellow" on one, "Whimsy Yellow" on the other).
+  It then moved into code — synced, but no longer editable by the team. The
+  metaobject list is the only place that is both.
 
-  It lived in a snippet for exactly one deploy, and that broke the section on
-  the live homepage: the theme was pushed with only this file, Shopify renders a
-  missing snippet as empty output with no error, and the palette silently became
-  zero colours. Inline, the data cannot be separated from the code that reads it
-  and a single-file push is always complete.
-
-  TO ADD, RENAME OR REORDER A COLOUR, edit the rows below and push the theme.
-  Order here is the order the swatches appear in.
-
-    Title | Swatch hex | Product tag | Aliases | View all URL
-
-  Only Title and Swatch hex are required.
-
-  - Product tag  defaults to the handleized title when blank, and is matched
-                 against product tags and the Color category metafield.
-  - Aliases      comma-separated other names this colour goes by, matched
-                 against titles, variant options and metafield entries alike.
-                 This is the no-rename escape hatch: "Limone Yellow" on the
-                 palette is "Limone Gardenia" on the shelf.
-  - View all URL overrides where this swatch's "View all" points. Leave blank to
-                 use the section's own "View all goes to" setting.
-
-  Rows are separated by ";" and fields by "|", because Liquid has no way to
-  express a list of records.
-
-  Presentation is NOT here and stays per instance: eyebrow, heading, intro text,
-  layout, columns, counts and the default swatch are section settings, and the
-  two pages deliberately differ on several of them.
+  Each entry is flattened into the "title | swatch | tag | aliases | view all"
+  row format the rest of this section already parses, so the matching logic
+  below is untouched. Pipes and semicolons inside a value would break that
+  format, so they are replaced on the way in.
 {%- endcomment -%}
+{%- liquid
+  # Entries come from Shopify admin, Content, Metaobjects, "Colour swatch". They are
+  # the single list both the homepage and the Shop by Colour page read, which is what
+  # keeps the two in step: section blocks are stored per template, so while the
+  # list lived in blocks each page carried its own copy and they drifted.
+  #
+  # Ordered by the Position field. Liquid cannot sort drops by a nested field,
+  # so each entry becomes a zero-padded "position:handle" key, the keys are
+  # sorted as text, and each is looked up again by handle. Padding to five
+  # digits keeps 10 after 9; entries with no Position sort last, alphabetically
+  # by handle. Liquid returns the first 50 entries of a type.
+  assign hp_colour_keys = ''
+  for hp_entry in shop.metaobjects.colour_swatch.values
+    assign hp_pos = hp_entry.position.value | default: 9999 | at_least: 0 | at_most: 89999 | plus: 10000
+    assign hp_colour_keys = hp_colour_keys | append: hp_pos | append: ':' | append: hp_entry.system.handle | append: ','
+  endfor
+  assign hp_colour_keys = hp_colour_keys | split: ',' | sort
+  assign hp_colour_count = hp_colour_keys.size
+-%}
 {%- capture hp_colour_data -%}
-  Yellow                  | #e3c10c | yellow;
-  Aqua                    | #93c9c2 | aqua;
-  Sage Green              | #6e7c4f | sage-green;
-  Ivory White             | #f0ead9 | ivory-white             | Cream;
-  Burnt Maple             | #c4703a | burnt-maple;
-  Riviera Blue            | #33506f | riviera-blue;
-  Coconut Terra           | #8a6660 | coconut-terra           | Coconut;
-  Teal                    | #1e5560 | teal;
-  Reactive Santorini Blue | #1e3468 | reactive-santorini-blue | Santorini Blue;
-  Reactive Cloud Grey     | #bbb0a2 | reactive-cloud-grey     | Cloud Grey;
-  Limone Yellow           | #f0b71c | limone-yellow           | Limone Gardenia;
-  Windsor Red             | #be4a55 | windsor-red             | Windsor Bloom;
-  Boho Floral             | #efe7d7 | boho-floral             | Boho Garden;
-  Aqua-grey               | #afc7c0 | aqua-grey;
-  Jute Natural            | #c2a878 | jute-natural            | Jute, Rattan, Rustic, Rope, Handwoven;
-  Stone Grey              | #8c9091 | stone-grey              | Stone;
-  Gold                    | #c9a227 | gold                    | Golden;
-  Copper                  | #b87333 | copper;
-  Silver                  | #b9bcc0 | silver;
-  Black                   | #1f1f1f | black                   | Matte black, Black Matte;
-  Turquoise               | #3fb8ad | turquoise;
+  {%- for hp_key in hp_colour_keys -%}
+    {%- assign hp_handle = hp_key | split: ':' | last -%}
+    {%- assign sw = shop.metaobjects.colour_swatch[hp_handle] -%}
+    {{- sw.title.value | replace: '|', '/' | replace: ';', ',' -}}
+    |{{- sw.swatch.value -}}
+    |{{- sw.tag.value | replace: '|', '/' | replace: ';', ',' -}}
+    |{{- sw.aliases.value | replace: '|', '/' | replace: ';', ',' -}}
+    |{{- sw.view_all_url.value -}};
+  {%- endfor -%}
 {%- endcapture -%}
 {%- liquid
   # These used to be one setting: "products per colour" also decided how many
@@ -394,6 +377,9 @@
 
     <hp-colour-shop data-section-id="{{ section.id }}">
       <div class="hp-colors__row" role="group" aria-label="{{ section.settings.heading | escape }}">
+        {%- if hp_colour_count == 0 and request.design_mode -%}
+          <p class="hp-section-head__text">Nothing to show yet. Add entries in Shopify admin under Content → Metaobjects → Colour swatch.</p>
+        {%- endif -%}
         {%- for row in hp_colours -%}
           {%- liquid
             assign fields = row | strip | split: '|'
@@ -797,7 +783,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "The colour swatches are shared by every instance of this section, so the homepage and the Shop by Colour page always match. To add, rename or reorder a colour, edit snippets/hp-colour-swatches.liquid in the theme code. Everything below is set per instance."
+      "content": "The colour swatches are shared by the homepage and the Shop by Colour page, so both always match. Add, edit, reorder or remove colours in Shopify admin → Content → Metaobjects → Colour swatch (lower Position shows first). Everything below is set per page."
     },
     {
       "type": "text",
