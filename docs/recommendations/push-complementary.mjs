@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 /**
+ * RETIRED 2026-09-16 — do not run. Pairings are now managed in Shopify admin
+ * (Content → Metaobjects → Product pairing) and the theme no longer reads the
+ * metafield this writes. Kept for reference; see README.md.
+ *
  * Push the curated pairings in complementary-pairings.json into Shopify's
  * Search & Discovery complementary-products metafield.
  *

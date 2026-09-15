@@ -823,7 +823,8 @@
      relevant to the product in context — and it needs no API key, no
      third-party call, and no secret in the theme.
        intent=related        "you may also like"
-       intent=complementary  "goes well with" (curated in Search & Discovery)
+       (intent=complementary is rendered in Liquid from Product pairing
+        entries, so those bands carry no data-url and never fetch)
   ---------------------------------------------------------------------- */
   var HpRecs = (function () {
     function HpRecs() { return Reflect.construct(HTMLElement, [], HpRecs); }
@@ -893,6 +894,7 @@
       var pid = el.getAttribute('data-product-id');
       var limit = el.getAttribute('data-limit') || 4;
       var grid = el.querySelector('[data-hp-recs-grid]');
+      if (el.hasAttribute('data-curated')) { el.hidden = false; return; }   // pairings rendered in Liquid
       if (!pid || !grid) { el.hidden = true; return; }
       if (el.dataset.hpFor === pid) return;   // already showing this product's set
       el.dataset.hpFor = pid;

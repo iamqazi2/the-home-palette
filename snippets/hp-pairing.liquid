@@ -1,0 +1,102 @@
+{% comment %}
+  THP — curated "goes well with" cards for one product.
+
+  The pairings are managed in Shopify admin, not in code:
+  Content → Metaobjects → Product pairing. One entry per product, holding the
+  product and its ordered list of suggested products. Store staff add an entry
+  when they add a product; nothing here needs to change.
+
+  Renders the cards only — no heading, no wrapper — and renders nothing at all
+  when the product has no entry or none of its suggestions can be sold, so a
+  call site can capture the output and fall back when it is blank.
+
+  Finding the entry: entries are created with the product's handle as their
+  own handle, so a direct lookup finds almost all of them. An entry added in
+  admin takes its handle from its Name instead, which differs from the product
+  handle whenever the product was renamed. Those are found by walking the list
+  (paginated, so up to 250 entries), matched on the product itself.
+
+  Params:
+    product   (required) product to suggest for
+    layout    'grid'   <li> cards for the related-products section (default)
+              'hp'     cards for an hp-recommendations band
+              'drawer' compact cards for the cart drawer
+    limit     most cards to show (default 4)
+    section_id, image_ratio, image_shape, show_secondary_image, show_vendor,
+    show_rating, quick_add — passed through to card-product
+{% endcomment %}
+
+{%- liquid
+  assign pp_layout = layout | default: 'grid'
+  assign pp_limit = limit | default: 4
+  assign pp_entry = nil
+
+  if product != blank
+    assign pp_try = shop.metaobjects.product_pairing[product.handle]
+    if pp_try != blank and pp_try.product.value.id == product.id
+      assign pp_entry = pp_try
+    endif
+  endif
+-%}
+
+{%- if product != blank and pp_entry == nil and shop.metaobjects.product_pairing.values_count > 0 -%}
+  {%- paginate shop.metaobjects.product_pairing.values by 250 -%}
+    {%- for pp_candidate in shop.metaobjects.product_pairing.values -%}
+      {%- if pp_candidate.product.value.id == product.id -%}
+        {%- assign pp_entry = pp_candidate -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endpaginate -%}
+{%- endif -%}
+
+{%- if pp_entry != nil -%}
+  {%- assign pp_shown = 0 -%}
+  {%- for rec in pp_entry.suggestions.value -%}
+    {%- if pp_shown >= pp_limit -%}{%- break -%}{%- endif -%}
+    {%- if rec == blank or rec.available == false or rec.id == product.id -%}{%- continue -%}{%- endif -%}
+    {%- liquid
+      assign pp_skip_styles = true
+      if pp_shown == 0
+        assign pp_skip_styles = false
+      endif
+      assign pp_shown = pp_shown | plus: 1
+    -%}
+    {%- case pp_layout -%}
+      {%- when 'drawer' -%}
+        <a class="hp-drec" href="{{ rec.url }}">
+          <span class="hp-drec__media">
+            {%- if rec.featured_image -%}
+              {{ rec.featured_image | image_url: width: 300 | image_tag: alt: '', loading: 'lazy', width: 150, height: 188 }}
+            {%- endif -%}
+          </span>
+          <span class="hp-drec__title">{{ rec.title | escape }}</span>
+          <span class="hp-drec__price">{{ rec.price_min | money_without_trailing_zeros }}</span>
+        </a>
+      {%- when 'hp' -%}
+        <div role="listitem" data-hp-reveal>
+          {% render 'card-product',
+            card_product: rec,
+            media_aspect_ratio: 'portrait',
+            show_secondary_image: true,
+            show_rating: true,
+            section_id: section_id
+          %}
+        </div>
+      {%- else -%}
+        <li class="grid__item">
+          {% render 'card-product',
+            card_product: rec,
+            media_aspect_ratio: image_ratio,
+            image_shape: image_shape,
+            show_secondary_image: show_secondary_image,
+            show_vendor: show_vendor,
+            show_rating: show_rating,
+            skip_styles: pp_skip_styles,
+            quick_add: quick_add,
+            section_id: section_id
+          %}
+        </li>
+    {%- endcase -%}
+  {%- endfor -%}
+{%- endif -%}

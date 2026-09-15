@@ -1125,6 +1125,17 @@ class ProductRecommendations extends HTMLElement {
   }
 
   connectedCallback() {
+    // Curated pairings are rendered server-side (snippets/hp-pairing), so
+    // there is nothing to fetch; with no url at all the band has no source.
+    if (this.hasAttribute('data-curated')) {
+      this.classList.add('product-recommendations--loaded');
+      this.syncOverflow();
+      return;
+    }
+    if (!this.dataset.url) {
+      if (!this.querySelector('.grid__item')) this.remove();
+      return;
+    }
     this.initializeRecommendations(this.dataset.productId);
   }
 
@@ -1149,11 +1160,9 @@ class ProductRecommendations extends HTMLElement {
         html.innerHTML = text;
         const recommendations = html.querySelector('product-recommendations');
 
-        // `intent=complementary` has no fallback of its own: a product with no
-        // curated pairing returns an empty band. When the section offers a
-        // fallback url, ask again with `intent=related` so the band still fills
-        // rather than vanishing. Only ever retried once — the fallback url is
-        // not passed down, so an empty second response just ends here.
+        // When the section offers a fallback url and the first answer is
+        // empty, ask once more with it. Only ever retried once — the fallback
+        // url is not passed down, so an empty second response just ends here.
         if (!html.querySelector('.grid__item') && url === this.dataset.url && this.dataset.urlFallback) {
           this.loadRecommendations(productId, this.dataset.urlFallback);
           return;

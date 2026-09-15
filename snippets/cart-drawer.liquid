@@ -495,22 +495,28 @@
       </cart-drawer-items>
 
         {%- comment -%}
-          Suggestions based on the most recently added item, from Shopify's own
-          recommendations data. The drawer opens on every page, so this uses the
-          JSON endpoint rather than a section render.
+          Suggestions based on the most recently added item: its curated
+          pairings (Content → Metaobjects → Product pairing) when it has an
+          entry, rendered here; otherwise Shopify's own related products,
+          fetched from the JSON endpoint because the drawer opens on every page
+          and no recommendations section is guaranteed to exist.
         {%- endcomment -%}
         {%- assign last_item = cart.items | last -%}
         {%- if last_item != blank -%}
+          {%- capture drawer_pairing -%}
+            {%- render 'hp-pairing', product: last_item.product, layout: 'drawer', limit: 4 -%}
+          {%- endcapture -%}
+          {%- assign drawer_pairing = drawer_pairing | strip -%}
           <hp-drawer-recs
             class="hp-recs hp-recs--drawer"
             data-product-id="{{ last_item.product_id }}"
             data-limit="4"
-            hidden
+            {% if drawer_pairing != blank %}data-curated{% else %}hidden{% endif %}
           >
             <div class="hp-recs__head">
               <h2 class="hp-recs__title">Goes well with</h2>
             </div>
-            <div class="hp-drec-grid" data-hp-recs-grid></div>
+            <div class="hp-drec-grid" data-hp-recs-grid>{{ drawer_pairing }}</div>
           </hp-drawer-recs>
         {%- endif -%}
 

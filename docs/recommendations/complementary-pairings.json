@@ -1,5 +1,6 @@
 {
   "_source": "https://docs.google.com/document/d/1RgabhQH4apqq9w30e4OKRed-UPKWAmjoIo7VxDVWI_Y",
+  "_retired": "2026-09-16: superseded by the Product pairing metaobject list in Shopify admin (Content → Metaobjects). Not read by the theme; do not edit. See README.md.",
   "_note": "Curated complementary pairings. Anchor product handle -> ordered list of complementary product handles. Pushed to Shopify's Search & Discovery complementary-products metafield (shopify--discovery--product_recommendation.complementary_products); the theme reads it through snippets/hp-recommendations.liquid with intent 'complementary'. Variant-specific links in the source doc are collapsed to the parent product, because complementary recommendations are product-level in Shopify.",
   "_updated": "2026-08-28",
 

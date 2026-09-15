@@ -159,28 +159,49 @@
 {%- endstyle -%}
 
 {%- comment -%}
-  THP: ask for the *curated* pairings first. `complementary` serves the client's
-  pairing sheet (docs/recommendations), so a dinner set suggests the matching
-  placemats and cutlery rather than another dinner set. Shopify returns nothing
-  for a product with no pairing set, so data-url-fallback re-asks with `related`
-  and the band still fills on the rest of the catalogue — see
-  ProductRecommendations in assets/global.js.
+  THP: curated pairings first. They are managed in Shopify admin under
+  Content → Metaobjects → Product pairing and rendered here server-side by
+  snippets/hp-pairing, so a dinner set suggests the matching placemats and
+  cutlery rather than another dinner set. A product with no pairing asks the
+  recommendations API for `related` instead (when the fallback is on), so the
+  band still fills on the rest of the catalogue.
+
+  `data-curated` tells ProductRecommendations in assets/global.js that the
+  cards are already here and there is nothing to fetch. The API's own
+  `complementary` intent is no longer asked for: it reads the Search &
+  Discovery metafield, which is not maintained any more.
 {%- endcomment -%}
 {%- liquid
   assign recs_base = routes.product_recommendations_url | append: '?limit=' | append: section.settings.products_to_show
   assign recs_intent = section.settings.intent | default: 'complementary'
+
+  assign pairing_cards = ''
+  if recs_intent == 'complementary'
+    capture pairing_cards
+      render 'hp-pairing', product: product, layout: 'grid', limit: section.settings.products_to_show, image_ratio: section.settings.image_ratio, image_shape: section.settings.image_shape, show_secondary_image: section.settings.show_secondary_image, show_vendor: section.settings.show_vendor, show_rating: section.settings.show_rating, quick_add: section.settings.quick_add, section_id: section.id
+    endcapture
+    assign pairing_cards = pairing_cards | strip
+  endif
+
+  assign recs_url = ''
+  if pairing_cards == blank
+    if recs_intent == 'related' or section.settings.fallback_to_related
+      assign recs_url = recs_base | append: '&intent=related'
+    endif
+  endif
 -%}
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <product-recommendations
     class="related-products page-width section-{{ section.id }}-padding isolate{% if section.settings.enable_scroll %} related-products--scroll{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-    data-url="{{ recs_base }}&intent={{ recs_intent }}"
-    {% if recs_intent == 'complementary' and section.settings.fallback_to_related %}
-      data-url-fallback="{{ recs_base }}&intent=related"
+    {% if pairing_cards != blank %}
+      data-curated
+    {% else %}
+      data-url="{{ recs_url }}"
     {% endif %}
     data-section-id="{{ section.id }}"
     data-product-id="{{ product.id }}"
   >
-    {% if recommendations.performed and recommendations.products_count > 0 %}
+    {% if pairing_cards != blank or recommendations.performed and recommendations.products_count > 0 %}
       {%- liquid
         # Where "View all" goes.
         #
@@ -189,12 +210,12 @@
         # product on the same shelf, so clicking "View all" under "Match it
         # with..." landed on a page of unrelated things.
         #
-        # Recommendations come from the recommendations API, not a collection,
-        # so there is no ready-made collection URL for "the pairings of product
+        # Matches come from a pairing entry or the recommendations API, not a
+        # collection, so there is no ready-made collection URL for "the pairings of product
         # X". The page that does exist is this product's own `matches` template
         # (templates/product.matches.json), which runs this same section as a
-        # full grid — same product, same intent, same API call, so it can only
-        # ever show the same set the band was showing.
+        # full grid — same product, same pairing entry, so it can only ever
+        # show the same set the band was showing.
         assign va_url = blank
         if section.settings.view_all_target == 'collection'
           assign va_collection = product.collections.first
@@ -230,23 +251,27 @@
         class="grid product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
         role="list"
       >
-        {% assign skip_card_product_styles = false %}
-        {% for recommendation in recommendations.products %}
-          <li class="grid__item">
-            {% render 'card-product',
-              card_product: recommendation,
-              media_aspect_ratio: section.settings.image_ratio,
-              image_shape: section.settings.image_shape,
-              show_secondary_image: section.settings.show_secondary_image,
-              show_vendor: section.settings.show_vendor,
-              show_rating: section.settings.show_rating,
-              skip_styles: skip_card_product_styles,
-              quick_add: section.settings.quick_add,
-              section_id: section.id
-            %}
-          </li>
-          {%- assign skip_card_product_styles = true -%}
-        {% endfor %}
+        {%- if pairing_cards != blank -%}
+          {{ pairing_cards }}
+        {%- else -%}
+          {% assign skip_card_product_styles = false %}
+          {% for recommendation in recommendations.products %}
+            <li class="grid__item">
+              {% render 'card-product',
+                card_product: recommendation,
+                media_aspect_ratio: section.settings.image_ratio,
+                image_shape: section.settings.image_shape,
+                show_secondary_image: section.settings.show_secondary_image,
+                show_vendor: section.settings.show_vendor,
+                show_rating: section.settings.show_rating,
+                skip_styles: skip_card_product_styles,
+                quick_add: section.settings.quick_add,
+                section_id: section.id
+              %}
+            </li>
+            {%- assign skip_card_product_styles = true -%}
+          {% endfor %}
+        {%- endif -%}
       </ul>
     {% endif %}
   </product-recommendations>
@@ -275,7 +300,7 @@
       "type": "select",
       "id": "intent",
       "label": "Recommendation type",
-      "info": "Curated uses the pairings set in Search & Discovery (see docs/recommendations). Automatic uses Shopify's own related-products data.",
+      "info": "Curated uses the pairings in Content → Metaobjects → Product pairing. Automatic uses Shopify's own related-products data.",
       "options": [
         { "value": "complementary", "label": "Curated pairings (goes well with)" },
         { "value": "related", "label": "Automatic (similar products)" }
