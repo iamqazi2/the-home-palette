@@ -1,6 +1,14 @@
 {% comment %}
   THP — Journal index.
 
+  POSTS NOW COME FROM A REAL SHOPIFY BLOG when one is connected — the blog this
+  template belongs to on /blogs/<handle>, or the one picked in "Blog" on
+  /pages/journals. Posts are then written in admin under Content → Blog posts,
+  which has the full editor (headings, images, video, links) and per-post SEO
+  fields, and every card links to the post's own URL. The block-based posts
+  described below remain only as the fallback while no blog has any posts, so
+  the page never goes empty during the switch.
+
   Built for a Shopify PAGE rather than a Blog, because that is what exists on
   this store (/pages/journals). Each post is a block here and each post's own
   page is a separate Shopify Page, linked by handle. A real Blog would give
@@ -35,10 +43,32 @@
     wrapped in pipes, while the names accumulate in a separate list — keeping
     the two apart is what stops the delimiters ending up in the chip labels.
   endcomment
+  # Which list the stories come from. On a blog template the page's own blog;
+  # elsewhere the blog chosen in the section settings. Articles win whenever
+  # that blog has any, and the blocks are only read when it has none.
+  assign jb = section.settings.blog
+  if template.name == 'blog' or template.name == 'article'
+    assign jb = blog
+  endif
+  assign use_articles = false
+  if jb != blank and jb.articles_count > 0
+    assign use_articles = true
+  endif
+  assign post_count = section.blocks.size
+  assign story_source = section.blocks
+  if use_articles
+    assign post_count = jb.articles_count
+    assign story_source = jb.articles
+  endif
+
   assign topic_keys = ''
   assign topic_names = ''
-  for block in section.blocks
-    assign tag = block.settings.tag | strip
+  for block in story_source
+    if use_articles
+      assign tag = block.tags | first | strip
+    else
+      assign tag = block.settings.tag | strip
+    endif
     if tag == blank
       continue
     endif
@@ -436,6 +466,19 @@
     font-size: 1.5rem;
     color: var(--hp-taupe);
   }
+  .hp-jrnl__pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-top: clamp(3rem, 5vw, 4.8rem);
+    font-family: var(--hp-font-ui);
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+  }
+  .hp-jrnl__pagination a,
+  .hp-jrnl__pagination .current,
+  .hp-jrnl__pagination .deco { display: inline-block; padding: 0.6rem 1rem; color: var(--hp-heading); text-decoration: none; }
+  .hp-jrnl__pagination .current { border-bottom: 2px solid var(--hp-teal); }
 {%- endstyle -%}
 
 <div class="hp-jrnl-hero">
@@ -465,7 +508,7 @@
     <p class="hp-jrnl-hero__meta" data-hp-reveal>
       <span>
         {% render 'hp-icon', icon: 'gem', size: 14 %}
-        {{ section.blocks.size }} {{ section.settings.count_label | default: 'stories' | escape }}
+        {{ post_count }} {{ section.settings.count_label | default: 'stories' | escape }}
       </span>
       {%- if topic_list.size > 0 -%}
         <span>
@@ -479,7 +522,127 @@
 
 <div class="hp-jrnl hp-section{% if section.settings.flip %} hp-jrnl--flip{% endif %}">
   <div class="hp-container">
-    {%- if section.blocks.size == 0 -%}
+    {%- if use_articles -%}
+      {%- paginate jb.articles by 24 -%}
+      <div class="hp-jrnl__index" data-hp-journal-index>
+
+      {%- if section.settings.show_filter and topic_list.size > 1 -%}
+        <hp-journal-filter class="hp-jrnl__filter" data-hp-reveal>
+          <button type="button" class="hp-jrnl__chip is-active" data-hp-topic="" aria-pressed="true">
+            {{ section.settings.all_label | default: 'All stories' | escape }}
+            <span class="hp-jrnl__chip-count">{{ jb.articles.size }}</span>
+          </button>
+          {%- for topic in topic_list -%}
+            {%- assign topic_name = topic | strip -%}
+            {%- if topic_name == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign topic_count = 0 -%}
+            {%- for a in jb.articles -%}
+              {%- assign a_tag = a.tags | first | strip -%}
+              {%- if a_tag == topic_name -%}
+                {%- assign topic_count = topic_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if topic_count == 0 -%}{%- continue -%}{%- endif -%}
+            <button type="button" class="hp-jrnl__chip" data-hp-topic="{{ topic_name | escape }}" aria-pressed="false">
+              {{ topic_name | escape }}
+              <span class="hp-jrnl__chip-count">{{ topic_count }}</span>
+            </button>
+          {%- endfor -%}
+        </hp-journal-filter>
+      {%- endif -%}
+
+      {%- for a in jb.articles limit: 1 -%}
+        {%- liquid
+          assign a_tag = a.tags | first | strip
+          assign a_excerpt = a.excerpt | strip_html | strip
+          if a_excerpt == blank
+            assign a_excerpt = a.content | replace: '</', ' </' | strip_html | strip | truncatewords: 28
+          endif
+          assign a_alt = a.image.alt | default: a.title | escape
+        -%}
+        <div class="hp-jrnl__lead hp-jrnl__post" data-hp-post data-hp-tag="{{ a_tag | escape }}">
+          <a class="hp-jrnl__lead-link" href="{{ a.url }}">
+            <div class="hp-jrnl__lead-media" data-hp-reveal>
+              {%- if a.image -%}
+                {{
+                  a.image
+                  | image_url: width: 1800
+                  | image_tag: widths: '600, 900, 1200, 1500, 1800', sizes: '(min-width: 990px) 78vw, 100vw', loading: 'eager', alt: a_alt
+                }}
+              {%- endif -%}
+              {%- if section.settings.ribbon_label != blank and paginate.current_page == 1 -%}
+                <span class="hp-jrnl__ribbon">
+                  {% render 'hp-icon', icon: 'sparkles', size: 13 %}
+                  {{ section.settings.ribbon_label | escape }}
+                </span>
+              {%- endif -%}
+            </div>
+            <div class="hp-jrnl__lead-card" data-hp-reveal>
+              {%- if a_tag != blank -%}
+                <span class="hp-jrnl__lead-tag">{{ a_tag | escape }}</span>
+              {%- endif -%}
+              <h2 class="hp-jrnl__lead-title">{{ a.title | escape }}</h2>
+              {%- if a_excerpt != blank -%}
+                <p class="hp-jrnl__lead-excerpt">{{ a_excerpt | escape }}</p>
+              {%- endif -%}
+              <span class="hp-jrnl__lead-more">
+                {{ section.settings.read_label | default: 'Read the story' | escape }}
+                {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+              </span>
+            </div>
+          </a>
+        </div>
+      {%- endfor -%}
+
+      {%- if jb.articles.size > 1 -%}
+        <div class="hp-jrnl__grid" data-hp-stagger>
+          {%- for a in jb.articles offset: 1 -%}
+            {%- liquid
+              assign a_tag = a.tags | first | strip
+              assign a_excerpt = a.excerpt | strip_html | strip
+              if a_excerpt == blank
+                assign a_excerpt = a.content | replace: '</', ' </' | strip_html | strip | truncatewords: 28
+              endif
+              assign a_alt = a.image.alt | default: a.title | escape
+            -%}
+            <div class="hp-jrnl__post" data-hp-post data-hp-tag="{{ a_tag | escape }}" data-hp-reveal>
+              <a class="hp-jrnl__card" href="{{ a.url }}">
+                {%- if a.image -%}
+                  <span class="hp-jrnl__card-media">
+                    {{
+                      a.image
+                      | image_url: width: 1200
+                      | image_tag: widths: '400, 600, 900, 1200', sizes: '(min-width: 1200px) 30vw, (min-width: 750px) 45vw, 100vw', alt: a_alt, loading: 'lazy'
+                    }}
+                    {%- if a_tag != blank -%}
+                      <span class="hp-jrnl__card-tag">{{ a_tag | escape }}</span>
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+                <span class="hp-jrnl__card-body">
+                  <h2 class="hp-jrnl__card-title">{{ a.title | escape }}</h2>
+                  {%- if a_excerpt != blank -%}
+                    <p class="hp-jrnl__card-excerpt">{{ a_excerpt | escape }}</p>
+                  {%- endif -%}
+                  <span class="hp-jrnl__card-more">
+                    {{ section.settings.read_label | default: 'Read the story' | escape }}
+                    {% render 'hp-icon', icon: 'arrow-right', size: 15 %}
+                  </span>
+                </span>
+              </a>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="hp-jrnl__pagination" aria-label="Journal pages">
+          {{ paginate | default_pagination: next: 'Older stories →', previous: '← Newer stories' }}
+        </nav>
+      {%- endif -%}
+      {%- endpaginate -%}
+    {%- elsif section.blocks.size == 0 -%}
       <p class="hp-jrnl__empty">{{ section.settings.empty_text | default: 'Stories are on their way.' | escape }}</p>
     {%- else -%}
       <div class="hp-jrnl__index" data-hp-journal-index>
@@ -645,64 +808,203 @@
   "tag": "section",
   "max_blocks": 24,
   "settings": [
-    { "type": "header", "content": "Hero" },
-    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
-    { "type": "range", "id": "scrim", "label": "Overlay strength", "min": 40, "max": 95, "step": 5, "unit": "%", "default": 85 },
-    { "type": "color", "id": "scrim_color", "label": "Overlay colour", "default": "#1a4b46" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Journal" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Notes From the Table" },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "range",
+      "id": "scrim",
+      "label": "Overlay strength",
+      "min": 40,
+      "max": 95,
+      "step": 5,
+      "unit": "%",
+      "default": 85
+    },
+    {
+      "type": "color",
+      "id": "scrim_color",
+      "label": "Overlay colour",
+      "default": "#1a4b46"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The Journal"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Notes From the Table"
+    },
     {
       "type": "textarea",
       "id": "text",
       "label": "Tagline",
       "default": "Styling notes, care guides and table stories from The Home Palette."
     },
-    { "type": "text", "id": "count_label", "label": "Story count label", "default": "stories" },
-    { "type": "text", "id": "topics_label", "label": "Topic count label", "default": "topics" },
-
-    { "type": "header", "content": "Stories" },
-    { "type": "color", "id": "bg_color", "label": "Background", "default": "#fffdf4" },
-    { "type": "color", "id": "lead_card_color", "label": "Lead story card", "default": "#1a4b46" },
-    { "type": "checkbox", "id": "flip", "label": "Lead story card on the left", "default": false },
-    { "type": "checkbox", "id": "show_filter", "label": "Show topic filter", "default": true },
-    { "type": "text", "id": "all_label", "label": "“All” chip label", "default": "All stories" },
-    { "type": "text", "id": "ribbon_label", "label": "Lead story ribbon", "default": "Latest" },
-    { "type": "text", "id": "read_label", "label": "Link label", "default": "Read the story" },
-    { "type": "text", "id": "back_label", "label": "Back link label", "default": "All stories" },
+    {
+      "type": "text",
+      "id": "count_label",
+      "label": "Story count label",
+      "default": "stories"
+    },
+    {
+      "type": "text",
+      "id": "topics_label",
+      "label": "Topic count label",
+      "default": "topics"
+    },
+    {
+      "type": "header",
+      "content": "Blog"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog",
+      "info": "Posts come from this blog as soon as it has any. On a blog's own page (/blogs/…) that blog is used automatically."
+    },
+    {
+      "type": "paragraph",
+      "content": "Write posts in Shopify admin → Content → Blog posts: headings, images, video, links, a featured image, excerpt, tags (the first tag becomes the filter chip) and the meta title, description and URL are all set per post there. The Post blocks below are only used while the blog has no posts."
+    },
+    {
+      "type": "header",
+      "content": "Stories"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#fffdf4"
+    },
+    {
+      "type": "color",
+      "id": "lead_card_color",
+      "label": "Lead story card",
+      "default": "#1a4b46"
+    },
+    {
+      "type": "checkbox",
+      "id": "flip",
+      "label": "Lead story card on the left",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filter",
+      "label": "Show topic filter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "all_label",
+      "label": "“All” chip label",
+      "default": "All stories"
+    },
+    {
+      "type": "text",
+      "id": "ribbon_label",
+      "label": "Lead story ribbon",
+      "default": "Latest"
+    },
+    {
+      "type": "text",
+      "id": "read_label",
+      "label": "Link label",
+      "default": "Read the story"
+    },
+    {
+      "type": "text",
+      "id": "back_label",
+      "label": "Back link label",
+      "default": "All stories"
+    },
     {
       "type": "checkbox",
       "id": "use_pages",
       "label": "Posts have their own pages",
-      "info": "Off: a story opens on this page at ?post=… — the theme cannot create Shopify pages, so this is what keeps the links working. Turn it on once you have created a page per post (template journal-post) and the cards will link to /pages/<handle> instead.",
+      "info": "Only affects the Post blocks below, which are the fallback while the blog has no posts. Off: a story opens on this page at ?post=…. On: cards link to /pages/<handle>.",
       "default": false
     },
-    { "type": "text", "id": "empty_text", "label": "Empty state", "default": "Stories are on their way." }
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty state",
+      "default": "Stories are on their way."
+    }
   ],
   "blocks": [
     {
       "type": "post",
-      "name": "Post",
+      "name": "Post (fallback)",
       "settings": [
-        { "type": "text", "id": "title", "label": "Title" },
-        { "type": "textarea", "id": "excerpt", "label": "Excerpt" },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "excerpt",
+          "label": "Excerpt"
+        },
         {
           "type": "html",
           "id": "body",
           "label": "Article",
           "info": "The full post, shown when the story is opened. Headings, paragraphs and lists are all fine here."
         },
-        { "type": "text", "id": "tag", "label": "Category", "info": "Also becomes a filter chip." },
-        { "type": "image_picker", "id": "image", "label": "Image" },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Category",
+          "info": "Also becomes a filter chip."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
         {
           "type": "text",
           "id": "handle",
           "label": "Page handle",
           "info": "The post's own page, e.g. journal-ceramic-vs-porcelain. Links to /pages/<handle>."
         },
-        { "type": "url", "id": "url", "label": "Custom link", "info": "Overrides the handle above." }
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Custom link",
+          "info": "Overrides the handle above."
+        }
       ]
     }
   ],
-  "presets": [{ "name": "THP Journal", "blocks": [{ "type": "post" }, { "type": "post" }, { "type": "post" }] }]
+  "presets": [
+    {
+      "name": "THP Journal",
+      "blocks": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "post"
+        },
+        {
+          "type": "post"
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}

@@ -1,0 +1,379 @@
+{% comment %}
+  THP — a single Journal article, rendered from a real Shopify blog post.
+
+  Posts are written in Shopify admin under Content → Blog posts, which is a full
+  editor: headings, lists, links, tables, uploaded images, embedded video, a
+  featured image, excerpt, tags, author, scheduling, and a "Search engine
+  listing" panel for the meta title, meta description and URL handle. This
+  section only supplies the frame and the typography, so every element that
+  editor can produce is styled below — including the ones the older page-based
+  posts never needed (h4–h6, figures, tables, iframes, video).
+
+  Meta tags need nothing here: layout/theme.liquid already writes the title,
+  description, canonical URL and Open Graph tags from the post's own SEO fields.
+  What this section adds is BlogPosting structured data, so search engines can
+  read the headline, dates, author and image directly.
+{% endcomment %}
+
+{%- liquid
+  assign words = article.content | replace: '</', ' </' | strip_html | split: ' ' | size
+  assign read_minutes = words | times: 1.0 | divided_by: 200 | ceil | at_least: 1
+  assign back_url = section.settings.back_url | default: blog.url
+  assign first_tag = article.tags | first
+-%}
+
+{%- style -%}
+  .hp-article-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(34rem, 46vw, 56rem);
+    background: var(--hp-teal);
+    color: var(--hp-cream);
+    overflow: hidden;
+  }
+  .hp-article-hero--plain { min-height: clamp(24rem, 28vw, 32rem); }
+  .hp-article-hero__media { position: absolute; inset: 0; z-index: 0; }
+  .hp-article-hero__media img { width: 100%; height: 100%; object-fit: cover; }
+  .hp-article-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(10, 35, 32, 0.2) 25%, rgba(10, 35, 32, 0.88) 100%);
+  }
+  .hp-article-hero__inner { position: relative; z-index: 2; width: 100%; padding: clamp(3.2rem, 6vw, 6rem) 0; }
+  .hp-article-hero__eyebrow { margin: 0 0 1.4rem; }
+  .hp-article-hero__eyebrow a { color: inherit; text-decoration: none; }
+  .hp-article-hero__title {
+    margin: 0;
+    max-width: 26ch;
+    color: var(--hp-cream);
+    font-size: var(--hp-h-page);
+    text-shadow: 0 2px 16px rgba(10, 35, 32, 0.6);
+  }
+  .hp-article-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.8rem;
+    margin: 1.8rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--hp-font-ui);
+    font-size: 1.15rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 249, 223, 0.82);
+  }
+
+  .hp-article { background: var(--hp-cream-soft); padding-bottom: clamp(3rem, 6vw, 6rem); }
+  .hp-article__wrap {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 5vw, 5.5rem) var(--hp-gap-x) 0;
+  }
+  .hp-article__lede {
+    margin: 0 0 clamp(2.4rem, 4vw, 3.6rem);
+    font-family: var(--hp-font-display);
+    font-size: clamp(1.9rem, 2.1vw, 2.4rem);
+    line-height: 1.5;
+    color: var(--hp-heading);
+  }
+
+  /* ---- body: every element the Shopify post editor can emit ---- */
+  .hp-article__body {
+    font-size: 1.65rem;
+    line-height: 1.85;
+    color: var(--hp-ink);
+    overflow-wrap: break-word;
+  }
+  .hp-article__body > :first-child { margin-top: 0; }
+  .hp-article__body h1,
+  .hp-article__body h2,
+  .hp-article__body h3,
+  .hp-article__body h4,
+  .hp-article__body h5,
+  .hp-article__body h6 {
+    color: var(--hp-heading);
+    line-height: 1.25;
+    scroll-margin-top: 12rem;
+  }
+  .hp-article__body h1,
+  .hp-article__body h2 { margin: clamp(3.2rem, 4.5vw, 4.4rem) 0 1.2rem; font-size: var(--hp-h-section); }
+  .hp-article__body h3 { margin: clamp(2.6rem, 3.4vw, 3.2rem) 0 1rem; font-size: var(--hp-h-block); }
+  .hp-article__body h4 { margin: 2.4rem 0 0.9rem; font-size: clamp(1.9rem, 1.8vw, 2.2rem); }
+  .hp-article__body h5 { margin: 2.2rem 0 0.8rem; font-size: 1.8rem; }
+  .hp-article__body h6 {
+    margin: 2.2rem 0 0.8rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.25rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .hp-article__body p { margin: 0 0 1.6rem; }
+  .hp-article__body ul,
+  .hp-article__body ol { margin: 0 0 1.8rem; padding-left: 2.2rem; }
+  .hp-article__body li { margin-bottom: 0.7rem; }
+  .hp-article__body li > ul,
+  .hp-article__body li > ol { margin: 0.7rem 0 0; }
+  .hp-article__body a {
+    color: var(--hp-teal);
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+    text-decoration-thickness: 1px;
+  }
+  .hp-article__body a:hover { color: var(--hp-teal-deep); }
+  .hp-article__body strong,
+  .hp-article__body b { font-weight: 600; }
+  .hp-article__body img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 2.6rem auto;
+    border-radius: var(--hp-r-card);
+  }
+  .hp-article__body figure { margin: 2.6rem 0; }
+  .hp-article__body figure img { margin: 0 auto; }
+  .hp-article__body figcaption {
+    margin-top: 1rem;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--hp-muted, rgba(28, 33, 31, 0.65));
+  }
+  /* Embedded video (YouTube, Vimeo) arrives as a fixed-size iframe; this makes
+     it full width and keeps its shape on every screen. */
+  .hp-article__body iframe,
+  .hp-article__body video {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin: 2.6rem 0;
+    border: 0;
+    border-radius: var(--hp-r-card);
+    background: #000;
+  }
+  .hp-article__body blockquote {
+    margin: 2.6rem 0;
+    padding: 0 0 0 2rem;
+    border-left: 3px solid var(--hp-teal-chip);
+    font-family: var(--hp-font-display);
+    font-size: 2rem;
+    line-height: 1.5;
+    color: var(--hp-heading);
+  }
+  .hp-article__body hr {
+    margin: 3.2rem 0;
+    border: 0;
+    border-top: 1px solid var(--hp-hairline);
+  }
+  /* Tables scroll sideways on phones instead of breaking the page width. */
+  .hp-article__body table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 2.6rem 0;
+    border-collapse: collapse;
+    font-size: 1.45rem;
+  }
+  .hp-article__body th,
+  .hp-article__body td {
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--hp-hairline);
+    text-align: left;
+    vertical-align: top;
+  }
+  .hp-article__body th { background: rgba(26, 75, 70, 0.06); font-weight: 600; }
+  .hp-article__body code {
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: rgba(26, 75, 70, 0.08);
+    font-size: 0.9em;
+  }
+  .hp-article__body pre {
+    overflow-x: auto;
+    padding: 1.6rem;
+    border-radius: var(--hp-r-card);
+    background: rgba(26, 75, 70, 0.08);
+    font-size: 1.35rem;
+    line-height: 1.6;
+  }
+  .hp-article__body pre code { padding: 0; background: none; }
+
+  .hp-article__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin: clamp(3rem, 5vw, 4.4rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .hp-article__tags a {
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--hp-hairline);
+    border-radius: var(--hp-r-pill);
+    font-family: var(--hp-font-ui);
+    font-size: 1.15rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--hp-heading);
+  }
+  .hp-article__tags a:hover { background: var(--hp-teal); border-color: var(--hp-teal); color: var(--hp-cream); }
+
+  .hp-article__pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem;
+    margin-top: clamp(3.2rem, 5vw, 4.8rem);
+    padding-top: clamp(2.4rem, 4vw, 3.2rem);
+    border-top: 1px solid var(--hp-hairline);
+  }
+  .hp-article__pager a { display: block; text-decoration: none; color: var(--hp-heading); }
+  .hp-article__pager-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-family: var(--hp-font-ui);
+    font-size: 1.1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hp-teal);
+  }
+  .hp-article__pager-title { font-family: var(--hp-font-display); font-size: 1.9rem; line-height: 1.3; }
+  .hp-article__pager-next { text-align: right; grid-column: 2; }
+
+  .hp-article__back { text-align: center; padding-top: clamp(2.4rem, 4vw, 4rem); }
+
+  @media screen and (max-width: 749px) {
+    .hp-article__pager { grid-template-columns: 1fr; }
+    .hp-article__pager-next { grid-column: 1; text-align: left; }
+  }
+{%- endstyle -%}
+
+<div class="hp-article-hero{% unless article.image %} hp-article-hero--plain{% endunless %}">
+  {%- if article.image -%}
+    <div class="hp-article-hero__media">
+      {{
+        article.image
+        | image_url: width: 2200
+        | image_tag: widths: '600, 900, 1200, 1600, 2200', sizes: '100vw', alt: article.image.alt | default: article.title, fetchpriority: 'high'
+      }}
+    </div>
+  {%- endif -%}
+  <div class="hp-container hp-article-hero__inner">
+    <p class="hp-eyebrow hp-eyebrow--light hp-article-hero__eyebrow">
+      <a href="{{ back_url }}">{{ section.settings.eyebrow | default: blog.title | escape }}</a>
+    </p>
+    <h1 class="hp-article-hero__title">{{ article.title | escape }}</h1>
+    <ul class="hp-article-hero__meta">
+      {%- if section.settings.show_date -%}
+        <li>{{ article.published_at | time_tag: format: 'date' }}</li>
+      {%- endif -%}
+      {%- if section.settings.show_author and article.author != blank -%}
+        <li>{{ article.author | escape }}</li>
+      {%- endif -%}
+      {%- if section.settings.show_reading_time -%}
+        <li>{{ read_minutes }} min read</li>
+      {%- endif -%}
+    </ul>
+  </div>
+</div>
+
+<div class="hp-article">
+  <article class="hp-article__wrap">
+    {%- if section.settings.show_excerpt and article.excerpt != blank -%}
+      <div class="hp-article__lede">{{ article.excerpt | strip_html }}</div>
+    {%- endif -%}
+
+    <div class="hp-article__body rte">
+      {{ article.content }}
+    </div>
+
+    {%- if section.settings.show_tags and article.tags.size > 0 -%}
+      <ul class="hp-article__tags">
+        {%- for tag in article.tags -%}
+          <li><a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag | escape }}</a></li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if section.settings.show_pager and blog.previous_article or section.settings.show_pager and blog.next_article -%}
+      <nav class="hp-article__pager" aria-label="More stories">
+        {%- if blog.previous_article -%}
+          <a href="{{ blog.previous_article.url }}">
+            <span class="hp-article__pager-label">← Previous</span>
+            <span class="hp-article__pager-title">{{ blog.previous_article.title | escape }}</span>
+          </a>
+        {%- endif -%}
+        {%- if blog.next_article -%}
+          <a class="hp-article__pager-next" href="{{ blog.next_article.url }}">
+            <span class="hp-article__pager-label">Next →</span>
+            <span class="hp-article__pager-title">{{ blog.next_article.title | escape }}</span>
+          </a>
+        {%- endif -%}
+      </nav>
+    {%- endif -%}
+
+    <div class="hp-article__back">
+      <a class="hp-btn hp-btn--outline" href="{{ back_url }}">
+        {{ section.settings.back_label | default: 'Back to the Journal' | escape }}
+      </a>
+    </div>
+  </article>
+</div>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {{ canonical_url | json }},
+    "headline": {{ article.title | json }},
+    "description": {{ article.excerpt_or_content | strip_html | truncatewords: 40 | json }},
+    {%- if article.image %}
+    "image": [{{ article.image | image_url: width: 1600 | prepend: 'https:' | json }}],
+    {%- endif %}
+    "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' | json }},
+    "dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' | json }},
+    "author": { "@type": "Person", "name": {{ article.author | default: shop.name | json }} },
+    "publisher": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }}
+    }
+    {%- if first_tag %},
+    "keywords": {{ article.tags | join: ', ' | json }}
+    {%- endif %}
+  }
+</script>
+
+{% schema %}
+{
+  "name": "THP Journal Article",
+  "tag": "section",
+  "class": "hp-article-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Write and edit posts in Shopify admin → Content → Blog posts. Headings, images, video, links, the featured image and the meta title, description and URL all live there, per post. The settings below apply to every post."
+    },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "Leave blank to show the blog's name.", "default": "The Journal" },
+    { "type": "checkbox", "id": "show_excerpt", "label": "Show excerpt as an intro", "default": true },
+    { "type": "checkbox", "id": "show_date", "label": "Show date", "default": true },
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": false },
+    { "type": "checkbox", "id": "show_reading_time", "label": "Show reading time", "default": true },
+    { "type": "checkbox", "id": "show_tags", "label": "Show tags", "default": true },
+    { "type": "checkbox", "id": "show_pager", "label": "Show previous / next story", "default": true },
+    {
+      "type": "url",
+      "id": "back_url",
+      "label": "Back link",
+      "info": "Leave blank to go back to the blog. Point at /pages/journals to return to the Journal page."
+    },
+    { "type": "text", "id": "back_label", "label": "Back link label", "default": "Back to the Journal" }
+  ]
+}
+{% endschema %}

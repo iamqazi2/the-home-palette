@@ -1,18 +1,25 @@
 {
   "sections": {
     "main": {
-      "type": "main-blog",
+      "type": "hp-journal",
       "settings": {
-        "layout": "collage",
-        "show_image": true,
-        "image_height": "medium",
-        "show_date": true,
-        "show_author": false,
-        "padding_top": 40,
-        "padding_bottom": 40,
-        "hp_hero_image": "shopify://shop_images/WhatsApp_Image_2026-04-19_at_9.13.36_PM.jpg",
-        "hp_eyebrow": "The Journal",
-        "hp_tagline": "Styling notes, care guides and table stories from The Home Palette."
+        "hero_image": "shopify://shop_images/blush-peach-premium.webp",
+        "scrim": 85,
+        "scrim_color": "#1a4b46",
+        "eyebrow": "The Journal",
+        "heading": "Notes From the Table",
+        "text": "Styling notes, care guides and table stories from The Home Palette.",
+        "count_label": "stories",
+        "topics_label": "topics",
+        "bg_color": "#fff9df",
+        "lead_card_color": "#1a4b46",
+        "flip": false,
+        "show_filter": true,
+        "all_label": "All stories",
+        "ribbon_label": "Latest",
+        "read_label": "Read the story",
+        "back_label": "All stories",
+        "empty_text": "Stories are on their way."
       }
     }
   },

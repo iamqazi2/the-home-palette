@@ -85,7 +85,8 @@
         "read_label": "Read the story",
         "back_label": "All stories",
         "use_pages": false,
-        "empty_text": "Stories are on their way."
+        "empty_text": "Stories are on their way.",
+        "blog": "journal"
       }
     }
   },
