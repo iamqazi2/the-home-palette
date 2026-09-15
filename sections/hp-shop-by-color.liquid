@@ -63,35 +63,43 @@
   format, so they are replaced on the way in.
 {%- endcomment -%}
 {%- liquid
-  # Entries come from Shopify admin, Content, Metaobjects, "Colour swatch". They are
-  # the single list both the homepage and the Shop by Colour page read, which is what
-  # keeps the two in step: section blocks are stored per template, so while the
-  # list lived in blocks each page carried its own copy and they drifted.
+  # Entries come from Shopify admin, Content, Metaobjects, "Colour swatch". That
+  # single list is read by both the homepage and the Shop by Colour page.
   #
-  # Ordered by the Position field. Liquid cannot sort drops by a nested field,
-  # so each entry becomes a zero-padded "position:handle" key, the keys are
-  # sorted as text, and each is looked up again by handle. Padding to five
-  # digits keeps 10 after 9; entries with no Position sort last, alphabetically
-  # by handle. Liquid returns the first 50 entries of a type.
-  assign hp_colour_keys = ''
+  # One pass over the list, and nothing is looked up again afterwards. An
+  # earlier version sorted handles and then fetched each entry back by handle;
+  # Shopify stops answering those lookups after twenty, the failed assign kept
+  # the previous entry, and the twenty-first swatch rendered as a second copy of
+  # the twentieth. That also meant any colour added past twenty never appeared.
+  #
+  # So each entry is written straight into its finished row, prefixed with a
+  # zero-padded Position and its handle, and the rows are sorted as text. The
+  # prefix is stripped afterwards. Padding to five digits keeps 10 after 9, and
+  # entries without a Position sort last, alphabetically by handle. Characters
+  # the row format uses as separators are replaced inside values on the way in.
+  assign hp_colour_rows = ''
   for hp_entry in shop.metaobjects.colour_swatch.values
     assign hp_pos = hp_entry.position.value | default: 9999 | at_least: 0 | at_most: 89999 | plus: 10000
-    assign hp_colour_keys = hp_colour_keys | append: hp_pos | append: ':' | append: hp_entry.system.handle | append: ','
+    assign hp_title = hp_entry.title.value | append: '' | replace: '|', '/' | replace: ';', ',' | replace: '~', '-'
+    if hp_title == blank
+      continue
+    endif
+    assign hp_swatch = hp_entry.swatch.value | append: ''
+    assign hp_tag = hp_entry.tag.value | append: '' | replace: '|', '/' | replace: ';', ',' | replace: '~', '-'
+    assign hp_aliases = hp_entry.aliases.value | append: '' | replace: '|', '/' | replace: ';', ',' | replace: '~', '-'
+    assign hp_view = hp_entry.view_all_url.value | append: '' | replace: '|', '%7C' | replace: ';', '%3B' | replace: '~', '%7E'
+    assign hp_row = hp_pos | append: '~' | append: hp_entry.system.handle | append: '~' | append: hp_title | append: '|' | append: hp_swatch | append: '|' | append: hp_tag | append: '|' | append: hp_aliases | append: '|' | append: hp_view
+    assign hp_colour_rows = hp_colour_rows | append: hp_row | append: ';'
   endfor
-  assign hp_colour_keys = hp_colour_keys | split: ',' | sort
-  assign hp_colour_count = hp_colour_keys.size
+  assign hp_colour_rows = hp_colour_rows | split: ';' | sort
+
+  assign hp_colour_data = ''
+  for hp_row in hp_colour_rows
+    assign hp_rest = hp_row | split: '~' | last
+    assign hp_colour_data = hp_colour_data | append: hp_rest | append: ';'
+  endfor
+  assign hp_colour_count = hp_colour_rows.size
 -%}
-{%- capture hp_colour_data -%}
-  {%- for hp_key in hp_colour_keys -%}
-    {%- assign hp_handle = hp_key | split: ':' | last -%}
-    {%- assign sw = shop.metaobjects.colour_swatch[hp_handle] -%}
-    {{- sw.title.value | replace: '|', '/' | replace: ';', ',' -}}
-    |{{- sw.swatch.value -}}
-    |{{- sw.tag.value | replace: '|', '/' | replace: ';', ',' -}}
-    |{{- sw.aliases.value | replace: '|', '/' | replace: ';', ',' -}}
-    |{{- sw.view_all_url.value -}};
-  {%- endfor -%}
-{%- endcapture -%}
 {%- liquid
   # These used to be one setting: "products per colour" also decided how many
   # grid columns to draw. That capped the shelf at 6 products purely because 7
@@ -783,7 +791,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "The colour swatches are shared by the homepage and the Shop by Colour page, so both always match. Add, edit, reorder or remove colours in Shopify admin → Content → Metaobjects → Colour swatch (lower Position shows first). Everything below is set per page."
+      "content": "The colours are shared by the homepage and the Shop by Colour page, so both always match. They are not blocks here: [open the Colour swatch list](https://admin.shopify.com/store/2v7tma-zm/content/metaobjects/entries/colour_swatch) in Shopify admin to add, edit, reorder or remove colours. Lower Position shows first. Everything below is set per page."
     },
     {
       "type": "text",

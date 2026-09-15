@@ -30,7 +30,7 @@
   #
   # Ordered by the Position field. Liquid cannot sort drops by a nested field,
   # so each entry becomes a zero-padded "position:handle" key, the keys are
-  # sorted as text, and each is looked up again by handle. Padding to five
+  # sorted as text, and each entry is found again by walking the list. Padding to five
   # digits keeps 10 after 9; entries with no Position sort last, alphabetically
   # by handle. Liquid returns the first 50 entries of a type.
   assign hp_occ_keys = ''
@@ -197,7 +197,17 @@
       {%- for hp_key in hp_occ_keys -%}
         {%- liquid
           assign hp_handle = hp_key | split: ':' | last
-          assign occ = shop.metaobjects.shop_occasion[hp_handle]
+          # Found by walking the list rather than looked up by handle. Shopify
+          # stops answering handle lookups after twenty per page, and a failed
+          # assign keeps the previous entry, so a lookup-based version silently
+          # repeats a card once the list grows past twenty.
+          assign occ = nil
+          for hp_entry in shop.metaobjects.shop_occasion.values
+            if hp_entry.system.handle == hp_handle
+              assign occ = hp_entry
+              break
+            endif
+          endfor
           assign occ_title = occ.title.value
           assign occ_caption = occ.caption.value
           assign occ_icon = occ.icon.value | default: 'utensils'
@@ -251,7 +261,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "The cards are shared by the homepage and the Shop by Occasion page, so both always match. Add, edit, reorder or remove cards in Shopify admin → Content → Metaobjects → Shop by Occasion card (lower Position shows first). Everything below is set per page."
+      "content": "The cards are shared by the homepage and the Shop by Occasion page, so both always match. They are not blocks here: [open the Shop by Occasion card list](https://admin.shopify.com/store/2v7tma-zm/content/metaobjects/entries/shop_occasion) in Shopify admin to add, edit, reorder or remove cards. Lower Position shows first. Everything below is set per page."
     },
     {
       "type": "text",

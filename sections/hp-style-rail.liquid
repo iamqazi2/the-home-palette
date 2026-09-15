@@ -11,7 +11,7 @@
   #
   # Ordered by the Position field. Liquid cannot sort drops by a nested field,
   # so each entry becomes a zero-padded "position:handle" key, the keys are
-  # sorted as text, and each is looked up again by handle. Padding to five
+  # sorted as text, and each entry is found again by walking the list. Padding to five
   # digits keeps 10 after 9; entries with no Position sort last, alphabetically
   # by handle. Liquid returns the first 50 entries of a type.
   assign hp_sty_keys = ''
@@ -111,7 +111,17 @@
       {%- for hp_key in hp_sty_keys -%}
         {%- liquid
           assign hp_handle = hp_key | split: ':' | last
-          assign sty = shop.metaobjects.shop_style[hp_handle]
+          # Found by walking the list rather than looked up by handle. Shopify
+          # stops answering handle lookups after twenty per page, and a failed
+          # assign keeps the previous entry, so a lookup-based version silently
+          # repeats a card once the list grows past twenty.
+          assign sty = nil
+          for hp_entry in shop.metaobjects.shop_style.values
+            if hp_entry.system.handle == hp_handle
+              assign sty = hp_entry
+              break
+            endif
+          endfor
           assign sty_title = sty.title.value
           assign col = sty.collection.value
           assign tile_image = sty.image.value | default: col.featured_image
@@ -154,7 +164,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "The tiles are shared by the homepage and the Shop by Style page, so both always match. Add, edit, reorder or remove tiles in Shopify admin → Content → Metaobjects → Shop by Style tile (lower Position shows first). Everything below is set per page."
+      "content": "The tiles are shared by the homepage and the Shop by Style page, so both always match. They are not blocks here: [open the Shop by Style tile list](https://admin.shopify.com/store/2v7tma-zm/content/metaobjects/entries/shop_style) in Shopify admin to add, edit, reorder or remove tiles. Lower Position shows first. Everything below is set per page."
     },
     {
       "type": "text",
