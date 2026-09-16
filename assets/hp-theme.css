@@ -2296,3 +2296,209 @@ body.overflow-hidden { overflow: hidden; }
    app's revamped widget. They are superseded by hp-reviews.css, which covers
    both widget generations and every Judge.me surface from one place; keeping a
    second partial copy here only created rules that fought each other. */
+
+/* ==========================================================================
+   .hp-prose — long-form text written in a rich text editor.
+
+   Used by Journal posts, both the theme-editor posts on /pages/journals and
+   real blog posts on /blogs/…, so the two render identically. The goal is to
+   look like the editor the text was written in: six heading sizes that step
+   down in order, lists whose bullet or number sits on the same line as the
+   text, images at their own size, underlined links.
+
+   Deliberately NOT .rte. Dawn's .rte sets list-style-position: inside, which
+   combined with the <li><p>…</p></li> markup that Google Docs and the Shopify
+   editor both paste puts every bullet on a line of its own with the text
+   underneath. Dawn's h3 also out-sizes the theme's h2 — the heading order ran
+   backwards.
+   ========================================================================== */
+.hp-prose {
+  font-family: var(--hp-font-body, inherit);
+  font-size: 1.65rem;
+  line-height: 1.8;
+  color: var(--hp-ink);
+  overflow-wrap: break-word;
+}
+.hp-prose > :first-child { margin-top: 0; }
+.hp-prose > :last-child { margin-bottom: 0; }
+
+.hp-prose h1,
+.hp-prose h2,
+.hp-prose h3,
+.hp-prose h4,
+.hp-prose h5,
+.hp-prose h6 {
+  font-family: var(--hp-font-display);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--hp-heading);
+  scroll-margin-top: 12rem;
+}
+.hp-prose h1 { margin: 4.4rem 0 1.4rem; font-size: clamp(3rem, 3.4vw, 3.8rem); }
+.hp-prose h2 { margin: 4rem 0 1.2rem;   font-size: clamp(2.6rem, 2.8vw, 3.2rem); }
+.hp-prose h3 { margin: 3.2rem 0 1rem;   font-size: clamp(2.2rem, 2.3vw, 2.6rem); }
+.hp-prose h4 { margin: 2.8rem 0 0.9rem; font-size: clamp(1.95rem, 1.9vw, 2.15rem); }
+.hp-prose h5 { margin: 2.4rem 0 0.8rem; font-size: 1.85rem; }
+.hp-prose h6 { margin: 2.4rem 0 0.8rem; font-size: 1.7rem; }
+/* Pasted text wraps heading words in spans; keep them from restyling. */
+.hp-prose h1 span, .hp-prose h2 span, .hp-prose h3 span,
+.hp-prose h4 span, .hp-prose h5 span, .hp-prose h6 span { font: inherit; color: inherit; }
+
+.hp-prose p { margin: 0 0 1.6rem; }
+.hp-prose p:empty { display: none; }
+
+.hp-prose strong,
+.hp-prose b { font-weight: 700; color: inherit; }
+.hp-prose em,
+.hp-prose i { font-style: italic; }
+.hp-prose u { text-decoration: underline; }
+.hp-prose s,
+.hp-prose del { text-decoration: line-through; }
+.hp-prose sub,
+.hp-prose sup { font-size: 0.75em; line-height: 0; }
+
+.hp-prose a {
+  color: var(--hp-teal);
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+  text-decoration-thickness: 1px;
+}
+.hp-prose a:hover { color: var(--hp-teal-deep, var(--hp-teal)); }
+.hp-prose a span { color: inherit; }
+
+/* Lists: marker outside, on the first line of the item. */
+.hp-prose ul,
+.hp-prose ol {
+  margin: 0 0 1.8rem;
+  padding-left: 2.4rem;
+  list-style-position: outside;
+}
+.hp-prose ul { list-style-type: disc; }
+.hp-prose ol { list-style-type: decimal; }
+.hp-prose ul ul { list-style-type: circle; }
+.hp-prose ul ul ul { list-style-type: square; }
+.hp-prose ol ol { list-style-type: lower-alpha; }
+.hp-prose ol ol ol { list-style-type: lower-roman; }
+.hp-prose li {
+  display: list-item;
+  margin: 0 0 0.6rem;
+  padding-left: 0.4rem;
+  list-style: inherit;
+}
+.hp-prose li::marker { color: var(--hp-heading); }
+/* Pasted list items carry a paragraph inside; it must not break the line or
+   add paragraph spacing. */
+.hp-prose li > p { margin: 0; }
+.hp-prose li > p + p { margin-top: 0.6rem; }
+.hp-prose li > ul,
+.hp-prose li > ol { margin: 0.6rem 0 0; }
+
+/* Images keep their own size (or the size set in the editor), never wider
+   than the column, centred on their own line. */
+.hp-prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 2.4rem auto;
+  border: 0;
+  border-radius: var(--hp-r-card, 12px);
+  box-shadow: none;
+}
+.hp-prose p > img:only-child,
+.hp-prose p > img:first-child { margin-top: 0.8rem; margin-bottom: 0.8rem; }
+.hp-prose p:has(> img) { margin: 2.4rem 0; }
+.hp-prose figure { margin: 2.4rem 0; }
+.hp-prose figure img { margin: 0 auto; }
+.hp-prose figcaption {
+  margin-top: 0.9rem;
+  font-size: 1.35rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--hp-taupe, rgba(28, 33, 31, 0.65));
+}
+
+/* Text alignment chosen in the editor. */
+.hp-prose [style*="text-align: center"] img,
+.hp-prose [style*="text-align:center"] img { margin-left: auto; margin-right: auto; }
+.hp-prose [style*="text-align: right"] img,
+.hp-prose [style*="text-align:right"] img { margin-left: auto; margin-right: 0; }
+.hp-prose [style*="text-align: left"] img,
+.hp-prose [style*="text-align:left"] img { margin-left: 0; margin-right: auto; }
+
+/* Embedded video. */
+.hp-prose iframe,
+.hp-prose video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin: 2.4rem 0;
+  border: 0;
+  border-radius: var(--hp-r-card, 12px);
+  background: #000;
+}
+
+.hp-prose blockquote {
+  margin: 2.4rem 0;
+  padding: 0.2rem 0 0.2rem 2rem;
+  border-left: 3px solid var(--hp-teal);
+  font-family: var(--hp-font-display);
+  font-size: 2rem;
+  font-style: normal;
+  line-height: 1.5;
+  color: var(--hp-heading);
+}
+.hp-prose blockquote p:last-child { margin-bottom: 0; }
+
+.hp-prose hr {
+  margin: 3.2rem 0;
+  border: 0;
+  border-top: 1px solid var(--hp-hairline, rgba(0, 0, 0, 0.12));
+}
+
+.hp-prose table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 2.4rem 0;
+  border-collapse: collapse;
+  font-size: 1.5rem;
+  line-height: 1.5;
+}
+.hp-prose th,
+.hp-prose td {
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--hp-hairline, rgba(0, 0, 0, 0.12));
+  text-align: left;
+  vertical-align: top;
+}
+.hp-prose th { font-weight: 700; background: rgba(26, 75, 70, 0.06); }
+.hp-prose td > p,
+.hp-prose th > p { margin: 0; }
+
+.hp-prose code {
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(26, 75, 70, 0.08);
+  font-size: 0.9em;
+}
+.hp-prose pre {
+  overflow-x: auto;
+  margin: 2.4rem 0;
+  padding: 1.6rem;
+  border-radius: var(--hp-r-card, 12px);
+  background: rgba(26, 75, 70, 0.08);
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+.hp-prose pre code { padding: 0; background: none; }
+
+@media screen and (max-width: 749px) {
+  .hp-prose { font-size: 1.55rem; }
+  .hp-prose ul,
+  .hp-prose ol { padding-left: 2rem; }
+}

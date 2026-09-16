@@ -440,23 +440,9 @@
     line-height: 1.7;
     color: var(--hp-heading);
   }
-  .hp-jrnl__post-body {
-    margin-top: clamp(2.4rem, 3.4vw, 3.2rem);
-    font-size: 1.55rem;
-    line-height: 1.9;
-    color: var(--hp-taupe);
-  }
-  .hp-jrnl__post-body h2 {
-    margin: clamp(2.6rem, 3.4vw, 3.4rem) 0 1rem;
-    font-family: var(--hp-font-display);
-    font-size: var(--hp-h-block);
-    line-height: 1.25;
-    color: var(--hp-heading);
-  }
-  .hp-jrnl__post-body p { margin: 0 0 1.6rem; }
-  .hp-jrnl__post-body ul, .hp-jrnl__post-body ol { margin: 0 0 1.6rem; padding-left: 2.2rem; }
-  .hp-jrnl__post-body li { margin-bottom: 0.8rem; }
-  .hp-jrnl__post-body strong { color: var(--hp-ink); }
+  /* Typography for the post itself lives in .hp-prose (hp-theme.css), shared
+     with /blogs/ posts so both render the same way. */
+  .hp-jrnl__post-body { margin-top: clamp(2.4rem, 3.4vw, 3.2rem); }
   .hp-jrnl__post-foot { margin-top: clamp(2.4rem, 3.4vw, 3.4rem); }
 
   .hp-jrnl__empty {
@@ -780,7 +766,7 @@
               <p class="hp-jrnl__post-lede">{{ block.settings.excerpt }}</p>
             {%- endif -%}
 
-            <div class="hp-jrnl__post-body rte">
+            <div class="hp-jrnl__post-body hp-prose" data-hp-no-anim>
               {%- if block.settings.body != blank -%}
                 {{ block.settings.body }}
               {%- else -%}

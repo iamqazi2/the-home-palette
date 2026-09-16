@@ -80,128 +80,8 @@
     color: var(--hp-heading);
   }
 
-  /* ---- body: every element the Shopify post editor can emit ---- */
-  .hp-article__body {
-    font-size: 1.65rem;
-    line-height: 1.85;
-    color: var(--hp-ink);
-    overflow-wrap: break-word;
-  }
-  .hp-article__body > :first-child { margin-top: 0; }
-  .hp-article__body h1,
-  .hp-article__body h2,
-  .hp-article__body h3,
-  .hp-article__body h4,
-  .hp-article__body h5,
-  .hp-article__body h6 {
-    color: var(--hp-heading);
-    line-height: 1.25;
-    scroll-margin-top: 12rem;
-  }
-  .hp-article__body h1,
-  .hp-article__body h2 { margin: clamp(3.2rem, 4.5vw, 4.4rem) 0 1.2rem; font-size: var(--hp-h-section); }
-  .hp-article__body h3 { margin: clamp(2.6rem, 3.4vw, 3.2rem) 0 1rem; font-size: var(--hp-h-block); }
-  .hp-article__body h4 { margin: 2.4rem 0 0.9rem; font-size: clamp(1.9rem, 1.8vw, 2.2rem); }
-  .hp-article__body h5 { margin: 2.2rem 0 0.8rem; font-size: 1.8rem; }
-  .hp-article__body h6 {
-    margin: 2.2rem 0 0.8rem;
-    font-family: var(--hp-font-ui);
-    font-size: 1.25rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-  .hp-article__body p { margin: 0 0 1.6rem; }
-  .hp-article__body ul,
-  .hp-article__body ol { margin: 0 0 1.8rem; padding-left: 2.2rem; }
-  .hp-article__body li { margin-bottom: 0.7rem; }
-  .hp-article__body li > ul,
-  .hp-article__body li > ol { margin: 0.7rem 0 0; }
-  .hp-article__body a {
-    color: var(--hp-teal);
-    text-decoration: underline;
-    text-underline-offset: 0.3rem;
-    text-decoration-thickness: 1px;
-  }
-  .hp-article__body a:hover { color: var(--hp-teal-deep); }
-  .hp-article__body strong,
-  .hp-article__body b { font-weight: 600; }
-  .hp-article__body img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    margin: 2.6rem auto;
-    border-radius: var(--hp-r-card);
-  }
-  .hp-article__body figure { margin: 2.6rem 0; }
-  .hp-article__body figure img { margin: 0 auto; }
-  .hp-article__body figcaption {
-    margin-top: 1rem;
-    font-size: 1.3rem;
-    line-height: 1.5;
-    text-align: center;
-    color: var(--hp-muted, rgba(28, 33, 31, 0.65));
-  }
-  /* Embedded video (YouTube, Vimeo) arrives as a fixed-size iframe; this makes
-     it full width and keeps its shape on every screen. */
-  .hp-article__body iframe,
-  .hp-article__body video {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    margin: 2.6rem 0;
-    border: 0;
-    border-radius: var(--hp-r-card);
-    background: #000;
-  }
-  .hp-article__body blockquote {
-    margin: 2.6rem 0;
-    padding: 0 0 0 2rem;
-    border-left: 3px solid var(--hp-teal-chip);
-    font-family: var(--hp-font-display);
-    font-size: 2rem;
-    line-height: 1.5;
-    color: var(--hp-heading);
-  }
-  .hp-article__body hr {
-    margin: 3.2rem 0;
-    border: 0;
-    border-top: 1px solid var(--hp-hairline);
-  }
-  /* Tables scroll sideways on phones instead of breaking the page width. */
-  .hp-article__body table {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: auto;
-    margin: 2.6rem 0;
-    border-collapse: collapse;
-    font-size: 1.45rem;
-  }
-  .hp-article__body th,
-  .hp-article__body td {
-    padding: 1rem 1.2rem;
-    border: 1px solid var(--hp-hairline);
-    text-align: left;
-    vertical-align: top;
-  }
-  .hp-article__body th { background: rgba(26, 75, 70, 0.06); font-weight: 600; }
-  .hp-article__body code {
-    padding: 0.15rem 0.45rem;
-    border-radius: 4px;
-    background: rgba(26, 75, 70, 0.08);
-    font-size: 0.9em;
-  }
-  .hp-article__body pre {
-    overflow-x: auto;
-    padding: 1.6rem;
-    border-radius: var(--hp-r-card);
-    background: rgba(26, 75, 70, 0.08);
-    font-size: 1.35rem;
-    line-height: 1.6;
-  }
-  .hp-article__body pre code { padding: 0; background: none; }
+  /* Typography for the post body lives in .hp-prose (hp-theme.css), shared with
+     the Journal page's own posts so both render the same way. */
 
   .hp-article__tags {
     display: flex;
@@ -289,7 +169,7 @@
       <div class="hp-article__lede">{{ article.excerpt | strip_html }}</div>
     {%- endif -%}
 
-    <div class="hp-article__body rte">
+    <div class="hp-article__body hp-prose" data-hp-no-anim>
       {{ article.content }}
     </div>
 
