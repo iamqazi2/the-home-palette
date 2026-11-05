@@ -209,7 +209,7 @@
         "tile_6": {
           "type": "tile",
           "settings": {
-            "collection": "plates",
+            "collection": "plates-archived",
             "image": "shopify://shop_images/Ova-Plates-6-inch-Set-of-2-The-Home-Palette-42217547596075.webp",
             "title": "Plates"
           }
@@ -343,76 +343,6 @@
     },
     "hp_occasion": {
       "type": "hp-occasion",
-      "blocks": {
-        "occ_3": {
-          "type": "occasion",
-          "settings": {
-            "icon": "coffee",
-            "title": "Tea Time",
-            "caption": "Slow afternoon rituals",
-            "collection": "tea-time",
-            "link": ""
-          }
-        },
-        "occ_6": {
-          "type": "occasion",
-          "settings": {
-            "icon": "heart",
-            "title": "Wedding Gifts",
-            "caption": "Heirlooms to give",
-            "collection": "wedding-gifts",
-            "link": ""
-          }
-        },
-        "occ_2": {
-          "type": "occasion",
-          "settings": {
-            "icon": "users",
-            "title": "Hosting Guests",
-            "caption": "Sets that impress",
-            "collection": "hosting-guests",
-            "link": ""
-          }
-        },
-        "occ_1": {
-          "type": "occasion",
-          "settings": {
-            "icon": "utensils",
-            "title": "Everyday Dining",
-            "caption": "Sturdy, beautiful staples",
-            "collection": "everyday-dining",
-            "link": ""
-          }
-        },
-        "occ_5": {
-          "type": "occasion",
-          "settings": {
-            "icon": "sparkles",
-            "title": "Eid",
-            "caption": "Festive gatherings",
-            "collection": "eid",
-            "link": ""
-          }
-        },
-        "occ_4": {
-          "type": "occasion",
-          "settings": {
-            "icon": "moon-star",
-            "title": "Ramadan",
-            "caption": "Iftar & suhoor tables",
-            "collection": "ramadan",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "occ_3",
-        "occ_6",
-        "occ_2",
-        "occ_1",
-        "occ_5",
-        "occ_4"
-      ],
       "settings": {
         "eyebrow": "Chapter Three — The Table",
         "heading": "Shop by Occasion",
@@ -427,60 +357,6 @@
     },
     "hp_style_rail": {
       "type": "hp-style-rail",
-      "blocks": {
-        "style_1": {
-          "type": "style",
-          "settings": {
-            "title": "Minimalist",
-            "image": "shopify://shop_images/Ivory-White-Premium-Dinner-Set-45-pcs-The-Home-Palette-42283805147435.webp",
-            "collection": "minimalist",
-            "link": ""
-          }
-        },
-        "style_3": {
-          "type": "style",
-          "settings": {
-            "title": "Floral",
-            "image": "shopify://shop_images/Boho-Garden-Dinner-Set-32-pcs-The-Home-Palette-43084232098091.webp",
-            "collection": "floral",
-            "link": "shopify://collections/floral"
-          }
-        },
-        "style_4": {
-          "type": "style",
-          "settings": {
-            "title": "Extravagant",
-            "image": "shopify://shop_images/40E3CD50-57AD-4F0F-8C0C-C9190DFD462A.jpg",
-            "collection": "extravagant",
-            "link": "shopify://collections/extravagant"
-          }
-        },
-        "style_2": {
-          "type": "style",
-          "settings": {
-            "title": "Traditional",
-            "image": "shopify://shop_images/thp-metal-ware_d17c1b97-35dc-4c51-b4e7-28ff5badf456.webp",
-            "collection": "traditional",
-            "link": ""
-          }
-        },
-        "style_5": {
-          "type": "style",
-          "settings": {
-            "title": "Hotel Collection",
-            "image": "shopify://shop_images/hotel-ware.jpg",
-            "collection": "hotel-collection",
-            "link": "shopify://collections/hotel-collection"
-          }
-        }
-      },
-      "block_order": [
-        "style_1",
-        "style_3",
-        "style_4",
-        "style_2",
-        "style_5"
-      ],
       "settings": {
         "eyebrow": "Textures & Glazes",
         "heading": "Shop by Style",
